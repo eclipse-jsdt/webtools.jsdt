@@ -42,14 +42,10 @@ public class SelectionJavadocParser extends JavadocParser {
 		this.selectionEnd = ((SelectionParser)sourceParser).selectionEnd;
 		this.javadocStart = this.sourceParser.scanner.commentStarts[commentPtr];
 		this.javadocEnd = this.sourceParser.scanner.commentStops[commentPtr];
-		if (this.javadocStart <= this.selectionStart && this.selectionEnd <= this.javadocEnd) {
-			if (SelectionEngine.DEBUG) {
-				System.out.println("SELECTION in Javadoc:"); //$NON-NLS-1$
-			}
-			super.checkDeprecation(commentPtr);
-		} else {
-			this.docComment = null;
+		if (SelectionEngine.DEBUG) {
+			System.out.println("SELECTION in Javadoc:"); //$NON-NLS-1$
 		}
+		super.checkDeprecation(commentPtr);
 		return false;
 	}
 
@@ -185,6 +181,7 @@ public class SelectionJavadocParser extends JavadocParser {
 	 * Store selected node into doc comment.
 	 */
 	protected void updateDocComment() {
+		super.updateDocComment();
 		if (selectedNode instanceof Expression) {
 			((SelectionJavadoc) this.docComment).selectedNode = (Expression) selectedNode;
 		}
