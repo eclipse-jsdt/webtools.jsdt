@@ -485,7 +485,7 @@ void write(DataOutputStream out) throws IOException {
 				length--;
 				String key = (String) keyTable[i];
 				out.writeUTF(key);
-				internedTypeLocators.put(key, new Integer(internedTypeLocators.elementSize));
+				internedTypeLocators.put(key, Integer.valueOf(internedTypeLocators.elementSize));
 			}
 		}
 		if (JavaBuilder.DEBUG && length != 0)
@@ -527,11 +527,11 @@ void write(DataOutputStream out) throws IOException {
 			for (int j = 0, m = qNames.length; j < m; j++) {
 				char[][] qName = qNames[j];
 				if (!internedQualifiedNames.containsKey(qName)) { // remember the names have been interned
-					internedQualifiedNames.put(qName, new Integer(internedQualifiedNames.elementSize));
+					internedQualifiedNames.put(qName, Integer.valueOf(internedQualifiedNames.elementSize));
 					for (int k = 0, n = qName.length; k < n; k++) {
 						char[] sName = qName[k];
 						if (!internedSimpleNames.containsKey(sName)) // remember the names have been interned
-							internedSimpleNames.put(sName, new Integer(internedSimpleNames.elementSize));
+							internedSimpleNames.put(sName, Integer.valueOf(internedSimpleNames.elementSize));
 					}
 				}
 			}
@@ -539,7 +539,7 @@ void write(DataOutputStream out) throws IOException {
 			for (int j = 0, m = sNames.length; j < m; j++) {
 				char[] sName = sNames[j];
 				if (!internedSimpleNames.containsKey(sName)) // remember the names have been interned
-					internedSimpleNames.put(sName, new Integer(internedSimpleNames.elementSize));
+					internedSimpleNames.put(sName, Integer.valueOf(internedSimpleNames.elementSize));
 			}
 		}
 	}

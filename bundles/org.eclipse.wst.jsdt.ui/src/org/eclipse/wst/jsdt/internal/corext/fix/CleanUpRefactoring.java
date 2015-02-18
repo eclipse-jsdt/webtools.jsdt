@@ -168,7 +168,7 @@ public class CleanUpRefactoring extends Refactoring implements IScheduledRefacto
 		
 		public String getSubTaskMessage(IJavaScriptUnit source) {
 			String typeName= source.getElementName();
-			return Messages.format(FixMessages.CleanUpRefactoring_ProcessingCompilationUnit_message, new Object[] {new Integer(getIndex()), new Integer(fSize), typeName});
+			return Messages.format(FixMessages.CleanUpRefactoring_ProcessingCompilationUnit_message, new Object[] {Integer.valueOf(getIndex()), Integer.valueOf(fSize), typeName});
 		}
 	}
 	

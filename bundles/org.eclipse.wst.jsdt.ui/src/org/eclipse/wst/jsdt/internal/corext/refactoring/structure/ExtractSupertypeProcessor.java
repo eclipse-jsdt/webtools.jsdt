@@ -274,16 +274,16 @@ public final class ExtractSupertypeProcessor extends PullUpRefactoringProcessor 
 			arguments.put(ATTRIBUTE_REPLACE, Boolean.valueOf(fReplace).toString());
 			arguments.put(ATTRIBUTE_INSTANCEOF, Boolean.valueOf(fInstanceOf).toString());
 			arguments.put(ATTRIBUTE_STUBS, Boolean.valueOf(fCreateMethodStubs).toString());
-			arguments.put(ATTRIBUTE_EXTRACT, new Integer(fMembersToMove.length).toString());
+			arguments.put(ATTRIBUTE_EXTRACT, Integer.valueOf(fMembersToMove.length).toString());
 			for (int offset= 0; offset < fMembersToMove.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + 1), descriptor.elementToHandle(fMembersToMove[offset]));
-			arguments.put(ATTRIBUTE_DELETE, new Integer(fDeletedMethods.length).toString());
+			arguments.put(ATTRIBUTE_DELETE, Integer.valueOf(fDeletedMethods.length).toString());
 			for (int offset= 0; offset < fDeletedMethods.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + fMembersToMove.length + 1), descriptor.elementToHandle(fDeletedMethods[offset]));
-			arguments.put(ATTRIBUTE_ABSTRACT, new Integer(fAbstractMethods.length).toString());
+			arguments.put(ATTRIBUTE_ABSTRACT, Integer.valueOf(fAbstractMethods.length).toString());
 			for (int offset= 0; offset < fAbstractMethods.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + fMembersToMove.length + fDeletedMethods.length + 1), descriptor.elementToHandle(fAbstractMethods[offset]));
-			arguments.put(ATTRIBUTE_TYPES, new Integer(fTypesToExtract.length).toString());
+			arguments.put(ATTRIBUTE_TYPES, Integer.valueOf(fTypesToExtract.length).toString());
 			for (int offset= 0; offset < fTypesToExtract.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + fMembersToMove.length + fDeletedMethods.length + fAbstractMethods.length + 1), descriptor.elementToHandle(fTypesToExtract[offset]));
 			final DynamicValidationRefactoringChange change= new DynamicValidationRefactoringChange(descriptor, RefactoringCoreMessages.ExtractSupertypeProcessor_extract_supertype, fChangeManager.getAllChanges());

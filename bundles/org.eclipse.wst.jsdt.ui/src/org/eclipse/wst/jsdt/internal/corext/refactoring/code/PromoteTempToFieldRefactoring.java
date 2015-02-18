@@ -678,11 +678,11 @@ public class PromoteTempToFieldRefactoring extends ScriptableRefactoring {
 		final JDTRefactoringDescriptor descriptor= new JDTRefactoringDescriptor(IJavaScriptRefactorings.CONVERT_LOCAL_VARIABLE, project, description, comment.asString(), arguments, RefactoringDescriptor.STRUCTURAL_CHANGE);
 		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_INPUT, descriptor.elementToHandle(fCu));
 		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_NAME, fFieldName);
-		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_SELECTION, new Integer(fSelectionStart).toString() + " " + new Integer(fSelectionLength).toString()); //$NON-NLS-1$
+		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_SELECTION, Integer.valueOf(fSelectionStart).toString() + " " + Integer.valueOf(fSelectionLength).toString()); //$NON-NLS-1$
 		arguments.put(ATTRIBUTE_STATIC, Boolean.valueOf(fDeclareStatic).toString());
 		arguments.put(ATTRIBUTE_FINAL, Boolean.valueOf(fDeclareFinal).toString());
-		arguments.put(ATTRIBUTE_VISIBILITY, new Integer(fVisibility).toString());
-		arguments.put(ATTRIBUTE_INITIALIZE, new Integer(fInitializeIn).toString());
+		arguments.put(ATTRIBUTE_VISIBILITY, Integer.valueOf(fVisibility).toString());
+		arguments.put(ATTRIBUTE_INITIALIZE, Integer.valueOf(fInitializeIn).toString());
 		final CompilationUnitChange result= new CompilationUnitChange(RefactoringCoreMessages.PromoteTempToFieldRefactoring_name, fCu);
 		result.setDescriptor(new RefactoringChangeDescriptor(descriptor));
 		TextEdit resultingEdits= rewrite.rewriteAST();

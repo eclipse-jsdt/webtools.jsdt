@@ -181,7 +181,7 @@ public final class PacketReceiveManager extends PacketManager {
 		}
 
 		synchronized (this.responsePackets) {
-			this.timedOutPackets.add(new Integer(requestSequence));
+			this.timedOutPackets.add(Integer.valueOf(requestSequence));
 		}
 		throw new TimeoutException("Timed out waiting for packet: " + requestSequence); //$NON-NLS-1$
 	}
@@ -263,7 +263,7 @@ public final class PacketReceiveManager extends PacketManager {
 		}
 		synchronized (this.responsePackets) {
 			if (!this.timedOutPackets.isEmpty()) {
-				Integer requestSeq = new Integer(response.getRequestSequence());
+				Integer requestSeq = Integer.valueOf(response.getRequestSequence());
 				if (this.timedOutPackets.remove(requestSeq)) {
 					return; // already timed out. No need to keep this one
 				}

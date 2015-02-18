@@ -131,7 +131,7 @@ public class GoToNextPreviousMemberAction extends Action implements IUpdate {
 			if (offsetArray.length == 0)
 				return oldSourceRange;
 			Arrays.sort(offsetArray);
-			Integer oldOffset= new Integer(oldSourceRange.getOffset());
+			Integer oldOffset= Integer.valueOf(oldSourceRange.getOffset());
 			int index= Arrays.binarySearch(offsetArray, oldOffset);
 
 			if (fIsGotoNext)
@@ -236,6 +236,6 @@ public class GoToNextPreviousMemberAction extends Action implements IUpdate {
 
 	private static void addOffset(List result, int offset) {
 		if (offset >= 0)
-			result.add(new Integer(offset));
+			result.add(Integer.valueOf(offset));
 	}
 }

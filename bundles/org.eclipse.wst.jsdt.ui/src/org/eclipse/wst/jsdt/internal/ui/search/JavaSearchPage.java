@@ -722,7 +722,7 @@ public class JavaSearchPage extends DialogPage implements ISearchPage {
 	private Button createButton(Composite parent, int style, String text, int data, boolean isSelected) {
 		Button button= new Button(parent, style);
 		button.setText(text);
-		button.setData(new Integer(data));
+		button.setData(Integer.valueOf(data));
 		button.setLayoutData(new GridData());
 		button.setSelection(isSelected);
 		return button;

@@ -903,13 +903,13 @@ public class JavaProject
 				},
 				new Object[] {
 					status.getMessage(),
-					new Integer(severity),
+					Integer.valueOf(severity),
 					Messages.classpath_buildPath,
 					isCycleProblem ? "true" : "false",//$NON-NLS-1$ //$NON-NLS-2$
 					isClasspathFileFormatProblem ? "true" : "false",//$NON-NLS-1$ //$NON-NLS-2$
-					new Integer(status.getCode()),
+					Integer.valueOf(status.getCode()),
 					Util.getProblemArgumentsForMarker(arguments) ,
-					new Integer(CategorizedProblem.CAT_BUILDPATH),
+					Integer.valueOf(CategorizedProblem.CAT_BUILDPATH),
 					JavaBuilder.SOURCE_ID,
 				}
 			);

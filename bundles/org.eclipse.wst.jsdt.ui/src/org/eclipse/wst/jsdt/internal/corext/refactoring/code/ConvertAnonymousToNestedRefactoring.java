@@ -459,10 +459,10 @@ public class ConvertAnonymousToNestedRefactoring extends ScriptableRefactoring {
 		final JDTRefactoringDescriptor descriptor= new JDTRefactoringDescriptor(IJavaScriptRefactorings.CONVERT_ANONYMOUS, projectName, description, comment.asString(), arguments, flags);
 		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_INPUT, descriptor.elementToHandle(fCu));
 		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_NAME, fClassName);
-		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_SELECTION, new Integer(fSelectionStart).toString() + ' ' + new Integer(fSelectionLength).toString());
+		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_SELECTION, Integer.valueOf(fSelectionStart).toString() + ' ' + Integer.valueOf(fSelectionLength).toString());
 		arguments.put(ATTRIBUTE_FINAL, Boolean.valueOf(fDeclareFinal).toString());
 		arguments.put(ATTRIBUTE_STATIC, Boolean.valueOf(fDeclareStatic).toString());
-		arguments.put(ATTRIBUTE_VISIBILITY, new Integer(fVisibility).toString());
+		arguments.put(ATTRIBUTE_VISIBILITY, Integer.valueOf(fVisibility).toString());
 		return new RefactoringChangeDescriptor(descriptor);
 	}
 

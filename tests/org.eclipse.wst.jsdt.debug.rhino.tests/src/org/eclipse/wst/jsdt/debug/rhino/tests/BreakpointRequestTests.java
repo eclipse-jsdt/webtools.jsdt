@@ -36,7 +36,7 @@ public class BreakpointRequestTests extends RequestTest {
 	 */
 	public void testInvalidBreakpoint() throws Exception {
 		RhinoRequest request = new RhinoRequest(JSONConstants.BREAKPOINT);
-		request.getArguments().put(JSONConstants.BREAKPOINT_ID, new Integer("9999")); //$NON-NLS-1$
+		request.getArguments().put(JSONConstants.BREAKPOINT_ID, Integer.valueOf("9999")); //$NON-NLS-1$
 		debugSession.send(request);
 		Response response = debugSession.receiveResponse(request.getSequence(), VirtualMachine.DEFAULT_TIMEOUT);
 		assertFalse(response.isSuccess());
@@ -64,7 +64,7 @@ public class BreakpointRequestTests extends RequestTest {
 	 */
 	public void testClearInvalidBreakpoint() throws Exception {
 		RhinoRequest request = new RhinoRequest(JSONConstants.CLEARBREAKPOINT);
-		request.getArguments().put(JSONConstants.BREAKPOINT_ID, new Integer("9999")); //$NON-NLS-1$
+		request.getArguments().put(JSONConstants.BREAKPOINT_ID, Integer.valueOf("9999")); //$NON-NLS-1$
 		debugSession.send(request);
 		Response response = debugSession.receiveResponse(request.getSequence(), VirtualMachine.DEFAULT_TIMEOUT);
 		assertFalse(response.isSuccess());

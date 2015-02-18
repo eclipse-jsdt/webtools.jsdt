@@ -267,7 +267,7 @@ private String[] computeDocumentNames(String[] onDiskNames, int[] positions, Sim
 				newDocNames[count++] = (String) added[i];
 		Util.sort(newDocNames);
 		for (int i = 0, l = newDocNames.length; i < l; i++)
-			indexedDocuments.put(newDocNames[i], new Integer(i));
+			indexedDocuments.put(newDocNames[i], Integer.valueOf(i));
 		return newDocNames;
 	}
 
@@ -313,7 +313,7 @@ private String[] computeDocumentNames(String[] onDiskNames, int[] positions, Sim
 		Util.sort(newDocNames);
 		for (int i = 0, l = newDocNames.length; i < l; i++)
 			if (indexedDocuments.containsKey(newDocNames[i]))
-				indexedDocuments.put(newDocNames[i], new Integer(i)); // remember the position for each new document
+				indexedDocuments.put(newDocNames[i], Integer.valueOf(i)); // remember the position for each new document
 	}
 
 	// need to be able to look up an old position (ref# from a ref[]) and map it to its new position
@@ -328,7 +328,7 @@ private String[] computeDocumentNames(String[] onDiskNames, int[] positions, Sim
 			case RE_INDEXED :
 				String newName = newDocNames[++count];
 				if (newName.equals(onDiskNames[i])) {
-					indexedDocuments.put(newName, new Integer(count)); // the reindexed docName that was at position i is now at position count
+					indexedDocuments.put(newName, Integer.valueOf(count)); // the reindexed docName that was at position i is now at position count
 					i++;
 				}
 				break;
@@ -648,7 +648,7 @@ private synchronized HashtableOfObject readCategoryTable(char[] categoryName, bo
 						firstOffset = arrayOffset;
 					matchingWords[count++] = word;
 				}
-				categoryTable.put(word, new Integer(arrayOffset)); // offset to array in the file
+				categoryTable.put(word, Integer.valueOf(arrayOffset)); // offset to array in the file
 			}
 		}
 		this.categoryTables.put(INTERNED_CATEGORY_NAMES.get(categoryName), categoryTable);
@@ -1074,7 +1074,7 @@ private void writeCategoryTable(char[] categoryName, HashtableOfObject wordsToDo
 				o = values[i] = ((IntList) values[i]).asArray();
 			int[] documentNumbers = (int[]) o;
 			if (documentNumbers.length >= largeArraySize) {
-				values[i] = new Integer(this.streamEnd);
+				values[i] = Integer.valueOf(this.streamEnd);
 				writeDocumentNumbers(documentNumbers, stream);
 			}
 		}

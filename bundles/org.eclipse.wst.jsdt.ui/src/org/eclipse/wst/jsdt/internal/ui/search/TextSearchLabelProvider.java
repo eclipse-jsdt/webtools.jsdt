@@ -30,7 +30,7 @@ public abstract class TextSearchLabelProvider extends LabelProvider {
 		if (matchCount < 2)
 			return text;
 		else {
-			return Messages.format(fMatchCountFormat, new Object[] { text, new Integer(matchCount) });
+			return Messages.format(fMatchCountFormat, new Object[] { text, Integer.valueOf(matchCount) });
 		}
 	}
 

@@ -26,7 +26,7 @@ public class TimeoutArgument implements IntegerArgument {
 	/**
 	 * default connecting timeout
 	 */
-	public static final Integer CONNECT_TIMEOUT = new Integer(30000);
+	public static final Integer CONNECT_TIMEOUT = Integer.valueOf(30000);
 	
 	/**
 	 * The timeout

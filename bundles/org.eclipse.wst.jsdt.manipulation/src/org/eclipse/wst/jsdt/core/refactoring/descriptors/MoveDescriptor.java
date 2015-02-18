@@ -144,25 +144,25 @@ public final class MoveDescriptor extends JavaScriptRefactoringDescriptor {
 			fArguments.put(ATTRIBUTE_QUALIFIED, Boolean.toString(fQualified));
 			if (fPatterns != null && !"".equals(fPatterns)) //$NON-NLS-1$
 				fArguments.put(ATTRIBUTE_PATTERNS, fPatterns);
-			fArguments.put(ATTRIBUTE_FILES, new Integer(fFiles.length).toString());
+			fArguments.put(ATTRIBUTE_FILES, Integer.valueOf(fFiles.length).toString());
 			for (int offset= 0; offset < fFiles.length; offset++)
 				fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + 1), JavaScriptRefactoringDescriptor.resourceToHandle(project, fFiles[offset]));
-			fArguments.put(ATTRIBUTE_FOLDERS, new Integer(fFolders.length).toString());
+			fArguments.put(ATTRIBUTE_FOLDERS, Integer.valueOf(fFolders.length).toString());
 			for (int offset= 0; offset < fFolders.length; offset++)
 				fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + fFiles.length + 1), JavaScriptRefactoringDescriptor.resourceToHandle(project, fFolders[offset]));
-			fArguments.put(ATTRIBUTE_UNITS, new Integer(fUnits.length).toString());
+			fArguments.put(ATTRIBUTE_UNITS, Integer.valueOf(fUnits.length).toString());
 			for (int offset= 0; offset < fUnits.length; offset++)
 				fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + fFolders.length + fFiles.length + 1), JavaScriptRefactoringDescriptor.elementToHandle(project, fUnits[offset]));
 		} else if (POLICY_MOVE_ROOTS.equals(fMovePolicy)) {
-			fArguments.put(ATTRIBUTE_ROOTS, new Integer(fRoots.length).toString());
+			fArguments.put(ATTRIBUTE_ROOTS, Integer.valueOf(fRoots.length).toString());
 			for (int offset= 0; offset < fRoots.length; offset++)
 				fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + 1), JavaScriptRefactoringDescriptor.elementToHandle(project, fRoots[offset]));
 		} else if (POLICY_MOVE_PACKAGES.equals(fMovePolicy)) {
-			fArguments.put(ATTRIBUTE_FRAGMENTS, new Integer(fFragments.length).toString());
+			fArguments.put(ATTRIBUTE_FRAGMENTS, Integer.valueOf(fFragments.length).toString());
 			for (int offset= 0; offset < fFragments.length; offset++)
 				fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + 1), JavaScriptRefactoringDescriptor.elementToHandle(project, fFragments[offset]));
 		} else if (POLICY_MOVE_MEMBERS.equals(fMovePolicy)) {
-			fArguments.put(ATTRIBUTE_MEMBERS, new Integer(fMembers.length).toString());
+			fArguments.put(ATTRIBUTE_MEMBERS, Integer.valueOf(fMembers.length).toString());
 			for (int offset= 0; offset < fMembers.length; offset++)
 				fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + 1), JavaScriptRefactoringDescriptor.elementToHandle(project, fMembers[offset]));
 		}

@@ -236,8 +236,8 @@ protected IProject[] build(int kind, Map ignored, IProgressMonitor monitor) thro
 			new String[] {IMarker.MESSAGE, IMarker.SEVERITY, IJavaScriptModelMarker.CATEGORY_ID, IMarker.SOURCE_ID},
 			new Object[] {
 				Messages.bind(Messages.build_inconsistentProject, e.getLocalizedMessage()),
-				new Integer(IMarker.SEVERITY_ERROR),
-				new Integer(CategorizedProblem.CAT_BUILDPATH),
+				Integer.valueOf(IMarker.SEVERITY_ERROR),
+				Integer.valueOf(CategorizedProblem.CAT_BUILDPATH),
 				JavaBuilder.SOURCE_ID
 			}
 		);
@@ -248,8 +248,8 @@ protected IProject[] build(int kind, Map ignored, IProgressMonitor monitor) thro
 			new String[] {IMarker.MESSAGE, IMarker.SEVERITY, IJavaScriptModelMarker.CATEGORY_ID, IMarker.SOURCE_ID},
 			new Object[] {
 				Messages.bind(Messages.build_inconsistentProject, e.getLocalizedMessage()),
-				new Integer(IMarker.SEVERITY_ERROR),
-				new Integer(CategorizedProblem.CAT_BUILDPATH),
+				Integer.valueOf(IMarker.SEVERITY_ERROR),
+				Integer.valueOf(CategorizedProblem.CAT_BUILDPATH),
 				JavaBuilder.SOURCE_ID
 			}
 		);
@@ -263,7 +263,7 @@ protected IProject[] build(int kind, Map ignored, IProgressMonitor monitor) thro
 			new String[] {IMarker.MESSAGE, IMarker.SEVERITY, IMarker.SOURCE_ID},
 			new Object[] {
 				Messages.bind(Messages.build_missingSourceFile, e.missingSourceFile),
-				new Integer(IMarker.SEVERITY_ERROR),
+				Integer.valueOf(IMarker.SEVERITY_ERROR),
 				JavaBuilder.SOURCE_ID
 			}
 		);
@@ -333,7 +333,7 @@ protected void clean(IProgressMonitor monitor) throws CoreException {
 			new String[] {IMarker.MESSAGE, IMarker.SEVERITY, IMarker.SOURCE_ID},
 			new Object[] {
 				Messages.bind(Messages.build_inconsistentProject, e.getLocalizedMessage()),
-				new Integer(IMarker.SEVERITY_ERROR),
+				Integer.valueOf(IMarker.SEVERITY_ERROR),
 				JavaBuilder.SOURCE_ID
 			}
 		);
@@ -666,8 +666,8 @@ private boolean isWorthBuilding() throws CoreException {
 			new String[] {IMarker.MESSAGE, IMarker.SEVERITY, IJavaScriptModelMarker.CATEGORY_ID, IMarker.SOURCE_ID},
 			new Object[] {
 				Messages.build_abortDueToClasspathProblems,
-				new Integer(IMarker.SEVERITY_ERROR),
-				new Integer(CategorizedProblem.CAT_BUILDPATH),
+				Integer.valueOf(IMarker.SEVERITY_ERROR),
+				Integer.valueOf(CategorizedProblem.CAT_BUILDPATH),
 				JavaBuilder.SOURCE_ID
 			}
 		);
@@ -709,8 +709,8 @@ private boolean isWorthBuilding() throws CoreException {
 					isClasspathBroken(prereq.getRawIncludepath(), p)
 						? Messages.bind(Messages.build_prereqProjectHasClasspathProblems, p.getName())
 						: Messages.bind(Messages.build_prereqProjectMustBeRebuilt, p.getName()),
-					new Integer(IMarker.SEVERITY_ERROR),
-					new Integer(CategorizedProblem.CAT_BUILDPATH),
+					Integer.valueOf(IMarker.SEVERITY_ERROR),
+					Integer.valueOf(CategorizedProblem.CAT_BUILDPATH),
 					JavaBuilder.SOURCE_ID
 				}
 			);

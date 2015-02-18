@@ -503,7 +503,7 @@ public class IntroduceParameterRefactoring extends ScriptableRefactoring impleme
 					final JDTRefactoringDescriptor extended= (JDTRefactoringDescriptor) refactoringDescriptor;
 					final Map arguments= new HashMap();
 					arguments.put(ATTRIBUTE_ARGUMENT, fParameter.getNewName());
-					arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_SELECTION, new Integer(fSelectionStart).toString() + " " + new Integer(fSelectionLength).toString()); //$NON-NLS-1$
+					arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_SELECTION, Integer.valueOf(fSelectionStart).toString() + " " + Integer.valueOf(fSelectionLength).toString()); //$NON-NLS-1$
 					arguments.putAll(extended.getArguments());
 					String signature= fChangeSignatureRefactoring.getMethodName();
 					try {

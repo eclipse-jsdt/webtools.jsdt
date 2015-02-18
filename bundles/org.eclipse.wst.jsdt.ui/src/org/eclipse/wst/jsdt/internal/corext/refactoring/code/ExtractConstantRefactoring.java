@@ -546,10 +546,10 @@ public class ExtractConstantRefactoring extends ScriptableRefactoring {
 		final JDTRefactoringDescriptor descriptor= new JDTRefactoringDescriptor(IJavaScriptRefactorings.EXTRACT_CONSTANT, project, description, comment.asString(), arguments, flags);
 		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_INPUT, descriptor.elementToHandle(fCu));
 		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_NAME, fConstantName);
-		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_SELECTION, new Integer(fSelectionStart).toString() + " " + new Integer(fSelectionLength).toString()); //$NON-NLS-1$
+		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_SELECTION, Integer.valueOf(fSelectionStart).toString() + " " + Integer.valueOf(fSelectionLength).toString()); //$NON-NLS-1$
 		arguments.put(ATTRIBUTE_REPLACE, Boolean.valueOf(fReplaceAllOccurrences).toString());
 		arguments.put(ATTRIBUTE_QUALIFY, Boolean.valueOf(fQualifyReferencesWithDeclaringClassName).toString());
-		arguments.put(ATTRIBUTE_VISIBILITY, new Integer(JdtFlags.getVisibilityCode(fVisibility)).toString());
+		arguments.put(ATTRIBUTE_VISIBILITY, Integer.valueOf(JdtFlags.getVisibilityCode(fVisibility)).toString());
 		return new RefactoringDescriptorChange(descriptor, RefactoringCoreMessages.ExtractConstantRefactoring_name, new Change[] { fChange});
 	}
 

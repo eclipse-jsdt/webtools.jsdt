@@ -434,8 +434,8 @@ public class SelfEncapsulateFieldRefactoring extends ScriptableRefactoring {
 			comment.addSetting(RefactoringCoreMessages.SelfEncapsulateField_generate_comments);
 		final JDTRefactoringDescriptor descriptor= new JDTRefactoringDescriptor(IJavaScriptRefactorings.ENCAPSULATE_FIELD, project, description, comment.asString(), arguments, flags);
 		arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_INPUT, descriptor.elementToHandle(fField));
-		arguments.put(ATTRIBUTE_VISIBILITY, new Integer(fVisibility).toString());
-		arguments.put(ATTRIBUTE_INSERTION, new Integer(fInsertionIndex).toString());
+		arguments.put(ATTRIBUTE_VISIBILITY, Integer.valueOf(fVisibility).toString());
+		arguments.put(ATTRIBUTE_INSERTION, Integer.valueOf(fInsertionIndex).toString());
 		arguments.put(ATTRIBUTE_SETTER, fSetterName);
 		arguments.put(ATTRIBUTE_GETTER, fGetterName);
 		arguments.put(ATTRIBUTE_COMMENTS, Boolean.valueOf(fGenerateJavadoc).toString());

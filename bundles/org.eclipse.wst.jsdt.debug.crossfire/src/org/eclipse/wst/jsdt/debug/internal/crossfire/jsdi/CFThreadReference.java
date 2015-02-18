@@ -97,7 +97,7 @@ public class CFThreadReference extends CFMirror implements ThreadReference {
 	public synchronized List frames() {
 		if(frames == null) {
 			CFRequestPacket request = new CFRequestPacket(Commands.BACKTRACE, id);
-			request.setArgument(Attributes.FROM_FRAME, new Integer(0));
+			request.setArgument(Attributes.FROM_FRAME, Integer.valueOf(0));
 			request.setArgument(Attributes.INCLUDE_SCOPES, Boolean.TRUE);
 			CFResponsePacket response = crossfire().sendRequest(request);
 			if(response.isSuccess()) {

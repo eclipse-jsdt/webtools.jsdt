@@ -65,7 +65,7 @@ public class RequestLookupTest extends FrameRequestTests {
 							request.getArguments().put(JSONConstants.THREAD_ID, threadId);
 							request.getArguments().put(JSONConstants.CONTEXT_ID, contextId);
 							request.getArguments().put(JSONConstants.FRAME_ID, frameId);
-							request.getArguments().put(JSONConstants.REF, new Integer(0));
+							request.getArguments().put(JSONConstants.REF, Integer.valueOf(0));
 							debugSession.send(request);
 							response = debugSession.receiveResponse(request.getSequence(), VirtualMachine.DEFAULT_TIMEOUT);
 							assertTrue(response.isSuccess());
@@ -122,7 +122,7 @@ public class RequestLookupTest extends FrameRequestTests {
 						assertTrue("There should be at least one frame", frames.size() > 0); //$NON-NLS-1$
 						Number frameId = (Number) frames.iterator().next();
 						
-						response = doLookup(debugSession, threadId, contextId, frameId, new Integer(0));
+						response = doLookup(debugSession, threadId, contextId, frameId, Integer.valueOf(0));
 						assertTrue(response.isSuccess());
 						Map map = (Map) response.getBody().get(JSONConstants.LOOKUP);
 						assertNotNull("There must be a lookup response", map); //$NON-NLS-1$

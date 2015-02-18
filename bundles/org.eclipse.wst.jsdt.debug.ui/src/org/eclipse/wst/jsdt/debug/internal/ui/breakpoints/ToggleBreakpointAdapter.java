@@ -354,7 +354,7 @@ public class ToggleBreakpointAdapter implements IToggleBreakpointsTargetExtensio
 						//nothing else we can do
 						attributes.put(IJavaScriptBreakpoint.TYPE_NAME, getTypeName(element));
 						attributes.put(IJavaScriptBreakpoint.SCRIPT_PATH, getScriptPath(element));
-						attributes.put(IMarker.LINE_NUMBER, new Integer(line));
+						attributes.put(IMarker.LINE_NUMBER, Integer.valueOf(line));
 						IJavaScriptFunctionBreakpoint breakpoint = JavaScriptDebugModel.createFunctionBreakpoint(resource, method.getElementName(), method.getSignature(), start, end, attributes, true);
 						breakpoint.setJavaScriptElementHandle(element.getHandleIdentifier());
 						return Status.OK_STATUS;

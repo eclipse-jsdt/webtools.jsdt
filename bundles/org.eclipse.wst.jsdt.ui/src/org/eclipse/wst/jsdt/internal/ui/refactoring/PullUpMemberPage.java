@@ -101,7 +101,7 @@ public class PullUpMemberPage extends UserInputWizardPage {
 			if (!ACTION_PROPERTY.equals(property))
 				return null;
 			final MemberActionInfo info= (MemberActionInfo) element;
-			return new Integer(info.getAction());
+			return Integer.valueOf(info.getAction());
 		}
 
 		public void modify(final Object element, final String property, final Object value) {
@@ -283,7 +283,7 @@ public class PullUpMemberPage extends UserInputWizardPage {
 	}
 
 	private static void putToStringMapping(final Map result, final String[] actionLabels, final int actionIndex) {
-		result.put(actionLabels[actionIndex], new Integer(actionIndex));
+		result.put(actionLabels[actionIndex], Integer.valueOf(actionIndex));
 	}
 
 	private static void setActionForInfos(final MemberActionInfo[] infos, final int action) {
@@ -912,7 +912,7 @@ public class PullUpMemberPage extends UserInputWizardPage {
 					return;
 				final MemberActionInfo info= (MemberActionInfo) structured.getFirstElement();
 				editor.setItems(info.getAllowedLabels());
-				editor.setValue(new Integer(info.getAction()));
+				editor.setValue(Integer.valueOf(info.getAction()));
 			}
 		});
 

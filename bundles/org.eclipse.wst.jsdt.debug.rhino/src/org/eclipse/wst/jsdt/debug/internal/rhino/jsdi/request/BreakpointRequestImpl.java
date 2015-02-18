@@ -125,7 +125,7 @@ public class BreakpointRequestImpl extends EventRequestImpl implements Breakpoin
 				request.getArguments().put(JSONConstants.FUNCTION, this.location.functionName());
 			}
 			else{
-				request.getArguments().put(JSONConstants.LINE, new Integer(this.location.lineNumber()));
+				request.getArguments().put(JSONConstants.LINE, Integer.valueOf(this.location.lineNumber()));
 			}
 			try {
 				RhinoResponse response = this.vm.sendRequest(request);

@@ -74,9 +74,9 @@ public class JavaScriptLineBreakpoint extends JavaScriptBreakpoint implements IJ
 				// add attributes
 				attributes.put(IBreakpoint.ID, getModelIdentifier());
 				attributes.put(IBreakpoint.ENABLED, Boolean.valueOf(true));
-				attributes.put(IMarker.LINE_NUMBER, new Integer(linenumber));
-				attributes.put(IMarker.CHAR_START, new Integer(charstart));
-				attributes.put(IMarker.CHAR_END, new Integer(charend));
+				attributes.put(IMarker.LINE_NUMBER, Integer.valueOf(linenumber));
+				attributes.put(IMarker.CHAR_START, Integer.valueOf(charstart));
+				attributes.put(IMarker.CHAR_END, Integer.valueOf(charend));
 
 				ensureMarker().setAttributes(attributes);
 

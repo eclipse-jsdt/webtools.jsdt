@@ -434,7 +434,7 @@ public class ExternalizeStringsAction extends SelectionDispatchAction {
 			super(parent);
 			setInput(Arrays.asList(input));
 			setTitle(ActionMessages.ExternalizeStringsAction_dialog_title);  
-			setMessage(Messages.format(ActionMessages.FindStringsToExternalizeAction_non_externalized, new Object[] {new Integer(count)} )); 
+			setMessage(Messages.format(ActionMessages.FindStringsToExternalizeAction_non_externalized, new Object[] {Integer.valueOf(count)} )); 
 			setContentProvider(new ArrayContentProvider());
 			setLabelProvider(createLabelProvider());
 		}
@@ -510,7 +510,7 @@ public class ExternalizeStringsAction extends SelectionDispatchAction {
 					String elementName= nlsel.cu.getResource().getFullPath().toString();
 					return Messages.format(
 						ActionMessages.FindStringsToExternalizeAction_foundStrings, 
-						new Object[] {new Integer(nlsel.count), elementName} );
+						new Object[] {Integer.valueOf(nlsel.count), elementName} );
 				}		
 				public Image getImage(Object element) {
 					return super.getImage(((NonNLSElement)element).cu);

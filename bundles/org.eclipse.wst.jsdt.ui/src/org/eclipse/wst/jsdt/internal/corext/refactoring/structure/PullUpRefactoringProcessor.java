@@ -961,13 +961,13 @@ public class PullUpRefactoringProcessor extends HierarchyProcessor {
 			arguments.put(ATTRIBUTE_REPLACE, Boolean.valueOf(fReplace).toString());
 			arguments.put(ATTRIBUTE_INSTANCEOF, Boolean.valueOf(fInstanceOf).toString());
 			arguments.put(ATTRIBUTE_STUBS, Boolean.valueOf(fCreateMethodStubs).toString());
-			arguments.put(ATTRIBUTE_PULL, new Integer(fMembersToMove.length).toString());
+			arguments.put(ATTRIBUTE_PULL, Integer.valueOf(fMembersToMove.length).toString());
 			for (int offset= 0; offset < fMembersToMove.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + 1), descriptor.elementToHandle(fMembersToMove[offset]));
-			arguments.put(ATTRIBUTE_DELETE, new Integer(fDeletedMethods.length).toString());
+			arguments.put(ATTRIBUTE_DELETE, Integer.valueOf(fDeletedMethods.length).toString());
 			for (int offset= 0; offset < fDeletedMethods.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + fMembersToMove.length + 1), descriptor.elementToHandle(fDeletedMethods[offset]));
-			arguments.put(ATTRIBUTE_ABSTRACT, new Integer(fAbstractMethods.length).toString());
+			arguments.put(ATTRIBUTE_ABSTRACT, Integer.valueOf(fAbstractMethods.length).toString());
 			for (int offset= 0; offset < fAbstractMethods.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + fMembersToMove.length + fDeletedMethods.length + 1), descriptor.elementToHandle(fAbstractMethods[offset]));
 			return new DynamicValidationRefactoringChange(descriptor, RefactoringCoreMessages.PullUpRefactoring_Pull_Up, fChangeManager.getAllChanges());

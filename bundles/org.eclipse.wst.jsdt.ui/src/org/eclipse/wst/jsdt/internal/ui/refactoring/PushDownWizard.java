@@ -145,7 +145,7 @@ public final class PushDownWizard extends RefactoringWizard {
 					return null;
 
 				final MemberActionInfo info= (MemberActionInfo) element;
-				return new Integer(info.getAction());
+				return Integer.valueOf(info.getAction());
 			}
 
 			public void modify(final Object element, final String property, final Object value) {
@@ -399,9 +399,9 @@ public final class PushDownWizard extends RefactoringWizard {
 		private Map createStringMappingForSelectedElements() {
 			final Map result= new HashMap();
 			int action= MemberActionInfo.PUSH_DOWN_ACTION;
-			result.put(MemberActionInfoLabelProvider.getActionLabel(action), new Integer(action));
+			result.put(MemberActionInfoLabelProvider.getActionLabel(action), Integer.valueOf(action));
 			int action1= MemberActionInfo.PUSH_ABSTRACT_ACTION;
-			result.put(MemberActionInfoLabelProvider.getActionLabel(action1), new Integer(action1));
+			result.put(MemberActionInfoLabelProvider.getActionLabel(action1), Integer.valueOf(action1));
 			return result;
 		}
 
@@ -540,7 +540,7 @@ public final class PushDownWizard extends RefactoringWizard {
 						return;
 					final MemberActionInfo mac= (MemberActionInfo) ss.getFirstElement();
 					comboBoxCellEditor.setItems(MemberActionInfoLabelProvider.getAvailableActionLabels(mac));
-					comboBoxCellEditor.setValue(new Integer(mac.getAction()));
+					comboBoxCellEditor.setValue(Integer.valueOf(mac.getAction()));
 				}
 			});
 

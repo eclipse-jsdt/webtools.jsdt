@@ -104,7 +104,7 @@ public class OccurrencesFinder extends ASTVisitor implements IOccurrencesFinder 
 			try {
 				boolean isWriteAccess= fWriteUsages.contains(node);
 				int line= document.getLineOfOffset(startPosition);
-				Integer lineInteger= new Integer(line);
+				Integer lineInteger= Integer.valueOf(line);
 				OccurrencesGroupKey groupKey= (OccurrencesGroupKey) lineToGroup.get(lineInteger);
 				if (groupKey == null) {
 					IRegion region= document.getLineInformation(line);

@@ -202,7 +202,7 @@ public class JavaSearchQuery implements ISearchQuery {
 					return Messages.format(SearchMessages.JavaSearchOperation_singularOccurrencesPostfix, args); 
 			}
 		} else {
-			Object[] args= { getSearchPatternDescription(), new Integer(nMatches), fPatternData.getScopeDescription() };
+			Object[] args= { getSearchPatternDescription(), Integer.valueOf(nMatches), fPatternData.getScopeDescription() };
 			switch (fPatternData.getLimitTo()) {
 				case IJavaScriptSearchConstants.IMPLEMENTORS:
 					return Messages.format(SearchMessages.JavaSearchOperation_pluralImplementorsPostfix, args); 

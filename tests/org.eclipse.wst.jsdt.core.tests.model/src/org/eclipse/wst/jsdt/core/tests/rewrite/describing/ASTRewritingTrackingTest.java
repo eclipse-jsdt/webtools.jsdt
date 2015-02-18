@@ -238,7 +238,7 @@ public class ASTRewritingTrackingTest extends ASTRewritingTest {
 		
 		// change modifier
 		int newModifiers= Modifier.STATIC | Modifier.TRANSIENT | Modifier.PRIVATE;
-		rewrite.set(field, FieldDeclaration.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+		rewrite.set(field, FieldDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 								
 		String preview= evaluateRewrite(cu, rewrite);
 		

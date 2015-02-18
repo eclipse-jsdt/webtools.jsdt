@@ -1212,7 +1212,7 @@ public class ChangeSignatureRefactoring extends ScriptableRefactoring implements
 					arguments.put(ATTRIBUTE_RETURN, fReturnTypeInfo.getNewTypeName());
 				try {
 					if (!isVisibilitySameAsInitial())
-						arguments.put(ATTRIBUTE_VISIBILITY, new Integer(fVisibility).toString());
+						arguments.put(ATTRIBUTE_VISIBILITY, Integer.valueOf(fVisibility).toString());
 				} catch (JavaScriptModelException exception) {
 					JavaScriptPlugin.log(exception);
 				}
@@ -1241,7 +1241,7 @@ public class ChangeSignatureRefactoring extends ScriptableRefactoring implements
 				for (final Iterator iterator= fExceptionInfos.iterator(); iterator.hasNext();) {
 					final ExceptionInfo info= (ExceptionInfo) iterator.next();
 					arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + count, descriptor.elementToHandle(info.getType()));
-					arguments.put(ATTRIBUTE_KIND + count, new Integer(info.getKind()).toString());
+					arguments.put(ATTRIBUTE_KIND + count, Integer.valueOf(info.getKind()).toString());
 					count++;
 				}
 			} catch (JavaScriptModelException exception) {
@@ -1924,7 +1924,7 @@ public class ChangeSignatureRefactoring extends ScriptableRefactoring implements
 
 		private void removeExtraDimensions(SingleVariableDeclaration oldParam) {
 			if (oldParam.getExtraDimensions() != 0) {		
-				getASTRewrite().set(oldParam, SingleVariableDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), fDescription);
+				getASTRewrite().set(oldParam, SingleVariableDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), fDescription);
 			}
 		}
 	
@@ -1939,7 +1939,7 @@ public class ChangeSignatureRefactoring extends ScriptableRefactoring implements
 	
 		private void removeExtraDimensions(FunctionDeclaration methDecl) {
 			if (methDecl.getExtraDimensions() != 0)
-				getASTRewrite().set(methDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), fDescription);
+				getASTRewrite().set(methDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), fDescription);
 		}
 
 		private boolean needsVisibilityUpdate() throws JavaScriptModelException {

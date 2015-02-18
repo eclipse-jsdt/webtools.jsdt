@@ -464,7 +464,7 @@ public class JavaScriptThread extends JavaScriptDebugElement implements IJavaScr
 						}
 					}
 					if (!suspended) {
-						IStatus status = new Status(IStatus.ERROR, JavaScriptDebugPlugin.PLUGIN_ID, 100, NLS.bind(ModelMessages.thread_timed_out_trying_to_suspend, new String[] { new Integer(VirtualMachine.DEFAULT_TIMEOUT).toString() }), null);
+						IStatus status = new Status(IStatus.ERROR, JavaScriptDebugPlugin.PLUGIN_ID, 100, NLS.bind(ModelMessages.thread_timed_out_trying_to_suspend, new String[] { Integer.valueOf(VirtualMachine.DEFAULT_TIMEOUT).toString() }), null);
 						JavaScriptDebugPlugin.log(status);
 					}
 					markSuspended();

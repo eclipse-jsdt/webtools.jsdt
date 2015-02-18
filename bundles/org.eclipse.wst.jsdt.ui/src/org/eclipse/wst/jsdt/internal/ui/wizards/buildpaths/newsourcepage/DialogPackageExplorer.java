@@ -117,7 +117,7 @@ public class DialogPackageExplorer implements IMenuListener, ISelectionProvider,
                         if (excluded == 1)
                             return Messages.format(NewWizardMessages.DialogPackageExplorer_LabelProvider_SingleExcluded, text); 
                         else if (excluded > 1)
-                            return Messages.format(NewWizardMessages.DialogPackageExplorer_LabelProvider_MultiExcluded, new Object[] {text, new Integer(excluded)}); 
+                            return Messages.format(NewWizardMessages.DialogPackageExplorer_LabelProvider_MultiExcluded, new Object[] {text, Integer.valueOf(excluded)}); 
                     }
                 }
                 if (element instanceof IJavaScriptProject) {
@@ -130,7 +130,7 @@ public class DialogPackageExplorer implements IMenuListener, ISelectionProvider,
                             if (excluded == 1)
                                 return Messages.format(NewWizardMessages.DialogPackageExplorer_LabelProvider_SingleExcluded, text); 
                             else if (excluded > 1)
-                                return Messages.format(NewWizardMessages.DialogPackageExplorer_LabelProvider_MultiExcluded, new Object[] {text, new Integer(excluded)}); 
+                                return Messages.format(NewWizardMessages.DialogPackageExplorer_LabelProvider_MultiExcluded, new Object[] {text, Integer.valueOf(excluded)}); 
                         }
                     }
                 }

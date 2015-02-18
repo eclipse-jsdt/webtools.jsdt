@@ -96,7 +96,7 @@ public class StackFrame implements DebugFrame {
 	 * @return the frame line number
 	 */
 	public Integer getLineNumber() {
-		return new Integer(lineNumber);
+		return Integer.valueOf(lineNumber);
 	}
 
 	/*
@@ -107,7 +107,7 @@ public class StackFrame implements DebugFrame {
 	public void onDebuggerStatement(Context cx) {
 		initializeHandles();
 		this.lineNumber = 1+lineNumber;
-		contextData.debuggerStatement(script, new Integer(lineNumber));
+		contextData.debuggerStatement(script, Integer.valueOf(lineNumber));
 	}
 
 	/*
@@ -119,7 +119,7 @@ public class StackFrame implements DebugFrame {
 		this.activation = activation;
 		this.thisObj = thisObj;
 		initializeHandles();
-		contextData.pushFrame(this, this.script, new Integer(lineNumber), getFunctionName());
+		contextData.pushFrame(this, this.script, Integer.valueOf(lineNumber), getFunctionName());
 	}
 
 	/*
@@ -154,7 +154,7 @@ public class StackFrame implements DebugFrame {
 			return;
 		initializeHandles();
 		this.lineNumber = lineNumber;
-		Integer line = new Integer(this.lineNumber);
+		Integer line = Integer.valueOf(this.lineNumber);
 		if(this.script.isValid(line, getFunctionName())) {
 			this.contextData.lineChange(this.script, line);
 		}
@@ -258,8 +258,8 @@ public class StackFrame implements DebugFrame {
 		result.put(JSONConstants.CONTEXT_ID, contextData.getId());
 		result.put(JSONConstants.FRAME_ID, id);
 		result.put(JSONConstants.SCRIPT_ID, script.getId());
-		result.put(JSONConstants.LINE, new Integer(lineNumber));
-		result.put(JSONConstants.REF, new Integer(0));
+		result.put(JSONConstants.LINE, Integer.valueOf(lineNumber));
+		result.put(JSONConstants.REF, Integer.valueOf(0));
 		//TODO update this
 		result.put(JSONConstants.SCOPE_NAME, null);
 		return result;

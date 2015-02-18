@@ -93,7 +93,7 @@ public class TypeChangeCompletionProposal extends LinkedCorrectionProposal {
 			if (declNode instanceof FunctionDeclaration) {
 				FunctionDeclaration methodDecl= (FunctionDeclaration) declNode;
 				rewrite.set(methodDecl, FunctionDeclaration.RETURN_TYPE2_PROPERTY, type, null);
-				rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), null);
+				rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), null);
 			} else if (declNode instanceof VariableDeclarationFragment) {
 				ASTNode parent= declNode.getParent();
 				if (parent instanceof FieldDeclaration) {
@@ -112,7 +112,7 @@ public class TypeChangeCompletionProposal extends LinkedCorrectionProposal {
 						}
 					} else {
 						rewrite.set(fieldDecl, FieldDeclaration.TYPE_PROPERTY, type, null);
-						rewrite.set(declNode, VariableDeclarationFragment.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), null);
+						rewrite.set(declNode, VariableDeclarationFragment.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), null);
 					}
 				} else if (parent instanceof VariableDeclarationStatement) {
 					VariableDeclarationStatement varDecl= (VariableDeclarationStatement) parent;
@@ -129,18 +129,18 @@ public class TypeChangeCompletionProposal extends LinkedCorrectionProposal {
 						}
 					} else {
 						rewrite.set(varDecl, VariableDeclarationStatement.TYPE_PROPERTY, type, null);
-						rewrite.set(declNode, VariableDeclarationFragment.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), null);
+						rewrite.set(declNode, VariableDeclarationFragment.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), null);
 					}
 				} else if (parent instanceof VariableDeclarationExpression) {
 					VariableDeclarationExpression varDecl= (VariableDeclarationExpression) parent;
 
 					rewrite.set(varDecl, VariableDeclarationExpression.TYPE_PROPERTY, type, null);
-					rewrite.set(declNode, VariableDeclarationFragment.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), null);
+					rewrite.set(declNode, VariableDeclarationFragment.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), null);
 				}
 			} else if (declNode instanceof SingleVariableDeclaration) {
 				SingleVariableDeclaration variableDeclaration= (SingleVariableDeclaration) declNode;
 				rewrite.set(variableDeclaration, SingleVariableDeclaration.TYPE_PROPERTY, type, null);
-				rewrite.set(variableDeclaration, SingleVariableDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), null);
+				rewrite.set(variableDeclaration, SingleVariableDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), null);
 			}
 
 			// set up linked mode

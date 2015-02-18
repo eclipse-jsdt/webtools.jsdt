@@ -57,7 +57,7 @@ public Object getConstant() throws JavaScriptModelException {
 	String signature = info.getTypeSignature();
 	try {
 //		if (signature.equals(Signature.SIG_INT)) {
-//			constant = new Integer(constantSource);
+//			constant = Integer.valueOf(constantSource);
 //		} else if (signature.equals(Signature.SIG_SHORT)) {
 //			constant = new Short(constantSource);
 //		} else if (signature.equals(Signature.SIG_BYTE)) {

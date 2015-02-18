@@ -154,7 +154,7 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		for (int i= 0; i < content.length(); i++) {
 			char ch= content.charAt(i);
 			if (ch == 'Y') {
-				expectedOffsets.add(new Integer(i + 1));
+				expectedOffsets.add(Integer.valueOf(i + 1));
 			}
 		}
 		
@@ -205,7 +205,7 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		for (int i= 0; i < content.length(); i++) {
 			char ch= content.charAt(i);
 			if (ch == 'Y') {
-				expectedOffsets.add(new Integer(i + 1));
+				expectedOffsets.add(Integer.valueOf(i + 1));
 			}
 		}
 		

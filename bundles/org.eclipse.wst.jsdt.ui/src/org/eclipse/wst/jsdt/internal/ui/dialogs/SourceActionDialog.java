@@ -456,7 +456,7 @@ public class SourceActionDialog extends CheckedTreeSelectionDialog {
 	private List convertToIntegerList(int[] array) {
 		List result= new ArrayList(array.length);
 		for (int i= 0; i < array.length; i++) {
-			result.add(new Integer(array[i]));
+			result.add(Integer.valueOf(array[i]));
 		}
 		return result;
 	}
@@ -505,11 +505,11 @@ public class SourceActionDialog extends CheckedTreeSelectionDialog {
 			ActionMessages.SourceActionDialog_modifier_private, 
 		};
 		Integer[] data= new Integer[] {
-					new Integer(Modifier.PUBLIC),
-					new Integer(Modifier.PROTECTED),
-					new Integer(Modifier.NONE),
-					new Integer(Modifier.PRIVATE)};
-		Integer initialVisibility= new Integer(correctVisibility);
+					Integer.valueOf(Modifier.PUBLIC),
+					Integer.valueOf(Modifier.PROTECTED),
+					Integer.valueOf(Modifier.NONE),
+					Integer.valueOf(Modifier.PRIVATE)};
+		Integer initialVisibility= Integer.valueOf(correctVisibility);
 		for (int i= 0; i < labels.length; i++) {
 			Button radio= new Button(group, SWT.RADIO);
 			Integer visibilityCode= data[i];
@@ -534,7 +534,7 @@ public class SourceActionDialog extends CheckedTreeSelectionDialog {
 		finalCheckboxButton.setText(ActionMessages.SourceActionDialog_modifier_final); 
 		GridData gd= new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		finalCheckboxButton.setLayoutData(gd);
-		finalCheckboxButton.setData(new Integer(Modifier.FINAL));
+		finalCheckboxButton.setData(Integer.valueOf(Modifier.FINAL));
 		finalCheckboxButton.setEnabled(true);
 		finalCheckboxButton.setSelection(isFinal());
 		finalCheckboxButton.addSelectionListener(new SelectionListener() {
@@ -551,7 +551,7 @@ public class SourceActionDialog extends CheckedTreeSelectionDialog {
 		syncCheckboxButton.setText(ActionMessages.SourceActionDialog_modifier_synchronized); 
 		gd= new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		syncCheckboxButton.setLayoutData(gd);
-		syncCheckboxButton.setData(new Integer(Modifier.SYNCHRONIZED));
+		syncCheckboxButton.setData(Integer.valueOf(Modifier.SYNCHRONIZED));
 		syncCheckboxButton.setEnabled(true);
 		syncCheckboxButton.setSelection(isSynchronized());
 		syncCheckboxButton.addSelectionListener(new SelectionListener() {

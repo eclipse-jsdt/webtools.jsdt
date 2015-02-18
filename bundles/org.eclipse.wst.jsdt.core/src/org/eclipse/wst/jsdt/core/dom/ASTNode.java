@@ -1402,7 +1402,7 @@ public abstract class ASTNode {
 			SimplePropertyDescriptor p = (SimplePropertyDescriptor) property;
 			if (p.getValueType() == int.class) {
 				int result = internalGetSetIntProperty(p, true, 0);
-				return new Integer(result);
+				return Integer.valueOf(result);
 			} else if (p.getValueType() == boolean.class) {
 				boolean result = internalGetSetBooleanProperty(p, true, false);
 				return Boolean.valueOf(result);

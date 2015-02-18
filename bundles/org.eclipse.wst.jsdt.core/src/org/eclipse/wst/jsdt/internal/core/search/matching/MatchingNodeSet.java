@@ -31,9 +31,9 @@ public class MatchingNodeSet {
  */
 SimpleLookupTable matchingNodes = new SimpleLookupTable(3); // node -> accuracy
 private HashtableOfLong matchingNodesKeys = new HashtableOfLong(3); // sourceRange -> node
-static Integer EXACT_MATCH = new Integer(SearchMatch.A_ACCURATE);
-static Integer POTENTIAL_MATCH = new Integer(SearchMatch.A_INACCURATE);
-static Integer ERASURE_MATCH = new Integer(SearchPattern.R_ERASURE_MATCH);
+static Integer EXACT_MATCH = Integer.valueOf(SearchMatch.A_ACCURATE);
+static Integer POTENTIAL_MATCH = Integer.valueOf(SearchMatch.A_INACCURATE);
+static Integer ERASURE_MATCH = Integer.valueOf(SearchPattern.R_ERASURE_MATCH);
 
 /**
  * Tell whether locators need to resolve or not for current matching node set.
@@ -58,7 +58,7 @@ public int addMatch(ASTNode node, int matchLevel) {
 	switch (maskedLevel) {
 		case PatternLocator.INACCURATE_MATCH:
 			if (matchLevel != maskedLevel) {
-				addTrustedMatch(node, new Integer(SearchMatch.A_INACCURATE+(matchLevel & PatternLocator.FLAVORS_MASK)));
+				addTrustedMatch(node, Integer.valueOf(SearchMatch.A_INACCURATE+(matchLevel & PatternLocator.FLAVORS_MASK)));
 			} else {
 				addTrustedMatch(node, POTENTIAL_MATCH);
 			}
@@ -68,14 +68,14 @@ public int addMatch(ASTNode node, int matchLevel) {
 			break;
 		case PatternLocator.ERASURE_MATCH:
 			if (matchLevel != maskedLevel) {
-				addTrustedMatch(node, new Integer(SearchPattern.R_ERASURE_MATCH+(matchLevel & PatternLocator.FLAVORS_MASK)));
+				addTrustedMatch(node, Integer.valueOf(SearchPattern.R_ERASURE_MATCH+(matchLevel & PatternLocator.FLAVORS_MASK)));
 			} else {
 				addTrustedMatch(node, ERASURE_MATCH);
 			}
 			break;
 		case PatternLocator.ACCURATE_MATCH:
 			if (matchLevel != maskedLevel) {
-				addTrustedMatch(node, new Integer(SearchMatch.A_ACCURATE+(matchLevel & PatternLocator.FLAVORS_MASK)));
+				addTrustedMatch(node, Integer.valueOf(SearchMatch.A_ACCURATE+(matchLevel & PatternLocator.FLAVORS_MASK)));
 			} else {
 				addTrustedMatch(node, EXACT_MATCH);
 			}

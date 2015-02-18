@@ -591,7 +591,7 @@ public class PasteAction extends SelectionDispatchAction{
 					IProject project;
 					int i= 1;
 					do {
-						String name= Messages.format(ReorgMessages.PasteAction_projectName, i == 1 ? (Object) "" : new Integer(i)); //$NON-NLS-1$
+						String name= Messages.format(ReorgMessages.PasteAction_projectName, i == 1 ? (Object) "" : Integer.valueOf(i)); //$NON-NLS-1$
 						project= JavaScriptPlugin.getWorkspace().getRoot().getProject(name);
 						i++;
 					} while (project.exists());

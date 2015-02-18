@@ -137,7 +137,7 @@ public class ExceptionOccurrencesFinder extends ASTVisitor implements IOccurrenc
 			try {
 				boolean isException= node == fSelectedName;
 				int line= document.getLineOfOffset(startPosition);
-				Integer lineInteger= new Integer(line);
+				Integer lineInteger= Integer.valueOf(line);
 				ExceptionOccurrencesGroupKey groupKey= (ExceptionOccurrencesGroupKey) lineToLineElement.get(lineInteger);
 				if (groupKey == null) {
 					IRegion region= document.getLineInformation(line);

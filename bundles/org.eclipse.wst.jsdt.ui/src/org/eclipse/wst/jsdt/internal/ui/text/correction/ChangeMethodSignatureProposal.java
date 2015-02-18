@@ -205,7 +205,7 @@ public class ChangeMethodSignatureProposal extends LinkedCorrectionProposal {
 				
 				Type newType= imports.addImport(newTypeBinding, ast);
 				rewrite.replace(decl.getType(), newType, null);
-				rewrite.set(decl, SingleVariableDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), null);
+				rewrite.set(decl, SingleVariableDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), null);
 				
 				IBinding binding= decl.getName().resolveBinding();
 				if (binding != null) {

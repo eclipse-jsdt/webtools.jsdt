@@ -525,7 +525,7 @@ public abstract class AbstractSpellDictionary implements ISpellDictionary {
 					}
 			} catch (IOException exception) {
 				if (line > 0) {
-					String message= Messages.format(JavaUIMessages.AbstractSpellingDictionary_encodingError, new Object[] { new Integer(line), url.toString() });
+					String message= Messages.format(JavaUIMessages.AbstractSpellingDictionary_encodingError, new Object[] { Integer.valueOf(line), url.toString() });
 					IStatus status= new Status(IStatus.ERROR, JavaScriptUI.ID_PLUGIN, IStatus.OK, message, exception);
 					JavaScriptPlugin.log(status);
 				} else

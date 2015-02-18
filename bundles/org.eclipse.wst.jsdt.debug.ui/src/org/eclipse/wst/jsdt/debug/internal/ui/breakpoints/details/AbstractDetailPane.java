@@ -140,7 +140,7 @@ public abstract class AbstractDetailPane implements IDetailPane3 {
 	 */
 	protected void addAutosaveProperties(int[] autosave) {
 		for (int i = 0; i < autosave.length; i++) {
-			fAutoSaveProperties.add(new Integer(autosave[i]));
+			fAutoSaveProperties.add(Integer.valueOf(autosave[i]));
 		}
 	}
 
@@ -153,7 +153,7 @@ public abstract class AbstractDetailPane implements IDetailPane3 {
 		fEditor.setMnemonics(false);
 		fEditor.addPropertyListener(new IPropertyListener() {
 			public void propertyChanged(Object source, int propId) {
-				if (fAutoSaveProperties.contains(new Integer(propId))) {
+				if (fAutoSaveProperties.contains(Integer.valueOf(propId))) {
 					try {
 						fEditor.doSave();
 						return;

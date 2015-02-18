@@ -33,7 +33,7 @@ public class JavaScriptSuperTypeAction extends JavaScriptLibrariesAction {
 	
 	public void run(IAction arg0) {
 		Map data = new HashMap();
-		data.put(BuildPathsPropertyPage.DATA_PAGE_INDEX, new Integer(BUILD_PATH_PAGE_INDEX));
+		data.put(BuildPathsPropertyPage.DATA_PAGE_INDEX, Integer.valueOf(BUILD_PATH_PAGE_INDEX));
 		String ID = arg0.getId();
 		String propertyPage = (String)PROPS_TO_IDS.get(ID);
 		

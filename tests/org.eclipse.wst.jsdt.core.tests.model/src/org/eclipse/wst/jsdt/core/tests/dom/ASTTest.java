@@ -5164,7 +5164,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 				int start = buffer.length();
 				buffer.append("(");
 				// push start position - popped by postVisit for same node
-				stack.add(new Integer(start));
+				stack.add(Integer.valueOf(start));
 			}
 			public void postVisit(ASTNode node) {
 				// pop start position placed there by preVisit
@@ -7181,11 +7181,11 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		Set s = new HashSet();
 		for (int i=0; i<all.length; i++) {
 			assertTrue(MIN <= all[i] && all[i] <= MAX);
-			s.add(new Integer(all[i]));
+			s.add(Integer.valueOf(all[i]));
 		}
 		assertTrue(s.size() == all.length);
 		// ensure that Integers really do compare properly with equals
-		assertTrue(new Integer(1).equals(new Integer(1)));
+		assertTrue(Integer.valueOf(1).equals(Integer.valueOf(1)));
 	}
 }
 

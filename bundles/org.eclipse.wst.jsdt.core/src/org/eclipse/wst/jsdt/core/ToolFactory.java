@@ -46,7 +46,7 @@ public class ToolFactory {
 	 * @see DefaultCodeFormatterConstants#FORMATTER_NEVER_INDENT_LINE_COMMENTS_ON_FIRST_COLUMN
 	 * @see #createCodeFormatter(Map, int)
 	 */
-	public static final int M_FORMAT_NEW = new Integer(0).intValue();
+	public static final int M_FORMAT_NEW = 0;
 
 	/**
 	 * This mode is used for formatting existing code when all formatter options should be used.
@@ -58,7 +58,7 @@ public class ToolFactory {
 	 * @see DefaultCodeFormatterConstants#FORMATTER_NEVER_INDENT_LINE_COMMENTS_ON_FIRST_COLUMN
 	 * @see #createCodeFormatter(Map, int)
 	 */
-	public static final int M_FORMAT_EXISTING = new Integer(1).intValue();
+	public static final int M_FORMAT_EXISTING = 1;
 
 	/**
 	 * Create an instance of the built-in code formatter.

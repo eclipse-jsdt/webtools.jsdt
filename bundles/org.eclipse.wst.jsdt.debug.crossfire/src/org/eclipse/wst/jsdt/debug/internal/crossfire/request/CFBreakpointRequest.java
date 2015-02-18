@@ -108,7 +108,7 @@ public class CFBreakpointRequest extends CFThreadEventRequest implements Breakpo
 			Map bp = new HashMap();
 			bp.put(Attributes.TYPE, Attributes.LINE);
 			Map loc = new HashMap();
-			loc.put(Attributes.LINE, new Integer(location.lineNumber()));
+			loc.put(Attributes.LINE, Integer.valueOf(location.lineNumber()));
 			loc.put(Attributes.URL, script.url());
 			bp.put(Attributes.LOCATION, loc);
 			Map attribs = new HashMap();

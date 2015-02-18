@@ -83,7 +83,7 @@ public class ArrayReferenceImpl extends ObjectReferenceImpl implements ArrayRefe
 			}
 			values = new ArrayList(length);
 			for (int i = 0; i < length; i++) {
-				Object value = members.get(new Integer(i));
+				Object value = members.get(Integer.valueOf(i));
 				if (value == null) {
 					value = new UndefinedValueImpl(vm);
 				}

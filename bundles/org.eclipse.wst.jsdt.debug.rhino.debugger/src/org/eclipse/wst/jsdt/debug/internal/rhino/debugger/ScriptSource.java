@@ -107,7 +107,7 @@ public class ScriptSource {
 			if(line < min) {
 				min = line;
 			}
-			lineNumbers.add(new Integer(line));
+			lineNumbers.add(Integer.valueOf(line));
 		}
 		//dump in the line numbers from the expanded set of functions
 		if(flength > 0) {
@@ -133,7 +133,7 @@ public class ScriptSource {
 						else if(currentLine > end) {
 							end = currentLine;
 						}
-						lineNumbers.add(new Integer(currentLine));
+						lineNumbers.add(Integer.valueOf(currentLine));
 					}
 				}
 				String name = functions[i].getFunctionName();
@@ -157,7 +157,7 @@ public class ScriptSource {
 			}
 			lineNumbers = null;
 		}
-		this.firstLine = new Integer(min);
+		this.firstLine = Integer.valueOf(min);
 	}
 
 	/**
@@ -282,7 +282,7 @@ public class ScriptSource {
 			HashSet lineNumbers = new HashSet();
 			for (int i = 0; i < lines.length; i++) {
 				if(lines[i] != null) {
-					lineNumbers.add(new Integer(i));
+					lineNumbers.add(Integer.valueOf(i));
 				}
 			}
 			result.put(JSONConstants.LINES, (lineNumbers == null ? Collections.EMPTY_SET : lineNumbers));

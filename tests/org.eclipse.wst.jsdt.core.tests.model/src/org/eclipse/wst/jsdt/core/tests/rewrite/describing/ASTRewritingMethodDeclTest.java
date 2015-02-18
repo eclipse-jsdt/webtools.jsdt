@@ -205,7 +205,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		
 		{ // insert return type, add second modifier
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(0);
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(Modifier.PUBLIC | Modifier.FINAL), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(Modifier.PUBLIC | Modifier.FINAL), null);
 		
 			Type newReturnType= astRoot.getAST().newPrimitiveType(PrimitiveType.FLOAT);
 			
@@ -216,7 +216,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		}
 		{ // insert return type, add (first) modifier
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(1);
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(Modifier.FINAL), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(Modifier.FINAL), null);
 			
 			Type newReturnType= astRoot.getAST().newPrimitiveType(PrimitiveType.FLOAT);
 			
@@ -228,7 +228,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		{ // insert return type, add second modifier with comments
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(2);
 			
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(Modifier.FINAL), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(Modifier.FINAL), null);
 			
 			Type newReturnType= astRoot.getAST().newPrimitiveType(PrimitiveType.FLOAT);
 			
@@ -240,7 +240,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		
 		{ // remove return type, add second modifier
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(3);
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(Modifier.PUBLIC | Modifier.FINAL), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(Modifier.PUBLIC | Modifier.FINAL), null);
 		
 			// from method to constructor 
 			rewrite.set(methodDecl, FunctionDeclaration.RETURN_TYPE_PROPERTY, null, null);
@@ -249,7 +249,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		}
 		{ // remove return type, add (first) modifier
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(4);
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(Modifier.FINAL), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(Modifier.FINAL), null);
 			
 			// from method to constructor 
 			rewrite.set(methodDecl, FunctionDeclaration.RETURN_TYPE_PROPERTY, null, null);
@@ -259,7 +259,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		{ // remove return type, add second modifier with comments
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(5);
 			
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(Modifier.FINAL), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(Modifier.FINAL), null);
 			
 			// from method to constructor 
 			rewrite.set(methodDecl, FunctionDeclaration.RETURN_TYPE_PROPERTY, null, null);
@@ -308,7 +308,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		
 		{ // insert return type, remove second modifier
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(0);
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(Modifier.PUBLIC), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(Modifier.PUBLIC), null);
 		
 			Type newReturnType= astRoot.getAST().newPrimitiveType(PrimitiveType.FLOAT);
 			
@@ -319,7 +319,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		}
 		{ // insert return type, remove (only) modifier
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(1);
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(0), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(0), null);
 			
 			Type newReturnType= astRoot.getAST().newPrimitiveType(PrimitiveType.FLOAT);
 			
@@ -331,7 +331,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		{ // insert return type, remove modifier with comments
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(2);
 			
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(0), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(0), null);
 			
 			Type newReturnType= astRoot.getAST().newPrimitiveType(PrimitiveType.FLOAT);
 			
@@ -343,7 +343,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		
 		{ // remove return type, remove second modifier
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(3);
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(Modifier.PUBLIC), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(Modifier.PUBLIC), null);
 		
 			// from method to constructor 
 			rewrite.set(methodDecl, FunctionDeclaration.RETURN_TYPE_PROPERTY, null, null);
@@ -352,7 +352,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		}
 		{ // remove return type, remove (only) modifier
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(4);
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(0), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(0), null);
 			
 			// from method to constructor 
 			rewrite.set(methodDecl, FunctionDeclaration.RETURN_TYPE_PROPERTY, null, null);
@@ -362,7 +362,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		{ // remove return type, remove modifier with comments
 			FunctionDeclaration methodDecl= (FunctionDeclaration) list.get(5);
 			
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(0), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(0), null);
 			
 			// from method to constructor 
 			rewrite.set(methodDecl, FunctionDeclaration.RETURN_TYPE_PROPERTY, null, null);
@@ -635,7 +635,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			FunctionDeclaration methodDecl= findMethodDeclaration(type, "gee");
 			
 			// change flags
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(0), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(0), null);
 			
 			List parameters= methodDecl.parameters();
 			assertTrue("must be 3 parameters", parameters.size() == 3);
@@ -796,7 +796,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			// change flags
 			int newModifiers= Modifier.PUBLIC | Modifier.SYNCHRONIZED;
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 			
 			List parameters= methodDecl.parameters();
 			assertTrue("must be 3 parameters", parameters.size() == 3);
@@ -817,7 +817,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			// change flags
 			int newModifiers= Modifier.PUBLIC | Modifier.SYNCHRONIZED | Modifier.STATIC;
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 			
 			List parameters= methodDecl.parameters();
 			assertTrue("must be 3 parameters", parameters.size() == 3);
@@ -1244,7 +1244,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			// change flags
 			int newModifiers= Modifier.PUBLIC | Modifier.ABSTRACT;
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 			
 			Block body= methodDecl.getBody();
 			assertTrue("No body: gee", body != null);
@@ -1256,7 +1256,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			// change flags
 			int newModifiers= Modifier.PRIVATE;
-			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(methodDecl, FunctionDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 			
 			
 			Block body= methodDecl.getBody();
@@ -1308,7 +1308,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		{ // add extra dim, add throws
 			FunctionDeclaration methodDecl= findMethodDeclaration(type, "foo1");
 			
-			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(1), null);
+			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(1), null);
 			
 			Name newThrownException2= ast.newSimpleName("ArrayStoreException");
 			rewrite.getListRewrite(methodDecl, FunctionDeclaration.THROWN_EXCEPTIONS_PROPERTY).insertLast(newThrownException2, null);
@@ -1317,14 +1317,14 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		{ // add extra dim, remove throws
 			FunctionDeclaration methodDecl= findMethodDeclaration(type, "foo2");
 			
-			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(1), null);
+			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(1), null);
 			
 			rewrite.remove((ASTNode) methodDecl.thrownExceptions().get(0), null);			
 		}		
 		{ // remove extra dim, add throws
 			FunctionDeclaration methodDecl= findMethodDeclaration(type, "foo3");
 
-			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(1), null);
+			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(1), null);
 			
 			Name newThrownException2= ast.newSimpleName("ArrayStoreException");
 			rewrite.getListRewrite(methodDecl, FunctionDeclaration.THROWN_EXCEPTIONS_PROPERTY).insertLast(newThrownException2, null);
@@ -1333,7 +1333,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		{ // add extra dim, remove throws
 			FunctionDeclaration methodDecl= findMethodDeclaration(type, "foo4");
 			
-			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(1), null);
+			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(1), null);
 			
 			rewrite.remove((ASTNode) methodDecl.thrownExceptions().get(0), null);			
 		}
@@ -1344,7 +1344,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			rewrite.getListRewrite(methodDecl, FunctionDeclaration.PARAMETERS_PROPERTY).insertLast(newParam1, null);
 
 			
-			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(4), null);
+			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(4), null);
 			
 			Name newThrownException2= ast.newSimpleName("ArrayStoreException");
 			rewrite.getListRewrite(methodDecl, FunctionDeclaration.THROWN_EXCEPTIONS_PROPERTY).insertLast(newThrownException2, null);
@@ -1355,7 +1355,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			rewrite.remove((ASTNode) methodDecl.parameters().get(0), null);		
 			
-			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(4), null);
+			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(4), null);
 			
 			rewrite.remove((ASTNode) methodDecl.thrownExceptions().get(0), null);			
 		}
@@ -1530,7 +1530,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			// add modifier
 			int newModifiers= Modifier.FINAL;
-			rewrite.set(decl, FieldDeclaration.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(decl, FieldDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 			
 			PrimitiveType newType= ast.newPrimitiveType(PrimitiveType.BOOLEAN);
 			rewrite.replace(decl.getType(), newType, null);
@@ -1547,7 +1547,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			// add modifier
 			int newModifiers= Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
-			rewrite.set(decl, FieldDeclaration.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(decl, FieldDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 			
 			List fragments= decl.fragments();
 			assertTrue("Number of fragments not 3", fragments.size() == 3);
@@ -1566,7 +1566,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			// change modifier
 			int newModifiers= 0;
-			rewrite.set(decl, FieldDeclaration.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(decl, FieldDeclaration.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 		}
 				
 		String preview= evaluateRewrite(cu, rewrite);
@@ -1611,7 +1611,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			
 			// add modifier
 			int newModifiers= Modifier.STATIC;
-			rewrite.set(initializer, Initializer.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(initializer, Initializer.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 			
 			
 			Block block= ast.newBlock();
@@ -1623,7 +1623,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			Initializer initializer= (Initializer) declarations.get(1);
 			
 			int newModifiers= 0;
-			rewrite.set(initializer, Initializer.MODIFIERS_PROPERTY, new Integer(newModifiers), null);
+			rewrite.set(initializer, Initializer.MODIFIERS_PROPERTY, Integer.valueOf(newModifiers), null);
 			
 		}
 				
@@ -1744,7 +1744,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 			FunctionDeclaration methodDecl= findMethodDeclaration(type, "DD");
 			
 			rewrite.set(methodDecl, FunctionDeclaration.CONSTRUCTOR_PROPERTY, Boolean.TRUE, null);
-			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, new Integer(0), null);
+			rewrite.set(methodDecl, FunctionDeclaration.EXTRA_DIMENSIONS_PROPERTY, Integer.valueOf(0), null);
 		}
 
 		String preview= evaluateRewrite(cu, rewrite);

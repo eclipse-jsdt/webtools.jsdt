@@ -63,7 +63,7 @@ public final class RenameLocalVariableDescriptor extends JavaScriptRefactoringDe
 		super.populateArgumentMap();
 		fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_NAME, fName);
 		fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_INPUT, elementToHandle(getProject(), fUnit));
-		fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_SELECTION, new Integer(fSelection.getOffset()).toString() + " " + new Integer(fSelection.getLength()).toString()); //$NON-NLS-1$
+		fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_SELECTION, Integer.valueOf(fSelection.getOffset()).toString() + " " + Integer.valueOf(fSelection.getLength()).toString()); //$NON-NLS-1$
 		fArguments.put(JavaScriptRefactoringDescriptor.ATTRIBUTE_REFERENCES, Boolean.toString(fReferences));
 	}
 

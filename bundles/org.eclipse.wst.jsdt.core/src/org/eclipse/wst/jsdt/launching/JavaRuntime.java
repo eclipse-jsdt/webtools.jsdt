@@ -1092,11 +1092,11 @@ throw new org.eclipse.wst.jsdt.core.UnimplementedException();
 ////		if (projects == null) {
 ////			projects = new ArrayList();
 ////			fgProjects.set(projects);
-////			count = new Integer(0);
+////			count = Integer.valueOf(0);
 ////		}
 ////		int intCount = count.intValue();
 ////		intCount++;
-////		fgEntryCount.set(new Integer(intCount));
+////		fgEntryCount.set(Integer.valueOf(intCount));
 ////		try {
 ////			for (int i = 0; i < cpes.length; i++) {
 ////				IIncludePathEntry cpe = cpes[i];
@@ -1127,7 +1127,7 @@ throw new org.eclipse.wst.jsdt.core.UnimplementedException();
 ////				fgProjects.set(null);
 ////				fgEntryCount.set(null);
 ////			} else {
-////				fgEntryCount.set(new Integer(intCount));
+////				fgEntryCount.set(Integer.valueOf(intCount));
 ////			}
 ////		}
 ////		// set includepath property

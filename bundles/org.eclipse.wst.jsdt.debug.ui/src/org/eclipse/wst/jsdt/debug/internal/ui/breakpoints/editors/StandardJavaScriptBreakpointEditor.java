@@ -153,7 +153,7 @@ public class StandardJavaScriptBreakpointEditor extends AbstractJavaScriptBreakp
 			enabled = true;
 			int hitCount = breakpoint.getHitCount();
 			if (hitCount > 0) {
-				text = new Integer(hitCount).toString();
+				text = Integer.valueOf(hitCount).toString();
 				hasHitCount = true;
 			}
 			suspendThread= breakpoint.getSuspendPolicy() == IJavaScriptBreakpoint.SUSPEND_THREAD;

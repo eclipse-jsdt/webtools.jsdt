@@ -6786,7 +6786,7 @@ public void recoveryTokenCheck() {
 }
 
 protected boolean shouldInsertSemicolon(int prevpos, int prevtoken) {
-	Integer position = new Integer(prevpos);
+	Integer position = Integer.valueOf(prevpos);
 	if (this.errorAction.contains(position)) {
 		// should not insert a semi-colon at a location that has already be tried
 		return false;

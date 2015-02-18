@@ -44,7 +44,7 @@ public class ThreadRequestTests extends RequestTest {
 	 */
 	public void testInvalidThread() throws Exception {
 		RhinoRequest request = new RhinoRequest("context"); //$NON-NLS-1$
-		request.getArguments().put(JSONConstants.THREAD_ID, new Integer("9999")); //$NON-NLS-1$
+		request.getArguments().put(JSONConstants.THREAD_ID, Integer.valueOf("9999")); //$NON-NLS-1$
 		debugSession.send(request);
 		Response response = debugSession.receiveResponse(request.getSequence(), VirtualMachine.DEFAULT_TIMEOUT);
 		assertFalse(response.isSuccess());

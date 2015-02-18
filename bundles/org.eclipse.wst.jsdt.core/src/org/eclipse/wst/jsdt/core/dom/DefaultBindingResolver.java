@@ -485,7 +485,7 @@ class DefaultBindingResolver extends BindingResolver {
 			Constant constant = compilerExpression.constant;
 			if (constant != null && constant != Constant.NotAConstant) {
 				switch (constant.typeID()) {
-					case TypeIds.T_int : return new Integer(constant.intValue());
+					case TypeIds.T_int : return Integer.valueOf(constant.intValue());
 					case TypeIds.T_short : return new Short(constant.shortValue());
 					case TypeIds.T_char : return new Character(constant.charValue());
 					case TypeIds.T_float : return new Float(constant.floatValue());

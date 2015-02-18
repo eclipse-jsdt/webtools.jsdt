@@ -213,9 +213,9 @@ public class CleanUpRefactoringWizard extends RefactoringWizard {
 			if (cus.length == 1) {
 				setMessage(MultiFixMessages.CleanUpRefactoringWizard_CleaningUp11_Title);
 			} else if (projects.length == 1) {
-				setMessage(Messages.format(MultiFixMessages.CleanUpRefactoringWizard_CleaningUpN1_Title, new Integer(cus.length)));
+				setMessage(Messages.format(MultiFixMessages.CleanUpRefactoringWizard_CleaningUpN1_Title, Integer.valueOf(cus.length)));
 			} else {
-				setMessage(Messages.format(MultiFixMessages.CleanUpRefactoringWizard_CleaningUpNN_Title, new Object[] {new Integer(cus.length), new Integer(projects.length)}));
+				setMessage(Messages.format(MultiFixMessages.CleanUpRefactoringWizard_CleaningUpNN_Title, new Object[] {Integer.valueOf(cus.length), Integer.valueOf(projects.length)}));
 			}
         }
 

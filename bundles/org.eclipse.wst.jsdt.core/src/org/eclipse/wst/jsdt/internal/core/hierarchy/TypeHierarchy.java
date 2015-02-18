@@ -257,7 +257,7 @@ public class TypeHierarchy implements ITypeHierarchy, IElementChangedListener {
 
 	private static Integer bytesToFlags(byte[] bytes) {
 		if (bytes != null && bytes.length > 0) {
-			return new Integer(new String(bytes));
+			return Integer.valueOf(new String(bytes));
 		}
 		else {
 			return null;
@@ -268,7 +268,7 @@ public class TypeHierarchy implements ITypeHierarchy, IElementChangedListener {
 	 * cacheFlags.
 	 */
 	public void cacheFlags(IType type, int flags) {
-		this.typeFlags.put(type, new Integer(flags));
+		this.typeFlags.put(type, Integer.valueOf(flags));
 	}
 
 	/**
@@ -964,11 +964,11 @@ public class TypeHierarchy implements ITypeHierarchy, IElementChangedListener {
 			while ((b = (byte) input.read()) != SEPARATOR1 && b != -1) {
 				bytes = readUntil(input, SEPARATOR3, 1);
 				bytes[0] = b;
-				int subClass = new Integer(new String(bytes)).intValue();
+				int subClass = Integer.valueOf(new String(bytes)).intValue();
 
 				// read super type
 				bytes = readUntil(input, SEPARATOR1);
-				int superClass = new Integer(new String(bytes)).intValue();
+				int superClass = Integer.valueOf(new String(bytes)).intValue();
 
 				typeHierarchy.cacheSuperclass(types[subClass], types[superClass]);
 			}
@@ -1079,7 +1079,7 @@ public class TypeHierarchy implements ITypeHierarchy, IElementChangedListener {
 			int count = 0;
 
 			if (this.focusType != null) {
-				Integer index = new Integer(count++);
+				Integer index = Integer.valueOf(count++);
 				hashtable.put(this.focusType, index);
 				hashtable2.put(index, this.focusType);
 			}
@@ -1088,13 +1088,13 @@ public class TypeHierarchy implements ITypeHierarchy, IElementChangedListener {
 				Map.Entry entry = (Map.Entry) types[i];
 				Object t = entry.getKey();
 				if (hashtable.get(t) == null) {
-					Integer index = new Integer(count++);
+					Integer index = Integer.valueOf(count++);
 					hashtable.put(t, index);
 					hashtable2.put(index, t);
 				}
 				Object superClass = entry.getValue();
 				if (superClass != null && hashtable.get(superClass) == null) {
-					Integer index = new Integer(count++);
+					Integer index = Integer.valueOf(count++);
 					hashtable.put(superClass, index);
 					hashtable2.put(index, superClass);
 				}
@@ -1127,7 +1127,7 @@ public class TypeHierarchy implements ITypeHierarchy, IElementChangedListener {
 
 			// save types
 			for (int i = 0; i < count; i++) {
-				IType t = (IType) hashtable2.get(new Integer(i));
+				IType t = (IType) hashtable2.get(Integer.valueOf(i));
 
 				// n bytes
 				output.write(t.getHandleIdentifier().getBytes());

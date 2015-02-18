@@ -428,7 +428,7 @@ public class RequestHandler {
 		if (number == null) {
 			return null;
 		}
-		return new Integer(number.intValue());
+		return Integer.valueOf(number.intValue());
 	}
 
 	/**

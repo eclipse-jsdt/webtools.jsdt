@@ -202,7 +202,7 @@ public class UseSupertypeWizard extends RefactoringWizard{
 			fTreeViewer.addSelectionChangedListener(new ISelectionChangedListener(){
 				public void selectionChanged(SelectionChangedEvent event) {
 					IStructuredSelection ss= (IStructuredSelection)event.getSelection();
-					if (new Integer(0).equals(fFileCount.get(ss.getFirstElement()))){
+					if (Integer.valueOf(0).equals(fFileCount.get(ss.getFirstElement()))){
 						setMessage(RefactoringMessages.UseSupertypeInputPage_No_updates, IMessageProvider.INFORMATION); 
 						setPageComplete(false);
 					} else {
@@ -233,7 +233,7 @@ public class UseSupertypeWizard extends RefactoringWizard{
 		private void updateUpdateLabels() {
 			IType selectedType= getSelectedSupertype();
 			final int count= getUseSupertypeProcessor().getChanges();
-			fFileCount.put(selectedType, new Integer(count));
+			fFileCount.put(selectedType, Integer.valueOf(count));
 			if (count == 0) {
 				setMessage(RefactoringMessages.UseSupertypeInputPage_No_updates, IMessageProvider.INFORMATION); 
 				setPageComplete(false);

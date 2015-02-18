@@ -427,7 +427,7 @@ public class ContentAssistTestUtilities {
 		viewer.setSelectedRange(offset, 0);
 		
 		// Invoke insertProposal of CompletionProposalPopup
-		privateInsertProposalMethod.invoke(objPopup, new Object[]{pages[0][0], new Character((char) 0), new Integer(524288), new Integer(offset)});
+		privateInsertProposalMethod.invoke(objPopup, new Object[]{pages[0][0], new Character((char) 0), Integer.valueOf(524288), Integer.valueOf(offset)});
 		
 		// Get result of inserted proposal in the Editor
 		String strAfterInsert = viewer.getDocument().get();

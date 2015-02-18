@@ -146,7 +146,7 @@ public class RhinoResponse extends RhinoPacket implements Response {
 	 */
 	public Map toJSON() {
 		Map json = super.toJSON();
-		json.put(JSONConstants.REQUEST_SEQ, new Integer(requestSequence));
+		json.put(JSONConstants.REQUEST_SEQ, Integer.valueOf(requestSequence));
 		json.put(JSONConstants.COMMAND, command);
 		json.put(JSONConstants.BODY, body);
 		json.put(JSONConstants.SUCCESS, new Boolean(success));

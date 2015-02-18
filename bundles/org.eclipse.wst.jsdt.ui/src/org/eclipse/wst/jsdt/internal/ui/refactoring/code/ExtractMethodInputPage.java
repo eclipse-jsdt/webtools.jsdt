@@ -138,8 +138,8 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 //			RefactoringMessages.ExtractMethodInputPage_default, 
 //			RefactoringMessages.ExtractMethodInputPage_private
 //		};
-//		Integer[] data= new Integer[] {new Integer(Modifier.PUBLIC), new Integer(Modifier.PROTECTED), new Integer(Modifier.NONE), new Integer(Modifier.PRIVATE)};
-//		Integer visibility= new Integer(fRefactoring.getVisibility());
+//		Integer[] data= Integer.valueOf[] {Integer.valueOf(Modifier.PUBLIC), Integer.valueOf(Modifier.PROTECTED), Integer.valueOf(Modifier.NONE), Integer.valueOf(Modifier.PRIVATE)};
+//		Integer visibility= Integer.valueOf(fRefactoring.getVisibility());
 //		for (int i= 0; i < labels.length; i++) {
 //			Button radio= new Button(group, SWT.RADIO);
 //			radio.setText(labels[i]);
@@ -205,7 +205,7 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 		} else {
 			checkBox.setText(Messages.format(
 				RefactoringMessages.ExtractMethodInputPage_duplicates_multi, 
-				new Integer(duplicates))); 
+				Integer.valueOf(duplicates))); 
 		}
 		checkBox.setSelection(fRefactoring.getReplaceDuplicates());
 		checkBox.setEnabled(duplicates > 0);

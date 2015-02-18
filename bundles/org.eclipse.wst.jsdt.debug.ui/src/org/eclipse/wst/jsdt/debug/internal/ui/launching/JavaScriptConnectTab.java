@@ -371,7 +371,7 @@ public class JavaScriptConnectTab extends AbstractLaunchConfigurationTab impleme
 										editor.getPreferenceStore().setValue(key, Boolean.valueOf(value).booleanValue());
 									}
 									else if (argument instanceof IntegerArgument) {
-										editor.getPreferenceStore().setValue(key, new Integer(value).intValue());
+										editor.getPreferenceStore().setValue(key, Integer.valueOf(value).intValue());
 									}
 									editor.load();
 								}
@@ -421,7 +421,7 @@ public class JavaScriptConnectTab extends AbstractLaunchConfigurationTab impleme
 					argmap.put(key, Boolean.valueOf(editor.getPreferenceStore().getBoolean(key)).toString());
 				} 
 				else if (argument instanceof IntegerArgument) {
-					argmap.put(key, new Integer(editor.getPreferenceStore().getInt(key)).toString());
+					argmap.put(key, Integer.valueOf(editor.getPreferenceStore().getInt(key)).toString());
 				}
 			}
 			configuration.setAttribute(ILaunchConstants.ARGUMENT_MAP, argmap);

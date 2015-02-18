@@ -245,7 +245,7 @@ public abstract class RequestTest extends TestCase {
 					for (int i = 0; i < adds.length; i++) {
 						request = new RhinoRequest(JSONConstants.SETBREAKPOINT);
 						request.getArguments().put(JSONConstants.SCRIPT_ID, scriptId);
-						request.getArguments().put(JSONConstants.LINE, new Integer(adds[i]));
+						request.getArguments().put(JSONConstants.LINE, Integer.valueOf(adds[i]));
 						debugSession.send(request);
 						response = debugSession.receiveResponse(request.getSequence(), VirtualMachine.DEFAULT_TIMEOUT);
 						assertTrue(testName()+": the request to set a breakpoint on line ["+adds[i]+"] was not successful", response.isSuccess()); //$NON-NLS-1$ //$NON-NLS-2$

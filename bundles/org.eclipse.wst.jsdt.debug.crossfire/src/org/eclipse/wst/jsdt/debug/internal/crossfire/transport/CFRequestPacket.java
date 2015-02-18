@@ -125,7 +125,7 @@ public class CFRequestPacket extends CFPacket implements Request {
 	 */
 	public Map toJSON() {
 		Map json = super.toJSON();
-		json.put(Attributes.SEQ, new Integer(sequence));
+		json.put(Attributes.SEQ, Integer.valueOf(sequence));
 		json.put(Attributes.COMMAND, command);
 		if(!arguments.isEmpty()) {
 			json.put(Attributes.ARGUMENTS, arguments);

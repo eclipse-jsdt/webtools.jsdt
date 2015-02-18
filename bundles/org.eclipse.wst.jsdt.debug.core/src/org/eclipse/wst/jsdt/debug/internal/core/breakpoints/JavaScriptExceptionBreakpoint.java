@@ -66,7 +66,7 @@ public class JavaScriptExceptionBreakpoint extends JavaScriptBreakpoint {
 				// add attributes
 				attributes.put(IBreakpoint.ID, getModelIdentifier());
 				attributes.put(IBreakpoint.ENABLED, Boolean.valueOf(true));
-				Integer nochar = new Integer(-1);
+				Integer nochar = Integer.valueOf(-1);
 				attributes.put(IMarker.CHAR_START, nochar);
 				attributes.put(IMarker.CHAR_END, nochar);
 

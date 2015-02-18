@@ -614,10 +614,10 @@ public final class JavaDeleteProcessor extends DeleteProcessor implements IScrip
 			final JDTRefactoringDescriptor descriptor= new JDTRefactoringDescriptor(IJavaScriptRefactorings.DELETE, project, description, comment.asString(), arguments, flags);
 			arguments.put(ATTRIBUTE_DELETE_SUBPACKAGES, Boolean.valueOf(fDeleteSubPackages).toString());
 			arguments.put(ATTRIBUTE_SUGGEST_ACCESSORS, Boolean.valueOf(fSuggestGetterSetterDeletion).toString());
-			arguments.put(ATTRIBUTE_RESOURCES, new Integer(fResources.length).toString());
+			arguments.put(ATTRIBUTE_RESOURCES, Integer.valueOf(fResources.length).toString());
 			for (int offset= 0; offset < fResources.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + 1), descriptor.resourceToHandle(fResources[offset]));
-			arguments.put(ATTRIBUTE_ELEMENTS, new Integer(fJavaElements.length).toString());
+			arguments.put(ATTRIBUTE_ELEMENTS, Integer.valueOf(fJavaElements.length).toString());
 			for (int offset= 0; offset < fJavaElements.length; offset++)
 				arguments.put(JDTRefactoringDescriptor.ATTRIBUTE_ELEMENT + (offset + fResources.length + 1), descriptor.elementToHandle(fJavaElements[offset]));
 			return new DynamicValidationRefactoringChange(descriptor, RefactoringCoreMessages.DeleteRefactoring_7, new Change[] { fDeleteChange});

@@ -280,6 +280,6 @@ public class CleanUpSaveParticipantConfigurationModifyDialog extends StatusDialo
 			count+= fPages[i].getSelectedCleanUpCount();
 		}
 		
-		fCountLabel.setText(Messages.format(SaveParticipantMessages.CleanUpSaveParticipantConfigurationModifyDialog_XofYSelected_Label, new Object[] {new Integer(count), new Integer(size)}));
+		fCountLabel.setText(Messages.format(SaveParticipantMessages.CleanUpSaveParticipantConfigurationModifyDialog_XofYSelected_Label, new Object[] {Integer.valueOf(count), Integer.valueOf(size)}));
 	}
 }

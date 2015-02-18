@@ -87,7 +87,7 @@ protected static Object convertConstant(Constant constant) {
 		case TypeIds.T_float :
 			return new Float(constant.floatValue());
 		case TypeIds.T_int :
-			return new Integer(constant.intValue());
+			return Integer.valueOf(constant.intValue());
 		case TypeIds.T_long :
 			return new Long(constant.longValue());
 		case TypeIds.T_short :

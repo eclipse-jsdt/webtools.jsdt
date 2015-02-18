@@ -143,7 +143,7 @@ public class JavaSearchResultPage extends AbstractTextSearchViewPage implements 
 		
 		initSortActions();
 		initGroupingActions();
-		setElementLimit(new Integer(DEFAULT_ELEMENT_LIMIT));
+		setElementLimit(Integer.valueOf(DEFAULT_ELEMENT_LIMIT));
 	}
 		
 	private void initSortActions() {
@@ -199,8 +199,8 @@ public class JavaSearchResultPage extends AbstractTextSearchViewPage implements 
 		try {
 			IMarker marker= file.createMarker(NewSearchUI.SEARCH_MARKER);
 			HashMap attributes= new HashMap(4);
-			attributes.put(IMarker.CHAR_START, new Integer(offset));
-			attributes.put(IMarker.CHAR_END, new Integer(offset + length));
+			attributes.put(IMarker.CHAR_START, Integer.valueOf(offset));
+			attributes.put(IMarker.CHAR_END, Integer.valueOf(offset + length));
 			marker.setAttributes(attributes);
 			IDE.gotoMarker(editor, marker);
 			marker.delete();
@@ -417,7 +417,7 @@ public class JavaSearchResultPage extends AbstractTextSearchViewPage implements 
 		
 		fCurrentGrouping= grouping;
 		fCurrentSortOrder= sortOrder;
-		setElementLimit(new Integer(elementLimit));
+		setElementLimit(Integer.valueOf(elementLimit));
 	}
 
 	/* (non-Javadoc)

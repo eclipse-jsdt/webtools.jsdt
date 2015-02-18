@@ -81,7 +81,7 @@ public class OccurrencesSearchQuery implements ISearchQuery {
 		if (nMatches == 1) {
 			return Messages.format(fSingularLabel, new Object[] { fName, fElement.getElementName() });
 		} else {
-			return Messages.format(fPluralLabel, new Object[] { fName, new Integer(nMatches), fElement.getElementName() });
+			return Messages.format(fPluralLabel, new Object[] { fName, Integer.valueOf(nMatches), fElement.getElementName() });
 		}
 	}
 		

@@ -188,7 +188,7 @@ public class QuickFixProcessor implements IQuickFixProcessor {
 		ArrayList resultingCollections= new ArrayList();
 		for (int i= 0; i < locations.length; i++) {
 			IProblemLocation curr= locations[i];
-			Integer id= new Integer(curr.getProblemId());
+			Integer id= Integer.valueOf(curr.getProblemId());
 			if (handledProblems.add(id)) {
 				process(context, curr, resultingCollections);
 			}

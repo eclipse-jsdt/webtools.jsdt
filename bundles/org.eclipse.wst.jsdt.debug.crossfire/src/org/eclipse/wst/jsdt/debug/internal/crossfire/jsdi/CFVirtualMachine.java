@@ -109,7 +109,7 @@ public class CFVirtualMachine extends CFMirror implements VirtualMachine {
 					
 					if (url != null) {
 						Map location = new HashMap();
-						location.put(Attributes.LINE, new Integer(breakpoint.getLineNumber()));
+						location.put(Attributes.LINE, Integer.valueOf(breakpoint.getLineNumber()));
 						location.put(Attributes.URL, url);
 						Map attributes = new HashMap();
 						if (breakpoint.isConditionEnabled()) {
@@ -121,7 +121,7 @@ public class CFVirtualMachine extends CFMirror implements VirtualMachine {
 						attributes.put(Attributes.ENABLED, new Boolean(breakpoint.isEnabled()));
 						int hitCount = breakpoint.getHitCount();
 						if (hitCount != -1) {
-							attributes.put(Attributes.HIT_COUNT, new Integer(hitCount));
+							attributes.put(Attributes.HIT_COUNT, Integer.valueOf(hitCount));
 						}
 						Map bpMap = new HashMap();
 						bpMap.put(Attributes.TYPE, Attributes.LINE);
@@ -242,7 +242,7 @@ public class CFVirtualMachine extends CFMirror implements VirtualMachine {
 			CFThreadReference thread = findThread(contextid);
 			if(thread != null) {
 				CFRequestPacket request = new CFRequestPacket(Commands.FRAME, thread.id());
-				request.setArgument(Attributes.INDEX, new Integer(index));
+				request.setArgument(Attributes.INDEX, Integer.valueOf(index));
 				request.setArgument(Attributes.INCLUDE_SCOPES, new Boolean(includescopes));
 				CFResponsePacket response = sendRequest(request);
 				if(response.isSuccess()) {

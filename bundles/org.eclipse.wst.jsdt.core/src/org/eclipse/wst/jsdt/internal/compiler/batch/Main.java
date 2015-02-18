@@ -543,7 +543,7 @@ public class Main implements ProblemSeverities, SuffixConstants {
 		 */
 		public void logNumberOfClassFilesGenerated(int exportedClassFilesCounter) {
 			if ((this.tagBits & Logger.XML) != 0) {
-				this.parameters.put(Logger.VALUE, new Integer(exportedClassFilesCounter));
+				this.parameters.put(Logger.VALUE, Integer.valueOf(exportedClassFilesCounter));
 				this.printTag(Logger.NUMBER_OF_CLASSFILES, this.parameters, true, true);
 			}
 			if (exportedClassFilesCounter == 1) {
@@ -684,10 +684,10 @@ public class Main implements ProblemSeverities, SuffixConstants {
 			int globalErrorsCount, int globalWarningsCount, int globalTasksCount) {
 			if ((this.tagBits & Logger.XML) != 0) {
 				// generate xml
-				this.parameters.put(Logger.NUMBER_OF_PROBLEMS, new Integer(globalProblemsCount));
-				this.parameters.put(Logger.NUMBER_OF_ERRORS, new Integer(globalErrorsCount));
-				this.parameters.put(Logger.NUMBER_OF_WARNINGS, new Integer(globalWarningsCount));
-				this.parameters.put(Logger.NUMBER_OF_TASKS, new Integer(globalTasksCount));
+				this.parameters.put(Logger.NUMBER_OF_PROBLEMS, Integer.valueOf(globalProblemsCount));
+				this.parameters.put(Logger.NUMBER_OF_ERRORS, Integer.valueOf(globalErrorsCount));
+				this.parameters.put(Logger.NUMBER_OF_WARNINGS, Integer.valueOf(globalWarningsCount));
+				this.parameters.put(Logger.NUMBER_OF_TASKS, Integer.valueOf(globalTasksCount));
 				this.printTag(Logger.PROBLEM_SUMMARY, this.parameters, true, true);
 			}
 			if (globalProblemsCount == 1) {
@@ -843,19 +843,19 @@ public class Main implements ProblemSeverities, SuffixConstants {
 			final int sourceEnd = problem.getSourceEnd();
 			final int id = problem.getID();
 			this.parameters.put(Logger.ID, getFieldName(id)); // ID as field name
-			this.parameters.put(Logger.PROBLEM_ID, new Integer(id)); // ID as numeric value
+			this.parameters.put(Logger.PROBLEM_ID, Integer.valueOf(id)); // ID as numeric value
 			boolean isError = problem.isError();
 			int severity = isError ? ProblemSeverities.Error : ProblemSeverities.Warning;
 			this.parameters.put(Logger.PROBLEM_SEVERITY, isError ? Logger.ERROR : Logger.WARNING);
-			this.parameters.put(Logger.PROBLEM_LINE, new Integer(problem.getSourceLineNumber()));
-			this.parameters.put(Logger.PROBLEM_SOURCE_START, new Integer(sourceStart));
-			this.parameters.put(Logger.PROBLEM_SOURCE_END, new Integer(sourceEnd));
+			this.parameters.put(Logger.PROBLEM_LINE, Integer.valueOf(problem.getSourceLineNumber()));
+			this.parameters.put(Logger.PROBLEM_SOURCE_START, Integer.valueOf(sourceStart));
+			this.parameters.put(Logger.PROBLEM_SOURCE_END, Integer.valueOf(sourceEnd));
 			String problemOptionKey = getProblemOptionKey(id);
 			if (problemOptionKey != null) {
 				this.parameters.put(Logger.PROBLEM_OPTION_KEY, problemOptionKey);
 			}
 			int categoryID = ProblemReporter.getProblemCategory(severity, id);
-			this.parameters.put(Logger.PROBLEM_CATEGORY_ID, new Integer(categoryID));
+			this.parameters.put(Logger.PROBLEM_CATEGORY_ID, Integer.valueOf(categoryID));
 			this.printTag(Logger.PROBLEM_TAG, this.parameters, true, false);
 			this.parameters.put(Logger.VALUE, problem.getMessage());
 			this.printTag(Logger.PROBLEM_MESSAGE, this.parameters, true, true);
@@ -880,9 +880,9 @@ public class Main implements ProblemSeverities, SuffixConstants {
 		 *            the given unit source
 		 */
 		private void logXmlTask(CategorizedProblem problem, char[] unitSource) {
-			this.parameters.put(Logger.PROBLEM_LINE, new Integer(problem.getSourceLineNumber()));
-			this.parameters.put(Logger.PROBLEM_SOURCE_START, new Integer(problem.getSourceStart()));
-			this.parameters.put(Logger.PROBLEM_SOURCE_END, new Integer(problem.getSourceEnd()));
+			this.parameters.put(Logger.PROBLEM_LINE, Integer.valueOf(problem.getSourceLineNumber()));
+			this.parameters.put(Logger.PROBLEM_SOURCE_START, Integer.valueOf(problem.getSourceStart()));
+			this.parameters.put(Logger.PROBLEM_SOURCE_END, Integer.valueOf(problem.getSourceEnd()));
 			String problemOptionKey = getProblemOptionKey(problem.getID());
 			if (problemOptionKey != null) {
 				this.parameters.put(Logger.PROBLEM_OPTION_KEY, problemOptionKey);
@@ -1005,14 +1005,14 @@ public class Main implements ProblemSeverities, SuffixConstants {
 		 * Only use in xml mode.
 		 */
 		private void startLoggingProblems(int errors, int warnings) {
-			this.parameters.put(Logger.NUMBER_OF_PROBLEMS, new Integer(errors + warnings));
-			this.parameters.put(Logger.NUMBER_OF_ERRORS, new Integer(errors));
-			this.parameters.put(Logger.NUMBER_OF_WARNINGS, new Integer(warnings));
+			this.parameters.put(Logger.NUMBER_OF_PROBLEMS, Integer.valueOf(errors + warnings));
+			this.parameters.put(Logger.NUMBER_OF_ERRORS, Integer.valueOf(errors));
+			this.parameters.put(Logger.NUMBER_OF_WARNINGS, Integer.valueOf(warnings));
 			this.printTag(Logger.PROBLEMS, this.parameters, true, false);
 		}
 
 		private void startLoggingExtraProblems(int count) {
-			this.parameters.put(Logger.NUMBER_OF_PROBLEMS, new Integer(count));
+			this.parameters.put(Logger.NUMBER_OF_PROBLEMS, Integer.valueOf(count));
 			this.printTag(Logger.EXTRA_PROBLEMS, this.parameters, true, false);
 		}
 
@@ -1054,7 +1054,7 @@ public class Main implements ProblemSeverities, SuffixConstants {
 		}
 		public void startLoggingTasks(int tasks) {
 			if ((this.tagBits & Logger.XML) != 0) {
-				this.parameters.put(Logger.NUMBER_OF_TASKS, new Integer(tasks));
+				this.parameters.put(Logger.NUMBER_OF_TASKS, Integer.valueOf(tasks));
 				this.printTag(Logger.TASKS, this.parameters, true, false);
 			}
 		}
@@ -1105,9 +1105,9 @@ public class Main implements ProblemSeverities, SuffixConstants {
 			final int sourceEnd = problem.getSourceEnd();
 			boolean isError = problem.isError();
 			this.parameters.put(Logger.PROBLEM_SEVERITY, isError ? Logger.ERROR : Logger.WARNING);
-			this.parameters.put(Logger.PROBLEM_LINE, new Integer(problem.getSourceLineNumber()));
-			this.parameters.put(Logger.PROBLEM_SOURCE_START, new Integer(sourceStart));
-			this.parameters.put(Logger.PROBLEM_SOURCE_END, new Integer(sourceEnd));
+			this.parameters.put(Logger.PROBLEM_LINE, Integer.valueOf(problem.getSourceLineNumber()));
+			this.parameters.put(Logger.PROBLEM_SOURCE_START, Integer.valueOf(sourceStart));
+			this.parameters.put(Logger.PROBLEM_SOURCE_END, Integer.valueOf(sourceEnd));
 			this.printTag(Logger.EXTRA_PROBLEM_TAG, this.parameters, true, false);
 			this.parameters.put(Logger.VALUE, problem.getMessage());
 			this.printTag(Logger.PROBLEM_MESSAGE, this.parameters, true, true);

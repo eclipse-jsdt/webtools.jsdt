@@ -41,14 +41,14 @@ public class CFResponsePacket extends CFPacket implements Response {
 	static final Map failed_attributes;
 	static {
 		failed_attributes = new HashMap();
-		Integer value = new Integer(-1);
+		Integer value = Integer.valueOf(-1);
 		failed_attributes.put(Attributes.SEQ, value);
 		failed_attributes.put(Attributes.TYPE, RESPONSE);
 		failed_attributes.put(Attributes.REQUEST_SEQ, value);
 		failed_attributes.put(Attributes.COMMAND, "failed"); //$NON-NLS-1$
 		Map status = new HashMap();
 		failed_attributes.put(Attributes.STATUS, status);
-		status.put(Attributes.CODE, new Integer(CODE_UNEXPECTED_EXCEPTION));
+		status.put(Attributes.CODE, Integer.valueOf(CODE_UNEXPECTED_EXCEPTION));
 		status.put(Attributes.RUNNING, Boolean.FALSE);
 		status.put(Attributes.MESSAGE, "failed"); //$NON-NLS-1$
 	}
@@ -220,7 +220,7 @@ public class CFResponsePacket extends CFPacket implements Response {
 	 */
 	public Map toJSON() {
 		Map json = super.toJSON();
-		json.put(Attributes.REQUEST_SEQ, new Integer(requestSequence));
+		json.put(Attributes.REQUEST_SEQ, Integer.valueOf(requestSequence));
 		json.put(Attributes.COMMAND, command);
 		if(body != null && body.size() > 0) {
 			json.put(Attributes.BODY, body);
@@ -228,7 +228,7 @@ public class CFResponsePacket extends CFPacket implements Response {
 		Map status = new HashMap();
 		json.put(Attributes.STATUS, status);
 		status.put(Attributes.RUNNING, new Boolean(running));
-		status.put(Attributes.CODE, new Integer(code));
+		status.put(Attributes.CODE, Integer.valueOf(code));
 		if (message != null) {
 			status.put(Attributes.MESSAGE, message);
 		}

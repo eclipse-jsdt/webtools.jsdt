@@ -189,7 +189,7 @@ public class SortElementsOperation extends JavaModelOperation {
 				List types = compilationUnit.types();
 				for (Iterator iter = types.iterator(); iter.hasNext();) {
 					AbstractTypeDeclaration typeDeclaration = (AbstractTypeDeclaration) iter.next();
-					typeDeclaration.setProperty(JavaScriptUnitSorter.RELATIVE_ORDER, new Integer(typeDeclaration.getStartPosition()));
+					typeDeclaration.setProperty(JavaScriptUnitSorter.RELATIVE_ORDER, Integer.valueOf(typeDeclaration.getStartPosition()));
 					compilationUnit.setProperty(CONTAINS_MALFORMED_NODES, Boolean.valueOf(isMalformed(typeDeclaration)));
 				}
 				return true;
@@ -199,7 +199,7 @@ public class SortElementsOperation extends JavaModelOperation {
 				List bodyDeclarations = anonymousClassDeclaration.bodyDeclarations();
 				for (Iterator iter = bodyDeclarations.iterator(); iter.hasNext();) {
 					BodyDeclaration bodyDeclaration = (BodyDeclaration) iter.next();
-					bodyDeclaration.setProperty(JavaScriptUnitSorter.RELATIVE_ORDER, new Integer(bodyDeclaration.getStartPosition()));
+					bodyDeclaration.setProperty(JavaScriptUnitSorter.RELATIVE_ORDER, Integer.valueOf(bodyDeclaration.getStartPosition()));
 					anonymousClassDeclaration.setProperty(CONTAINS_MALFORMED_NODES, Boolean.valueOf(isMalformed(bodyDeclaration)));
 				}
 				return true;
@@ -209,7 +209,7 @@ public class SortElementsOperation extends JavaModelOperation {
 				List bodyDeclarations = typeDeclaration.bodyDeclarations();
 				for (Iterator iter = bodyDeclarations.iterator(); iter.hasNext();) {
 					BodyDeclaration bodyDeclaration = (BodyDeclaration) iter.next();
-					bodyDeclaration.setProperty(JavaScriptUnitSorter.RELATIVE_ORDER, new Integer(bodyDeclaration.getStartPosition()));
+					bodyDeclaration.setProperty(JavaScriptUnitSorter.RELATIVE_ORDER, Integer.valueOf(bodyDeclaration.getStartPosition()));
 					typeDeclaration.setProperty(CONTAINS_MALFORMED_NODES, Boolean.valueOf(isMalformed(bodyDeclaration)));
 				}
 				return true;

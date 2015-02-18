@@ -74,8 +74,8 @@ public class JavaScriptFunctionBreakpoint extends JavaScriptLineBreakpoint imple
 				attributes.put(IBreakpoint.ENABLED, Boolean.valueOf(true));
 				attributes.put(FUNCTION_NAME, name);
 				attributes.put(FUNCTION_SIGNAURE, signature);
-				attributes.put(IMarker.CHAR_START, new Integer(charstart));
-				attributes.put(IMarker.CHAR_END, new Integer(charend));
+				attributes.put(IMarker.CHAR_START, Integer.valueOf(charstart));
+				attributes.put(IMarker.CHAR_END, Integer.valueOf(charend));
 				attributes.put(ENTRY, Boolean.valueOf(true));
 
 				ensureMarker().setAttributes(attributes);

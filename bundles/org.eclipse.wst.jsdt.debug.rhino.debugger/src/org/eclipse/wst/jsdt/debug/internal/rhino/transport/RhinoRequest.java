@@ -107,7 +107,7 @@ public class RhinoRequest extends RhinoPacket implements Request {
 	 */
 	public Map toJSON() {
 		Map json = super.toJSON();
-		json.put(JSONConstants.SEQ, new Integer(sequence));
+		json.put(JSONConstants.SEQ, Integer.valueOf(sequence));
 		json.put(JSONConstants.COMMAND, command);
 		json.put(JSONConstants.ARGUMENTS, arguments);
 		return json;

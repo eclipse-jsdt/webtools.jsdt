@@ -255,13 +255,13 @@ public class LineWrappingTabPage extends FormatterTabPage {
             Boolean forceWrapping;
             
             try {
-                wrappingStyle= new Integer(DefaultCodeFormatterConstants.getWrappingStyle(value));
-                indentStyle= new Integer(DefaultCodeFormatterConstants.getIndentStyle(value));
+                wrappingStyle= Integer.valueOf(DefaultCodeFormatterConstants.getWrappingStyle(value));
+                indentStyle= Integer.valueOf(DefaultCodeFormatterConstants.getIndentStyle(value));
                 forceWrapping= new Boolean(DefaultCodeFormatterConstants.getForceWrapping(value));
             } catch (IllegalArgumentException e) {
 				forceWrapping= new Boolean(false);
-				indentStyle= new Integer(DefaultCodeFormatterConstants.INDENT_DEFAULT);
-				wrappingStyle= new Integer(DefaultCodeFormatterConstants.WRAP_NO_SPLIT);
+				indentStyle= Integer.valueOf(DefaultCodeFormatterConstants.INDENT_DEFAULT);
+				wrappingStyle= Integer.valueOf(DefaultCodeFormatterConstants.WRAP_NO_SPLIT);
 			} 
 			
             increaseMapEntry(wrappingMap, wrappingStyle);
@@ -272,9 +272,9 @@ public class LineWrappingTabPage extends FormatterTabPage {
         private void increaseMapEntry(Map map, Object type) {
             Integer count= (Integer)map.get(type);
             if (count == null) // not in map yet -> count == 0
-                map.put(type, new Integer(1));
+                map.put(type, Integer.valueOf(1));
             else
-                map.put(type, new Integer(count.intValue() + 1));
+                map.put(type, Integer.valueOf(count.intValue() + 1));
         }
                 
         private void refreshControls(Map wrappingStyleMap, Map indentStyleMap, Map forceWrappingMap) {
@@ -311,7 +311,7 @@ public class LineWrappingTabPage extends FormatterTabPage {
 		private Integer getWrappingStyleMax(Map wrappingStyleMap) {
             int maxCount= 0, maxStyle= 0;
             for (int i=0; i<WRAPPING_NAMES.length; i++) {
-                Integer count= (Integer)wrappingStyleMap.get(new Integer(i));
+                Integer count= (Integer)wrappingStyleMap.get(Integer.valueOf(i));
                 if (count == null)
                     continue;
                 if (count.intValue() > maxCount) {
@@ -319,7 +319,7 @@ public class LineWrappingTabPage extends FormatterTabPage {
                     maxStyle= i;
                 }
             }
-            return new Integer(maxStyle);
+            return Integer.valueOf(maxStyle);
         }
         
         private void updateButton(Map forceWrappingMap) {
@@ -362,7 +362,7 @@ public class LineWrappingTabPage extends FormatterTabPage {
             int maxCount= 0, maxStyle= 0;
                         
             for(int i = 0; i < items.length; i++) {
-                Integer count= (Integer) map.get(new Integer(i));
+                Integer count= (Integer) map.get(Integer.valueOf(i));
                 int val= (count == null) ? 0 : count.intValue();
                 if (val > maxCount) {
                     maxCount= val;

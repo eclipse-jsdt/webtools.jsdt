@@ -70,7 +70,7 @@ private void sortUnit(int apiLevel, IJavaScriptUnit unit, String expectedResult,
 //	if (testPositions) {
 //		for (int i = 0; i < initialSource.length(); i++) {
 //			if (!Character.isWhitespace(initialSource.charAt(i))) {
-//				arrayList.add(new Integer(i));
+//				arrayList.add(Integer.valueOf(i));
 //			}
 //		}
 //		final int length = arrayList.size();
@@ -111,7 +111,7 @@ private void sortUnit(int apiLevel, IJavaScriptUnit unit, String expectedResult,
 	if (testPositions) {
 		for (int i = 0; i < initialSource.length(); i++) {
 			if (!Character.isWhitespace(initialSource.charAt(i))) {
-				arrayList.add(new Integer(i));
+				arrayList.add(Integer.valueOf(i));
 			}
 		}
 		final int length = arrayList.size();
