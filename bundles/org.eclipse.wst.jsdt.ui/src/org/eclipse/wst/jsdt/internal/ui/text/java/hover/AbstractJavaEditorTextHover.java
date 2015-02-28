@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -163,13 +163,17 @@ public abstract class AbstractJavaEditorTextHover implements IJavaEditorTextHove
 		if (styleSheetURL != null) {
 			try {
 				styleSheetURL= FileLocator.toFileURL(styleSheetURL);
-				BufferedReader reader= new BufferedReader(new InputStreamReader(styleSheetURL.openStream()));
 				StringBuffer buffer= new StringBuffer(200);
-				String line= reader.readLine();
-				while (line != null) {
-					buffer.append(line);
-					buffer.append('\n');
-					line= reader.readLine();
+				BufferedReader reader= new BufferedReader(new InputStreamReader(styleSheetURL.openStream()));
+				try {
+					String line= reader.readLine();
+					while (line != null) {
+						buffer.append(line);
+						buffer.append('\n');
+						line= reader.readLine();
+					}
+				} finally {
+					reader.close();
 				}
 				return buffer.toString();
 			} catch (IOException ex) {

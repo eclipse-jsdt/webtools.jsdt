@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -49,7 +49,7 @@ import org.eclipse.wst.jsdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.wst.jsdt.internal.compiler.problem.DefaultProblem;
 import org.eclipse.wst.jsdt.internal.compiler.problem.DefaultProblemFactory;
 public class Util {
-	private static String TARGET_PLUGIN="org.eclipse.wst.jsdt.core";
+	private static String TARGET_PLUGIN="org.eclipse.wst.jsdt.core"; //$NON-NLS-1$
 	// Trace for delete operation
 	/*
 	 * Maximum time wasted repeating delete operations while running JDT/Core tests.
@@ -1247,21 +1247,17 @@ private static boolean waitUntilResourceDeleted(IResource resource) {
 }
 public static void writeToFile(String contents, String destinationFilePath) {
 	File destFile = new File(destinationFilePath);
-	FileOutputStream output = null;
+	PrintWriter writer = null;
 	try {
-		output = new FileOutputStream(destFile);
-		PrintWriter writer = new PrintWriter(output);
+		writer = new PrintWriter(new FileOutputStream(destFile));
 		writer.print(contents);
 		writer.flush();
 	} catch (IOException e) {
 		e.printStackTrace();
 		return;
 	} finally {
-		if (output != null) {
-			try {
-				output.close();
-			} catch (IOException e2) {
-			}
+		if (writer != null) {
+			writer.close();
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2012 IBM Corporation and others.
+ * Copyright (c) 2005, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -138,9 +138,10 @@ public class BundleResourceUtil {
 				IFile file = null;
 				URL entry = Activator.getDefault().getBundle().getEntry(zipFileEntry);
 				if(entry != null) {
+					ZipInputStream input = null;
 					try {
 						byte[] b = new byte[2048];
-						ZipInputStream input = new ZipInputStream(entry.openStream());
+						input = new ZipInputStream(entry.openStream());
 
 						ZipEntry nextEntry = input.getNextEntry();
 						while(nextEntry != null) {
@@ -186,6 +187,14 @@ public class BundleResourceUtil {
 					} catch(CoreException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					} finally {
+						try {
+							if (input != null)
+								input.close();
+						}
+						catch (IOException e) {
+							// Ignore
+						}
 					}
 				} else {
 					System.err.println("can't find " + zipFileEntry);

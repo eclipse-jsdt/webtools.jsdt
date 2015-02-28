@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2011 IBM Corporation and others.
+ * Copyright (c) 2005, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -515,13 +515,17 @@ public abstract class AbstractJavaCompletionProposal implements IJavaCompletionP
 			if (url != null) {
 				try {
 					url= FileLocator.toFileURL(url);
-					BufferedReader reader= new BufferedReader(new InputStreamReader(url.openStream()));
 					StringBuffer buffer= new StringBuffer(200);
-					String line= reader.readLine();
-					while (line != null) {
-						buffer.append(line);
-						buffer.append('\n');
-						line= reader.readLine();
+					BufferedReader reader= new BufferedReader(new InputStreamReader(url.openStream()));
+					try {
+						String line= reader.readLine();
+						while (line != null) {
+							buffer.append(line);
+							buffer.append('\n');
+							line= reader.readLine();
+						}
+					} finally {
+						reader.close();
 					}
 					fgCSSStyles= buffer.toString();
 				} catch (IOException ex) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -487,28 +487,31 @@ public abstract class AbstractSpellDictionary implements ISpellDictionary {
 					decoder.onMalformedInput(CodingErrorAction.REPORT);
 					decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
 					final BufferedReader reader= new BufferedReader(new InputStreamReader(stream, decoder));
-					
-					boolean doRead= true;
-					while (doRead) {
-						try {
-							word= reader.readLine();
-						} catch (MalformedInputException ex) {
-							// Tell the decoder to replace malformed input in order to read the line.
-							decoder.onMalformedInput(CodingErrorAction.REPLACE);
-							decoder.reset();
-							word= reader.readLine();
-							decoder.onMalformedInput(CodingErrorAction.REPORT);
-							
-							String message= Messages.format(JavaUIMessages.AbstractSpellingDictionary_encodingError, new String[] { word, decoder.replacement(), url.toString() });
-							IStatus status= new Status(IStatus.ERROR, JavaScriptUI.ID_PLUGIN, IStatus.OK, message, ex);
-							JavaScriptPlugin.log(status);
-							
+					try {
+						boolean doRead= true;
+						while (doRead) {
+							try {
+								word= reader.readLine();
+							} catch (MalformedInputException ex) {
+								// Tell the decoder to replace malformed input in order to read the line.
+								decoder.onMalformedInput(CodingErrorAction.REPLACE);
+								decoder.reset();
+								word= reader.readLine();
+								decoder.onMalformedInput(CodingErrorAction.REPORT);
+								
+								String message= Messages.format(JavaUIMessages.AbstractSpellingDictionary_encodingError, new String[] { word, decoder.replacement(), url.toString() });
+								IStatus status= new Status(IStatus.ERROR, JavaScriptUI.ID_PLUGIN, IStatus.OK, message, ex);
+								JavaScriptPlugin.log(status);
+								
+								doRead= word != null;
+								continue;
+							}
 							doRead= word != null;
-							continue;
+							if (doRead)
+								hashWord(word);
 						}
-						doRead= word != null;
-						if (doRead)
-							hashWord(word);
+					} finally {
+						reader.close();
 					}
 					return true;
 				}

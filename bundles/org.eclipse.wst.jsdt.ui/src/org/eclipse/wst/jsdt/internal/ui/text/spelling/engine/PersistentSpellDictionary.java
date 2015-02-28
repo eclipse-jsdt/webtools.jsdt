@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,7 +13,6 @@ package org.eclipse.wst.jsdt.internal.ui.text.spelling.engine;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -55,20 +54,20 @@ public class PersistentSpellDictionary extends AbstractSpellDictionary {
 		if (isCorrect(word))
 			return;
 
-		OutputStreamWriter writer= null;
-		try {
-			Charset charset= Charset.forName(getEncoding());
-			ByteBuffer byteBuffer= charset.encode(word + "\n"); //$NON-NLS-1$
-			int size= byteBuffer.limit();
-			final byte[] byteArray;
-			if (byteBuffer.hasArray())
-				byteArray= byteBuffer.array();
-			else {
-				byteArray= new byte[size];
-				byteBuffer.get(byteArray);
-			}
+		Charset charset= Charset.forName(getEncoding());
+		ByteBuffer byteBuffer= charset.encode(word + "\n"); //$NON-NLS-1$
+		int size= byteBuffer.limit();
+		final byte[] byteArray;
+		if (byteBuffer.hasArray())
+			byteArray= byteBuffer.array();
+		else {
+			byteArray= new byte[size];
+			byteBuffer.get(byteArray);
+		}
+		FileOutputStream fileStream = null;
 			
-			FileOutputStream fileStream= new FileOutputStream(fLocation.getPath(), true);
+		try {
+			fileStream= new FileOutputStream(fLocation.getPath(), true);
 			
 			// Encoding UTF-16 charset writes a BOM. In which case we need to cut it away if the file isn't empty
 			int bomCutSize= 0;
@@ -81,9 +80,10 @@ public class PersistentSpellDictionary extends AbstractSpellDictionary {
 			return;
 		} finally {
 			try {
-				if (writer != null)
-					writer.close();
+				if (fileStream != null)
+					fileStream.close();
 			} catch (IOException e) {
+				// Ignore
 			}
 		}
 

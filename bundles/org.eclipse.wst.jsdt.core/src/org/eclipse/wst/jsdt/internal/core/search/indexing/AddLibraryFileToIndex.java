@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -175,26 +175,34 @@ class AddLibraryFileToIndex extends IndexRequest {
 					}
 					else if (org.eclipse.wst.jsdt.internal.compiler.util.Util.isArchiveFileName(file.getName())){
 						ZipFile zip = new ZipFile(file);
-						for (Enumeration e = zip.entries(); e.hasMoreElements();) {
-							if (this.isCancelled) {
-								if (JobManager.VERBOSE)
-									org.eclipse.wst.jsdt.internal.core.util.Util.verbose("-> indexing of " + zip.getName() + " has been cancelled"); //$NON-NLS-1$ //$NON-NLS-2$
-								return false;
-							}
-	
-							// iterate each entry to index it
-							ZipEntry ze = (ZipEntry) e.nextElement();
-							if (Util.isClassFileName(ze.getName())) {
-								InputStreamReader inputStreamReader = new InputStreamReader(zip.getInputStream(ze), "utf8"); //$NON-NLS-1$
-								StringBuffer buffer = new StringBuffer();
-								char c[] = new char[2048];
-								int length = 0;
-								while ((length = inputStreamReader.read(c)) > -1) {
-									buffer.append(c, 0, length);
+						try {
+							for (Enumeration e = zip.entries(); e.hasMoreElements();) {
+								if (this.isCancelled) {
+									if (JobManager.VERBOSE)
+										org.eclipse.wst.jsdt.internal.core.util.Util.verbose("-> indexing of " + zip.getName() + " has been cancelled"); //$NON-NLS-1$ //$NON-NLS-2$
+									return false;
 								}
-								JavaSearchDocument entryDocument = new JavaSearchDocument(ze, libraryFilePath, buffer.toString().toCharArray(), participant);
-								this.manager.indexDocument(entryDocument, participant, index, this.containerPath);
+		
+								// iterate each entry to index it
+								ZipEntry ze = (ZipEntry) e.nextElement();
+								if (Util.isClassFileName(ze.getName())) {
+									StringBuffer buffer = new StringBuffer();
+									InputStreamReader inputStreamReader = new InputStreamReader(zip.getInputStream(ze), "utf8"); //$NON-NLS-1$
+									try {
+										char c[] = new char[2048];
+										int length = 0;
+										while ((length = inputStreamReader.read(c)) > -1) {
+											buffer.append(c, 0, length);
+										}
+									} finally {
+										inputStreamReader.close();
+									}
+									JavaSearchDocument entryDocument = new JavaSearchDocument(ze, libraryFilePath, buffer.toString().toCharArray(), participant);
+									this.manager.indexDocument(entryDocument, participant, index, this.containerPath);
+								}
 							}
+						} finally {
+							zip.close();
 						}
 					}
 				} else {
@@ -238,7 +246,7 @@ class AddLibraryFileToIndex extends IndexRequest {
 	{
 		try {
 			final char[] classFileChars = org.eclipse.wst.jsdt.internal.compiler.util.Util.getFileCharContent(file,null);
-			String packageName="";
+			String packageName=""; //$NON-NLS-1$
 			JavaSearchDocument entryDocument = new JavaSearchDocument(  new Path(file.getAbsolutePath()), classFileChars, participant,packageName);
 			this.manager.indexDocument(entryDocument, participant, index, this.containerPath);
 		} catch (Exception ex)
