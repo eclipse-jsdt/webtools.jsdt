@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -240,12 +240,13 @@ public class LineWrappingTabPage extends FormatterTabPage {
   
         private String getPreviewText(Map wrappingMap, Map indentMap, Map forceMap) {
             Iterator iterator= fElements.iterator();
-            String previewText= ""; //$NON-NLS-1$
+            StringBuilder previewText= new StringBuilder();
             while (iterator.hasNext()) {
                 Category category= (Category)iterator.next();
-                previewText= previewText + category.previewText + "\n\n"; //$NON-NLS-1$
+                previewText.append(category.previewText);
+                previewText.append('\n').append('\n');
             }
-            return previewText;
+            return previewText.toString();
         }
         
         private void insertIntoMap(Map wrappingMap, Map indentMap, Map forceMap, Category category) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2013 IBM Corporation and others.
+ * Copyright (c) 2005, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,6 @@
 package org.eclipse.wst.jsdt.core.infer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -77,7 +76,7 @@ public class InferrenceManager {
 
 	public InferrenceProvider [] getInferenceProviders(IInferenceFile script)
 	{
-		List proposedProviders = new ArrayList();
+		List<InferrenceProvider> proposedProviders = new ArrayList<InferrenceProvider>();
 		InferrenceProvider[] inferenceProviders = getInferenceProviders();
 
 		if (inferenceProviders.length==1)
@@ -117,11 +116,12 @@ public class InferrenceManager {
 			}
 		}
 		if (_debugInfer){
-			String proposedProvidersString = "";			
-			Iterator providers = proposedProviders.iterator();
-			while(providers.hasNext())			
-				proposedProvidersString += ((InferrenceProvider)providers.next()).getID().toString()+", ";			
-			Logger.log(Logger.INFO_DEBUG, "Proposed Inference Providers: " + proposedProvidersString);
+			StringBuilder sb = new StringBuilder("Proposed Inference Providers: "); //$NON-NLS-1$
+			for (InferrenceProvider inferrenceProvider : inferenceProviders) {
+				sb.append(inferrenceProvider.getID());
+				sb.append(", ");  //$NON-NLS-1$
+			}
+			Logger.log(Logger.INFO_DEBUG, sb.toString());
 		}
 	
 		return (InferrenceProvider [] )proposedProviders.toArray(new InferrenceProvider[proposedProviders.size()]);

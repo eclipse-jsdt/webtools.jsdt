@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -86,14 +86,14 @@ public class UserLibraryWizardPage extends NewElementWizardPage implements IJsGl
 	}
     
     private static IJavaScriptProject createPlaceholderProject() {
-        String name= "####internal"; //$NON-NLS-1$
+    	StringBuilder name= new StringBuilder("####internal"); //$NON-NLS-1$
         IWorkspaceRoot root= ResourcesPlugin.getWorkspace().getRoot();
         while (true) {
-            IProject project= root.getProject(name);
+            IProject project= root.getProject(name.toString());
             if (!project.exists()) {
                 return JavaScriptCore.create(project);
             }
-            name += '1';
+            name.append('1');
         }       
     }
 

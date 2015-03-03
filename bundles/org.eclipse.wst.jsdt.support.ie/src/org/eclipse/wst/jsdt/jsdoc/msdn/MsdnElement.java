@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2007 IBM Corporation and others.
+ * Copyright (c) 2005, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -284,12 +284,15 @@ public class MsdnElement extends ElementInfo{
 
 	public String getParamString() {
 		String[][] params = getParamaters();
-		String paramString="";
+		StringBuilder paramString = new StringBuilder();
 
 		for(int i = 0;i<params.length;i++) {
-			paramString = paramString + params[i][0] + (((i+1)<params.length) ?",":"");
+			paramString.append(params[i][0]);
+			if ((i+1) < params.length) {
+				paramString.append(',');
+			}
 		}
-		return paramString;
+		return paramString.toString();
 	}
 
 	public String getJsStructure(String parent) {

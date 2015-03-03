@@ -954,8 +954,10 @@ public static boolean isResourceDeleted(IResource resource) {
  * 	If negative then display children information instead.
  */
 private static void printFileInfo(File file, int indent, int recurse) {
-	String tab = "";
-	for (int i=0; i<indent; i++) tab+="\t";
+	StringBuilder tab = new StringBuilder();
+	for (int i=0; i<indent; i++) {
+		tab.append('\t');
+	}
 	System.out.print(tab+"- "+file.getName()+" file info: ");
 	String sep = "";
 	if (file.canRead()) {
@@ -1014,8 +1016,10 @@ private static void printFileInfo(File file, int indent, int recurse) {
  * @param indent Number of tab to display before the stack elements to display.
  */
 private static void printJdtCoreStackTrace(Exception exception, int indent) {
-	String tab = "";
-	for (int i=0; i<indent; i++) tab+="\t";
+	StringBuilder tab = new StringBuilder();
+	for (int i=0; i<indent; i++) {
+		tab.append('\t');
+	}
 	StackTraceElement[] elements = (exception==null?new Exception():exception).getStackTrace();
 	int idx = 0, length=elements.length;
 	while (idx<length && !elements[idx++].getClassName().startsWith("org.eclipse.wst.jsdt")) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -6984,58 +6984,91 @@ public void setStatementsRecovery(boolean enabled) {
 }
 public String toString() {
 
-
-	String s = "lastCheckpoint : int = " + String.valueOf(this.lastCheckPoint) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
-	s = s + "identifierStack : char["+(this.identifierPtr + 1)+"][] = {"; //$NON-NLS-1$ //$NON-NLS-2$
+	StringBuilder sb = new StringBuilder();
+	sb.append("lastCheckpoint : int = "); //$NON-NLS-1$
+	sb.append(this.lastCheckPoint);
+	sb.append('\n');
+	sb.append("identifierStack : char[");//$NON-NLS-1$
+	sb.append(this.identifierPtr + 1);
+	sb.append("][] = {");//$NON-NLS-1$
 	for (int i = 0; i <= this.identifierPtr; i++) {
-		s = s + "\"" + String.valueOf(this.identifierStack[i]) + "\","; //$NON-NLS-1$ //$NON-NLS-2$
+		sb.append('\"');
+		sb.append(this.identifierStack[i]);
+		sb.append('\"').append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
+	sb.append('}').append('\n');
 
-	s = s + "identifierLengthStack : int["+(this.identifierLengthPtr + 1)+"] = {"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append("identifierLengthStack : int["); //$NON-NLS-1$
+	sb.append(this.identifierLengthPtr + 1);
+	sb.append("] = {"); //$NON-NLS-1$
 	for (int i = 0; i <= this.identifierLengthPtr; i++) {
-		s = s + this.identifierLengthStack[i] + ","; //$NON-NLS-1$
+		sb.append(this.identifierLengthStack[i]);
+		sb.append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
+	sb.append('}').append('\n');
 
-	s = s + "astLengthStack : int["+(this.astLengthPtr + 1)+"] = {"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append("astLengthStack : int["); //$NON-NLS-1$
+	sb.append(this.astLengthPtr + 1);
+	sb.append("] = {"); //$NON-NLS-1$
 	for (int i = 0; i <= this.astLengthPtr; i++) {
-		s = s + this.astLengthStack[i] + ","; //$NON-NLS-1$
+		sb.append(this.astLengthStack[i]);
+		sb.append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
-	s = s + "astPtr : int = " + String.valueOf(this.astPtr) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append('}').append('\n');
+	sb.append("astPtr : int = "); //$NON-NLS-1$
+	sb.append(this.astPtr);
+	sb.append('\n');
 
-	s = s + "intStack : int["+(this.intPtr + 1)+"] = {"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append("intStack : int["); //$NON-NLS-1$
+	sb.append(this.intPtr + 1);
+	sb.append("] = {"); //$NON-NLS-1$
 	for (int i = 0; i <= this.intPtr; i++) {
-		s = s + this.intStack[i] + ","; //$NON-NLS-1$
+		sb.append(this.intStack[i]);
+		sb.append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
-	s = s + "intPtr : int = " + String.valueOf(this.intPtr) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append('}').append('\n');
+	sb.append("intPtr : int = "); //$NON-NLS-1$
+	sb.append(this.intPtr);
+	sb.append('\n');
 
-	s = s + "expressionLengthStack : int["+(this.expressionLengthPtr + 1)+"] = {"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append("expressionLengthStack : int["); //$NON-NLS-1$
+	sb.append(this.expressionLengthPtr + 1);
+	sb.append("] = {"); //$NON-NLS-1$
 	for (int i = 0; i <= this.expressionLengthPtr; i++) {
-		s = s + this.expressionLengthStack[i] + ","; //$NON-NLS-1$
+		sb.append(this.expressionLengthStack[i]);
+		sb.append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
+	sb.append('}').append('\n');
 
-	s = s + "expressionPtr : int = " + String.valueOf(this.expressionPtr) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append("expressionPtr : int = "); //$NON-NLS-1$
+	sb.append(this.expressionPtr);
+	sb.append('\n');
 
-	s = s + "genericsIdentifiersLengthStack : int["+(this.genericsIdentifiersLengthPtr + 1)+"] = {"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append("genericsIdentifiersLengthStack : int["); //$NON-NLS-1$
+	sb.append(this.genericsIdentifiersLengthPtr + 1);
+	sb.append("] = {"); //$NON-NLS-1$
 	for (int i = 0; i <= this.genericsIdentifiersLengthPtr; i++) {
-		s = s + this.genericsIdentifiersLengthStack[i] + ","; //$NON-NLS-1$
+		sb.append(this.genericsIdentifiersLengthStack[i]);
+		sb.append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
+	sb.append('}').append('\n');
 
-	s = s + "genericsLengthStack : int["+(this.genericsLengthPtr + 1)+"] = {"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append("genericsLengthStack : int["); //$NON-NLS-1$
+	sb.append(this.genericsLengthPtr + 1);
+	sb.append("] = {"); //$NON-NLS-1$
 	for (int i = 0; i <= this.genericsLengthPtr; i++) {
-		s = s + this.genericsLengthStack[i] + ","; //$NON-NLS-1$
+		sb.append(this.genericsLengthStack[i]);
+		sb.append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
+	sb.append('}').append('\n');
 
-	s = s + "genericsPtr : int = " + String.valueOf(this.genericsPtr) + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+	sb.append("genericsPtr : int = "); //$NON-NLS-1$
+	sb.append(this.genericsPtr);
+	sb.append('\n');
 
-	s = s + "\n\n\n----------------Scanner--------------\n" + this.scanner.toString(); //$NON-NLS-1$
-	return s;
+	sb.append("\n\n\n----------------Scanner--------------\n"); //$NON-NLS-1$
+	sb.append(this.scanner);
+	return sb.toString();
 
 }
 /*

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -1584,68 +1584,62 @@ public String toString(){
 	if (this == DEAD_END){
 		return "FlowInfo.DEAD_END"; //$NON-NLS-1$
 	}
+
+	StringBuilder defs = new StringBuilder(String.valueOf(this.definiteInits));
+	StringBuilder pots = new StringBuilder(String.valueOf(this.potentialInits));
+	StringBuilder nulls = new StringBuilder();
 	if ((this.tagBits & NULL_FLAG_MASK) != 0) {
-		if (this.extra == null) {
-			return "FlowInfo<def: " + this.definiteInits //$NON-NLS-1$
-				+", pot: " + this.potentialInits  //$NON-NLS-1$
-				+ ", reachable:" + ((this.tagBits & UNREACHABLE) == 0) //$NON-NLS-1$
-				+", null: " + this.nullBit1 //$NON-NLS-1$
-					+ this.nullBit2 + this.nullBit3 + this.nullBit4
-				+">"; //$NON-NLS-1$
-		}
-		else {
-			String def = "FlowInfo<def:[" + this.definiteInits, //$NON-NLS-1$
-				pot = "], pot:[" + this.potentialInits, //$NON-NLS-1$
-				nullS = ", null:[" + this.nullBit1 //$NON-NLS-1$
-					+ this.nullBit2 + this.nullBit3 + this.nullBit4;
-			int i, ceil;
-			for (i = 0, ceil = this.extra[0].length > 3 ?
-								3 :
-								this.extra[0].length;
-				i < ceil; i++) {
-				def += "," + this.extra[0][i]; //$NON-NLS-1$
-				pot += "," + this.extra[1][i]; //$NON-NLS-1$
-				nullS += "," + this.extra[2][i] //$NON-NLS-1$
-				    + this.extra[3][i] + this.extra[4][i] + this.extra[5][i];
-			}
-			if (ceil < this.extra[0].length) {
-				def += ",..."; //$NON-NLS-1$
-				pot += ",..."; //$NON-NLS-1$
-				nullS += ",..."; //$NON-NLS-1$
-			}
-			return def + pot
-				+ "], reachable:" + ((this.tagBits & UNREACHABLE) == 0) //$NON-NLS-1$
-				+ nullS
-				+ "]>"; //$NON-NLS-1$
-		}
+		nulls.append("null:"); //$NON-NLS-1$
+		nulls.append(this.extra == null ? ' ' : '[');
+		nulls.append(this.nullBit1);
+		nulls.append(this.nullBit2);
+		nulls.append(this.nullBit3);
+		nulls.append(this.nullBit4);
+	} else {
+		nulls.append("no null info"); //$NON-NLS-1$
 	}
-	else {
-		if (this.extra == null) {
-			return "FlowInfo<def: " + this.definiteInits //$NON-NLS-1$
-				+", pot: " + this.potentialInits  //$NON-NLS-1$
-				+ ", reachable:" + ((this.tagBits & UNREACHABLE) == 0) //$NON-NLS-1$
-				+", no null info>"; //$NON-NLS-1$
-		}
-		else {
-			String def = "FlowInfo<def:[" + this.definiteInits, //$NON-NLS-1$
-				pot = "], pot:[" + this.potentialInits; //$NON-NLS-1$
-			int i, ceil;
-			for (i = 0, ceil = this.extra[0].length > 3 ?
-								3 :
-								this.extra[0].length;
+	
+	if (this.extra != null) {
+		int i, ceil;
+		for (i = 0, ceil = this.extra[0].length > 3 ? 3 : this.extra[0].length; 
 				i < ceil; i++) {
-				def += "," + this.extra[0][i]; //$NON-NLS-1$
-				pot += "," + this.extra[1][i]; //$NON-NLS-1$
+			defs.append(',').append(this.extra[0][i]);
+			pots.append(',').append(this.extra[1][i]);
+			if ((this.tagBits & NULL_FLAG_MASK) != 0) {
+				nulls.append(',');
+				nulls.append(this.extra[2][i]);
+				nulls.append(this.extra[3][i]);
+				nulls.append(this.extra[4][i]);
+				nulls.append(this.extra[5][i]);
 			}
-			if (ceil < this.extra[0].length) {
-				def += ",..."; //$NON-NLS-1$
-				pot += ",..."; //$NON-NLS-1$
-			}
-			return def + pot
-				+ "], reachable:" + ((this.tagBits & UNREACHABLE) == 0) //$NON-NLS-1$
-				+ ", no null info>"; //$NON-NLS-1$
 		}
+		if (ceil < this.extra[0].length) {
+			defs.append(",..."); //$NON-NLS-1$
+			pots.append(",..."); //$NON-NLS-1$
+			if ((this.tagBits & NULL_FLAG_MASK) != 0) {
+				nulls.append(",..."); //$NON-NLS-1$
+			}
+		}
+		nulls.append(']');
 	}
+	StringBuilder sb = new StringBuilder("FlowInfo<def:"); //$NON-NLS-1$
+	sb.append(this.extra == null ? ' ' : '[');
+	sb.append(defs);
+	if (this.extra != null) {
+		sb.append(']');
+	}
+	sb.append(", pot:"); //$NON-NLS-1$
+	sb.append(this.extra == null ? ' ' : '[');
+	sb.append(pots);
+	if (this.extra != null) {
+		sb.append(']');
+	}
+	sb.append(", reachable: "); //$NON-NLS-1$
+	sb.append((this.tagBits & UNREACHABLE) == 0);
+	sb.append(',').append(' ');
+	sb.append(nulls);
+	sb.append('>');
+	return sb.toString();
 }
 
 public UnconditionalFlowInfo unconditionalCopy() {

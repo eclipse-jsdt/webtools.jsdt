@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2007 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -95,11 +95,14 @@ public int size() {
 	return elementSize;
 }
 public String toString() {
-	String s = ""; //$NON-NLS-1$
+	StringBuilder sb = new StringBuilder();
 	PackageBinding pkg;
-	for (int i = 0, length = valueTable.length; i < length; i++)
-		if ((pkg = valueTable[i]) != null)
-			s += pkg.toString() + "\n"; //$NON-NLS-1$
-	return s;
+	for (int i = 0, length = valueTable.length; i < length; i++) {
+		if ((pkg = valueTable[i]) != null) {
+			sb.append(pkg.toString());
+			sb.append('\n');
+		}
+	}
+	return sb.toString();
 }
 }

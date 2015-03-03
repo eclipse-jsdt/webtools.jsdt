@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 IBM Corporation and others.
+ * Copyright (c) 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -403,7 +403,6 @@ public class TestMethodPattern extends TestCase {
 	
 	private static void assertEquals(String message, String[] expected, char[][] actual) {
 		
-		String expectedColappsed = null;
 		String actualColappsed = null;
 		if(actual != null) {
 			char[] actualColappsedChars = CharOperation.concatWith(actual, IIndexConstants.PARAMETER_SEPARATOR, false);
@@ -412,17 +411,19 @@ public class TestMethodPattern extends TestCase {
 			}
 		}
 		
+		String expectedColappsed = null;
 		if(expected != null) {
-			expectedColappsed = "";
+			StringBuilder expectedColappsedBuilder = new StringBuilder();
 			for(int i = 0; i < expected.length; ++i) {
 				if(i > 0) {
-					expectedColappsed += ",";
+					expectedColappsedBuilder.append(',');
 				}
 				
 				if(expected[i] != null) {
-					expectedColappsed += expected[i];
+					expectedColappsedBuilder.append(expected[i]);
 				}
 			}
+			expectedColappsed = expectedColappsedBuilder.toString();
 		}
 		
 		assertEquals(message, expectedColappsed, actualColappsed);

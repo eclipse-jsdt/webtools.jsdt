@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -874,11 +874,11 @@ public class JavadocTestOptions extends JavadocTest {
 
 	private String resultForInvalidTagsClassOrField(int visibility) {
 		if (reportInvalidJavadocTagsDeprecatedRef == null && reportInvalidJavadocTagsNotVisibleRef == null) {
-			String result = "----------\n";
+			StringBuilder result = new StringBuilder("----------\n"); //$NON-NLS-1$
 			for (int i=0; i<=visibility; i++) {
-				result += CLASSES_ERRORS[i];
+				result.append(CLASSES_ERRORS[i]);
 			}
-			return result;
+			return result.toString();
 		}
 		StringBuffer result = new StringBuffer("----------\n");
 		for (int i=0, count=1; i<= visibility; i++) {
@@ -916,11 +916,11 @@ public class JavadocTestOptions extends JavadocTest {
 
 	private String resultForInvalidTagsMethodOrConstructor(int visibility) {
 		if (reportInvalidJavadocTagsDeprecatedRef == null && reportInvalidJavadocTagsNotVisibleRef == null) {
-			String result = "----------\n";
+			StringBuilder result = new StringBuilder("----------\n"); //$NON-NLS-1$
 			for (int i=0; i<=visibility; i++) {
-				result += METHODS_ERRORS[i];
+				result.append(METHODS_ERRORS[i]);
 			}
-			return result;
+			return result.toString();
 		}
 		StringBuffer result = new StringBuffer("----------\n");
 		for (int i=0, count=1; i<= visibility; i++) {

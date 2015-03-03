@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 IBM Corporation and others.
+ * Copyright (c) 2006, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -351,27 +351,32 @@ public UnconditionalFlowInfo mitigateNullInfoOf(FlowInfo flowInfo) {
 }
 
 public String toString(){
-	if (this.extra == null) {
-		return "NullInfoRegistry<" + this.nullBit1 //$NON-NLS-1$
-			+ this.nullBit2 + this.nullBit3 + this.nullBit4
-			+ ">"; //$NON-NLS-1$
-	}
-	else {
-		String nullS = "NullInfoRegistry<[" + this.nullBit1 //$NON-NLS-1$
-			+ this.nullBit2 + this.nullBit3 + this.nullBit4;
-			int i, ceil;
-			for (i = 0, ceil = this.extra[0].length > 3 ?
-								3 :
-								this.extra[0].length;
-				i < ceil; i++) {
-				nullS += "," + this.extra[2][i] //$NON-NLS-1$
-				    + this.extra[3][i] + this.extra[4][i] + this.extra[5][i];
-			}
-			if (ceil < this.extra[0].length) {
-				nullS += ",..."; //$NON-NLS-1$
-			}
-			return nullS + "]>"; //$NON-NLS-1$
-	}
+	StringBuilder sb = new StringBuilder("NullInfoRegistry<"); //$NON-NLS-1$
+    if (this.extra != null) {
+        sb.append('[');
+    }
+    sb.append(this.nullBit1);
+    sb.append(this.nullBit2);
+    sb.append(this.nullBit3);
+    sb.append(this.nullBit4);
+    
+    if (this.extra != null) {
+        int i, ceil;
+        for (i = 0, ceil = this.extra[0].length > 3 ? 3 : this.extra[0].length; i < ceil; i++) {
+            sb.append(',');
+            sb.append(this.extra[2][i]);
+            sb.append(this.extra[3][i]);
+            sb.append(this.extra[4][i]);
+            sb.append(this.extra[5][i]);
+        }
+        if (ceil < this.extra[0].length) {
+            sb.append(",..."); //$NON-NLS-1$
+        }
+        sb.append(']');
+     }
+    sb.append('>');
+    
+    return sb.toString();
 }
 }
 

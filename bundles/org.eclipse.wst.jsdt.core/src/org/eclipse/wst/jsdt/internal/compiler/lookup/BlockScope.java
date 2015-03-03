@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -154,17 +154,20 @@ public final boolean allowBlankFinalFieldAssignment(FieldBinding binding) {
 			|| ((AbstractMethodDeclaration) methodScope.referenceContext).isInitializationMethod(); // inside constructor or clinit
 }
 String basicToString(int tab) {
-	String newLine = "\n"; //$NON-NLS-1$
-	for (int i = tab; --i >= 0;)
-		newLine += "\t"; //$NON-NLS-1$
-
-	String s = newLine + "--- Block Scope ---"; //$NON-NLS-1$
-	newLine += "\t"; //$NON-NLS-1$
-	s += newLine + "locals:"; //$NON-NLS-1$
-	for (int i = 0; i < this.localIndex; i++)
-		s += newLine + "\t" + this.locals[i].toString(); //$NON-NLS-1$
-	s += newLine + "startIndex = " + this.startIndex; //$NON-NLS-1$
-	return s;
+	StringBuilder sb = new StringBuilder('\n');
+	for (int i = tab; --i >= 0;) {
+		sb.append('\t');
+	}
+	sb.append("--- Block Scope ---"); //$NON-NLS-1$
+	sb.append('\t');
+	sb.append("locals:"); //$NON-NLS-1$
+	for (int i = 0; i < this.localIndex; i++) {
+		sb.append('\t');
+		sb.append(this.locals[i]);
+	}
+	sb.append("startIndex = "); //$NON-NLS-1$
+	sb.append(this.startIndex);
+	return sb.toString();
 }
 
 public void reportUnusedDeclarations()
@@ -711,10 +714,13 @@ public String toString() {
 }
 
 public String toString(int tab) {
-	String s = basicToString(tab);
-	for (int i = 0; i < this.subscopeCount; i++)
-		if (this.subscopes[i] instanceof BlockScope)
-			s += ((BlockScope) this.subscopes[i]).toString(tab + 1) + "\n"; //$NON-NLS-1$
-	return s;
+	StringBuilder sb = new StringBuilder(basicToString(tab));
+	for (int i = 0; i < this.subscopeCount; i++){
+		if (this.subscopes[i] instanceof BlockScope) {
+			sb.append(((BlockScope) this.subscopes[i]).toString(tab + 1));
+			sb.append("\n"); //$NON-NLS-1$
+		}
+	}
+	return sb.toString();
 }
 }

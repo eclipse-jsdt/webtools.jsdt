@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2007 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -145,11 +145,16 @@ public final class HashtableOfObjectToInt implements Cloneable {
 	}
 
 	public String toString() {
-		String s = ""; //$NON-NLS-1$
+		StringBuilder sb = new StringBuilder();
 		Object key;
-		for (int i = 0, length = this.keyTable.length; i < length; i++)
-			if ((key = this.keyTable[i]) != null)
-				s += key + " -> " + this.valueTable[i] + "\n"; 	//$NON-NLS-2$ //$NON-NLS-1$
-		return s;
+		for (int i = 0, length = keyTable.length; i < length; i++) {
+			if ((key = this.keyTable[i]) != null) {
+				sb.append(key);
+				sb.append(" -> "); //$NON-NLS-1$
+				sb.append(this.valueTable[i]);
+				sb.append('\n');
+			}
+		}
+		return sb.toString();
 	}
 }

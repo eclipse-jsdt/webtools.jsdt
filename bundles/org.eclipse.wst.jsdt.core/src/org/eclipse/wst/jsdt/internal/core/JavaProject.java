@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -1652,18 +1652,18 @@ public class JavaProject
 	public IJavaScriptElement getHandleFromMemento(String token, MementoTokenizer memento, WorkingCopyOwner owner) {
 		switch (token.charAt(0)) {
 			case JEM_PACKAGEFRAGMENTROOT:
-				String rootPath = IPackageFragmentRoot.DEFAULT_PACKAGEROOT_PATH;
+				StringBuilder rootPath = new StringBuilder(IPackageFragmentRoot.DEFAULT_PACKAGEROOT_PATH);
 				token = null;
 				while (memento.hasMoreTokens()) {
 					token = memento.nextToken();
 					char firstChar = token.charAt(0);
 					if (firstChar != JEM_PACKAGEFRAGMENT && firstChar != JEM_COUNT) {
-						rootPath += token;
+						rootPath.append(token);
 					} else {
 						break;
 					}
 				}
-				JavaElement root = (JavaElement)getPackageFragmentRoot(new Path(rootPath));
+				JavaElement root = (JavaElement)getPackageFragmentRoot(new Path(rootPath.toString()));
 				if (token != null && token.charAt(0) == JEM_PACKAGEFRAGMENT) {
 					return root.getHandleFromMemento(token, memento, owner);
 				} else {

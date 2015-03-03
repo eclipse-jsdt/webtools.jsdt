@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -86,17 +86,21 @@ public class JavaTypeCompletionProcessor extends CUPositionCompletionProcessor {
 		} else if (javaElement instanceof IType) {
 			// pattern: public class OuterType { public class Type extends /*caret*/  {} }
 			IType type= (IType) javaElement;
-			String before= "public class " + type.getElementName() + " extends "; //$NON-NLS-1$ //$NON-NLS-2$
-			String after= " {}"; //$NON-NLS-1$
+			StringBuilder before =  new StringBuilder("public class "); //$NON-NLS-1$
+			before.append(type.getElementName());
+			before.append(" extends "); //$NON-NLS-1$
+			StringBuilder after= new StringBuilder(" {}"); //$NON-NLS-1$
 			IJavaScriptElement parent= type.getParent();
 			while (parent instanceof IType) {
 				type= (IType) parent;
-				before+= "public class " + type.getElementName() + " {"; //$NON-NLS-1$ //$NON-NLS-2$
-				after+= "}"; //$NON-NLS-1$
+				before.append("public class "); //$NON-NLS-1$
+				before.append(type.getElementName());
+				before.append(' ').append('{');
+				after.append('}');
 				parent= type.getParent();
 			}
 			IJavaScriptUnit cu= type.getJavaScriptUnit();
-			setCompletionContext(cu, before, after);
+			setCompletionContext(cu, before.toString(), after.toString());
 		} else {
 			setCompletionContext(null, null, null);
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -270,15 +270,21 @@ public void setSourceStart(int sourceStart) {
 }
 
 public String toString() {
-	String s = "Pb(" + (this.id & IProblem.IgnoreCategoriesMask) + ") "; //$NON-NLS-1$ //$NON-NLS-2$
+	StringBuilder sb = new StringBuilder();
+	sb.append("Pb("); //$NON-NLS-1$
+	sb.append(this.id & IProblem.IgnoreCategoriesMask);
+	sb.append(") "); //$NON-NLS-1$
 	if (this.message != null) {
-		s += this.message;
+		sb.append(this.message);
 	} else {
-		if (this.arguments != null)
-			for (int i = 0; i < this.arguments.length; i++)
-				s += " " + this.arguments[i]; //$NON-NLS-1$
+		if (this.arguments != null) {
+			for (int i = 0; i < this.arguments.length; i++) {
+				sb.append(' ');
+				sb.append(this.arguments[i]);
+			}
+		}
 	}
-	return s;
+	return sb.toString();
 }
 
 

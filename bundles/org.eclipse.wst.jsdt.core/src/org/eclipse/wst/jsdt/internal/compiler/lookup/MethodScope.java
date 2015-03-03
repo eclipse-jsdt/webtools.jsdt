@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2014 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -409,21 +409,29 @@ public class MethodScope extends BlockScope {
 
 	String basicToString(int tab) {
 
-		String newLine = "\n"; //$NON-NLS-1$
-		for (int i = tab; --i >= 0;)
-			newLine += "\t"; //$NON-NLS-1$
+		StringBuilder sb = new StringBuilder('\n');
+		for (int i = tab; --i >= 0;) {
+			sb.append('\t');
+		}
 
-		String s = newLine + "--- Method Scope ---"; //$NON-NLS-1$
-		newLine += "\t"; //$NON-NLS-1$
-		s += newLine + "locals:"; //$NON-NLS-1$
-		for (int i = 0; i < localIndex; i++)
-			s += newLine + "\t" + locals[i].toString(); //$NON-NLS-1$
-		s += newLine + "startIndex = " + startIndex; //$NON-NLS-1$
-		s += newLine + "isConstructorCall = " + isConstructorCall; //$NON-NLS-1$
-		s += newLine + "initializedField = " + initializedField; //$NON-NLS-1$
-		s += newLine + "lastVisibleFieldID = " + lastVisibleFieldID; //$NON-NLS-1$
-		s += newLine + "referenceContext = " + referenceContext; //$NON-NLS-1$
-		return s;
+		sb.append("--- Method Scope ---"); //$NON-NLS-1$
+		sb.append('\t');
+		sb.append("locals:"); //$NON-NLS-1$
+		for (int i = 0; i < localIndex; i++) {
+			sb.append('\t');
+			sb.append(locals[i]);
+		}
+		sb.append("startIndex = "); //$NON-NLS-1$ 
+		sb.append(startIndex);
+		sb.append("isConstructorCall = "); //$NON-NLS-1$
+		sb.append(isConstructorCall);
+		sb.append("initializedField = "); //$NON-NLS-1$
+		sb.append(initializedField);
+		sb.append("lastVisibleFieldID = "); //$NON-NLS-1$
+		sb.append(lastVisibleFieldID);
+		sb.append("referenceContext = "); //$NON-NLS-1$
+		sb.append(referenceContext);
+		return sb.toString();
 	}
 
 	/**

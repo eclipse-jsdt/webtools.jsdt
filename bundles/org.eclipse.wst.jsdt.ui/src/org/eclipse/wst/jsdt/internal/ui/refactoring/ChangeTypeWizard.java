@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -70,19 +70,20 @@ public class ChangeTypeWizard extends RefactoringWizard {
 	
 	// For debugging
 	static String print(Collection/*<ITypeBinding>*/ types){
-		if (types.isEmpty())
+		if (types.isEmpty()) {
 			return "{ }"; //$NON-NLS-1$
-		String result = "{ "; //$NON-NLS-1$
+		}
+		StringBuilder result = new StringBuilder("{ "); //$NON-NLS-1$
 		for (Iterator it=types.iterator(); it.hasNext(); ){
 			ITypeBinding type= (ITypeBinding)it.next();
-			result += type.getQualifiedName();
+			result.append(type.getQualifiedName());
 			if (it.hasNext()){
-				result += ", ";  //$NON-NLS-1$
+				result.append(',').append(' ');
 			} else {
-				result += " }"; //$NON-NLS-1$
+				result.append(' ').append('}');
 			}
 		}
-		return result;
+		return result.toString();
 	}
 	
 	

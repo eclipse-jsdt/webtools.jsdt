@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -3519,9 +3519,11 @@ public void processPathEntries(final int defaultSize, final ArrayList paths,
 				}
 				break;
 			case bracketClosed:
+				StringBuilder sb = new StringBuilder();
 				for (int i = bracket; i < cursor ; i++) {
-					currentClasspathName += (String) tokens.get(i);
+					sb.append(tokens.get(i));
 				}
+				currentClasspathName = sb.toString();
 				state = readyToClose;
 				break;
 			case bracketOpened:

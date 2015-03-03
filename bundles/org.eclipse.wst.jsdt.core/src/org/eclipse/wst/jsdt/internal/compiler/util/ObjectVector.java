@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2007 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -126,10 +126,11 @@ public final class ObjectVector {
 	}
 
 	public String toString() {
-
-		String s = ""; //$NON-NLS-1$
-		for (int i = 0; i < this.size; i++)
-			s += this.elements[i].toString() + "\n"; //$NON-NLS-1$
-		return s;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < this.size; i++) {
+			sb.append(this.elements[i].toString());
+			sb.append('\n');
+		}
+		return sb.toString();
 	}
 }

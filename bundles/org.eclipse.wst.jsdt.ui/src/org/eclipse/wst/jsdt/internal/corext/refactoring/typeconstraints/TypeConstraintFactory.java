@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2007 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -108,13 +108,14 @@ public class TypeConstraintFactory implements ITypeConstraintFactory {
 	 */
 	public CompositeOrTypeConstraint createCompositeOrTypeConstraint(ITypeConstraint[] constraints){
 		ConstraintVariable left= ((SimpleTypeConstraint)constraints[0]).getLeft();
-		String bounds= ""; //$NON-NLS-1$
+		StringBuilder boundsBuilder= new StringBuilder();
 		for (int i= 0; i < constraints.length; i++){
 			ConstraintVariable right= ((SimpleTypeConstraint)constraints[i]).getRight();
 			ITypeBinding binding= right.getBinding();
-			String typeName= binding.getQualifiedName();
-			bounds= bounds + typeName +","; //$NON-NLS-1$
+			boundsBuilder.append(binding.getQualifiedName());
+			boundsBuilder.append(',');
 		}
+		String bounds = boundsBuilder.toString();
 		
 		if (fOrConstraints.containsKey(left)){
 			Map m2= (Map)fOrConstraints.get(left);

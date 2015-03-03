@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2007 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -724,13 +724,13 @@ protected void tearDown() throws Exception {
 			stream.print('\t');
 			if (ALL_TESTS_LOG) {
 				String testName = getName();
-				String str = "";
+				StringBuilder str = new StringBuilder();
 				int length = testName.length()-4;
 				for (int i=0; i<length; i++) {
-					str += '.';
+					str.append('.');
 				}
 				stream.print(str);
-				stream.print("end:");
+				stream.print("end:"); //$NON-NLS-1$
 				stream.print('\t');
 			}
 			long total = Runtime.getRuntime().totalMemory();

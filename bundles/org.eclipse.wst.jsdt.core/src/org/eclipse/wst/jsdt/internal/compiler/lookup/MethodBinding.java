@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -675,28 +675,28 @@ public class MethodBinding extends Binding {
 	}
 
 	public String toString() {
-		String s = (returnType != null) ? returnType.debugName() : "NULL TYPE"; //$NON-NLS-1$
-		s += " "; //$NON-NLS-1$
-		s += (selector != null) ? new String(selector) : "UNNAMED METHOD"; //$NON-NLS-1$
+		StringBuilder s = new StringBuilder();
+		s.append( (returnType != null) ? returnType.debugName() : "NULL TYPE"); //$NON-NLS-1$
+		s.append( (selector != null) ? new String(selector) : "UNNAMED METHOD"); //$NON-NLS-1$
 
-		s += "("; //$NON-NLS-1$
+		s.append('(');
 		if (parameters != null) {
 			if (parameters != Binding.NO_PARAMETERS) {
 				for (int i = 0, length = parameters.length; i < length; i++) {
 					if (i > 0) {
-						s += ", "; //$NON-NLS-1$
+						s.append(',').append(' ');
 					}
 					
-					s += (parameters[i] != null) ? parameters[i].debugName() : "NULL TYPE"; //$NON-NLS-1$
+					s.append( (parameters[i] != null) ? parameters[i].debugName() : "NULL TYPE"); //$NON-NLS-1$
 				}
 			}
 		}
 		else {
-			s += "NULL PARAMETERS"; //$NON-NLS-1$
+			s.append("NULL PARAMETERS"); //$NON-NLS-1$
 		}
-		s += ") "; //$NON-NLS-1$
+		s.append(") "); //$NON-NLS-1$
 
-		return s;
+		return s.toString();
 	}
 
 	/**

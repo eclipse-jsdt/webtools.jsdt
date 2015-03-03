@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2007 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -131,11 +131,14 @@ private void rehash() {
 }
 
 public String toString() {
-	String s = ""; //$NON-NLS-1$
+	StringBuilder sb = new StringBuilder();
 	Object object;
-	for (int i = 0, l = values.length; i < l; i++)
-		if ((object = values[i]) != null)
-			s += object.toString() + "\n"; //$NON-NLS-1$
-	return s;
+	for (int i = 0, l = values.length; i < l; i++) {
+		if ((object = values[i]) != null) {
+			sb.append(object.toString());
+			sb.append('\n');
+		}
+	}
+	return sb.toString();
 }
 }

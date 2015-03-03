@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -45,7 +45,6 @@ import org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit;
 import org.eclipse.wst.jsdt.internal.compiler.parser.JavadocParser;
 import org.eclipse.wst.jsdt.internal.compiler.parser.RecoveredType;
 import org.eclipse.wst.jsdt.internal.compiler.problem.ProblemReporter;
-import org.eclipse.wst.jsdt.internal.compiler.util.Util;
 
 public class SelectionParser extends AssistParser {
 	// OWNER
@@ -743,18 +742,22 @@ protected void updateRecoveryState() {
 }
 
 public  String toString() {
-	String s = Util.EMPTY_STRING;
-	s = s + "elementKindStack : int[] = {"; //$NON-NLS-1$
+	StringBuilder sb = new StringBuilder();
+	sb.append("elementKindStack : int[] = {"); //$NON-NLS-1$
 	for (int i = 0; i <= elementPtr; i++) {
-		s = s + String.valueOf(elementKindStack[i]) + ","; //$NON-NLS-1$
+		sb.append(elementKindStack[i]);
+		sb.append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
-	s = s + "elementInfoStack : int[] = {"; //$NON-NLS-1$
+	sb.append('}').append('\n');
+	
+	sb.append("elementInfoStack : int[] = {"); //$NON-NLS-1$
 	for (int i = 0; i <= elementPtr; i++) {
-		s = s + String.valueOf(elementInfoStack[i]) + ","; //$NON-NLS-1$
+		sb.append(elementInfoStack[i]);
+		sb.append(',');
 	}
-	s = s + "}\n"; //$NON-NLS-1$
-	return s + super.toString();
+	sb.append('}').append('\n');
+	sb.append(super.toString());
+	return sb.toString();
 }
 public int getCursorLocation() {
 	return this.selectionStart;
