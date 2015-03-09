@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -237,7 +237,7 @@ public class OpenTypeHistory extends History {
 		// Fetching the timestamp might not be cheap (remote file system
 		// external Jars. So check if we alreay have one.
 		if (!fTimestampMapping.containsKey(info)) {
-			fTimestampMapping.put(info, new Long(getContainerTimestamp(info)));
+			fTimestampMapping.put(info, Long.valueOf(getContainerTimestamp(info)));
 		}
 		super.accessed(info);
 	}
@@ -249,7 +249,7 @@ public class OpenTypeHistory extends History {
 	
 	public synchronized void replace(TypeNameMatch old, TypeNameMatch newMatch) {
 		fTimestampMapping.remove(old);
-		fTimestampMapping.put(newMatch, new Long(getContainerTimestamp(newMatch)));
+		fTimestampMapping.put(newMatch, Long.valueOf(getContainerTimestamp(newMatch)));
 		super.remove(old);
 		super.accessed(newMatch);
 	}
@@ -306,7 +306,7 @@ public class OpenTypeHistory extends History {
 					if (modifiers != type.getModifiers()) {
 						replace(type, SearchEngine.createTypeNameMatch(jType, modifiers));
 					} else {
-						fTimestampMapping.put(type, new Long(currentTimestamp));
+						fTimestampMapping.put(type, Long.valueOf(currentTimestamp));
 					}
 				}
 			} catch (JavaScriptModelException e) {
@@ -398,7 +398,7 @@ public class OpenTypeHistory extends History {
 			}
 		}
 		if (timestamp != IResource.NULL_STAMP) {
-			fTimestampMapping.put(info, new Long(timestamp));
+			fTimestampMapping.put(info, Long.valueOf(timestamp));
 		}
 		return info;
 	}

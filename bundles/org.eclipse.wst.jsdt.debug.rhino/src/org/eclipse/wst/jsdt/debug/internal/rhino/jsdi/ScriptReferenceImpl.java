@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -56,7 +56,7 @@ public class ScriptReferenceImpl extends MirrorImpl implements ScriptReference {
 	 */
 	public ScriptReferenceImpl(VirtualMachineImpl vm, Map jsonScript) {
 		super(vm);
-		this.scriptId = new Long(((Number) jsonScript.get(JSONConstants.SCRIPT_ID)).longValue());
+		this.scriptId = Long.valueOf(((Number) jsonScript.get(JSONConstants.SCRIPT_ID)).longValue());
 		this.sourcePath = (String) jsonScript.get(JSONConstants.LOCATION);
 		this.sourceProperties = (Map) jsonScript.get(JSONConstants.PROPERTIES);
 		this.source = (String) jsonScript.get(JSONConstants.SOURCE);

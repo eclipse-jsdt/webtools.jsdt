@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -59,7 +59,7 @@ public class StackFrameImpl extends MirrorImpl implements StackFrame {
 		this.contextId = (Number) jsonFrame.get(JSONConstants.CONTEXT_ID);
 		this.ref = (Number) jsonFrame.get(JSONConstants.REF);
 
-		Long scriptId = new Long(((Number) jsonFrame.get(JSONConstants.SCRIPT_ID)).longValue());
+		Long scriptId = Long.valueOf(((Number) jsonFrame.get(JSONConstants.SCRIPT_ID)).longValue());
 		ScriptReferenceImpl script = vm.getScript(scriptId);
 
 		String function = (String) jsonFrame.get(JSONConstants.FUNCTION);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -62,7 +62,7 @@ import org.eclipse.wst.jsdt.ui.actions.SelectionDispatchAction;
 
 public class CopyQualifiedNameAction extends SelectionDispatchAction {
 	
-	private static final long LABEL_FLAGS= new Long(JavaScriptElementLabels.F_FULLY_QUALIFIED | JavaScriptElementLabels.M_FULLY_QUALIFIED | JavaScriptElementLabels.I_FULLY_QUALIFIED | JavaScriptElementLabels.T_FULLY_QUALIFIED | JavaScriptElementLabels.M_PARAMETER_TYPES | JavaScriptElementLabels.USE_RESOLVED | JavaScriptElementLabels.T_TYPE_PARAMETERS | JavaScriptElementLabels.CU_QUALIFIED | JavaScriptElementLabels.CF_QUALIFIED).longValue();
+	private static final long LABEL_FLAGS= JavaScriptElementLabels.F_FULLY_QUALIFIED | JavaScriptElementLabels.M_FULLY_QUALIFIED | JavaScriptElementLabels.I_FULLY_QUALIFIED | JavaScriptElementLabels.T_FULLY_QUALIFIED | JavaScriptElementLabels.M_PARAMETER_TYPES | JavaScriptElementLabels.USE_RESOLVED | JavaScriptElementLabels.T_TYPE_PARAMETERS | JavaScriptElementLabels.CU_QUALIFIED | JavaScriptElementLabels.CF_QUALIFIED;
 
     //TODO: Make API
 	public static final String ACTION_DEFINITION_ID= "org.eclipse.wst.jsdt.ui.edit.text.java.copy.qualified.name"; //$NON-NLS-1$

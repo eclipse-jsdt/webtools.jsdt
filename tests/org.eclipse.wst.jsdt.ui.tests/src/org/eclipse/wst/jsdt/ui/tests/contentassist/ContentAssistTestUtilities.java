@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2012 IBM Corporation and others.
+ * Copyright (c) 2011, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -427,7 +427,7 @@ public class ContentAssistTestUtilities {
 		viewer.setSelectedRange(offset, 0);
 		
 		// Invoke insertProposal of CompletionProposalPopup
-		privateInsertProposalMethod.invoke(objPopup, new Object[]{pages[0][0], new Character((char) 0), Integer.valueOf(524288), Integer.valueOf(offset)});
+		privateInsertProposalMethod.invoke(objPopup, new Object[]{pages[0][0], Character.valueOf((char) 0), Integer.valueOf(524288), Integer.valueOf(offset)});
 		
 		// Get result of inserted proposal in the Editor
 		String strAfterInsert = viewer.getDocument().get();

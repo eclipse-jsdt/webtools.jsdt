@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -187,7 +187,7 @@ void recordLocatorForType(String qualifiedTypeName, String typeLocator) {
 void recordStructuralDependency(IProject prereqProject, State prereqState) {
 	if (prereqState != null)
 		if (prereqState.lastStructuralBuildTime > 0) // can skip if 0 (full build) since its assumed to be 0 if unknown
-			structuralBuildTimes.put(prereqProject.getName(), new Long(prereqState.lastStructuralBuildTime));
+			structuralBuildTimes.put(prereqProject.getName(), Long.valueOf(prereqState.lastStructuralBuildTime));
 }
 
 void removeLocator(String typeLocatorToRemove) {
@@ -274,7 +274,7 @@ static State read(IProject project, DataInputStream in) throws IOException {
 
 	newState.structuralBuildTimes = new SimpleLookupTable(length = in.readInt());
 	for (int i = 0; i < length; i++)
-		newState.structuralBuildTimes.put(in.readUTF(), new Long(in.readLong()));
+		newState.structuralBuildTimes.put(in.readUTF(), Long.valueOf(in.readLong()));
 
 	String[] internedTypeLocators = new String[length = in.readInt()];
 	for (int i = 0; i < length; i++)

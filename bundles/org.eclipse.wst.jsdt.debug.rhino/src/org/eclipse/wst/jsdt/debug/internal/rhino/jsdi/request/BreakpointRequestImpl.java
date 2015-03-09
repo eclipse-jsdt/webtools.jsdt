@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2011 IBM Corporation and others.
+ * Copyright (c) 2010, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -132,7 +132,7 @@ public class BreakpointRequestImpl extends EventRequestImpl implements Breakpoin
 				if(response.isSuccess()) {
 					Map body = (Map) response.getBody().get(JSONConstants.BREAKPOINT);
 					Number id = (Number) body.get(JSONConstants.BREAKPOINT_ID);
-					this.breakpointId = new Long(id.longValue());
+					this.breakpointId = Long.valueOf(id.longValue());
 				}
 			} catch (TimeoutException e) {
 				RhinoDebugPlugin.log(e);

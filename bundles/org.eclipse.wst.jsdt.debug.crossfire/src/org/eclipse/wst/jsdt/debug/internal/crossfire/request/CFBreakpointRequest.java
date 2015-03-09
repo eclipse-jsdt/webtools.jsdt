@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 IBM Corporation and others.
+ * Copyright (c) 2010, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -116,7 +116,7 @@ public class CFBreakpointRequest extends CFThreadEventRequest implements Breakpo
 				attribs.put(Attributes.CONDITION, condition);	
 			}
 			if (hitcount > 0) {
-				attribs.put(Attributes.HIT_COUNT, new Long(hitcount));
+				attribs.put(Attributes.HIT_COUNT, Long.valueOf(hitcount));
 			}
 			attribs.put(Attributes.ENABLED, Boolean.TRUE);
 			bp.put(Attributes.ATTRIBUTES, attribs);
@@ -129,7 +129,7 @@ public class CFBreakpointRequest extends CFThreadEventRequest implements Breakpo
 					bp = (Map)list.get(0);
 					if (bp != null) {
 						Number handle = (Number) bp.get(Attributes.HANDLE);
-						bpHandle = new Long(handle.longValue());
+						bpHandle = Long.valueOf(handle.longValue());
 						RemoteBreakpoint rb = BreakpointTracker.addBreakpoint((CFVirtualMachine) virtualMachine(), bp);
 						if(rb != null) {
 							BreakpointTracker.findLocalBreakpoint(rb);

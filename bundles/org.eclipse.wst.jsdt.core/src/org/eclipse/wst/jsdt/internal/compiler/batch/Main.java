@@ -767,9 +767,9 @@ public class Main implements ProblemSeverities, SuffixConstants {
 		 */
 		public void logTiming(long time, long lineCount) {
 			if ((this.tagBits & Logger.XML) != 0) {
-				this.parameters.put(Logger.VALUE, new Long(time));
+				this.parameters.put(Logger.VALUE, Long.valueOf(time));
 				this.printTag(Logger.TIME, this.parameters, true, true);
-				this.parameters.put(Logger.VALUE, new Long(lineCount));
+				this.parameters.put(Logger.VALUE, Long.valueOf(lineCount));
 				this.printTag(Logger.NUMBER_OF_LINES, this.parameters, true, true);
 			}
 			if (lineCount != 0) {

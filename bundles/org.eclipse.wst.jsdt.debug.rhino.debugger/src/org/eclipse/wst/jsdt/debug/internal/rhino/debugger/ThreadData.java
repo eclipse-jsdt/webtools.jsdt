@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009, 2010 IBM Corporation and others.
+ * Copyright (c) 2009, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -76,7 +76,7 @@ public class ThreadData {
 	public synchronized void contextCreated(Context context) {
 		context.setGeneratingDebug(true);
 		context.setOptimizationLevel(-1);
-		ContextData contextData = new ContextData(threadId, new Long(currentContextId++), debugger);
+		ContextData contextData = new ContextData(threadId, Long.valueOf(currentContextId++), debugger);
 		context.setDebugger(debugger, contextData);
 		contexts.addFirst(context);
 	}
@@ -175,6 +175,6 @@ public class ThreadData {
 	 * @return a new {@link DebugFrame}
 	 */
 	public synchronized DebugFrame getFrame(Context context, FunctionSource function, ScriptSource script) {
-		return new StackFrame(new Long(currentFrameId++), context, function, script);
+		return new StackFrame(Long.valueOf(currentFrameId++), context, function, script);
 	}
 }

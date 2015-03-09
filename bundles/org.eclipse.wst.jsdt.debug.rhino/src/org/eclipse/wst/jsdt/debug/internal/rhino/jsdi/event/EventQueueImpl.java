@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -76,13 +76,13 @@ public final class EventQueueImpl extends MirrorImpl implements EventQueue {
 				String eventName = event.getEvent();
 				EventSetImpl eventSet = new EventSetImpl(vm);
 				if (eventName.equals(JSONConstants.SCRIPT)) {
-					Long threadId = new Long(((Number) event.getBody().get(JSONConstants.THREAD_ID)).longValue());
+					Long threadId = Long.valueOf(((Number) event.getBody().get(JSONConstants.THREAD_ID)).longValue());
 					ThreadReferenceImpl thread = vm.getThread(threadId);
 					if(thread == null) {
 						continue;
 					}
 					eventSet.setThread(thread);
-					Long scriptId = new Long(((Number) event.getBody().get(JSONConstants.SCRIPT_ID)).longValue());
+					Long scriptId = Long.valueOf(((Number) event.getBody().get(JSONConstants.SCRIPT_ID)).longValue());
 					ScriptReferenceImpl script = vm.addScript(scriptId);
 					if(script != null) {
 						List scriptLoadRequests = eventRequestManager.scriptLoadRequests();
@@ -97,13 +97,13 @@ public final class EventQueueImpl extends MirrorImpl implements EventQueue {
 						thread.markSuspended(false);
 					}
 				} else if (eventName.equals(JSONConstants.BREAK)) {
-					Long threadId = new Long(((Number) event.getBody().get(JSONConstants.THREAD_ID)).longValue());
+					Long threadId = Long.valueOf(((Number) event.getBody().get(JSONConstants.THREAD_ID)).longValue());
 					ThreadReferenceImpl thread = vm.getThread(threadId);
 					if(thread == null) {
 						continue;
 					}
 					eventSet.setThread(thread);
-					Long scriptId = new Long(((Number) event.getBody().get(JSONConstants.SCRIPT_ID)).longValue());
+					Long scriptId = Long.valueOf(((Number) event.getBody().get(JSONConstants.SCRIPT_ID)).longValue());
 					ScriptReferenceImpl script = vm.getScript(scriptId);
 					if(script != null) {
 						int lineNumber = ((Number) event.getBody().get(JSONConstants.LINE)).intValue();
@@ -157,11 +157,11 @@ public final class EventQueueImpl extends MirrorImpl implements EventQueue {
 						}
 					}
 				} else if (eventName.equals(JSONConstants.EXCEPTION)) {
-					Long threadId = new Long(((Number) event.getBody().get(JSONConstants.THREAD_ID)).longValue());
+					Long threadId = Long.valueOf(((Number) event.getBody().get(JSONConstants.THREAD_ID)).longValue());
 					ThreadReferenceImpl thread = vm.getThread(threadId);
 					if(thread != null) {
 						eventSet.setThread(thread);
-						Long scriptId = new Long(((Number) event.getBody().get(JSONConstants.SCRIPT_ID)).longValue());
+						Long scriptId = Long.valueOf(((Number) event.getBody().get(JSONConstants.SCRIPT_ID)).longValue());
 						ScriptReferenceImpl script = vm.getScript(scriptId);
 						int lineNumber = ((Number) event.getBody().get(JSONConstants.LINE)).intValue();
 						Location location = script.lineLocation(lineNumber);
@@ -178,7 +178,7 @@ public final class EventQueueImpl extends MirrorImpl implements EventQueue {
 						}
 					}
 				} else if (eventName.equals(JSONConstants.THREAD)) {
-					Long threadId = new Long(((Number) event.getBody().get(JSONConstants.THREAD_ID)).longValue());
+					Long threadId = Long.valueOf(((Number) event.getBody().get(JSONConstants.THREAD_ID)).longValue());
 					String type = (String) event.getBody().get(JSONConstants.TYPE);
 					if (JSONConstants.ENTER.equals(type)) {
 						ThreadReferenceImpl thread = vm.getThread(threadId);

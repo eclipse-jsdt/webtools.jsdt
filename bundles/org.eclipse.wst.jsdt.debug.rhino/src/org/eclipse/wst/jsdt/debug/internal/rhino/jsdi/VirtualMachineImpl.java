@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 IBM Corporation and others.
+ * Copyright (c) 2010, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -77,7 +77,7 @@ public class VirtualMachineImpl extends MirrorImpl implements VirtualMachine {
 			RhinoResponse response = sendRequest(request);
 			List scriptIds = (List) response.getBody().get(JSONConstants.SCRIPTS);
 			for (Iterator iterator = scriptIds.iterator(); iterator.hasNext();) {
-				Long scriptId = new Long(((Number) iterator.next()).longValue());
+				Long scriptId = Long.valueOf(((Number) iterator.next()).longValue());
 				ScriptReferenceImpl script = createScriptReference(scriptId);
 				if(script != null) {
 					scripts.put(scriptId, script);
@@ -196,7 +196,7 @@ public class VirtualMachineImpl extends MirrorImpl implements VirtualMachine {
 			List threadIds = (List) response.getBody().get(JSONConstants.THREADS);
 			HashMap allThreads = new HashMap(threadIds.size());
 			for (Iterator iterator = threadIds.iterator(); iterator.hasNext();) {
-				Long threadId = new Long(((Number) iterator.next()).longValue());
+				Long threadId = Long.valueOf(((Number) iterator.next()).longValue());
 				ThreadReferenceImpl thread = (ThreadReferenceImpl) threads.get(threadId);
 				if (thread == null) {
 					thread = createThreadReference(threadId);

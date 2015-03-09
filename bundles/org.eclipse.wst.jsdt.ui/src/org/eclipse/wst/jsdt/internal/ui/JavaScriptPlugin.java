@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -299,7 +299,7 @@ public class JavaScriptPlugin extends AbstractUIPlugin {
 			long last= ((Long) fgRepeatedMessages.get(message)).longValue();
 			writeToLog= now - last > 5000;
 		}
-		fgRepeatedMessages.put(message, new Long(now));
+		fgRepeatedMessages.put(message, Long.valueOf(now));
 		if (writeToLog)
 			log(new Exception(message + detail).fillInStackTrace());
 	}
