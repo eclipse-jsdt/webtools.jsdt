@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -1111,6 +1111,7 @@ public int getNextToken() throws InvalidInputException {
 						if (this.currentNonWhitespaceToken==TokenNamereturn)
 							return TokenNameSEMICOLON; 
 					}
+
 					// inline version of:
 					//isWhiteSpace =
 					//	(this.currentCharacter == ' ') || ScannerHelper.isWhitespace(this.currentCharacter);
@@ -1125,9 +1126,13 @@ public int getNextToken() throws InvalidInputException {
 							isWhiteSpace = true;
 							break;
 						default :
-							isWhiteSpace = false;
+							// See: https://bugs.eclipse.org/bugs/show_bug.cgi?id=461339
+							int codePoint = Character.codePointAt(this.source, this.currentPosition - 1);
+							isWhiteSpace = (Character.getType(codePoint) == Character.FORMAT && codePoint == this.currentCharacter);
+							break;
 					}
 				}
+
 				if (isWhiteSpace) {
 					hasWhiteSpaces = true;
 				}
