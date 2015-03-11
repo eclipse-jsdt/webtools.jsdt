@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -535,11 +535,13 @@ class JavaScriptUnitResolver extends Compiler {
 				// the bindings could not be resolved due to missing types in name environment
 				// see https://bugs.eclipse.org/bugs/show_bug.cgi?id=86541
 				CompilationUnitDeclaration unitDeclaration = parse(sourceUnit, nodeSearcher, options, flags);
-				final int problemCount = unit.compilationResult.problemCount;
-				if (problemCount != 0) {
-					unitDeclaration.compilationResult.problems = new CategorizedProblem[problemCount];
-					System.arraycopy(unit.compilationResult.problems, 0, unitDeclaration.compilationResult.problems, 0, problemCount);
-					unitDeclaration.compilationResult.problemCount = problemCount;
+				if (unit != null && unit.compilationResult != null) {
+					final int problemCount = unit.compilationResult.problemCount;
+					if (problemCount != 0) {
+						unitDeclaration.compilationResult.problems = new CategorizedProblem[problemCount];
+						System.arraycopy(unit.compilationResult.problems, 0, unitDeclaration.compilationResult.problems, 0, problemCount);
+						unitDeclaration.compilationResult.problemCount = problemCount;
+					}
 				}
 				return unitDeclaration;
 			}
