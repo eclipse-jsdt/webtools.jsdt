@@ -1091,19 +1091,18 @@ public int getNextToken() throws InvalidInputException {
 					//isWhiteSpace =
 					//	(this.currentCharacter == ' ') || ScannerHelper.isWhitespace(this.currentCharacter);
 					switch (this.currentCharacter) {
-						case 9 :  /* \ u0009: HORIZONTAL TABULATION   */
-						case 10 : /* \ u000a: LINE FEED               */
-						case 11 : /* \ u000b: VERTICAL TAB            */
-						case 12 : /* \ u000c: FORM FEED               */
-						case 13 : /* \ u000d: CARRIAGE RETURN         */
-						case 32 : /* \ u0020: SPACE                   */
-						case 160: /* \ u00a0: NO-BREAK SPACE          */
+						case 9 :  		/* \ u0009: HORIZONTAL TABULATION                   */
+						case 10 : 		/* \ u000a: LINE FEED                               */
+						case 11 : 		/* \ u000b: VERTICAL TAB                            */
+						case 12 : 		/* \ u000c: FORM FEED                               */
+						case 13 : 		/* \ u000d: CARRIAGE RETURN                         */
+						case 32 : 		/* \ u0020: SPACE                                   */
+						case 160: 		/* \ u00a0: NO-BREAK SPACE                          */
+						case '\uFEFF': 	/* \ uFEFF: BYTE ORDER MARK (ECMA-262, Edition 5.1) */
 							isWhiteSpace = true;
 							break;
 						default :
-							// See: https://bugs.eclipse.org/bugs/show_bug.cgi?id=461339
-							int codePoint = Character.codePointAt(this.source, this.currentPosition - 1);
-							isWhiteSpace = (Character.getType(codePoint) == Character.FORMAT && codePoint == this.currentCharacter);
+							isWhiteSpace = false;
 							break;
 					}
 				}
