@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,6 +31,7 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 	private static final int CHARACTER= 4;
 	private static final int STRING= 5;
 	private static final int REGULAR_EXPRESSION = 6;
+	private static final int SHEBANG_LINE= 7;
 
 	// beginning of prefixes and postfixes
 	private static final int NONE= 0;
@@ -42,6 +43,7 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 	private static final int CARRIAGE_RETURN=6; // postfix for STRING, CHARACTER and SINGLE_LINE_COMMENT
 	private static final int REGULAR_EXPRESSION_END=7;
 	private static final int BACKSLASH_CARRIAGE_RETURN = 8; // anti-postfix for STRING, CHARACTER
+	private static final int HASH= 9; // prefix for SHEBANG
 
 	/** The scanner. */
 	private final BufferedDocumentScanner fScanner= new BufferedDocumentScanner(1000);	// faster implementation
@@ -65,7 +67,8 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 		new Token(JAVA_DOC),
 		new Token(JAVA_CHARACTER),
 		new Token(JAVA_STRING),
-		new Token(JAVA_STRING)	// regular expression same as string
+		new Token(JAVA_STRING),	// regular expression same as string
+		new Token(JAVA_SHEBANG_LINE)
 	};
 
 	public FastJavaPartitionScanner() {
@@ -119,6 +122,7 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 					case CHARACTER:
 					case STRING:
 					case REGULAR_EXPRESSION:
+					case SHEBANG_LINE:
 						if (fTokenLength > 0) {
 							IToken token= fTokens[fState];
 				 			
@@ -149,8 +153,10 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 						consume();
 						continue;
 					}
+				//$FALL-THROUGH$
 				case SINGLE_LINE_COMMENT:
 				case REGULAR_EXPRESSION:
+				case SHEBANG_LINE:
 					return postFix(fState);
 
 				default:
@@ -198,7 +204,12 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 							last= BACKSLASH;
 							newState= JAVASCRIPT;
 							break;
-
+							
+						case '#':
+							last= HASH;
+							newState= JAVASCRIPT;
+							break;
+							
 						default:
 							last= NONE;
 							newState= JAVASCRIPT;
@@ -218,6 +229,25 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 	 		switch (fState) {
 	 		case JAVASCRIPT:
 				switch (currentChar) {
+				case '#':
+					if (fLast == NONE) {
+						fTokenLength++;
+						fLast= HASH;
+					}
+					break;						
+				case '!':
+					if (fLast == HASH) {
+						if (fTokenLength - getLastLength(fLast) > 0) {
+							return preFix(JAVASCRIPT, SHEBANG_LINE, NONE, 2);
+						} else {
+							preFix(JAVASCRIPT, SHEBANG_LINE, NONE, 2);
+							fTokenOffset += fTokenLength;
+							fTokenLength= fPrefixLength;
+						}
+					} else {
+						consume();
+					}
+					break;
 				case '/':
 					if (fLast == SLASH) {
 						if (fTokenLength - getLastLength(fLast) > 0) {
@@ -469,6 +499,10 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 	 				break;
 	 			}
 	 			break;
+	 			
+	 		case SHEBANG_LINE:
+				consume();
+				break;
 	 		}
 		}
  	}
@@ -485,9 +519,11 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 		case BACKSLASH:
 		case SLASH:
 		case STAR:
+		case HASH:
 			return 1;
 
 		case SLASH_STAR:
+		case SHEBANG_LINE:
 			return 2;
 
 		case SLASH_STAR_STAR:

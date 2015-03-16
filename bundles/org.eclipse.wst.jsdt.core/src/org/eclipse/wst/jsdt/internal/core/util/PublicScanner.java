@@ -51,6 +51,7 @@ public class PublicScanner implements IScanner, ITerminalSymbols {
 	public int initialPosition, eofPosition;
 	// after this position eof are generated instead of real token from the source
 
+	public boolean tokenizeShebang = false;
 	public boolean tokenizeComments = false;
 	public boolean tokenizeWhiteSpace = false;
 
@@ -192,6 +193,7 @@ public PublicScanner() {
 }
 
 public PublicScanner(
+		boolean tokenizeShebang,
 		boolean tokenizeComments,
 		boolean tokenizeWhiteSpace,
 		boolean checkNonExternalizedStringLiterals,
@@ -202,6 +204,7 @@ public PublicScanner(
 		boolean isTaskCaseSensitive) {
 
 	this.eofPosition = Integer.MAX_VALUE;
+	this.tokenizeShebang = tokenizeShebang;
 	this.tokenizeComments = tokenizeComments;
 	this.tokenizeWhiteSpace = tokenizeWhiteSpace;
 	this.sourceLevel = sourceLevel;
@@ -222,6 +225,7 @@ public PublicScanner(
 		boolean isTaskCaseSensitive) {
 
 	this(
+		false,
 		tokenizeComments,
 		tokenizeWhiteSpace,
 		checkNonExternalizedStringLiterals,
@@ -1044,6 +1048,7 @@ public int getNextToken() throws InvalidInputException {
 		this.diet = false;
 		return this.currentPosition > this.eofPosition ? TokenNameEOF : TokenNameRBRACE;
 	}
+	
 	int whiteStart = 0;
 	int previousToken = this.currentToken;
 	try {
@@ -1074,8 +1079,9 @@ public int getNextToken() throws InvalidInputException {
 					if (this.currentPosition > this.eofPosition)
 						return this.currentToken=TokenNameEOF;
 				}
-				if (this.currentPosition > this.eofPosition)
+				if (this.currentPosition > this.eofPosition) {
 					return this.currentToken=TokenNameEOF;
+				}
 				if (checkIfUnicode) {
 					isWhiteSpace = jumpOverUnicodeWhiteSpace();
 					offset = this.currentPosition - offset;
@@ -1591,6 +1597,65 @@ public int getNextToken() throws InvalidInputException {
 						return this.currentToken=TokenNameEOF;
 					//the atEnd may not be <currentPosition == eofPosition> if source is only some part of a real (external) stream
 					throw new InvalidInputException("Ctrl-Z"); //$NON-NLS-1$
+				case '#' :
+					/* Support for SHEBANG LINE:
+					 * 
+					 *  Should always start (if any) from the first character of the file
+					 *  Ends with new line character
+					 *  
+					 *    TODO: Need to add an error indication if Shebang doesn't start from the very first position
+					 */
+					if (getNextChar('!')) {
+//						this.startPosition = 0; //Shebang is always at start
+						try { //get the next char
+							this.currentCharacter = this.source[this.currentPosition++];
+							while (this.currentCharacter != '\r' && this.currentCharacter != '\n') {
+								//get the next char
+								this.currentCharacter = this.source[this.currentPosition++];
+							}
+							/*
+							 * We need to completely consume the line break
+							 */
+							boolean isUnicode = false;
+							if (this.currentCharacter == '\r'
+							   && this.eofPosition > this.currentPosition) {
+							   	if (this.source[this.currentPosition] == '\n') {
+									this.currentPosition++;
+									this.currentCharacter = '\n';
+							   	} else if ((this.source[this.currentPosition] == '\\')
+									&& (this.source[this.currentPosition + 1] == 'u')) {
+									getNextUnicodeChar();
+									isUnicode = true;
+								}
+						   	}
+							if ((this.currentCharacter == '\r') || (this.currentCharacter == '\n')) {
+								if (this.recordLineSeparator) {
+									if (isUnicode) {
+										pushUnicodeLineSeparator();
+									} else {
+										pushLineSeparator();
+									}
+								}
+							}
+							if (this.tokenizeShebang) {
+								currentToken=TokenNameSHEBANG_LINE;
+								return currentToken;
+							}
+						} catch (IndexOutOfBoundsException e) {
+							this.currentPosition--;
+							if (this.tokenizeShebang) {
+								currentToken=TokenNameSHEBANG_LINE;
+								return currentToken;
+							} else {
+								this.currentPosition++;
+							}
+						}
+						break;
+					} else {
+						// Return the character value back tp this.currentCharacter
+						this.currentCharacter = this.source[this.currentPosition - 1]; 
+					}
+					//$FALL-THROUGH$
 				default :
 					char c = this.currentCharacter;
 					if (c < ScannerHelper.MAX_OBVIOUS) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -32,7 +32,8 @@ public interface TerminalTokens {
 		TokenNameCOMMENT_LINE = 1001,
 		TokenNameCOMMENT_BLOCK = 1002,
 		TokenNameCOMMENT_JAVADOC = 1003,
-		TokenNameUNKNOWN = 1004;
+		TokenNameSHEBANG_LINE = 1004,
+		TokenNameUNKNOWN = 1005;
 
     int TokenNameIdentifier = 32,
 		TokenNameabstract = 88,
