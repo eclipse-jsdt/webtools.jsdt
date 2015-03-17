@@ -43,6 +43,7 @@ import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.wst.jsdt.core.IIncludePathEntry;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
+import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.internal.corext.util.Messages;
 import org.eclipse.wst.jsdt.internal.ui.IJavaHelpContextIds;
 import org.eclipse.wst.jsdt.internal.ui.wizards.NewWizardMessages;
@@ -177,7 +178,13 @@ public class CreateMultipleSourceFoldersDialog extends TrayDialog {
 			Object[] elements= dialog.getResult();	
 			for (int i= 0; i < elements.length; i++) {
 				IResource res= (IResource)elements[i];
-				fInsertedElements.add(new CPListElement(fJavaProject, IIncludePathEntry.CPE_SOURCE, res.getFullPath(), res));
+				
+				IPath[] defaultExclusions = JavaScriptCore.getJavaScriptCore().getDefaultClasspathExclusionPatterns(); 
+				CPListElement cple = new CPListElement(fJavaProject, IIncludePathEntry.CPE_SOURCE, res.getFullPath(), res);
+				for (int j = 0; j < defaultExclusions.length; j++) {
+					cple.addToExclusions(res.getFullPath().append(defaultExclusions[j]));
+				}
+				fInsertedElements.add(cple);
 			}
 
 			if (fExistingElements.length == 1) {

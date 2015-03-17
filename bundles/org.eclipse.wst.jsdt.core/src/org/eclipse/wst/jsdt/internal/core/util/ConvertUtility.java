@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -35,6 +37,7 @@ import org.eclipse.wst.jsdt.core.IIncludePathAttribute;
 import org.eclipse.wst.jsdt.core.IIncludePathEntry;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.LibrarySuperType;
+import org.eclipse.wst.jsdt.internal.core.ClasspathEntry;
 import org.eclipse.wst.jsdt.internal.core.JavaProject;
 import org.eclipse.wst.jsdt.internal.core.search.indexing.IIndexConstants;
 
@@ -281,7 +284,8 @@ public class ConvertUtility {
 	}
 
 	public IIncludePathEntry[] getDefaultSourcePaths(IProject p) {
-		IIncludePathEntry[] defaults = new IIncludePathEntry[]{JavaScriptCore.newSourceEntry(p.getFullPath())};
+		IPath[] defaultExclusionPatterns = JavaScriptCore.getJavaScriptCore().getDefaultClasspathExclusionPatterns();
+		IIncludePathEntry[] defaults = new IIncludePathEntry[] { JavaScriptCore.newSourceEntry(p.getFullPath(), defaultExclusionPatterns) };
 		try {
 			IConfigurationElement[] configurationElements = Platform.getExtensionRegistry().getConfigurationElementsFor("org.eclipse.wst.jsdt.core.sourcePathProvider");
 			Map paths = new HashMap();
@@ -290,6 +294,20 @@ public class ConvertUtility {
 				if (provider != null) {
 					IIncludePathEntry[] defaultSourcePaths = provider.getDefaultSourcePaths(p);
 					for (int j = 0; j < defaultSourcePaths.length; j++) {
+						if (defaultSourcePaths[i] instanceof ClasspathEntry) {
+							ClasspathEntry cpe = (ClasspathEntry)defaultSourcePaths[i];
+							
+							Set<IPath> exclusions = new HashSet<IPath>();
+							exclusions.addAll(Arrays.asList(cpe.getExclusionPatterns()));
+							exclusions.addAll(Arrays.asList(defaultExclusionPatterns));
+							IPath[] exclusionPatterns= exclusions.toArray(new IPath[exclusions.size()]);
+
+							defaultSourcePaths[i] = JavaScriptCore.newSourceEntry(cpe.getPath(), 
+										cpe.getInclusionPatterns(), exclusionPatterns, 
+										cpe.getOutputLocation(), cpe.getExtraAttributes());
+
+						}
+						
 						paths.put(defaultSourcePaths[j].getPath(), defaultSourcePaths[j]);
 					}
 				}

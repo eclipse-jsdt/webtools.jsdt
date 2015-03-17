@@ -70,8 +70,10 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -4126,6 +4128,30 @@ public final class JavaScriptCore extends Plugin {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	/** 
+	 * Returns default inclusion patterns
+	 * 
+	 * return IPath[] array of IPath elements to exclude
+	 */
+	public IPath[] getDefaultClasspathExclusionPatterns() {
+		String defaultExclusions = JavaModelManager.getJavaModelManager().getOption(JavaScriptCore.CORE_DEFAULT_CLASSPATH_EXCLUSION_PATTERNS);
+		if (defaultExclusions == null || defaultExclusions.trim().length() == 0)
+			return ClasspathEntry.EXCLUDE_NONE;
+
+		Set<IPath> result = new HashSet<IPath>();
+		String[] exclusions = defaultExclusions.split(","); //$NON-NLS-1$
+		for (int i = 0; exclusions != null && i < exclusions.length; i++) {
+			exclusions[i] = exclusions[i] == null ? null : exclusions[i].trim();
+			Path exclusion = exclusions[i] == null || exclusions[i].length() == 0 ? 
+						null : new Path(exclusions[i]);
+			if (exclusion != null && !result.contains(exclusion))
+				result.add(exclusion);
+		}
+
+		return result.size() == 0 ? ClasspathEntry.EXCLUDE_NONE :
+					result.toArray(new IPath[result.size()]);
 	}
 
 }

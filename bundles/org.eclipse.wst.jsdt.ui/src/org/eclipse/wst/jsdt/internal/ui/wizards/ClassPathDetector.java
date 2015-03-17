@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,9 +12,11 @@
 package org.eclipse.wst.jsdt.internal.ui.wizards;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +42,8 @@ import org.eclipse.wst.jsdt.core.ToolFactory;
 import org.eclipse.wst.jsdt.core.compiler.IScanner;
 import org.eclipse.wst.jsdt.core.compiler.ITerminalSymbols;
 import org.eclipse.wst.jsdt.core.compiler.InvalidInputException;
+import org.eclipse.wst.jsdt.internal.core.ClasspathEntry;
+import org.eclipse.wst.jsdt.internal.core.util.Util;
 import org.eclipse.wst.jsdt.ui.PreferenceConstants;
 
 import com.ibm.icu.text.Collator;
@@ -50,6 +54,7 @@ public class ClassPathDetector implements IResourceProxyVisitor {
 	private IProject fProject;
 	private IIncludePathEntry[] fResultClasspath;
 	private IProgressMonitor fMonitor;
+	private IPath[] fExclusionPatterns;
 	
 	private static class CPSorter implements Comparator {
 		private Collator fCollator= Collator.getInstance();
@@ -59,17 +64,34 @@ public class ClassPathDetector implements IResourceProxyVisitor {
 			return fCollator.compare(e1.getPath().toString(), e2.getPath().toString());
 		}
 	}
-	
+
 	public ClassPathDetector(IProject project, IProgressMonitor monitor) throws CoreException {
+		this(project, monitor, ClasspathEntry.EXCLUDE_NONE);
+	}
+	
+	public ClassPathDetector(IProject project, IProgressMonitor monitor,
+				IPath[] exclusionPatterns) throws CoreException {
 		fSourceFolders= new HashMap();
 		fProject= project;
 		fResultClasspath= null;
+		fExclusionPatterns = exclusionPatterns;
 		
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
 			
 		detectClasspath(monitor);
+	}
+	
+	private char[][] convertPatternsToChars(IPath path, IPath[] patterns) {
+		int length = patterns.length;
+		char[][] patternChars = new char[length][];
+		IPath prefixPath = path.removeTrailingSeparator();
+		for (int i = 0; i < length; i++) {
+			patternChars[i] =
+				prefixPath.append(patterns[i]).toString().toCharArray();
+		}
+		return patternChars;
 	}
 	
 	/**
@@ -91,6 +113,7 @@ public class ClassPathDetector implements IResourceProxyVisitor {
 			if (monitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
+		
 			monitor.worked(1);
 
 			if (cpEntries.isEmpty()) {
@@ -118,17 +141,21 @@ public class ClassPathDetector implements IResourceProxyVisitor {
 		Set sourceFolderSet= fSourceFolders.keySet();
 		for (Iterator iter= sourceFolderSet.iterator(); iter.hasNext();) {
 			IPath path= (IPath) iter.next();
-			ArrayList excluded= new ArrayList();
-			for (Iterator inner= sourceFolderSet.iterator(); inner.hasNext();) {
-				IPath other= (IPath) inner.next();
-				if (!path.equals(other) && path.isPrefixOf(other)) {
-					IPath pathToExclude= other.removeFirstSegments(path.segmentCount()).addTrailingSeparator();
-					excluded.add(pathToExclude);
+			char[][] excludedPatternChars = convertPatternsToChars(path, fExclusionPatterns);
+			if (!Util.isExcluded(path, null, excludedPatternChars, true)) {
+				Set<IPath> excluded= new HashSet<IPath>();
+				for (Iterator inner= sourceFolderSet.iterator(); inner.hasNext();) {
+					IPath other= (IPath) inner.next();
+					if (!path.equals(other) && path.isPrefixOf(other)) {
+						IPath pathToExclude= other.removeFirstSegments(path.segmentCount()).addTrailingSeparator();
+						excluded.add(pathToExclude);
+					}
 				}
+				excluded.addAll(Arrays.asList(fExclusionPatterns));
+				IPath[] excludedPaths= (IPath[]) excluded.toArray(new IPath[excluded.size()]);
+				IIncludePathEntry entry= JavaScriptCore.newSourceEntry(path, excludedPaths);
+				res.add(entry);
 			}
-			IPath[] excludedPaths= (IPath[]) excluded.toArray(new IPath[excluded.size()]);
-			IIncludePathEntry entry= JavaScriptCore.newSourceEntry(path, excludedPaths);
-			res.add(entry);
 		}
 		Collections.sort(res, new CPSorter());
 		resEntries.addAll(res);

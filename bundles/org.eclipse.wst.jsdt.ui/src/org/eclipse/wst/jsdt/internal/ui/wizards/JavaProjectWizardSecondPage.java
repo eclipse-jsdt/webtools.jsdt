@@ -203,7 +203,9 @@ public class JavaProjectWizardSecondPage extends JavaCapabilityConfigurationPage
 	
 			if (fFirstPage.getDetect()) {
 				if (!fCurrProject.getFolder(JavaProject.SHARED_PROPERTIES_DIRECTORY).getFile(JavaProject.CLASSPATH_FILENAME).exists()) { 
-					final ClassPathDetector detector= new ClassPathDetector(fCurrProject, new SubProgressMonitor(monitor, 2));
+					final ClassPathDetector detector= 
+								new ClassPathDetector(fCurrProject, new SubProgressMonitor(monitor, 2),
+											JavaScriptCore.getJavaScriptCore().getDefaultClasspathExclusionPatterns());
 					entries= detector.getClasspath();
 				} else {
 					monitor.worked(2);
@@ -231,19 +233,21 @@ public class JavaProjectWizardSecondPage extends JavaCapabilityConfigurationPage
 				final IPath projectPath= fCurrProject.getFullPath();
 
 				// configure the classpath entries, including the default jre library.
-				List cpEntries= new ArrayList();
-				cpEntries.add(JavaScriptCore.newSourceEntry(projectPath.append(srcPath)));
+				List<IIncludePathEntry> cpEntries= new ArrayList<IIncludePathEntry>();
+				cpEntries.add(JavaScriptCore.newSourceEntry(projectPath.append(srcPath), 
+							JavaScriptCore.getJavaScriptCore().getDefaultClasspathExclusionPatterns()));
 				cpEntries.addAll(Arrays.asList(getDefaultClasspathEntry()));
-				entries= (IIncludePathEntry[]) cpEntries.toArray(new IIncludePathEntry[cpEntries.size()]);
+				entries= cpEntries.toArray(new IIncludePathEntry[cpEntries.size()]);
 				
 				// configure the output location
 //				outputLocation= projectPath.append(binPath);
 			} else {
 				IPath projectPath= fCurrProject.getFullPath();
-				List cpEntries= new ArrayList();
-				cpEntries.add(JavaScriptCore.newSourceEntry(projectPath));
+				List<IIncludePathEntry> cpEntries = new ArrayList<IIncludePathEntry>();
+				cpEntries.add(JavaScriptCore.newSourceEntry(projectPath, 
+							JavaScriptCore.getJavaScriptCore().getDefaultClasspathExclusionPatterns()));
 				cpEntries.addAll(Arrays.asList(getDefaultClasspathEntry()));
-				entries= (IIncludePathEntry[]) cpEntries.toArray(new IIncludePathEntry[cpEntries.size()]);
+				entries= cpEntries.toArray(new IIncludePathEntry[cpEntries.size()]);
 
 //				outputLocation= projectPath;
 				monitor.worked(2);
@@ -286,7 +290,7 @@ public class JavaProjectWizardSecondPage extends JavaCapabilityConfigurationPage
 			return new IIncludePathEntry[] { JavaScriptCore.newContainerEntry(jreContainerPath)};
 		}
 	}
-	
+
 	private void deleteProjectFile(URI projectLocation) throws CoreException {
 		IFileStore file= EFS.getStore(projectLocation);
 		if (file.fetchInfo().exists()) {
