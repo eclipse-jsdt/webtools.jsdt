@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -307,7 +307,7 @@ public class JavaProjectWizardSecondPage extends JavaCapabilityConfigurationPage
 			if (projectFile.fetchInfo().exists()) {
 				fDotProjectBackup= createBackup(projectFile, "project-desc"); //$NON-NLS-1$ 
 			}
-			IFileStore classpathFile= file.getChild(JavaProject.CLASSPATH_FILENAME);
+			IFileStore classpathFile= file.getChild(JavaProject.SHARED_PROPERTIES_DIRECTORY).getChild(JavaProject.CLASSPATH_FILENAME);
 			if (classpathFile.fetchInfo().exists()) {
 				fDotClasspathBackup= createBackup(classpathFile, "classpath-desc"); //$NON-NLS-1$ 
 			}
@@ -328,7 +328,7 @@ public class JavaProjectWizardSecondPage extends JavaCapabilityConfigurationPage
 			throw new CoreException(status);
 		}
 		try {
-			IFileStore classpathFile= EFS.getStore(projectLocation).getChild(JavaProject.CLASSPATH_FILENAME);
+			IFileStore classpathFile= EFS.getStore(projectLocation).getChild(JavaProject.SHARED_PROPERTIES_DIRECTORY).getChild(JavaProject.CLASSPATH_FILENAME);
 				classpathFile.delete(EFS.NONE, new SubProgressMonitor(monitor, 1));
 			if (fDotClasspathBackup != null) {
 				copyFile(fDotClasspathBackup, classpathFile, new SubProgressMonitor(monitor, 1));
