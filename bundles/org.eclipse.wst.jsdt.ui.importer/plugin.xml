@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.e4.ui.importer.projectConfigurators">
+      <projectConfigurator
+            class="org.eclipse.wst.jsdt.ui.importer.JSDTProjectNature"
+            label="JavaScript">
+         <activeWhen>
+            <hasFileWithSuffixRecursively
+                  suffix=".js">
+            </hasFileWithSuffixRecursively>
+         </activeWhen>
+      </projectConfigurator>
+   </extension>
+</plugin>

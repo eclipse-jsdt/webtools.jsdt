@@ -47,6 +47,12 @@
   </profiles>
 
   <repositories>
+  	<!-- Additional dependencies -->
+  	<repository>
+  		<id>org.eclipse.e4.ui-snapshots</id>
+  		<url>http://download.eclipse.org/e4/snapshots/org.eclipse.e4.ui</url>
+  		<layout>p2</layout>
+  	</repository>
     <!-- To reference parent pom -->
     <repository>
       <id>Webtools Repository - Releases</id>

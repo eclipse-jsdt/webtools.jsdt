@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <category-def name="JSDT" label="JavaScript Development Tools">Editor and debugger to efficiently develop JavaScript applications in Eclipse</category-def>
-
    <feature id="org.eclipse.wst.jsdt.feature" version="0.0.0">
       <category name="JSDT"/>
    </feature>
@@ -11,4 +10,9 @@
    <feature id="org.eclipse.wst.jsdt_tests.feature" version="0.0.0">
       <category name="JSDT"/>
    </feature>
+
+   <category-def name="JSDT - Incubation" label="JSDT - Incubating and experimental plugins"/>
+   <bundle id="org.eclipse.wst.jsdt.ui.importer" version="0.0.0">
+      <category name="JSDT - Incubation"/>
+   </bundle>
 </site>
