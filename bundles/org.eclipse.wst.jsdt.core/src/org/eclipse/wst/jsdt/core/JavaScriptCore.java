@@ -697,6 +697,11 @@ public final class JavaScriptCore extends Plugin {
 	 * Possible  configurable option ID.
 	 * @see #getDefaultOptions()
 	 */
+	public static final String CORE_DEFAULT_CLASSPATH_EXCLUSION_PATTERNS = PLUGIN_ID + ".classpath.exclusionPatterns.default"; //$NON-NLS-1$
+	/**
+	 * Possible  configurable option ID.
+	 * @see #getDefaultOptions()
+	 */
 	public static final String CORE_ENABLE_CLASSPATH_EXCLUSION_PATTERNS = PLUGIN_ID + ".classpath.exclusionPatterns"; //$NON-NLS-1$
 	/**
 	 * Possible  configurable option ID.
@@ -962,6 +967,11 @@ public final class JavaScriptCore extends Plugin {
 	 * @see #getDefaultOptions()
 	 */
 	public static final String NEVER = "never"; //$NON-NLS-1$
+	/**
+	 * Possible  configurable option value.
+	 * @see #getDefaultOptions()
+	 */
+	public static final String DEFAULT_EXCLUSION_PATTERNS = "**/*.min.js,**/node_modules/*,**/bower_components/*";	 //$NON-NLS-1$
 
 	/**
 	 * Value of the content-type for JavaScript source files. Use this value to retrieve the JavaScript content type

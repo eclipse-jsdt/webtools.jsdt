@@ -1745,6 +1745,7 @@ public class JavaModelManager implements ISaveParticipant, IContentTypeChangeLis
 		defaultOptionsMap.put(JavaScriptCore.CORE_CIRCULAR_CLASSPATH, JavaScriptCore.ERROR);
 		defaultOptionsMap.put(JavaScriptCore.CORE_INCOMPATIBLE_JDK_LEVEL, JavaScriptCore.IGNORE);
 		defaultOptionsMap.put(JavaScriptCore.CORE_ENABLE_CLASSPATH_EXCLUSION_PATTERNS, JavaScriptCore.ENABLED);
+		defaultOptionsMap.put(JavaScriptCore.CORE_DEFAULT_CLASSPATH_EXCLUSION_PATTERNS, JavaScriptCore.DEFAULT_EXCLUSION_PATTERNS);
 		defaultOptionsMap.put(JavaScriptCore.CORE_ENABLE_CLASSPATH_MULTIPLE_OUTPUT_LOCATIONS, JavaScriptCore.ENABLED);
 
 		// Formatter settings

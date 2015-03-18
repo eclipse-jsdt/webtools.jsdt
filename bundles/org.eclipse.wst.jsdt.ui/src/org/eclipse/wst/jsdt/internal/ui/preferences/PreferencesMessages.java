@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2014 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -120,6 +120,10 @@ public final class PreferencesMessages extends NLS {
 	public static String NewJavaProjectPreferencePage_sourcefolder_label;
 	public static String NewJavaProjectPreferencePage_sourcefolder_project;
 	public static String NewJavaProjectPreferencePage_sourcefolder_folder;
+	public static String NewJavaProjectPreferencePage_exclgroup_title;
+	public static String NewJavaProjectPreferencePage_exclgroup_description;
+	public static String NewJavaProjectPreferencePage_exclgroup_patterns_label;
+	public static String NewJavaProjectPreferencePage_exclgroup_patterns_validation_message;
 	public static String NewJavaProjectPreferencePage_folders_src;
 	public static String NewJavaProjectPreferencePage_folders_error_namesempty;
 	public static String NewJavaProjectPreferencePage_folders_error_invalidsrcname;

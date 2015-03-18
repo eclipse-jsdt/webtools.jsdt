@@ -18,6 +18,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
+import org.eclipse.wst.jsdt.internal.ui.preferences.NewJavaProjectPreferencePageTest;
 import org.eclipse.wst.jsdt.ui.tests.contentassist.AllContentAssistTests;
 import org.eclipse.wst.jsdt.ui.tests.documentation.DocumentationTest;
 import org.eclipse.wst.jsdt.ui.tests.format.FormattingTests;
@@ -62,6 +63,7 @@ public class JSDTUITests extends TestSuite {
 		all.addTest(FormattingTests.suite());
 		all.addTest(HyperLinkTest.suite());
 		all.addTest(DocumentationTest.suite());
+		all.addTestSuite(NewJavaProjectPreferencePageTest.class);
 
 		return all;
 	}
