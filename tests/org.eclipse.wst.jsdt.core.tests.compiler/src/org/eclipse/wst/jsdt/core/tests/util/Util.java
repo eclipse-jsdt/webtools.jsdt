@@ -48,6 +48,7 @@ import org.eclipse.wst.jsdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.wst.jsdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.wst.jsdt.internal.compiler.problem.DefaultProblem;
 import org.eclipse.wst.jsdt.internal.compiler.problem.DefaultProblemFactory;
+
 public class Util {
 	private static String TARGET_PLUGIN="org.eclipse.wst.jsdt.core"; //$NON-NLS-1$
 	// Trace for delete operation
@@ -118,7 +119,10 @@ public class Util {
 		if (Character.isLowerCase(container.charAt(0)) && container.charAt(1) == ':') {
 			container = Character.toUpperCase(container.charAt(0)) + container.substring(1);
 		}
-		File dir = new File(new File(container), "comptest");
+		
+		// Moving the comptest into ./target/work folder due not confuse Git
+		// ./target/work folder is created and removed by maven/sure
+		File dir = new File(new File(new File(new File(container), "target"), "work"), "comptest");
 
 		// If root directory already exists, clean it
 		if (dir.exists()) {
