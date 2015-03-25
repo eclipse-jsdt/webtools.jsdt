@@ -31,7 +31,7 @@
          id="org.mozilla.javascript.source"
          download-size="0"
          install-size="0"
-         version="1.7.2.qualifier"
+         version="1.7.4.qualifier"
          unpack="false"/>
 
 </feature>

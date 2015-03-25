@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2010, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.debug.rhino.debugger.shell;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,9 +77,10 @@ public class DebugMain {
 				throw Kit.codeBug();
 			}
 			if(scriptsrc != null) {
-				Script script = Main.loadScriptFromSource(cx, scriptsrc, FROM_EVAL, 0, null);
+				Script script = cx.compileString(scriptsrc, scriptsrc, 0, null);/*Main.loadScriptFromSource(cx, scriptsrc, FROM_EVAL, 0, null);*/
 				if(script != null) {
-					Main.evaluateScript(script, cx, Main.getGlobal());
+					script.exec(cx, Main.getGlobal());
+					/*Main.evaluateScript(script, cx, Main.getGlobal());*/
 				}
 			}
 			Object[] array = new Object[scripts.length];
@@ -86,7 +88,12 @@ public class DebugMain {
 			Scriptable argsObj = cx.newArray(Main.global, array);
 	        Main.global.defineProperty(GLOBAL_ARGUMENTS, argsObj, ScriptableObject.DONTENUM);
 	        for (int i = 0; i < scripts.length; i++) {
-				Main.processFile(cx, Main.global, scripts[i]);
+	        	try {
+	        		Main.processFile(cx, Main.global, scripts[i]);
+	        	}
+	        	catch(IOException ioe) {
+	        		ioe.printStackTrace();
+	        	}
 			}
 			return null; 
 		}
