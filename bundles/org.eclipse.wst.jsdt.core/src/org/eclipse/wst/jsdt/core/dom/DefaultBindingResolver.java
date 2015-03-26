@@ -575,6 +575,11 @@ class DefaultBindingResolver extends BindingResolver {
 				case ASTNode.FUNCTION_INVOCATION :
 				case ASTNode.SUPER_METHOD_INVOCATION :
 				case ASTNode.CONDITIONAL_EXPRESSION :
+					org.eclipse.wst.jsdt.internal.compiler.ast.Expression compilerExpression = (org.eclipse.wst.jsdt.internal.compiler.ast.Expression) this.newAstToOldAst.get(expression);
+					if (compilerExpression != null) {
+						return this.getTypeBinding(compilerExpression.resolvedType);
+					}
+					break;
 				case ASTNode.STRING_LITERAL :
 					if (this.scope != null) {
 						return this.getTypeBinding(this.scope.getJavaLangString());

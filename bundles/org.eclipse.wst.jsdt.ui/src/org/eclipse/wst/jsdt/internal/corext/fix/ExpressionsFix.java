@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,12 +27,12 @@ import org.eclipse.wst.jsdt.core.dom.Expression;
 import org.eclipse.wst.jsdt.core.dom.FunctionInvocation;
 import org.eclipse.wst.jsdt.core.dom.ITypeBinding;
 import org.eclipse.wst.jsdt.core.dom.InfixExpression;
+import org.eclipse.wst.jsdt.core.dom.InfixExpression.Operator;
 import org.eclipse.wst.jsdt.core.dom.InstanceofExpression;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.core.dom.ParenthesizedExpression;
 import org.eclipse.wst.jsdt.core.dom.PostfixExpression;
 import org.eclipse.wst.jsdt.core.dom.PrefixExpression;
-import org.eclipse.wst.jsdt.core.dom.InfixExpression.Operator;
 import org.eclipse.wst.jsdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.wst.jsdt.internal.corext.refactoring.structure.CompilationUnitRewrite;
 
@@ -367,7 +367,7 @@ public class ExpressionsFix extends AbstractFix {
 	
 	private static boolean isStringExpression(Expression expression) {
 		ITypeBinding binding = expression.resolveTypeBinding();
-		return binding.getQualifiedName().equals("java.lang.String"); //$NON-NLS-1$
+		return binding.getQualifiedName().equals("String"); //$NON-NLS-1$
 	}
 
 	protected ExpressionsFix(String name, JavaScriptUnit compilationUnit, IFixRewriteOperation[] fixRewriteOperations) {
