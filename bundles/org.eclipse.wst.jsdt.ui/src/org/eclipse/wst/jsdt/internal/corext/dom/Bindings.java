@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -452,8 +452,9 @@ public class Bindings {
 		}
 		
 		ITypeBinding type= overriding.getDeclaringClass();
-		if (type.getSuperclass() != null) {
-			IFunctionBinding res= findOverriddenMethodInHierarchy(type.getSuperclass(), overriding);
+		ITypeBinding superType = type != null ? type.getSuperclass() : null;
+		if (superType != null) {
+			IFunctionBinding res= findOverriddenMethodInHierarchy(superType, overriding);
 			if (res != null && !Modifier.isPrivate(res.getModifiers())) {
 				if (!testVisibility || isVisibleInHierarchy(res, overriding.getDeclaringClass().getPackage())) {
 					return res;
@@ -466,12 +467,13 @@ public class Bindings {
 	
 	public static boolean isVisibleInHierarchy(IFunctionBinding member, IPackageBinding pack) {
 		int otherflags= member.getModifiers();
-		ITypeBinding declaringType= member.getDeclaringClass();
 		if (Modifier.isPublic(otherflags) || Modifier.isProtected(otherflags)) {
 			return true;
 		} else if (Modifier.isPrivate(otherflags)) {
 			return false;
 		}		
+
+		ITypeBinding declaringType= member.getDeclaringClass();
 		return declaringType != null && pack == declaringType.getPackage();
 	}
 		
