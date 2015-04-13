@@ -6018,7 +6018,6 @@ public CompilationUnitDeclaration parse(
 					compilationResult,
 					0);
 
-
 		initializeInferenceEngine(this.compilationUnit);
 
 		/* scanners initialization */
@@ -6039,9 +6038,11 @@ public CompilationUnitDeclaration parse(
 			}
 		}
 		/* run automaton */
-if (false)
-	System.out.println("parsing "+new String(sourceUnit.getFileName())); //$NON-NLS-1$
-		parse();
+		if (false)
+			System.out.println("parsing "+new String(sourceUnit.getFileName())); //$NON-NLS-1$
+		if (options.complianceLevel > ClassFileConstants.JDK0_0) {
+			parse();
+		}
 	} finally {
 		unit = this.compilationUnit;
 		this.compilationUnit = null; // reset parser

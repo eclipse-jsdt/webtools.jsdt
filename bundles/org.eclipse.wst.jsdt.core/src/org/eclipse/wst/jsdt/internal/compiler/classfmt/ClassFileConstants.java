@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -64,6 +64,7 @@ public interface ClassFileConstants {
 	int ConstantUtf8FixedSize = 3;
 	int ConstantNameAndTypeFixedSize = 5;
 
+	int MAJOR_VERSION_0_0 = 00;
 	int MAJOR_VERSION_1_1 = 45;
 	int MAJOR_VERSION_1_2 = 46;
 	int MAJOR_VERSION_1_3 = 47;
@@ -77,6 +78,9 @@ public interface ClassFileConstants {
 	int MINOR_VERSION_2 = 2;
 	int MINOR_VERSION_3 = 3;
 
+	
+	// A special version number that is to be used to skip any parsing/type inference
+	long JDK0_0 = ((long)ClassFileConstants.MAJOR_VERSION_0_0 << 16) + ClassFileConstants.MINOR_VERSION_0; // 1.1. is 45.3
 	// JDK 1.1 -> 1.7, comparable value allowing to check both major/minor version at once 1.4.1 > 1.4.0
 	// 16 unsigned bits for major, then 16 bits for minor
 	long JDK1_1 = ((long)ClassFileConstants.MAJOR_VERSION_1_1 << 16) + ClassFileConstants.MINOR_VERSION_3; // 1.1. is 45.3

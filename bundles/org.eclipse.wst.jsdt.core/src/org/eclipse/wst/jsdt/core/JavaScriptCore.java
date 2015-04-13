@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2014 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -829,6 +829,12 @@ public final class JavaScriptCore extends Plugin {
 	 * @see #getDefaultOptions()
 	 */
 	public static final String OPTIMIZE_OUT = "optimize out"; //$NON-NLS-1$
+	/**
+	 * Possible  configurable option value.
+	 * @see #getDefaultOptions()
+	 * @since 1.3.401
+	 */
+	public static final String VERSION_0_0 = "0.0"; //$NON-NLS-1$
 	/**
 	 * Possible  configurable option value.
 	 * @see #getDefaultOptions()

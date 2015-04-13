@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -65,6 +65,7 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 //	private static final String PRESERVE= JavaScriptCore.PRESERVE;
 //	private static final String OPTIMIZE_OUT= JavaScriptCore.OPTIMIZE_OUT;
 	
+	private static final String VERSION_0_0= JavaScriptCore.VERSION_0_0;
 	private static final String VERSION_1_1= JavaScriptCore.VERSION_1_1;
 	private static final String VERSION_1_2= JavaScriptCore.VERSION_1_2;
 	private static final String VERSION_1_3= JavaScriptCore.VERSION_1_3;
@@ -168,11 +169,15 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 	private Composite createComplianceTabContent(Composite folder) {
 
 
-		String[] values3456= new String[] {   VERSION_1_4, VERSION_1_5};
+		String[] values3456= new String[] {
+					VERSION_0_0, VERSION_1_4
+//					, VERSION_1_5 // <<-- this was uncommented before adding external build/validation
+					};
 		String[] values3456Labels= new String[] {
+			PreferencesMessages.ComplianceConfigurationBlock_version00,
 //			PreferencesMessages.ComplianceConfigurationBlock_version13,  
 			PreferencesMessages.ComplianceConfigurationBlock_version14, 
-			PreferencesMessages.ComplianceConfigurationBlock_version15
+//			PreferencesMessages.ComplianceConfigurationBlock_version15 // <<-- this was uncommented before adding external build/validation
 //			PreferencesMessages.ComplianceConfigurationBlock_version16
 		};
 
@@ -205,8 +210,8 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 		group.setLayout(layout);
 	
 		String label= PreferencesMessages.ComplianceConfigurationBlock_compiler_compliance_label; 
-		Combo combo = addComboBox(group, label, PREF_COMPLIANCE, values3456, values3456Labels, 0);
-		combo.setEnabled(false);
+		Combo combo = addComboBox(group, label, PREF_COMPLIANCE, values3456, values3456Labels, 1);
+//		combo.setEnabled(false);
 
 //		label= PreferencesMessages.ComplianceConfigurationBlock_default_settings_label; 
 //		addCheckBox(group, label, INTR_DEFAULT_COMPLIANCE, new String[] { DEFAULT_CONF, USER_CONF }, 0);	
@@ -406,12 +411,12 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 		String target= getValue(PREF_CODEGEN_TARGET_PLATFORM);
 		
 		// compliance must not be smaller than source or target
-		if (JavaModelUtil.isVersionLessThan(compliance, source)) {
+		if (!VERSION_0_0.equals(compliance) && JavaModelUtil.isVersionLessThan(compliance, source)) {
 			status.setError(PreferencesMessages.ComplianceConfigurationBlock_src_greater_compliance); 
 			return status;
 		}
 		
-		if (JavaModelUtil.isVersionLessThan(compliance, target)) {
+		if (!VERSION_0_0.equals(compliance) && JavaModelUtil.isVersionLessThan(compliance, target)) {
 			status.setError(PreferencesMessages.ComplianceConfigurationBlock_classfile_greater_compliance); 
 			return status;
 		}

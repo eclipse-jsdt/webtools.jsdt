@@ -465,6 +465,7 @@ public final class PreferencesMessages extends NLS {
 	public static String ComplianceConfigurationBlock_error;
 	public static String ComplianceConfigurationBlock_warning;
 	public static String ComplianceConfigurationBlock_ignore;
+	public static String ComplianceConfigurationBlock_version00;
 	public static String ComplianceConfigurationBlock_version11;
 	public static String ComplianceConfigurationBlock_version12;
 	public static String ComplianceConfigurationBlock_version13;

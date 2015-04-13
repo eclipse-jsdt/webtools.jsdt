@@ -135,6 +135,8 @@ public class CompilerOptions {
 	public static final String DO_NOT_GENERATE = "do not generate"; //$NON-NLS-1$
 	public static final String PRESERVE = "preserve"; //$NON-NLS-1$
 	public static final String OPTIMIZE_OUT = "optimize out"; //$NON-NLS-1$
+	
+	public static final String VERSION_0_0 = "0.0"; //$NON-NLS-1$
 	public static final String VERSION_1_1 = "1.1"; //$NON-NLS-1$
 	public static final String VERSION_1_2 = "1.2"; //$NON-NLS-1$
 	public static final String VERSION_1_3 = "1.3"; //$NON-NLS-1$
@@ -708,7 +710,7 @@ public class CompilerOptions {
 		}
 		if ((optionValue = optionsMap.get(OPTION_Compliance)) != null) {
 			long level = versionToJdkLevel(optionValue);
-			if (level != 0) this.complianceLevel = level;
+			if (level >= 0) this.complianceLevel = level;
 		}
 		if ((optionValue = optionsMap.get(OPTION_Source)) != null) {
 			long level = versionToJdkLevel(optionValue);
@@ -1102,8 +1104,11 @@ public class CompilerOptions {
 			if (VERSION_JSR14.equals(versionID)) {
 				return ClassFileConstants.JDK1_4;
 			}
+			if (VERSION_0_0.equals(versionID)) {
+				return ClassFileConstants.JDK0_0;
+			}
 		}
-		return 0; // unknown
+		return -1; // unknown
 	}
 
 	public static String versionFromJdkLevel(long jdkLevel) {
