@@ -262,12 +262,14 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 					} else {
 						switch (lastNonWhitespaceChar)	//possible chars before regexp 
 						{
+						case 0: // No char before (the very beginning of a javascript
 						case '(':
 						case ',':
 						case '=':
 						case ':':
 						case '[':
 						case '!':
+						case '|':
 						case '&':
 						case '?':
 						case '{':
