@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2009 IBM Corporation and others.
+ * Copyright (c) 2005, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -352,7 +352,7 @@ public class JavaElementView extends ViewPart implements IShowInSource, IShowInT
 	private String getShowInMenuLabel() {
 		String keyBinding= null;
 
-		IBindingService bindingService= (IBindingService) PlatformUI.getWorkbench().getAdapter(IBindingService.class);
+		IBindingService bindingService= PlatformUI.getWorkbench().getAdapter(IBindingService.class);
 		if (bindingService != null)
 			keyBinding= bindingService.getBestActiveBindingFormattedFor(IWorkbenchCommandConstants.NAVIGATE_SHOW_IN_QUICK_MENU);
 
@@ -432,7 +432,7 @@ public class JavaElementView extends ViewPart implements IShowInSource, IShowInT
 					setEmptyInput();
 					return;
 				}
-				IJavaScriptElement javaElement= (IJavaScriptElement) input.getAdapter(IJavaScriptElement.class);
+				IJavaScriptElement javaElement= input.getAdapter(IJavaScriptElement.class);
 				if (javaElement == null) {
 					setEmptyInput();
 					return;
@@ -473,7 +473,7 @@ public class JavaElementView extends ViewPart implements IShowInSource, IShowInT
 					setEmptyInput();
 					return;
 				}
-				IJavaScriptElement javaElement= (IJavaScriptElement) input.getAdapter(IJavaScriptElement.class);
+				IJavaScriptElement javaElement= input.getAdapter(IJavaScriptElement.class);
 				if (javaElement == null) {
 					setEmptyInput();
 					return;
@@ -673,11 +673,11 @@ public class JavaElementView extends ViewPart implements IShowInSource, IShowInT
 							case IJavaScriptElement.JAVASCRIPT_PROJECT :
 							case IJavaScriptElement.PACKAGE_FRAGMENT_ROOT :
 							case IJavaScriptElement.PACKAGE_FRAGMENT :
-								ICommandService service = (ICommandService) getSite().getService(ICommandService.class);
+								ICommandService service = getSite().getService(ICommandService.class);
 								Command showInCommand= service.getCommand(IWorkbenchCommandConstants.NAVIGATE_SHOW_IN);
 								Map<String, String> params= Collections.singletonMap("org.eclipse.ui.navigate.showIn.targetId", JavaScriptUI.ID_PACKAGES);
 								try {
-									Object context= ((IHandlerService) getSite().getService(IHandlerService.class)).getCurrentState();
+									Object context= getSite().getService(IHandlerService.class).getCurrentState();
 									showInCommand.executeWithChecks(new ExecutionEvent(null, params, null, context));
 								} catch (ExecutionException e1) {
 									showAndLogError("Could not show element", e1);
