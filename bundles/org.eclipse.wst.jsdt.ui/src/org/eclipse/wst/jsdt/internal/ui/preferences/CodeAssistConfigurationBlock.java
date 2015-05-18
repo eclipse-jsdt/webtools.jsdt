@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -211,6 +211,7 @@ class CodeAssistConfigurationBlock extends OptionsConfigurationBlock {
 		label= PreferencesMessages.CodeAssistConfigurationBlock_matchCamelCase_label;
 		addCheckBox(composite, label, PREF_CODEASSIST_CAMEL_CASE_MATCH, enabledDisabled, 0);
 
+		/*
 		label= PreferencesMessages.CodeAssistConfigurationBlock_restricted_link;
 		Map targetInfo= new java.util.HashMap(2);
 		targetInfo.put(ProblemSeveritiesPreferencePage.DATA_SELECT_OPTION_KEY,	JavaScriptCore.COMPILER_PB_FORBIDDEN_REFERENCE);
@@ -226,6 +227,7 @@ class CodeAssistConfigurationBlock extends OptionsConfigurationBlock {
 		
 		label= PreferencesMessages.CodeAssistConfigurationBlock_hideDeprecated_label;
 		addCheckBox(composite, label, PREF_CODEASSIST_DEPRECATION_CHECK, enabledDisabled, 0);
+		*/
 	}
 
 	private void createPreferencePageLink(Composite composite, String label, final Map targetInfo) {
