@@ -2810,12 +2810,16 @@ public class JavaModelManager implements ISaveParticipant, IContentTypeChangeLis
 
 		private IPath[] loadPaths() throws IOException {
 			int count = loadInt();
-			IPath[] pathArray = new IPath[count];
+			ArrayList<IPath> pathArray = new ArrayList<IPath>(count);
 
-			for (int i = 0; i < count; ++i)
-				pathArray[i] = loadPath();
-
-			return pathArray;
+			for (int i = 0; i < count; ++i) {
+				IPath path = loadPath();
+				if (path != null) {	// Do not add null-path values 
+					pathArray.add(path);
+				}
+			}
+			
+			return pathArray.toArray(new Path[pathArray.size()]);
 		}
 
 		private void loadProjects(IJavaScriptModel model) throws IOException {
