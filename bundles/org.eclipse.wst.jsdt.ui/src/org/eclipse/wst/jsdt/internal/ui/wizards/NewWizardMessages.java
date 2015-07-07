@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -680,6 +680,7 @@ public final class NewWizardMessages extends NLS {
 	public static String Javascript_Error_Filename_Must_End_JS;
 	public static String Javascript_Resource_Group_Name_Exists;
 	public static String Javascript_Warning_Folder_Must_Be_Inside_Web_Content;
+	public static String Javascript_Error_Source_Folder_Is_Not_Configured;
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, NewWizardMessages.class);
 	}

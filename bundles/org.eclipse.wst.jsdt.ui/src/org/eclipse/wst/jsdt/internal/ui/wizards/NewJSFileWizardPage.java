@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2012 IBM Corporation and others.
+ * Copyright (c) 2006, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -119,6 +119,10 @@ class NewJSFileWizardPage extends WizardNewFileCreationPage {
 			if (project != null && isJSProject(project)) {
 				// check that the path is inside the webContent folder
 				IPath sourcePath = getSourcePath(project);
+				if (sourcePath == null) {
+					setErrorMessage(NLS.bind(NewWizardMessages.Javascript_Error_Source_Folder_Is_Not_Configured, project.getName()));
+					return false;
+				}
 				if (!sourcePath.isPrefixOf(fullPath)) {
 					setMessage(NewWizardMessages.Javascript_Warning_Folder_Must_Be_Inside_Web_Content, WARNING);
 				}
