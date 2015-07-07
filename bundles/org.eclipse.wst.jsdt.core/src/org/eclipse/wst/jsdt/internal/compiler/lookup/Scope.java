@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2014 IBM Corporation and others.
+ * Copyright (c) 2007, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -2468,19 +2468,21 @@ public abstract class Scope implements TypeConstants, TypeIds {
 			case Scope.BLOCK_SCOPE :
 			case Scope.METHOD_SCOPE :
 				MethodScope methodScope = methodScope();
-				if (!methodScope.isInsideInitializer()){
-					// check method modifiers to see if deprecated
-					MethodBinding context = ((AbstractMethodDeclaration)methodScope.referenceContext).getBinding();
-					if (context != null && context.isViewedAsDeprecated())
-						return true;
-				} else {
-					SourceTypeBinding type = ((BlockScope)this).referenceType().binding;
-					// inside field declaration ? check field modifier to see if deprecated
-					if (methodScope.initializedField != null && methodScope.initializedField.isViewedAsDeprecated())
-						return true;
-					if (type != null) {
-						if (type.isViewedAsDeprecated())
+				if (methodScope != null) {
+					if (!methodScope.isInsideInitializer()){
+						// check method modifiers to see if deprecated
+						MethodBinding context = ((AbstractMethodDeclaration)methodScope.referenceContext).getBinding();
+						if (context != null && context.isViewedAsDeprecated())
 							return true;
+					} else {
+						SourceTypeBinding type = ((BlockScope)this).referenceType().binding;
+						// inside field declaration ? check field modifier to see if deprecated
+						if (methodScope.initializedField != null && methodScope.initializedField.isViewedAsDeprecated())
+							return true;
+						if (type != null) {
+							if (type.isViewedAsDeprecated())
+								return true;
+						}
 					}
 				}
 				break;
