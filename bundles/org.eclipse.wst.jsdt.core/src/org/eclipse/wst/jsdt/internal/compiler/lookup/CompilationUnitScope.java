@@ -907,6 +907,9 @@ public class CompilationUnitScope extends BlockScope {
 		nextImport: for(int i = 0; i < numberOfStatements; i++) {
 			ImportReference importReference = referenceContext.imports[i];
 			char[][] compoundName = importReference.tokens;
+			if (compoundName.length == 0) {
+				continue nextImport;
+			}
 
 			// skip duplicates or imports of the current package
 			for(int j = 0; j < index; j++) {
