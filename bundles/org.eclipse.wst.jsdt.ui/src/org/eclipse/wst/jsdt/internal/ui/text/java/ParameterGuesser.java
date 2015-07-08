@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -32,17 +32,17 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.jsdt.core.CompletionProposal;
 import org.eclipse.wst.jsdt.core.CompletionRequestor;
 import org.eclipse.wst.jsdt.core.Flags;
-import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
+import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.IType;
 import org.eclipse.wst.jsdt.core.ITypeHierarchy;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.Signature;
 import org.eclipse.wst.jsdt.internal.corext.util.SuperTypeHierarchyCache;
-import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 import org.eclipse.wst.jsdt.internal.ui.JavaPluginImages;
+import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 import org.eclipse.wst.jsdt.internal.ui.text.template.contentassist.PositionBasedCompletionProposal;
 import org.eclipse.wst.jsdt.internal.ui.util.StringMatcher;
 import org.eclipse.wst.jsdt.internal.ui.viewsupport.ImageDescriptorRegistry;
@@ -357,7 +357,7 @@ public class ParameterGuesser {
 		 * @see org.eclipse.wst.jsdt.core.CompletionRequestor#accept(org.eclipse.wst.jsdt.core.CompletionProposal)
 		 */
 		public void accept(CompletionProposal proposal) {
-			if (isIgnored(proposal.getKind()))
+			if (isIgnored(proposal.getKind()) || proposal.getSignature() == null)
 				return;
 			
 			switch (proposal.getKind()) {
@@ -586,23 +586,18 @@ public class ParameterGuesser {
 	 * Finds a local or member variable that matched the type of the parameter
 	 */
 	private List findProposalsMatchingType(List proposals, Variable parameter) throws JavaScriptModelException {
-
-		if (parameter.getFQN().length() == 0)
-			return null;
-
 		// traverse the lists in reverse order, since it is empirically true that the code
 		// completion engine returns variables in the order they are found -- and we want to find
 		// matches closest to the code completion point.. No idea if this behavior is guaranteed.
-
 		List matches= new ArrayList();
-
-		for (ListIterator iterator= proposals.listIterator(proposals.size()); iterator.hasPrevious(); ) {
-			Variable variable= (Variable) iterator.previous();
-			variable.isAutoboxingMatch= false;
-			if (parameter.isAssignable(variable))
-				matches.add(variable);
+		if (parameter.getFQN().length() > 0) {
+			for (ListIterator iterator= proposals.listIterator(proposals.size()); iterator.hasPrevious(); ) {
+				Variable variable= (Variable) iterator.previous();
+				variable.isAutoboxingMatch= false;
+				if (parameter.isAssignable(variable))
+					matches.add(variable);
+			}
 		}
-
 		return matches;
 	}
 

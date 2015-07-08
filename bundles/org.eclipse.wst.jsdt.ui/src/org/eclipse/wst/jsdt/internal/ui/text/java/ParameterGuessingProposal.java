@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -239,8 +239,11 @@ public final class ParameterGuessingProposal extends JavaMethodCompletionProposa
 		for (int i= count - 1; i >= 0; i--) {
 			String paramName= new String(parameterNames[i]);
 			Position position= new Position(0,0);
-			
-			ICompletionProposal[] argumentProposals= guesser.parameterProposals(parameterTypes[i][0], parameterTypes[i][1], paramName, position, document);
+
+			ICompletionProposal[] argumentProposals= guesser.parameterProposals(
+						parameterTypes.length > i ? parameterTypes[i][0] : null, 
+						parameterTypes.length > i ? parameterTypes[i][1] : null, 
+						paramName, position, document);
 			if (argumentProposals.length == 0)
 				argumentProposals= new ICompletionProposal[] {new JavaCompletionProposal(paramName, 0, paramName.length(), null, paramName, 0)};
 			
