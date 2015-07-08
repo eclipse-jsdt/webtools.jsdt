@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2014 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -2240,11 +2240,10 @@ public class Util {
 			case Signature.C_RESOLVED :
 			case Signature.C_UNRESOLVED :
 				return scanClassTypeSignature(string, start);
-			case Signature.C_VOID :
-			case Signature.C_ANY :
+			default : 
+				// scanBaseTypeSignature() will take care of 'V' (void) and A(any) types as well 
+				// as of other base types signature characters
 				return scanBaseTypeSignature(string, start);
-			default :
-				throw new IllegalArgumentException();
 		}
 	}
 
@@ -2274,7 +2273,7 @@ public class Util {
 		if ("BCDFIJSVZA".indexOf(c) >= 0) { //$NON-NLS-1$
 			return start;
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(String.valueOf(string[start]));
 		}
 	}
 

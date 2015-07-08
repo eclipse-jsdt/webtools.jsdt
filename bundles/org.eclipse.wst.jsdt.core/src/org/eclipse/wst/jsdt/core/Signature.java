@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,11 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.wst.jsdt.core.compiler.CharOperation;
+import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.parser.ScannerHelper;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
 
@@ -145,6 +149,18 @@ public final class Signature {
 	public static final char[] VOID = "void".toCharArray(); //$NON-NLS-1$
 	public static final char[] ANY = "any".toCharArray(); //$NON-NLS-1$
 
+	private static final Map BASE_TYPES = new HashMap();
+	static {
+		// B -> ???
+		BASE_TYPES.put('C', String.valueOf(TypeBinding.CHAR.readableName()));		// C -> char
+		BASE_TYPES.put('D', String.valueOf(TypeBinding.DOUBLE.readableName()));		// D -> double
+		BASE_TYPES.put('F', String.valueOf(TypeBinding.FLOAT.readableName()));		// F -> float
+		BASE_TYPES.put('I', String.valueOf(TypeBinding.INT.readableName()));		// I -> int
+		BASE_TYPES.put('J', String.valueOf(TypeBinding.LONG.readableName()));		// J -> long
+		BASE_TYPES.put('S', String.valueOf(TypeBinding.SHORT.readableName()));		// S -> short
+		BASE_TYPES.put('Z', String.valueOf(TypeBinding.BOOLEAN.readableName()));	// Z -> boolean
+	}
+	
 private Signature() {
 	// Not instantiable
 }
@@ -587,6 +603,7 @@ public static int getParameterCount(char[] methodSignature) throws IllegalArgume
 public static int getTypeSignatureKind(char[] typeSignature) {
 	// need a minimum 1 char
 	if (typeSignature.length < 1) {
+		// uknown return type
 		throw new IllegalArgumentException();
 	}
 	char c = typeSignature[0];
@@ -596,11 +613,11 @@ public static int getTypeSignatureKind(char[] typeSignature) {
 		case C_RESOLVED :
 		case C_UNRESOLVED :
 			return CLASS_TYPE_SIGNATURE;
-		case C_VOID :
-		case C_ANY :
-			return BASE_TYPE_SIGNATURE;
 		default :
-			throw new IllegalArgumentException();
+			if ("BCDFIJSVZA".indexOf(c) >= 0) { //$NON-NLS-1$
+				return BASE_TYPE_SIGNATURE;
+			}			
+			throw new IllegalArgumentException(String.valueOf(typeSignature));
 	}
 }
 
@@ -616,24 +633,7 @@ public static int getTypeSignatureKind(char[] typeSignature) {
  *  
  */
 public static int getTypeSignatureKind(String typeSignature) {
-	if (typeSignature.length() < 1) {
-		// uknown return type
-		return BASE_TYPE_SIGNATURE;
-	}
-	char c = typeSignature.charAt(0);
-	switch (c) {
-		case C_ARRAY :
-			return ARRAY_TYPE_SIGNATURE;
-		case C_RESOLVED :
-		case C_UNRESOLVED :
-			return CLASS_TYPE_SIGNATURE;
-		case C_VOID :
-		case C_ANY :
-
-			return BASE_TYPE_SIGNATURE;
-		default :
-			throw new IllegalArgumentException();
-	}
+	return getTypeSignatureKind(typeSignature.toCharArray());
 }
 
 /**
@@ -1312,14 +1312,31 @@ private static int appendTypeSignature(char[] string, int start, boolean fullyQu
 				buffer.append(VOID);
 				return start;
 			default :
-				/* either the string is not formated as a signature, or we do not know
-				 * how to handle it, so just return it, this is preferable to throwing
-				 * an unnecessary exception
-				 */
-				buffer.append(string);
+				int result = appendBaseTypeSignature(string, start, fullyQualifyTypeNames, buffer);
+				if (result == -1) {
+					/* either the string is not formated as a signature, or we do not know
+					 * how to handle it, so just return it, this is preferable to throwing
+					 * an unnecessary exception
+					 */
+					buffer.append(string);
+				}
 				return start;
 		}
 	}
+}
+
+private static int appendBaseTypeSignature(char[] string, int start, boolean fullyQualifyTypeNames, StringBuffer buffer) {
+	// Need a minimum one char 
+	if (start >= string.length) { // Do not throw unnecessary exception here
+		return -1;
+	}
+	// must start in any of 'B'(?), 'C', 'D', 'F', 'I', 'J', 'S', 'Z'
+	char c = string[start];
+	String typeName = (String)BASE_TYPES.get(c);
+	if (typeName == null)
+		return -1;
+	buffer.append(typeName);
+	return start;
 }
 
 

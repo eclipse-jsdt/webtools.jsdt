@@ -647,17 +647,10 @@ public class MethodBinding extends Binding {
 	}
 
 	public AbstractMethodDeclaration sourceMethod() {
-		SourceTypeBinding sourceType;
-		try {
-			sourceType = (SourceTypeBinding) this.original().declaringClass;
-		} catch (ClassCastException e) {
-			return null;
+		ReferenceBinding declClass = this.original().declaringClass;
+		if (declClass instanceof SourceTypeBinding) {
+			return ((SourceTypeBinding)declClass).sourceMethod(this.original());
 		}
-
-		if (sourceType!=null) {
-			return sourceType.sourceMethod(this.original());
-		}
-
 		return null;
 	}
 
