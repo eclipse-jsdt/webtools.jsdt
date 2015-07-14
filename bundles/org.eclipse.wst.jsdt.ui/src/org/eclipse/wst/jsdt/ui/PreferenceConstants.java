@@ -3277,6 +3277,15 @@ public class PreferenceConstants {
 	public final static String EDITOR_SOURCE_HOVER_BACKGROUND_COLOR_SYSTEM_DEFAULT= "sourceHoverBackgroundColor.SystemDefault"; //$NON-NLS-1$
 	
 	/**
+	 * A named preference that controls whether override indicators is turned on or off.
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 * @since 1.1.601
+	 */
+	public final static String EDITOR_OVERRIDE_INDICATORS= "overrideIndicators"; //$NON-NLS-1$
+	
+	/**
 	 * Initializes the given preference store with the default values.
 	 * 
 	 * @param store the preference store to be initialized
@@ -3373,7 +3382,8 @@ public class PreferenceConstants {
 		store.setDefault(PreferenceConstants.EDITOR_SYNC_OUTLINE_ON_CURSOR_MOVE, true);
 
 		store.setDefault(PreferenceConstants.EDITOR_EVALUTE_TEMPORARY_PROBLEMS, true);
-
+		store.setDefault(PreferenceConstants.EDITOR_OVERRIDE_INDICATORS, false);
+		
 		PreferenceConverter.setDefault(store, PreferenceConstants.EDITOR_LINKED_POSITION_COLOR, new RGB(121, 121, 121));
 
 		store.setDefault(PreferenceConstants.EDITOR_TAB_WIDTH, 4);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -3028,10 +3028,12 @@ public abstract class JavaEditor extends AbstractDecoratedTextEditor implements 
 	protected boolean isShowingOverrideIndicators() {
 		AnnotationPreference preference= getAnnotationPreferenceLookup().getAnnotationPreference(OverrideIndicatorManager.ANNOTATION_TYPE);
 		IPreferenceStore store= getPreferenceStore();
-		return getBoolean(store, preference.getHighlightPreferenceKey())
+
+		return getBoolean(store, PreferenceConstants.EDITOR_OVERRIDE_INDICATORS) && 
+			(getBoolean(store, preference.getHighlightPreferenceKey())
 			|| getBoolean(store, preference.getVerticalRulerPreferenceKey())
 			|| getBoolean(store, preference.getOverviewRulerPreferenceKey())
-			|| getBoolean(store, preference.getTextPreferenceKey());
+			|| getBoolean(store, preference.getTextPreferenceKey()));
 	}
 
 	/**
@@ -3060,7 +3062,8 @@ public abstract class JavaEditor extends AbstractDecoratedTextEditor implements 
 		if (key == null || preference == null)
 			return false;
 
-		return key.equals(preference.getHighlightPreferenceKey())
+		return key.equals(PreferenceConstants.EDITOR_OVERRIDE_INDICATORS)
+			|| key.equals(preference.getHighlightPreferenceKey())
 			|| key.equals(preference.getVerticalRulerPreferenceKey())
 			|| key.equals(preference.getOverviewRulerPreferenceKey())
 			|| key.equals(preference.getTextPreferenceKey());

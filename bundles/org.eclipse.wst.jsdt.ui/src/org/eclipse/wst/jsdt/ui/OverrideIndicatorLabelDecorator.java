@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -218,6 +218,10 @@ public class OverrideIndicatorLabelDecorator implements ILabelDecorator, ILightw
 	 * @see org.eclipse.jface.viewers.ILightweightLabelDecorator#decorate(java.lang.Object, org.eclipse.jface.viewers.IDecoration)
 	 */
 	public void decorate(Object element, IDecoration decoration) { 
+		if (!isShowingOverrideIndicators()) { 
+			return;
+		}
+
 		int adornmentFlags= computeAdornmentFlags(element);
 		if ((adornmentFlags & JavaScriptElementImageDescriptor.IMPLEMENTS) != 0) {
 			if ((adornmentFlags & JavaScriptElementImageDescriptor.SYNCHRONIZED) != 0) {
@@ -234,4 +238,7 @@ public class OverrideIndicatorLabelDecorator implements ILabelDecorator, ILightw
 		}
 	}
 
+	private boolean isShowingOverrideIndicators() {
+		 return PreferenceConstants.getPreferenceStore().getBoolean(PreferenceConstants.EDITOR_OVERRIDE_INDICATORS);
+	}
 }
