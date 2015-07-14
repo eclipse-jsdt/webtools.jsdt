@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2010 IBM Corporation and others.
+ * Copyright (c) 2005, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -64,6 +64,8 @@ public class DocumentContextFragmentRoot extends PackageFragmentRoot{
 	private String[] fSystemFiles;
 	private RestrictedDocumentBinding importPolice;
 
+	private static final IPath EMPTY_PATH = new Path(""); //$NON-NLS-1$
+	
 	class RestrictedDocumentBinding implements IRestrictedAccessBindingRequestor {
 
 		private ArrayList foundPaths=new ArrayList();
@@ -600,24 +602,28 @@ public class DocumentContextFragmentRoot extends PackageFragmentRoot{
 		if(file.isFile()) {
 			return file;
 		}else {
-	//		IPath childPath = new Path(importName);
 			IFile resolved = null;
 			/* since eclipse throws an exception if it doesn't exists (contrary to its API) we have to catch it*/
 
 			try {
 				resolved = ((IContainer)getResource()).getFile(new Path(file.getPath()));
 			}catch(Exception e) {}
+			
+			if (resolved == null || !resolved.exists()) {
+				return null;
+			}
 
-			boolean exists =  resolved!=null && resolved.exists();
 			/* Special case for absolute paths specified with \ and / */
 			if( importName.charAt(0)=='\\' || importName.charAt(0)=='/'){
-				int seg  = resolved.getFullPath().matchingFirstSegments(webContext);
-
-				exists = exists && (webContext!=new Path("") && seg >0); //$NON-NLS-1$
+				if (EMPTY_PATH.equals(webContext) || 
+							resolved.getFullPath().matchingFirstSegments(webContext) == 0) {
+					return null;
+				}
 			}
-			if(exists) return new File(resolved.getLocation().toString());
+
+			IPath resolvedLocation = resolved.getLocation();
+			return resolvedLocation == null ? null : new File(resolved.getLocation().toString());
 		}
-		return null;
 	}
 
 	public int getKind() throws JavaScriptModelException {
