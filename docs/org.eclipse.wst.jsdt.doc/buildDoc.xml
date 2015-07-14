@@ -29,18 +29,17 @@
 
 	<target name="convertSchemaToHtml" if="eclipse.running">
 		<property name="dest" value="reference/extension-points" />
-		<record name="${basedir}/jsdtconvert.txt" action="start"/>
+        <record name="${basedir}/workspace/jsdtconvert.txt" action="start"/>
 
-		<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.core/plugin.xml" destination="${dest}" />
-		<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.debug.core/plugin.xml" destination="${dest}" />
-    	<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.debug.rhino/plugin.xml" destination="${dest}" />
-		<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.debug.rhino.debugger/plugin.xml" destination="${dest}" />
-		<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.debug.ui/plugin.xml" destination="${dest}" />
-		<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.manipulation/plugin.xml" destination="${dest}" />
-		<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.support.firefox/plugin.xml" destination="${dest}" />
-		<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.support.ie/plugin.xml" destination="${dest}" />
-		<pde.convertSchemaToHTML manifest="../org.eclipse.wst.jsdt.ui/plugin.xml" destination="${dest}" />
-		<record name="${basedir}/jsdtconvert.txt" action="stop"/>
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.core/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.debug.core/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.debug.rhino/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.debug.ui/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.manipulation/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.support.firefox/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.support.ie/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.ui/plugin.xml" destination="${dest}" />
+       <record name="${basedir}/workspace/jsdtconvert.txt" action="stop"/>
 	</target>
 
 	<target name="getJavadocPath">
@@ -51,7 +50,7 @@
 
 	<target name="generateJavadoc" depends="getJavadocPath" if="javadoc">
 
-		<property name="optionsFile" value="jsdtOptions.tmp.txt" />
+        <property name="optionsFile" value="workspace/jsdtOptions.tmp.txt" />
 		<copy file="jsdtOptions.txt" tofile="${optionsFile}" overwrite="true" />
 		
 		<condition property="argsListDelimiter" value=":">

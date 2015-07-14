@@ -22,6 +22,79 @@
 
   <groupId>org.eclipse.webtools.jsdt.docs</groupId>
   <artifactId>org.eclipse.wst.jsdt.doc</artifactId>
-  <version>1.4.100-SNAPSHOT</version>
+  <version>1.4.101-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
+  <!--  generate java doc -->
+   <profiles>
+    <profile>
+      <id>build-docs</id>
+      <activation>
+        <property>
+          <!-- skip the java doc build by setting skipjavadocbuild to any value. -->
+          <name>!skipjavadocbuild</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.tycho.extras</groupId>
+            <artifactId>tycho-eclipserun-plugin</artifactId>
+            <version>${tycho-extras.version}</version>
+            <executions>
+              <execution>
+                <id>build_java_doc</id>
+                <phase>compile</phase>
+                <configuration>
+                  <skip>false</skip>
+                  <!-- call buildDoc.xml -->
+                  <appArgLine>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</appArgLine>
+                  <dependencies>
+                    <!-- list of bundles that we need -->
+                    <dependency>
+                      <artifactId>org.eclipse.osgi.compatibility.state</artifactId>
+                      <type>eclipse-plugin</type>
+                    </dependency>
+                    <dependency>
+                      <artifactId>org.eclipse.ant.core</artifactId>
+                      <type>eclipse-plugin</type>
+                    </dependency>
+                    <dependency>
+                      <artifactId>org.apache.ant</artifactId>
+                      <type>eclipse-plugin</type>
+                    </dependency>
+                    <dependency>
+                      <artifactId>org.eclipse.help.base</artifactId>
+                      <type>eclipse-plugin</type>
+                    </dependency>
+                    <dependency>
+                      <artifactId>org.eclipse.pde.build</artifactId>
+                      <type>eclipse-plugin</type>
+                    </dependency>
+                    <dependency>
+                      <artifactId>org.eclipse.pde.core</artifactId>
+                      <type>eclipse-plugin</type>
+                    </dependency>
+                    <dependency>
+                      <artifactId>org.eclipse.update.configurator</artifactId>
+                      <type>eclipse-plugin</type>
+                    </dependency>
+                  </dependencies>
+                  <repositories>
+                    <repository>
+                      <id>eclipse</id>
+                      <layout>p2</layout>
+                      <url>${platform-repo.url}</url>
+                    </repository>
+                  </repositories>
+                </configuration>
+                <goals>
+                  <goal>eclipse-run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
