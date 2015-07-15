@@ -1330,6 +1330,11 @@ private static int appendBaseTypeSignature(char[] string, int start, boolean ful
 	if (start >= string.length) { // Do not throw unnecessary exception here
 		return -1;
 	}
+	// Base type should be exactly one character lenght
+	if (start + 1 < string.length && Character.isJavaIdentifierPart(string[start + 1])) {
+		return -1;
+	}
+	
 	// must start in any of 'B'(?), 'C', 'D', 'F', 'I', 'J', 'S', 'Z'
 	char c = string[start];
 	String typeName = (String)BASE_TYPES.get(c);
