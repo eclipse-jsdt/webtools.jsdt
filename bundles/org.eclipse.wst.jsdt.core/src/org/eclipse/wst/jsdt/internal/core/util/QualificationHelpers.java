@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
+ * Copyright (c) 2011, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -189,8 +189,13 @@ public class QualificationHelpers {
 				
 				//in case the qualifier is a signature, nothing happens if it is not
 				if(seperatedTypeNames[QULIFIERS_INDEX][i] != null && seperatedTypeNames[QULIFIERS_INDEX][i].length > 0) {
-					seperatedTypeNames[QULIFIERS_INDEX][i] = Signature.toCharArray(seperatedTypeNames[QULIFIERS_INDEX][i]);
-				}
+					try {
+						seperatedTypeNames[QULIFIERS_INDEX][i] = Signature.toCharArray(seperatedTypeNames[QULIFIERS_INDEX][i]);
+					} catch(IllegalArgumentException e) {
+						/* ignore, this will happen if a name looking like it maybe a signature gets passed in, but isn't, such as "QName"
+						 * the real future fix for this should be to completely stop using signatures
+						 */
+					}				}
 				
 				//in case the simple name is a signature, nothing happens if it is not
 				if(seperatedTypeNames[SIMPLE_NAMES_INDEX][i] != null && seperatedTypeNames[SIMPLE_NAMES_INDEX][i].length > 0) {
