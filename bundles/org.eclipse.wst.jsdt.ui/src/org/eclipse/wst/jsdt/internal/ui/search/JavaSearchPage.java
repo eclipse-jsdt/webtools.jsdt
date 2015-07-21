@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -740,7 +740,15 @@ public class JavaSearchPage extends DialogPage implements ISearchPage {
 				try {
 					IJavaScriptElement[] elements= SelectionConverter.codeResolve((JavaEditor) activePart);
 					if (elements != null && elements.length > 0) {
-						initData= determineInitValuesFrom(elements[0]);
+						// Elements array may contain null-values: https://bugs.eclipse.org/bugs/show_bug.cgi?id=473186
+						// As such, we're to take the first non-null element if any
+						// TODO: It's not OK to have null values here, so it should be investigated
+						for (int i = 0; i < elements.length; i++) {
+							if (elements[i] != null) {
+								initData= determineInitValuesFrom(elements[1]);
+								break;
+							}
+						}
 					}
 				} catch (JavaScriptModelException e) {
 					// ignore
