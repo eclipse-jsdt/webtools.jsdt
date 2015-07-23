@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -305,6 +305,8 @@ public class NameLookup implements SuffixConstants {
 				public boolean acceptBinding(int type,int modifiers, char[] packageName,
 						char[] simpleTypeName,
 						String path, AccessRestriction access) {
+					if (path == null)
+						return false; // Since path is used to create openables we cannot accept bindings without a path
 					if (excludePath!=null && path.equals(excludePath))
 						return false;
 					if(!foundPaths.contains(path))
