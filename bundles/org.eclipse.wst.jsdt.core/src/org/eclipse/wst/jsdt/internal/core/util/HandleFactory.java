@@ -352,6 +352,9 @@ public class HandleFactory {
 				IJavaScriptProject javaProject= this.javaModel.getJavaProject(project);
 				IPackageFragmentRoot[] roots= javaProject.getPackageFragmentRoots();
 				for (int j= 0, rootCount= roots.length; j < rootCount; j++) {
+					if (!(roots[j] instanceof PackageFragmentRoot)) {
+						continue;
+					}
 					PackageFragmentRoot root= (PackageFragmentRoot)roots[j];
 					if ( root.getPath().isPrefixOf(path)
 							&& !Util.isExcluded(path, root.fullInclusionPatternChars(), root.fullExclusionPatternChars(), false))
