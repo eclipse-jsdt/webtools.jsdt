@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -605,20 +605,24 @@ public class CompilationUnit extends Openable implements IJavaScriptUnit, org.ec
 	 */
 	public char[] getContents() {
 		IBuffer buffer = getBufferManager().getBuffer(this);
-		if (buffer == null) {
-			// no need to force opening of CU to get the content
-			// also this cannot be a working copy, as its buffer is never closed while the working copy is alive
-			try {
-				return Util.getResourceContentsAsCharArray((IFile) getResource());
-			} catch (JavaScriptModelException e) {
-				return CharOperation.NO_CHAR;
-			}
+		if (buffer != null) {
+			char[] contents = buffer.getCharacters();
+			return contents == null ? CharOperation.NO_CHAR : contents;			
 		}
-		char[] contents = buffer.getCharacters();
-		if (contents == null) // see https://bugs.eclipse.org/bugs/show_bug.cgi?id=129814
-			return CharOperation.NO_CHAR;
-		return contents;
+		
+		// no need to force opening of CU to get the content
+		// also this cannot be a working copy, as its buffer is never closed while the working copy is alive
+		try {
+			IResource resource = getResource();
+			if (resource instanceof IFile) {
+				return Util.getResourceContentsAsCharArray((IFile) resource);
+			}
+		} catch (JavaScriptModelException e) {
+			// Ignore
+		}
+		return CharOperation.NO_CHAR;
 	}
+
 	/**
 	 * A compilation unit has a corresponding resource unless it is contained
 	 * in a jar.
