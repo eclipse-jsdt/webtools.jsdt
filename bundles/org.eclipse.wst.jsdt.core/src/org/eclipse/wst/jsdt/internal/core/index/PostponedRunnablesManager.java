@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
+ * Copyright (c) 2011, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -198,7 +198,8 @@ class PostponedRunnablesManager {
 							runnable.run();
 						} else {
 							long timeToWait = runnable.timeToWait();
-							shortestTimeToWait = shortestTimeToWait <  timeToWait? shortestTimeToWait : timeToWait;
+							timeToWait = timeToWait < 0 ? 0 : timeToWait;
+							shortestTimeToWait = shortestTimeToWait < timeToWait? shortestTimeToWait : timeToWait;
 							this.addAction(runnable);
 						}
 					}
