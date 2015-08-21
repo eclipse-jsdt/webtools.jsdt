@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2013 IBM Corporation and others.
+ * Copyright (c) 2005, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -139,7 +139,8 @@ public class InferEngine extends ASTVisitor implements IInferEngine {
 	
 	InferOptions inferOptions;
 	CompilationUnitDeclaration compUnit;
-	Context[] contexts = new Context[100];
+	private static final int INITIAL_CONTEXT_SIZE = 25;
+	Context[] contexts = new Context[INITIAL_CONTEXT_SIZE];
 	int contextPtr = -1;
 	Context currentContext = new Context();
 	protected int passNumber = 1;
@@ -2518,9 +2519,15 @@ public class InferEngine extends ASTVisitor implements IInferEngine {
 
 	protected final void pushContext() {
 		Context newContext = new Context(currentContext);
-		contexts[++contextPtr] = currentContext;
-		currentContext = newContext;
+		
+		// Resize array of contexts if necessary
+		++contextPtr;
+		if (contexts.length == contextPtr) {
+			System.arraycopy(contexts, 0, (contexts = new Context[contexts.length + INITIAL_CONTEXT_SIZE]), 0, contextPtr);
+		}
 
+		contexts[contextPtr] = currentContext;
+		currentContext = newContext;
 	}
 
 	protected final void popContext() {
