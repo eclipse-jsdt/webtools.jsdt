@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,9 @@
 package org.eclipse.wst.jsdt.internal.corext.util;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.wst.jsdt.core.Flags;
@@ -136,13 +138,33 @@ public class MethodOverrideTester {
 	 * @throws JavaScriptModelException
 	 */
 	public IFunction findOverriddenMethodInHierarchy(IType type, IFunction overriding) throws JavaScriptModelException {
+		return findOverriddenMethodInHierarchy(type, overriding, null);		
+	}
+	
+	/*
+	 * Does the searching for overridden method in a type and its super types. 
+	 * Performs additional checks due to prevent the infinite loops due to possible hierarchy super type cycles.
+	 * 
+	 * processedSuperTypes == null means the first call, in such case the collection of processed super types is to be created.
+	 * See: https://bugs.eclipse.org/bugs/show_bug.cgi?id=423436
+	 */
+	private IFunction findOverriddenMethodInHierarchy(IType type, IFunction overriding, Set<IType> processedSuperTypes) throws JavaScriptModelException {
 		IFunction method= findOverriddenMethodInType(type, overriding);
 		if (method != null) {
 			return method;
 		}
+
 		IType superClass= fHierarchy.getSuperclass(type);
-		if (superClass != null) {
-			IFunction res=  findOverriddenMethodInHierarchy(superClass, overriding);
+		if (superClass == null) {
+			return null;
+		}
+
+		if (processedSuperTypes == null) {
+			processedSuperTypes = new HashSet<IType>();
+		}
+		if (!processedSuperTypes.contains(superClass)) {
+			processedSuperTypes.add(superClass);
+			IFunction res=  findOverriddenMethodInHierarchy(superClass, overriding, processedSuperTypes);
 			if (res != null) {
 				return res;
 			}
@@ -151,7 +173,7 @@ public class MethodOverrideTester {
 	}
 	
 	/**
-	 * Finds an overridden method in a type. WWith generics it is possible that 2 methods in the same type are overidden at the same time.
+	 * Finds an overridden method in a type. With generics it is possible that 2 methods in the same type are overidden at the same time.
 	 * In that case the first overridden method found is returned.
 	 * @param overriddenType The type to find methods in
 	 * @param overriding The overriding method
