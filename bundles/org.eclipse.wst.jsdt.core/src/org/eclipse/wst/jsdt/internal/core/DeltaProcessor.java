@@ -835,16 +835,17 @@ public class DeltaProcessor {
 						// project is not accessible or has lost its Java nature
 						break;
 					}
-					IIncludePathEntry[] classpath;
+					IIncludePathEntry[] classpath = null;
 					try {
 						classpath = javaProject.getResolvedClasspath();
-						for (int j = 0, cpLength = classpath.length; j < cpLength; j++){
-							if (classpath[j].getEntryKind() == IIncludePathEntry.CPE_LIBRARY){
-								archivePathsToRefresh.add(classpath[j].getPath());
-							}
-						}
 					} catch (JavaScriptModelException e) {
 						// project doesn't exist -> ignore
+						continue;
+					}
+					for (int j = 0, cpLength = classpath == null? 0 : classpath.length; j < cpLength; j++){
+						if (classpath[j].getEntryKind() == IIncludePathEntry.CPE_LIBRARY){
+							archivePathsToRefresh.add(classpath[j].getPath());
+						}
 					}
 					break;
 				case IJavaScriptElement.JAVASCRIPT_MODEL :
@@ -863,7 +864,7 @@ public class DeltaProcessor {
 							// project doesn't exist -> ignore
 							continue;
 						}
-						for (int k = 0, cpLength = classpath.length; k < cpLength; k++){
+						for (int k = 0, cpLength = classpath == null? 0 : classpath.length; k < cpLength; k++){
 							if (classpath[k].getEntryKind() == IIncludePathEntry.CPE_LIBRARY){
 								archivePathsToRefresh.add(classpath[k].getPath());
 							}
@@ -887,13 +888,15 @@ public class DeltaProcessor {
 				continue;
 			}
 			JavaProject javaProject = (JavaProject) JavaScriptCore.create(project);
-			IIncludePathEntry[] entries;
+			IIncludePathEntry[] entries = null;
 			try {
 				entries = javaProject.getResolvedClasspath();
 			} catch (JavaScriptModelException e1) {
 				// project does not exist -> ignore
-				continue;
 			}
+			if (entries == null)
+				continue;
+			
 			for (int j = 0; j < entries.length; j++){
 				if (entries[j].getEntryKind() == IIncludePathEntry.CPE_LIBRARY) {
 
