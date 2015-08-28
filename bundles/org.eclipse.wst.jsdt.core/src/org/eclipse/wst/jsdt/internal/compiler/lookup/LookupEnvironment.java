@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -836,9 +836,14 @@ public class LookupEnvironment implements ProblemReasons, TypeConstants {
 		if (referenceBinding == null || referenceBinding == TheNotFoundType) {
 			return null;
 		}
+
 		referenceBinding = BinaryTypeBinding.resolveType(referenceBinding, this, false); // no
 		// raw conversion for now
 		// compoundName refers to a nested type incorrectly (for example, package1.A$B)
+		if (referenceBinding == null || referenceBinding == TheNotFoundType) {
+			return null;
+		}
+		
 		if (referenceBinding.isNestedType()) {
 			return new ProblemReferenceBinding(compoundName, referenceBinding, InternalNameProvided);
 		}
