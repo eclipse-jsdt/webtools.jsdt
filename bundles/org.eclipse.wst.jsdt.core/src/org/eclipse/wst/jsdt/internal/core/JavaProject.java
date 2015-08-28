@@ -2643,7 +2643,7 @@ public class JavaProject
 	 */
 	public IIncludePathEntry[] resolveClasspath(IIncludePathEntry[] rawClasspath) throws JavaScriptModelException {
 		ArrayList resolvedEntries = new ArrayList();
-		for (int i = 0, length = rawClasspath.length; i < length; i++) {
+		for (int i = 0; rawClasspath != null && i < rawClasspath.length; i++) {
 			IIncludePathEntry rawEntry = rawClasspath[i];
 			switch (rawEntry.getEntryKind()){
 				case IIncludePathEntry.CPE_VARIABLE:
