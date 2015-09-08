@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.ui.importer;
 
+import java.io.File;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -155,5 +157,11 @@ public class JSDTProjectNature implements ProjectConfigurator {
 	@Override
 	public Set<IFolder> getDirectoriesToIgnore(IProject project, IProgressMonitor monitor) {
 		return null; // JSDT doesn't create "rubbish" directories
+	}
+
+	@Override
+	public Set<File> findConfigurableLocations(File root, IProgressMonitor monitor) {
+		// No easy way to detect project directories just by finding .js file in a dir
+		return Collections.EMPTY_SET;
 	}
 }
