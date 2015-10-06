@@ -5244,6 +5244,20 @@
 				<contentExtension pattern="org.eclipse.wst.jsdt.java.ui.javaLinkHelper" />	
 			</includes>
 		</viewerContentBinding>
+  <viewerContentBinding
+        viewerId="org.eclipse.wst.jsdt.ui.outline">
+     <includes>
+        <contentExtension
+              pattern="org.eclipse.wst.jsdt.java.ui.javaContent">
+        </contentExtension>
+        <contentExtension
+              pattern="org.eclipse.wst.jsdt.java.ui.filters.*">
+        </contentExtension>
+        <contentExtension
+              pattern="org.eclipse.wst.jsdt.java.ui.javaLinkHelper">
+        </contentExtension>
+     </includes>
+  </viewerContentBinding>
 	</extension>
 	
 	<extension
