@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +13,7 @@ package org.eclipse.wst.jsdt.internal.core;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.wst.jsdt.core.IClassFile;
 import org.eclipse.wst.jsdt.core.IField;
 import org.eclipse.wst.jsdt.core.IFunction;
@@ -724,11 +725,16 @@ public void acceptMethodTypeParameter(char[] declaringTypePackageName, char[] fi
  * Adds the given element to the list of resolved elements.
  */
 protected void addElement(IJavaScriptElement element) {
-	int elementLength = this.elementIndex + 1;
-	if (elementLength == this.elements.length) {
-		System.arraycopy(this.elements, 0, this.elements = new IJavaScriptElement[(elementLength*2) + 1], 0, elementLength);
+	if (SelectionEngine.DEBUG) {
+		Assert.isNotNull(element);
 	}
-	this.elements[++this.elementIndex] = element;
+	if (element != null) {
+		int elementLength = this.elementIndex + 1;
+		if (elementLength == this.elements.length) {
+			System.arraycopy(this.elements, 0, this.elements = new IJavaScriptElement[(elementLength*2) + 1], 0, elementLength);
+		}
+		this.elements[++this.elementIndex] = element;
+	}
 }
 /*
  * findLocalElement() cannot find local variable
