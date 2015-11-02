@@ -258,6 +258,8 @@ public class ParameterGuesser {
 				return fVars;
 
 			fEnclosingTypeName= getEnclosingTypeName(codeAssistOffset, compilationUnit);
+			if (fEnclosingTypeName == null)
+				return fVars;
 
 			// find some whitespace to start our variable-finding code complete from.
 			// this allows the VariableTracker to find all available variables (no prefix to match for the code completion)
