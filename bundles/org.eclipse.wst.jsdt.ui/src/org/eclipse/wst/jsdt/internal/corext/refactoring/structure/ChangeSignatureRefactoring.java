@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -2289,7 +2289,9 @@ public class ChangeSignatureRefactoring extends ScriptableRefactoring implements
 					Object[] keys= new String[]{paramDecl.getName().getIdentifier(),
 												fMethDecl.getName().getIdentifier(),
 												typeName};
-					String msg= Messages.format(RefactoringCoreMessages.ChangeSignatureRefactoring_parameter_used, keys); 
+					String msg= Messages.format(typeName == null ? 
+								RefactoringCoreMessages.ChangeSignatureRefactoring_function_parameter_used :
+								RefactoringCoreMessages.ChangeSignatureRefactoring_parameter_used, keys); 
 					fResult.addError(msg, context);
 				}
 			}	
@@ -2297,7 +2299,7 @@ public class ChangeSignatureRefactoring extends ScriptableRefactoring implements
 		
 		private String getFullTypeName(FunctionDeclaration decl) {
 			ASTNode node= decl;
-			while (true) {
+			while (node != null) {
 				node= node.getParent();
 				if (node instanceof AbstractTypeDeclaration) {
 					return ((AbstractTypeDeclaration) node).getName().getIdentifier();
@@ -2306,6 +2308,7 @@ public class ChangeSignatureRefactoring extends ScriptableRefactoring implements
 					return Messages.format(RefactoringCoreMessages.ChangeSignatureRefactoring_anonymous_subclass, new String[]{ASTNodes.asString(cic.getType())}); 
 				}
 			}
+			return null;
 		}
 		
 		protected ASTNode createNewParamgument(ParameterInfo info, List parameterInfos, List nodes) {
