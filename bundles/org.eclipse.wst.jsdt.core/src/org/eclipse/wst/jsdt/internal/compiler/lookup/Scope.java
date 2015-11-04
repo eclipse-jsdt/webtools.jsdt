@@ -1422,9 +1422,9 @@ public abstract class Scope implements TypeConstants, TypeIds {
 			//if can't be seen return problem binding
 			if(!constructor.canBeSeenBy(invocationSite, this)) {
 				constructor = new ProblemMethodBinding(
-						methods[0],
-						methods[0].selector,
-						methods[0].parameters,
+						constructor,
+						constructor.selector,
+						constructor.parameters,
 						ProblemReasons.NotVisible);
 			}
 			
