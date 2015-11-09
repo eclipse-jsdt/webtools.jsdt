@@ -45,6 +45,12 @@ public class DefaultCodeFormatterOptions {
 		return options;
 	}
 
+	public static DefaultCodeFormatterOptions getJSLintConventionsSettings() {
+		DefaultCodeFormatterOptions options = new DefaultCodeFormatterOptions();
+		options.setJSLintConventionsSettings();
+		return options;
+	}
+
 	public int alignment_for_arguments_in_allocation_expression;
 	public int alignment_for_arguments_in_enum_constant;
 	public int alignment_for_arguments_in_explicit_constructor_call;
@@ -178,6 +184,7 @@ public class DefaultCodeFormatterOptions {
 	public boolean insert_space_after_comma_in_type_arguments;
 	public boolean insert_space_after_comma_in_type_parameters;
 	public boolean insert_space_after_ellipsis;
+	public boolean insert_space_after_function_keyword;
 	public boolean insert_space_after_opening_angle_bracket_in_parameterized_type_reference;
 	public boolean insert_space_after_opening_angle_bracket_in_type_arguments;
 	public boolean insert_space_after_opening_angle_bracket_in_type_parameters;
@@ -458,6 +465,7 @@ public class DefaultCodeFormatterOptions {
 		options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_COMMA_IN_TYPE_PARAMETERS, this.insert_space_after_comma_in_type_parameters ? JavaScriptCore.INSERT : JavaScriptCore.DO_NOT_INSERT);
 		options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_OPENING_BRACKET_IN_ARRAY_ALLOCATION_EXPRESSION, this.insert_space_after_opening_bracket_in_array_allocation_expression? JavaScriptCore.INSERT : JavaScriptCore.DO_NOT_INSERT);
 		options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_ELLIPSIS, this.insert_space_after_ellipsis ? JavaScriptCore.INSERT : JavaScriptCore.DO_NOT_INSERT);
+		options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_FUNCTION_KEYWORD, this.insert_space_after_function_keyword ? JavaScriptCore.INSERT : JavaScriptCore.DO_NOT_INSERT);
 		options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_OPENING_ANGLE_BRACKET_IN_PARAMETERIZED_TYPE_REFERENCE, this.insert_space_after_opening_angle_bracket_in_parameterized_type_reference? JavaScriptCore.INSERT : JavaScriptCore.DO_NOT_INSERT);
 		options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_OPENING_ANGLE_BRACKET_IN_TYPE_ARGUMENTS, this.insert_space_after_opening_angle_bracket_in_type_arguments? JavaScriptCore.INSERT : JavaScriptCore.DO_NOT_INSERT);
 		options.put(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_OPENING_ANGLE_BRACKET_IN_TYPE_PARAMETERS, this.insert_space_after_opening_angle_bracket_in_type_parameters? JavaScriptCore.INSERT : JavaScriptCore.DO_NOT_INSERT);
@@ -1367,6 +1375,10 @@ public class DefaultCodeFormatterOptions {
 		if (insertSpaceAfterEllipsisOption != null) {
 			this.insert_space_after_ellipsis = JavaScriptCore.INSERT.equals(insertSpaceAfterEllipsisOption);
 		}
+		final Object insertSpaceAfterFunctionKeyword = settings.get(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_FUNCTION_KEYWORD);
+		if (insertSpaceAfterFunctionKeyword != null) {
+			this.insert_space_after_function_keyword = JavaScriptCore.INSERT.equals(insertSpaceAfterFunctionKeyword);
+		}
 		final Object insertSpaceAfterOpeningAngleBracketInParameterizedTypeReferenceOption = settings.get(DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_OPENING_ANGLE_BRACKET_IN_PARAMETERIZED_TYPE_REFERENCE);
 		if (insertSpaceAfterOpeningAngleBracketInParameterizedTypeReferenceOption != null) {
 			this.insert_space_after_opening_angle_bracket_in_parameterized_type_reference = JavaScriptCore.INSERT.equals(insertSpaceAfterOpeningAngleBracketInParameterizedTypeReferenceOption);
@@ -2073,6 +2085,7 @@ public class DefaultCodeFormatterOptions {
 		this.insert_space_after_comma_in_type_arguments = true;
 		this.insert_space_after_comma_in_type_parameters = true;
 		this.insert_space_after_ellipsis = true;
+		this.insert_space_after_function_keyword = false;
 		this.insert_space_after_opening_angle_bracket_in_parameterized_type_reference = false;
 		this.insert_space_after_opening_angle_bracket_in_type_arguments = false;
 		this.insert_space_after_opening_angle_bracket_in_type_parameters = false;
@@ -2339,6 +2352,7 @@ public class DefaultCodeFormatterOptions {
 		this.insert_space_after_comma_in_type_arguments = true;
 		this.insert_space_after_comma_in_type_parameters = true;
 		this.insert_space_after_ellipsis = true;
+		this.insert_space_after_function_keyword = false;
 		this.insert_space_after_opening_angle_bracket_in_parameterized_type_reference = false;
 		this.insert_space_after_opening_angle_bracket_in_type_arguments = false;
 		this.insert_space_after_opening_angle_bracket_in_type_parameters = false;
@@ -2471,5 +2485,13 @@ public class DefaultCodeFormatterOptions {
 		this.tab_char = MIXED;
 		this.use_tabs_only_for_leading_indentations = false;
 		this.wrap_before_binary_operator = true;
+	}
+
+	private void setJSLintConventionsSettings() {
+		setJavaConventionsSettings();
+		this.insert_space_after_function_keyword = true;
+		this.tab_char = SPACE;
+		this.tab_size = 4;
+		this.indentation_size = 4;
 	}
 }

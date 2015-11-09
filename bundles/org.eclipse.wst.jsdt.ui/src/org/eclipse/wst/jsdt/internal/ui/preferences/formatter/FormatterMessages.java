@@ -53,6 +53,7 @@ final class FormatterMessages extends NLS {
 //	public static String WhiteSpaceTabPage_classes_before_comma_implements;
 //	public static String WhiteSpaceTabPage_classes_after_comma_implements;
 	public static String WhiteSpaceTabPage_methods;
+	public static String WhiteSpaceTabPage_methods_after_function_keyword;
 	public static String WhiteSpaceTabPage_constructors;
 	public static String WhiteSpaceTabPage_fields;
 	public static String WhiteSpaceTabPage_fields_before_comma;
@@ -440,6 +441,7 @@ final class FormatterMessages extends NLS {
 	public static String ProfileManager_default_profile_name;
 	public static String ProfileManager_eclipse_profile_name;
 	public static String ProfileManager_java_conventions_profile_name;
+	public static String ProfileManager_jslint_conventions_profile_name;
 	
 	public static String JavaPreview_formatter_exception;
 	public static String WhiteSpaceTabPage_sort_by_java_element;

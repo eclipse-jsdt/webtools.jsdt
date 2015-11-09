@@ -29,6 +29,7 @@ public class FormatterProfileManager extends ProfileManager {
 	public final static String ECLIPSE21_PROFILE= "org.eclipse.wst.jsdt.ui.default_profile"; //$NON-NLS-1$
 	public final static String ECLIPSE_PROFILE= "org.eclipse.wst.jsdt.ui.default.eclipse_profile"; //$NON-NLS-1$
 	public final static String JAVA_PROFILE= "org.eclipse.wst.jsdt.ui.default.sun_profile"; //$NON-NLS-1$
+	public final static String JSLINT_PROFILE= "org.eclipse.wst.jsdt.ui.default.jslint_profile"; //$NON-NLS-1$
 	
 	public final static String DEFAULT_PROFILE= ECLIPSE_PROFILE;
 	
@@ -47,6 +48,9 @@ public class FormatterProfileManager extends ProfileManager {
 	private static List addBuiltinProfiles(List profiles, IProfileVersioner profileVersioner) {
 		final Profile javaProfile= new BuiltInProfile(JAVA_PROFILE, FormatterMessages.ProfileManager_java_conventions_profile_name, getJavaSettings(), 1, profileVersioner.getCurrentVersion(), profileVersioner.getProfileKind()); 
 		profiles.add(javaProfile);
+
+		final Profile jsLintProfile= new BuiltInProfile(JSLINT_PROFILE, FormatterMessages.ProfileManager_jslint_conventions_profile_name, getJSLintSettings(), 1, profileVersioner.getCurrentVersion(), profileVersioner.getProfileKind()); 
+		profiles.add(jsLintProfile);
 		
 		final Profile eclipseProfile= new BuiltInProfile(ECLIPSE_PROFILE, FormatterMessages.ProfileManager_eclipse_profile_name, getEclipseSettings(), 2, profileVersioner.getCurrentVersion(), profileVersioner.getProfileKind()); 
 		profiles.add(eclipseProfile);
@@ -86,7 +90,14 @@ public class FormatterProfileManager extends ProfileManager {
 		ProfileVersioner.setLatestCompliance(options);
 		return options;
 	}
-	
+
+	public static Map getJSLintSettings() {
+		final Map options= DefaultCodeFormatterConstants.getJSLintConventionsSettings();
+
+		ProfileVersioner.setLatestCompliance(options);
+		return options;
+	}
+
 	/** 
 	 * @return Returns the default settings.
 	 */

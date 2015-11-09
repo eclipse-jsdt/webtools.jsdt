@@ -190,7 +190,7 @@ public final class WhiteSpaceOptions {
 //  "void foo() throws E0, E1 {};" +  //$NON-NLS-1$
 //  "void bar(int x, int y) throws E0, E1 {}"); //$NON-NLS-1$
     CodeFormatter.K_STATEMENTS, 
-    "function foo() {};\nfunction bar(x,y){}"); //$NON-NLS-1$
+    "function foo() {}\nfunction bar(x,y){}\nvar baz=function(){};"); //$NON-NLS-1$
 
     private final PreviewSnippet ARRAY_DECL_PREVIEW= new PreviewSnippet(
     CodeFormatter.K_STATEMENTS, 
@@ -938,6 +938,7 @@ public final class WhiteSpaceOptions {
     private InnerNode createMethodDeclTree(Map workingValues, InnerNode parent) {
         final InnerNode root= new InnerNode(parent, workingValues, FormatterMessages.WhiteSpaceTabPage_methods); 
         
+        createOption(root, workingValues, FormatterMessages.WhiteSpaceTabPage_methods_after_function_keyword, DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_FUNCTION_KEYWORD, METHOD_DECL_PREVIEW);
         createOption(root, workingValues, FormatterMessages.WhiteSpaceTabPage_before_opening_paren, DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_BEFORE_OPENING_PAREN_IN_METHOD_DECLARATION, METHOD_DECL_PREVIEW); 
         createOption(root, workingValues, FormatterMessages.WhiteSpaceTabPage_after_opening_paren, DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_AFTER_OPENING_PAREN_IN_METHOD_DECLARATION, METHOD_DECL_PREVIEW); 
         createOption(root, workingValues, FormatterMessages.WhiteSpaceTabPage_before_closing_paren, DefaultCodeFormatterConstants.FORMATTER_INSERT_SPACE_BEFORE_CLOSING_PAREN_IN_METHOD_DECLARATION, METHOD_DECL_PREVIEW); 

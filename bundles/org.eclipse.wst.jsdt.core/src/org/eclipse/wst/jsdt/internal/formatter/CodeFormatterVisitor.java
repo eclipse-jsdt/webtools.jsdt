@@ -3837,6 +3837,11 @@ public class CodeFormatterVisitor extends ASTVisitor {
 		 */
 		this.scribe.printNextToken(TerminalTokens.TokenNamefunction);
 
+		if (this.preferences.insert_space_after_function_keyword)
+		{
+			this.scribe.space();
+		}
+
 		if (methodDeclaration.getName()!=null)
 			this.scribe.printNextToken(TerminalTokens.TokenNameIdentifier, true);
 

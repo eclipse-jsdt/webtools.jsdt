@@ -1597,6 +1597,18 @@ public class DefaultCodeFormatterConstants {
 	public static final String FORMATTER_INSERT_SPACE_AFTER_ELLIPSIS  = JavaScriptCore.PLUGIN_ID + ".formatter.insert_space_after_ellipsis";	//$NON-NLS-1$
 	/**
 	 * <pre>
+	 * FORMATTER / Option to insert a space after the function keyword (opening parenthesis in an anonymous function declaration)
+	 *     - option id:         "org.eclipse.wst.jsdt.core.formatter.insert_space_after_function_keyword"
+	 *     - possible values:   { INSERT, DO_NOT_INSERT }
+	 *     - default:           DO_NOT_INSERT
+	 * </pre>
+	 * @see JavaScriptCore#INSERT
+	 * @see JavaScriptCore#DO_NOT_INSERT
+	 *
+	 */
+	public static final String FORMATTER_INSERT_SPACE_AFTER_FUNCTION_KEYWORD = JavaScriptCore.PLUGIN_ID + ".formatter.insert_space_after_function_keyword";	//$NON-NLS-1$
+	/**
+	 * <pre>
 	 * FORMATTER / Option to insert a space after the opening angle bracket in parameterized type reference
 	 *     - option id:         "org.eclipse.wst.jsdt.core.formatter.insert_space_after_opening_angle_bracket_in_parameterized_type_reference"
 	 *     - possible values:   { INSERT, DO_NOT_INSERT }
@@ -3465,6 +3477,17 @@ public class DefaultCodeFormatterConstants {
 	public static Map getJavaConventionsSettings() {
 		return DefaultCodeFormatterOptions.getJavaConventionsSettings().getMap();
 	}
+
+	/**
+	 * Returns the settings according to the JSLint conventions.
+	 *
+	 * @return the settings according to the JSLint conventions
+	 *
+	 */
+	public static Map getJSLintConventionsSettings() {
+		return DefaultCodeFormatterOptions.getJSLintConventionsSettings().getMap();
+	}
+
 	/**
 	 * <p>Return the wrapping style of the given alignment value.
 	 * The given alignment value should be created using the <code>createAlignmentValue(boolean, int, int)</code>

@@ -9246,4 +9246,12 @@ public class FormatterRegressionTests extends AbstractJavaModelTests {
 	public void test656() {
 		runTest("test656", "A.js");//$NON-NLS-1$ //$NON-NLS-2$
 	}
+
+	// https://bugs.eclipse.org/bugs/show_bug.cgi?id=315507
+	public void test657() {
+		final Map options = DefaultCodeFormatterConstants.getJSLintConventionsSettings();
+		DefaultCodeFormatterOptions preferences = new DefaultCodeFormatterOptions(options);
+		DefaultCodeFormatter codeFormatter = new DefaultCodeFormatter(preferences);
+		runTest(codeFormatter, "test657", "A.js");//$NON-NLS-1$ //$NON-NLS-2$
+	}
 }
