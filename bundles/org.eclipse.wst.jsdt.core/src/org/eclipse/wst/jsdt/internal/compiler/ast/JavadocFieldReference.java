@@ -24,7 +24,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ProblemReasons;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class JavadocFieldReference extends FieldReference implements IJsDocFieldReference {
 
 	public int tagSourceStart, tagSourceEnd;

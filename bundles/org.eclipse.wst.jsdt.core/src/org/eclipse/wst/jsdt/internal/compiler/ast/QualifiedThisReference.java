@@ -21,6 +21,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ClassScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+/**
+ * 
+ *@deprecated
+ */
 public class QualifiedThisReference extends ThisReference implements IQualifiedThisReference {
 
 	public TypeReference qualification;

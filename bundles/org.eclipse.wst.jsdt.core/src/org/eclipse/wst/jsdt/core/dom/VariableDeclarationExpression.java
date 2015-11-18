@@ -76,6 +76,13 @@ public class VariableDeclarationExpression extends Expression {
 		new ChildListPropertyDescriptor(VariableDeclarationExpression.class, "fragments", VariableDeclarationFragment.class, CYCLE_RISK); //$NON-NLS-1$
 
 	/**
+	 * the kind structured property, as introduced in Ecmascript 2015 
+	 */
+	public static final SimplePropertyDescriptor KIND_PROPERTY = 
+				new SimplePropertyDescriptor(VariableDeclarationExpression.class, "kind", VariableKind.class, MANDATORY); //$NON-NLS-1$
+
+	
+	/**
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
@@ -92,18 +99,20 @@ public class VariableDeclarationExpression extends Expression {
 	private static final List PROPERTY_DESCRIPTORS_3_0;
 
 	static {
-		List propertyList = new ArrayList(4);
+		List propertyList = new ArrayList(5);
 		createPropertyList(VariableDeclarationExpression.class, propertyList);
 		addProperty(MODIFIERS_PROPERTY, propertyList);
 		addProperty(TYPE_PROPERTY, propertyList);
 		addProperty(FRAGMENTS_PROPERTY, propertyList);
+		addProperty(KIND_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS_2_0 = reapPropertyList(propertyList);
 
-		propertyList = new ArrayList(4);
+		propertyList = new ArrayList(5);
 		createPropertyList(VariableDeclarationExpression.class, propertyList);
 		addProperty(MODIFIERS2_PROPERTY, propertyList);
 		addProperty(TYPE_PROPERTY, propertyList);
 		addProperty(FRAGMENTS_PROPERTY, propertyList);
+		addProperty(KIND_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS_3_0 = reapPropertyList(propertyList);
 	}
 
@@ -152,6 +161,8 @@ public class VariableDeclarationExpression extends Expression {
 	 */
 	private ASTNode.NodeList variableDeclarationFragments =
 		new ASTNode.NodeList(FRAGMENTS_PROPERTY);
+	
+	private VariableKind kind = VariableKind.VAR;
 
 	/**
 	 * Creates a new unparented local variable declaration expression node
@@ -245,11 +256,14 @@ public class VariableDeclarationExpression extends Expression {
 			result.modifiers().addAll(ASTNode.copySubtrees(target, modifiers()));
 		}
 		result.setType((Type) getType().clone(target));
+		result.setKind(getKind());
 		result.fragments().addAll(
 			ASTNode.copySubtrees(target, fragments()));
 		return result;
 
 	}
+
+
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
@@ -401,6 +415,26 @@ public class VariableDeclarationExpression extends Expression {
 		this.baseType = type;
 		postReplaceChild(oldChild, type, TYPE_PROPERTY);
 	}
+	
+	/**
+	 * Sets the declaration kind
+	 * @param variableKind
+	 */
+	public void setKind(VariableKind variableKind) {
+		preValueChange(KIND_PROPERTY);
+		this.kind = variableKind;
+		postValueChange(KIND_PROPERTY);
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * Returns the type of the declaration 
+	 * @return
+	 */
+	public VariableKind getKind() {
+		return kind;
+	}
 
 	/**
 	 * Returns the live list of variable declaration fragments in this
@@ -421,7 +455,7 @@ public class VariableDeclarationExpression extends Expression {
 	 */
 	int memSize() {
 		// treat Operator as free
-		return BASE_NODE_SIZE + 4 * 4;
+		return BASE_NODE_SIZE + 5 * 4;
 	}
 
 	/* (omit javadoc for this method)
@@ -434,5 +468,7 @@ public class VariableDeclarationExpression extends Expression {
 			+ (this.baseType == null ? 0 : getType().treeSize())
 			+ this.variableDeclarationFragments.listSize();
 	}
+
+
 }
 

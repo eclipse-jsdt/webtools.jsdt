@@ -2482,9 +2482,9 @@ protected void consumeUnaryExpression(int op, boolean post) {
 	}
 }
 
-public ImportReference createAssistImportReference(char[][] tokens, long[] positions){
-	return new CompletionOnImportReference(tokens, positions);
-}
+//public ImportReference createAssistImportReference(char[][] tokens, long[] positions){
+//	return new CompletionOnImportReference(tokens, positions);
+//}
 public NameReference createQualifiedAssistNameReference(char[][] previousIdentifiers, char[] assistName, long[] positions){
 	return new CompletionOnQualifiedNameReference(
 					previousIdentifiers,

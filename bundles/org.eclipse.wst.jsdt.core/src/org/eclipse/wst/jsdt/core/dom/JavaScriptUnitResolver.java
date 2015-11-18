@@ -56,6 +56,7 @@ import org.eclipse.wst.jsdt.internal.core.SourceTypeElementInfo;
 import org.eclipse.wst.jsdt.internal.core.util.BindingKeyResolver;
 import org.eclipse.wst.jsdt.internal.core.util.CommentRecorderParser;
 import org.eclipse.wst.jsdt.internal.core.util.DOMFinder;
+import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
 
 /**
  * 
@@ -342,36 +343,38 @@ class JavaScriptUnitResolver extends Compiler {
 	public static void parse(IJavaScriptUnit[] compilationUnits, ASTRequestor astRequestor, int apiLevel, Map options, int flags, IProgressMonitor monitor) {
 		try {
 			CompilerOptions compilerOptions = new CompilerOptions(options);
-			Parser parser = new CommentRecorderParser(
-				new ProblemReporter(
-						DefaultErrorHandlingPolicies.proceedWithAllProblems(),
-						compilerOptions,
-						new DefaultProblemFactory()),
-				false);
+//			Parser parser = new CommentRecorderParser(
+//				new ProblemReporter(
+//						DefaultErrorHandlingPolicies.proceedWithAllProblems(),
+//						compilerOptions,
+//						new DefaultProblemFactory()),
+//				false);
 			int length = compilationUnits.length;
 			if (monitor != null) monitor.beginTask("", length); //$NON-NLS-1$
 			for (int i = 0; i < length; i++) {
 				org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit sourceUnit = (org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit) compilationUnits[i];
 				CompilationResult compilationResult = new CompilationResult(sourceUnit, 0, 0, compilerOptions.maxProblemsPerUnit);
-				CompilationUnitDeclaration compilationUnitDeclaration = parser.dietParse(sourceUnit, compilationResult);
-				parser.inferTypes(compilationUnitDeclaration, compilerOptions);
+//				CompilationUnitDeclaration compilationUnitDeclaration = parser.dietParse(sourceUnit, compilationResult);
+//				parser.inferTypes(compilationUnitDeclaration, compilerOptions);
 
-				if (compilationUnitDeclaration.ignoreMethodBodies) {
-					compilationUnitDeclaration.ignoreFurtherInvestigation = true;
+//				if (compilationUnitDeclaration.ignoreMethodBodies) {
+//					compilationUnitDeclaration.ignoreFurtherInvestigation = true;
 					// if initial diet parse did not work, no need to dig into method bodies.
-					continue;
-				}
+//					continue;
+//				}
 
 				//fill the methods bodies in order for the code to be generated
 				//real parse of the method....
-				org.eclipse.wst.jsdt.internal.compiler.ast.TypeDeclaration[] types = compilationUnitDeclaration.types;
-				if (types != null) {
-					for (int j = types.length; --j >= 0;)
-						types[j].parseMethod(parser, compilationUnitDeclaration);
-				}
+//				org.eclipse.wst.jsdt.internal.compiler.ast.TypeDeclaration[] types = compilationUnitDeclaration.types;
+//				if (types != null) {
+//					for (int j = types.length; --j >= 0;)
+//						types[j].parseMethod(parser, compilationUnitDeclaration);
+//				}
 
 				// convert AST
-				JavaScriptUnit node = convert(compilationUnitDeclaration, parser.scanner.getSource(), apiLevel, options, false/*don't resolve binding*/, null/*no owner needed*/, null/*no binding table needed*/, flags /* flags */, monitor);
+//				JavaScriptUnit node = convert(compilationUnitDeclaration, parser.scanner.getSource(), apiLevel, options, false/*don't resolve binding*/, null/*no owner needed*/, null/*no binding table needed*/, flags /* flags */, monitor);
+				JavaScriptUnit node = EsprimaParser.newParser().setSource(compilationUnits[i]).parse();
+				System.out.println("JavaScriptUnitResolver.parse caleed esprima for " + compilationUnits[i]);
 				node.setTypeRoot(compilationUnits[i]);
 
 				// accept AST
@@ -722,7 +725,8 @@ class JavaScriptUnitResolver extends Compiler {
 						BindingResolver resolver = new DefaultBindingResolver(unit.scope, owner, this.bindingTables, (flags & IJavaScriptUnit.ENABLE_BINDINGS_RECOVERY) != 0);
 						ast.setBindingResolver(resolver);
 						converter.setAST(ast);
-						JavaScriptUnit compilationUnit = converter.convert(unit, contents);
+						JavaScriptUnit compilationUnit = EsprimaParser.newParser().setSource(source).parse();
+						System.out.println("JSResolver parsed:" + source);
 						compilationUnit.setTypeRoot(source);
 						compilationUnit.setLineEndTable(compilationResult.getLineSeparatorPositions());
 						ast.setDefaultNodeFlag(0);

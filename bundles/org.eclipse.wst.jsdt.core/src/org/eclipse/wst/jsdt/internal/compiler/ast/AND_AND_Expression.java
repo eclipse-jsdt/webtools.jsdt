@@ -19,6 +19,11 @@ import org.eclipse.wst.jsdt.internal.compiler.impl.Constant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 
 //dedicated treatment for the &&
+
+/**
+ * 
+ * @deprecated
+ */
 public class AND_AND_Expression extends BinaryExpression implements IAND_AND_Expression {
 
 	int rightInitStateIndex = -1;

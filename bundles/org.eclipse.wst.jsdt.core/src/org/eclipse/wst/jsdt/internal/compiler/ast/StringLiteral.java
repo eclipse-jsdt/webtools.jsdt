@@ -16,7 +16,10 @@ import org.eclipse.wst.jsdt.internal.compiler.ASTVisitor;
 import org.eclipse.wst.jsdt.internal.compiler.impl.StringConstant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class StringLiteral extends Literal implements IStringLiteral {
 
 	char[] source;

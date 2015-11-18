@@ -23,6 +23,12 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.FieldBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.SourceTypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+
+
+/**
+ * 
+ * @deprecated
+ */
 public class ArrayReference extends Reference implements IArrayReference {
 
 	public Expression receiver;

@@ -13,6 +13,7 @@ package org.eclipse.wst.jsdt.core.tests.compiler;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -41,6 +42,7 @@ import org.eclipse.wst.jsdt.core.tests.compiler.regression.ScannerTest;
 import org.eclipse.wst.jsdt.core.tests.compiler.regression.SwitchTest;
 import org.eclipse.wst.jsdt.core.tests.compiler.regression.UtilTest;
 import org.eclipse.wst.jsdt.core.tests.compiler.util.ExclusionTests;
+import org.eclipse.wst.jsdt.core.tests.esprima.EsprimaParserTests;
 import org.eclipse.wst.jsdt.core.tests.interpret.BasicInterpretTest;
 import org.eclipse.wst.jsdt.core.tests.search.SearchTests;
 
@@ -100,7 +102,7 @@ public static Test suite() {
 	TestSuite all = new TestSuite("JSDT 'Compiler' Tests");
 	all.addTest(ExclusionTests.suite());
 	all.addTest(SearchTests.suite());
-	
+	all.addTest(new JUnit4TestAdapter(EsprimaParserTests.class));
 
 	for (Iterator iter = standardTests.iterator(); iter.hasNext();) {
 		Class test = (Class) iter.next();

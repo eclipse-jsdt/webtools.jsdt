@@ -20,7 +20,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.LocalVariableBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TagBits;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class InstanceOfExpression extends OperatorExpression implements IInstanceOfExpression {
 
 	public Expression expression;

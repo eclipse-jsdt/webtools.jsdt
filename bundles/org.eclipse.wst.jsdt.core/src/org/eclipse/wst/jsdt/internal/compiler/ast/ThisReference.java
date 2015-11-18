@@ -22,7 +22,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ClassScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class ThisReference extends Reference implements IThisReference {
 
 	/**

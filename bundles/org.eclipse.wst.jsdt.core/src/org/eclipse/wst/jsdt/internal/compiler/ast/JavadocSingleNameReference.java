@@ -18,7 +18,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ClassScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.LocalVariableBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TagBits;
-
+/**
+ * 
+ *@deprecated
+ */
 public class JavadocSingleNameReference extends SingleNameReference implements IJsDocSingleNameReference {
 
 	public int tagSourceStart, tagSourceEnd;

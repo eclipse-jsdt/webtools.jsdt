@@ -21,6 +21,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.LookupEnvironment;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+/**
+ * 
+ *@deprecated
+ */
 public class CompoundAssignment extends Assignment implements OperatorIds, ICompoundAssignment {
 	public int operator;
 	public int preAssignImplicitConversion;

@@ -21,7 +21,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.PackageBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
-
+/**
+ * 
+ *@deprecated
+ */
 public class JavadocQualifiedTypeReference extends QualifiedTypeReference implements IJsDocQualifiedTypeReference {
 
 	public int tagSourceStart, tagSourceEnd;

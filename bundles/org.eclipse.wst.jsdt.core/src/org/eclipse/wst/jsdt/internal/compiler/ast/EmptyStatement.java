@@ -17,7 +17,10 @@ import org.eclipse.wst.jsdt.internal.compiler.classfmt.ClassFileConstants;
 import org.eclipse.wst.jsdt.internal.compiler.flow.FlowContext;
 import org.eclipse.wst.jsdt.internal.compiler.flow.FlowInfo;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
-
+/**
+ * 
+ *@deprecated
+ */
 public class EmptyStatement extends Statement implements IEmptyStatement {
 
 	public EmptyStatement(int startPosition, int endPosition) {

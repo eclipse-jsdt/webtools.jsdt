@@ -18,7 +18,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ClassScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
-
+/**
+ * 
+ *@deprecated
+ */
 public class JavadocArraySingleTypeReference extends ArrayTypeReference implements IJsDocArraySingleTypeReference {
 
 	public JavadocArraySingleTypeReference(char[] name, int dim, long pos) {

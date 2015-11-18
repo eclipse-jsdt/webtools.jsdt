@@ -16,6 +16,7 @@ import org.eclipse.wst.jsdt.core.ast.ISubRoutineStatement;
 
 /**
  * Extra behavior for statements which are generating subroutines
+ * @deprecated
  */
 public abstract class SubRoutineStatement extends Statement implements ISubRoutineStatement {
 

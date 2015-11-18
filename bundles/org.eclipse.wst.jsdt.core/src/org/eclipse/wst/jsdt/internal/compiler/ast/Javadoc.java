@@ -28,6 +28,7 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
 /**
  * Node representing a structured Javadoc comment
+ * @deprecated
  */
 public class Javadoc extends ASTNode implements IJsDoc {
 

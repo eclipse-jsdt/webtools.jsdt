@@ -26,7 +26,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.SourceTypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class FieldDeclaration extends AbstractVariableDeclaration implements IFieldDeclaration {
 
 	public FieldBinding binding;

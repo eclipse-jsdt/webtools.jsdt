@@ -13,6 +13,7 @@ package org.eclipse.wst.jsdt.ui.text.java;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
 /**
  * Computes completions and context information displayed by the JavaScript editor content assistant.
@@ -42,7 +43,7 @@ public interface IJavaCompletionProposalComputer {
 	 *        invocation, i.e. there is no need for the receiver to spawn a sub monitor.
 	 * @return a list of completion proposals (element type: {@link org.eclipse.jface.text.contentassist.ICompletionProposal})
 	 */
-	List computeCompletionProposals(ContentAssistInvocationContext context, IProgressMonitor monitor);
+	List<ICompletionProposal> computeCompletionProposals(ContentAssistInvocationContext context, IProgressMonitor monitor);
 
 	/**
 	 * Returns context information objects valid at the given invocation context.
@@ -52,7 +53,7 @@ public interface IJavaCompletionProposalComputer {
 	 *        invocation, i.e. there is no need for the receiver to spawn a sub monitor.
 	 * @return a list of context information objects (element type: {@link org.eclipse.jface.text.contentassist.IContextInformation})
 	 */
-	List computeContextInformation(ContentAssistInvocationContext context, IProgressMonitor monitor);
+	List<ICompletionProposal> computeContextInformation(ContentAssistInvocationContext context, IProgressMonitor monitor);
 
 	/**
 	 * Returns the reason why this computer was unable to produce any completion proposals or

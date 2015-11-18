@@ -25,7 +25,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.TagBits;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.parser.Parser;
 import org.eclipse.wst.jsdt.internal.compiler.problem.AbortMethod;
-
+/**
+ * 
+ *@deprecated
+ */
 public class MethodDeclaration extends AbstractMethodDeclaration implements IFunctionDeclaration {
 
 	public TypeReference returnType;

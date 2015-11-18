@@ -52,14 +52,10 @@ import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.JsGlobalScopeContainerInitializer;
 import org.eclipse.wst.jsdt.core.LibrarySuperType;
 import org.eclipse.wst.jsdt.core.WorkingCopyOwner;
-import org.eclipse.wst.jsdt.core.compiler.CategorizedProblem;
 import org.eclipse.wst.jsdt.core.compiler.CharOperation;
 import org.eclipse.wst.jsdt.core.dom.AST;
-import org.eclipse.wst.jsdt.internal.compiler.IProblemFactory;
-import org.eclipse.wst.jsdt.internal.compiler.SourceElementParser;
-import org.eclipse.wst.jsdt.internal.compiler.ast.CompilationUnitDeclaration;
-import org.eclipse.wst.jsdt.internal.compiler.impl.CompilerOptions;
-import org.eclipse.wst.jsdt.internal.compiler.problem.DefaultProblemFactory;
+import org.eclipse.wst.jsdt.core.dom.ASTParser;
+import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.internal.compiler.util.SuffixConstants;
 import org.eclipse.wst.jsdt.internal.core.util.MementoTokenizer;
 import org.eclipse.wst.jsdt.internal.core.util.Messages;
@@ -161,71 +157,21 @@ public class CompilationUnit extends Openable implements IJavaScriptUnit, org.ec
 			contents = characters == null ? CharOperation.NO_CHAR : characters;
 		}
 	
+
 		// generate structure and compute syntax problems if needed
+		
 		CompilationUnitStructureRequestor requestor = new CompilationUnitStructureRequestor(this, unitInfo, newElements);
-		JavaModelManager.PerWorkingCopyInfo perWorkingCopyInfo = getPerWorkingCopyInfo();
-		IJavaScriptProject project = getJavaScriptProject();
-	
-		boolean createAST;
-		boolean resolveBindings;
-		int reconcileFlags;
-		HashMap problems;
+		CompilationUnitStructureVisitor visitor = new CompilationUnitStructureVisitor(this, unitInfo, newElements);
+		
+		ASTParser parser = ASTParser.newParser(AST.JLS3);
+		parser.setSource(this);
+		org.eclipse.wst.jsdt.core.dom.JavaScriptUnit cu = (JavaScriptUnit) parser.createAST(pm);
+		cu.accept(visitor);
+		
 		if (info instanceof ASTHolderCUInfo) {
-			ASTHolderCUInfo astHolder = (ASTHolderCUInfo) info;
-			createAST = astHolder.astLevel != NO_AST;
-			resolveBindings = astHolder.resolveBindings;
-			reconcileFlags = astHolder.reconcileFlags;
-			problems = astHolder.problems;
-		} else {
-			createAST = false;
-			resolveBindings = false;
-			reconcileFlags = 0;
-			problems = null;
+			((ASTHolderCUInfo) info).ast = cu;
 		}
-	
-		boolean computeProblems = perWorkingCopyInfo != null && perWorkingCopyInfo.isActive() && project != null && JavaProject.hasJavaNature(project.getProject());
-		IProblemFactory problemFactory = new DefaultProblemFactory();
-		Map options = project == null ? JavaScriptCore.getOptions() : project.getOptions(true);
-		if (!computeProblems) {
-			// disable task tags checking to speed up parsing
-			options.put(JavaScriptCore.COMPILER_TASK_TAGS, ""); //$NON-NLS-1$
-		}
-		SourceElementParser parser = new SourceElementParser(
-			requestor,
-			problemFactory,
-			new CompilerOptions(options),
-			true/*report local declarations*/,
-			!createAST /*optimize string literals only if not creating a DOM AST*/);
-		parser.reportOnlyOneSyntaxError = !computeProblems;
-		parser.setMethodsFullRecovery(true);
-		parser.setStatementsRecovery((reconcileFlags & IJavaScriptUnit.ENABLE_STATEMENTS_RECOVERY) != 0);
-	
-		requestor.parser = parser;
-		CompilationUnitDeclaration unit = parser.parseCompilationUnit(
-			new org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit() {
-				public char[] getContents() {
-					return contents;
-				}
-				public char[] getMainTypeName() {
-					return CompilationUnit.this.getMainTypeName();
-				}
-				public char[][] getPackageName() {
-					return CompilationUnit.this.getPackageName();
-				}
-				public char[] getFileName() {
-					return CompilationUnit.this.getFileName();
-				}
-				public LibrarySuperType getCommonSuperType() {
-					return CompilationUnit.this.getCommonSuperType();
-				}
-				public String getInferenceID() {
-					return CompilationUnit.this.getInferenceID();
-				}
-	
-	
-			},
-			true /*full parse to find local elements*/);
-	
+
 		// update timestamp (might be IResource.NULL_STAMP if original does not exist)
 		if (underlyingResource == null) {
 			underlyingResource = getResource();
@@ -233,46 +179,7 @@ public class CompilationUnit extends Openable implements IJavaScriptUnit, org.ec
 		// underlying resource is null in the case of a working copy on a class file in a jar
 		if (underlyingResource != null)
 			unitInfo.timestamp = ((IFile)underlyingResource).getModificationStamp();
-	
-		// compute other problems if needed
-		CompilationUnitDeclaration compilationUnitDeclaration = null;
-		try {
-			if (computeProblems) {
-				if (problems == null) {
-					// report problems to the problem requestor
-					problems = new HashMap();
-					compilationUnitDeclaration = CompilationUnitProblemFinder.process(unit, this, contents, parser, this.owner, problems, createAST, reconcileFlags, pm);
-					try {
-						perWorkingCopyInfo.beginReporting();
-						for (Iterator iteraror = problems.values().iterator(); iteraror.hasNext();) {
-							CategorizedProblem[] categorizedProblems = (CategorizedProblem[]) iteraror.next();
-							if (categorizedProblems == null) continue;
-							for (int i = 0, length = categorizedProblems.length; i < length; i++) {
-								perWorkingCopyInfo.acceptProblem(categorizedProblems[i]);
-							}
-						}
-					} finally {
-						perWorkingCopyInfo.endReporting();
-					}
-				} else {
-					// collect problems
-					compilationUnitDeclaration = CompilationUnitProblemFinder.process(unit, this, contents, parser, this.owner, problems, createAST, reconcileFlags, pm);
-				}
-			}
-	
-			if (createAST) {
-				int astLevel = ((ASTHolderCUInfo) info).astLevel;
-				org.eclipse.wst.jsdt.core.dom.JavaScriptUnit cu = AST.convertCompilationUnit(astLevel, unit, contents, options, computeProblems, this, reconcileFlags, pm);
-				((ASTHolderCUInfo) info).ast = cu;
-			}
-		} finally {
-		    if (compilationUnitDeclaration != null) {
-		        compilationUnitDeclaration.cleanUp();
-		        if (compilationUnitDeclaration.scope!=null)
-		        	compilationUnitDeclaration.scope.cleanup();
-		    }
-		}
-	
+		
 		return unitInfo.isStructureKnown();
 	}
 	/*

@@ -28,6 +28,8 @@
     <module>org.eclipse.wst.jsdt.support.firefox</module>
     <module>org.eclipse.wst.jsdt.support.ie</module>
     <module>org.eclipse.wst.jsdt.ui</module>
+    <module>org.eclipse.wst.jsdt.nashorn.extension</module>
+
 
     <module>org.eclipse.wst.jsdt.debug.core</module>
     <module>org.eclipse.wst.jsdt.debug.crossfire</module>

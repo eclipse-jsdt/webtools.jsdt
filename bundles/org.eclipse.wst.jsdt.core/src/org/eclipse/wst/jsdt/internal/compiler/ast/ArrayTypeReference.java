@@ -19,6 +19,11 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ClassScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+
+/**
+ * 
+ * @deprecated
+ */
 public class ArrayTypeReference extends SingleTypeReference implements IArrayTypeReference {
 	public int dimensions;
 	public int originalSourceEnd;

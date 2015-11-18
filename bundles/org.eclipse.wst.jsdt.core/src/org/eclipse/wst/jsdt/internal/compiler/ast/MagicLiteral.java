@@ -12,7 +12,10 @@ package org.eclipse.wst.jsdt.internal.compiler.ast;
 
 import org.eclipse.wst.jsdt.core.ast.IASTNode;
 import org.eclipse.wst.jsdt.core.ast.IMagicLiteral;
-
+/**
+ * 
+ *@deprecated
+ */
 public abstract class  MagicLiteral extends Literal implements IMagicLiteral {
 
 	public MagicLiteral(int start , int end) {

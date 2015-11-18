@@ -195,9 +195,7 @@ public class NumberLiteral extends Expression {
 			scanner.tokenizeComments = true;
 			scanner.tokenizeWhiteSpace = true;
 		}
-		preValueChange(TOKEN_PROPERTY);
-		this.tokenValue = token;
-		postValueChange(TOKEN_PROPERTY);
+		internalSetToken(token);
 	}
 
 	/* (omit javadoc for this method)

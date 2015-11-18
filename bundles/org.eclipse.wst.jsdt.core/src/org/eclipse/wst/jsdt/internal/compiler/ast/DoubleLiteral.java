@@ -17,7 +17,10 @@ import org.eclipse.wst.jsdt.internal.compiler.impl.DoubleConstant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.util.FloatUtil;
-
+/**
+ * 
+ *@deprecated
+ */
 public class DoubleLiteral extends NumberLiteral implements IDoubleLiteral {
 	double value;
 	public DoubleLiteral(char[] token, int s, int e) {

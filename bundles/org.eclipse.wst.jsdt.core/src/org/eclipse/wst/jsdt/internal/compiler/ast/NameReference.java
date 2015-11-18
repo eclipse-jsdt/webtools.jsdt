@@ -21,7 +21,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.LocalVariableBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public abstract class NameReference extends Reference implements INameReference, InvocationSite {
 
 	public Binding binding;//, codegenBinding; //may be aTypeBinding-aFieldBinding-aLocalVariableBinding

@@ -19,7 +19,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.WithScope;
-
+/**
+ * 
+ *@deprecated
+ */
 public class WithStatement extends Statement implements IWithStatement {
 
 	public Expression condition;

@@ -13,7 +13,10 @@ package org.eclipse.wst.jsdt.internal.compiler.ast;
 import org.eclipse.wst.jsdt.core.ast.IASTNode;
 import org.eclipse.wst.jsdt.core.ast.IBranchStatement;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
-
+/**
+ * 
+ *@deprecated
+ */
 public abstract class BranchStatement extends Statement implements IBranchStatement {
 
 	public char[] label;

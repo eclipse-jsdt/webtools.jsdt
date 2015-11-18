@@ -900,6 +900,52 @@ public final class AST {
 	}
 
 	/**
+	 * Creates and returns a new unparented property name node for the given
+	 * identifier. The identifier should be a legal JavaScript identifier,
+	 * 
+	 * @param identifier the identifier
+	 * @return a new unparented propertyName node
+	 * @exception IllegalArgumentException if the identifier is invalid
+	 */
+	public SimpleName newPropertyName(String identifier) {
+		if(identifier == null ){
+			throw new IllegalArgumentException();
+		}
+		PropertyName result = new PropertyName(this);
+		result.setIdentifier(identifier);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented array name node. 
+	 * 
+	 * @return a new Array name node
+	 */
+	public ArrayName newArrayName() {
+		ArrayName result = new ArrayName(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented object name node
+	 * @return a new Object name node
+	 */
+	public ObjectName newObjectName() {
+		ObjectName result = new ObjectName(this);
+		return result;
+	}
+	
+
+	/**
+	 * Creates and returns a new unparented assignment name (pattern) node
+	 * @return a new assignment name
+	 */
+	public AssignmentName newAssignmentName() {
+		AssignmentName result = new AssignmentName(this);
+		return result;
+	}
+
+	/**
 	 * Creates and returns a new unparented qualified name node for the given
 	 * qualifier and simple name child node.
 	 *
@@ -1505,6 +1551,28 @@ public final class AST {
 	 * By default, there are no modifiers and the base type is unspecified
 	 * (but legal).
 	 * <p>
+	 *
+	 * @return a new unparented variable declaration statement node
+	 * @exception IllegalArgumentException if:
+	 * <ul>
+	 * <li>the node belongs to a different AST</li>
+	 * <li>the node already has a parent</li>
+	 * <li>a cycle in would be created</li>
+	 * </ul>
+	 */
+	public VariableDeclarationStatement
+			newVariableDeclarationStatement() {
+		VariableDeclarationStatement result =
+			new VariableDeclarationStatement(this);
+		return result;
+	}
+	
+	/**
+	 * Creates a new unparented local variable declaration statement node
+	 * owned by this AST, for the given variable declaration fragment.
+	 * By default, there are no modifiers and the base type is unspecified
+	 * (but legal).
+	 * <p>
 	 * This method can be used to convert a variable declaration fragment
 	 * (<code>VariableDeclarationFragment</code>) into a statement
 	 * (<code>Statement</code>) by wrapping it. Additional variable
@@ -1522,12 +1590,12 @@ public final class AST {
 	 * </ul>
 	 */
 	public VariableDeclarationStatement
-			newVariableDeclarationStatement(VariableDeclarationFragment fragment) {
+	newVariableDeclarationStatement(VariableDeclarationFragment fragment) {
 		if (fragment == null) {
 			throw new IllegalArgumentException();
 		}
 		VariableDeclarationStatement result =
-			new VariableDeclarationStatement(this);
+					new VariableDeclarationStatement(this);
 		result.fragments().add(fragment);
 		return result;
 	}
@@ -1644,6 +1712,24 @@ public final class AST {
 	public ExpressionStatement newExpressionStatement(Expression expression) {
 		ExpressionStatement result = new ExpressionStatement(this);
 		result.setExpression(expression);
+		return result;
+	}
+
+	/**
+	 * Creates a new unparented expression statement node owned by this AST,
+	 * for the given expression.
+	 * <p>
+	 *
+	 * @return a new unparented statement node
+	 * @exception IllegalArgumentException if:
+	 * <ul>
+	 * <li>the node belongs to a different AST</li>
+	 * <li>the node already has a parent</li>
+	 * <li>a cycle in would be created</li>
+	 * </ul>
+	 */
+	public ExpressionStatement newExpressionStatement() {
+		ExpressionStatement result = new ExpressionStatement(this);
 		return result;
 	}
 
@@ -1795,6 +1881,17 @@ public final class AST {
 	public ForInStatement newForInStatement() {
 		return new ForInStatement(this);
 	}
+	
+	/**
+	 * Creates a new unparented for..of statement node owned by this AST.
+	 * By default, there are no initializers, no condition expression,
+	 * no updaters, and the body is an empty block.
+	 *
+	 * @return a new unparented for..of statement node
+	 */
+	public ForOfStatement newForOfStatement() {
+		return new ForOfStatement(this);
+	}
 
 	/*
 	 * Creates a new unparented enhanced for statement node owned by this AST.
@@ -1820,6 +1917,20 @@ public final class AST {
 		return new StringLiteral(this);
 	}
 
+	/**
+	 * Creates and returns a new unparented string literal node for
+	 * the given string literal.
+	 *
+	 * @return a new unparented string literal node
+	 */
+	public StringLiteral newStringLiteral(String literal) {
+		if(literal == null ){
+			throw new IllegalArgumentException();
+		}
+		StringLiteral result = new StringLiteral(this);
+		result.setLiteralValue(literal);
+		return result;
+	}
 
 	/**
 	 * Creates and returns a new unparented character literal node.
@@ -1832,16 +1943,32 @@ public final class AST {
 	}
 
 
+	/**
+	 * Creates and returns a new Regular Expression literal node.
+	 * Initially the node has an unspecified character literal.
+	 *
+	 * @return a new unparented regular expression literal node
+	 */	
+	public RegularExpressionLiteral newRegularExpressionLiteral() {
+		return new RegularExpressionLiteral(this);
+	}
 
 	/**
 	 * Creates and returns a new Regular Expression literal node.
 	 * Initially the node has an unspecified character literal.
 	 *
 	 * @return a new unparented regular expression literal node
-	 */	public RegularExpressionLiteral newRegularExpressionLiteral() {
-		return new RegularExpressionLiteral(this);
+	 */	
+	public RegularExpressionLiteral newRegularExpressionLiteral(String literal) {
+		if(literal == null ){
+			throw new IllegalArgumentException();
+		}
+		RegularExpressionLiteral result = new RegularExpressionLiteral(this);
+		result.setRegularExpression(literal);
+		return result;
 	}
-/**
+	 
+	 /**
 	 * Creates and returns a new unparented number literal node.
 	 *
 	 * @param literal the token for the numeric literal as it would
@@ -1908,6 +2035,39 @@ public final class AST {
 	public BooleanLiteral newBooleanLiteral(boolean value) {
 		BooleanLiteral result = new BooleanLiteral(this);
 		result.setBooleanValue(value);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented boolean literal node.
+	 *
+	 * @param value a string that is parseable to boolean
+	 * @return a new unparented boolean literal node
+	 */
+	public BooleanLiteral newBooleanLiteral(String value) {
+		if(value == null ){
+			throw new IllegalArgumentException();
+		}
+		return newBooleanLiteral(Boolean.parseBoolean(value));
+	}
+	
+	/**
+	 * Creates and returns a new unparented template literal node.
+	 *
+	 * @return a new unparented template literal node
+	 */
+	public TemplateLiteral newTemplateLiteral() {
+		TemplateLiteral result = new TemplateLiteral(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented template element node.
+	 *
+	 * @return a new unparented template element node
+	 */
+	public TemplateElement newTemplateElement() {
+		TemplateElement result = new TemplateElement(this);
 		return result;
 	}
 
@@ -2015,13 +2175,41 @@ public final class AST {
 	 * </ul>
 	 */
 	public VariableDeclarationExpression
-			newVariableDeclarationExpression(VariableDeclarationFragment fragment) {
+	newVariableDeclarationExpression(VariableDeclarationFragment fragment) {
 		if (fragment == null) {
 			throw new IllegalArgumentException();
 		}
 		VariableDeclarationExpression result =
-			new VariableDeclarationExpression(this);
+					new VariableDeclarationExpression(this);
 		result.fragments().add(fragment);
+		return result;
+	}
+	/**
+	 * Creates a new unparented local variable declaration expression node
+	 * owned by this AST, for the given variable declaration fragment. By
+	 * default, there are no modifiers and the base type is unspecified
+	 * (but legal).
+	 * <p>
+	 * This method can be used to convert a variable declaration fragment
+	 * (<code>VariableDeclarationFragment</code>) into an expression
+	 * (<code>Expression</code>) by wrapping it. Additional variable
+	 * declaration fragments can be added afterwards.
+	 * </p>
+	 *
+	 * @return a new unparented variable declaration expression node
+	 * @exception IllegalArgumentException if:
+	 * <ul>
+	 * <li>the node belongs to a different AST</li>
+	 * <li>the node already has a parent</li>
+	 * <li>a cycle in would be created</li>
+	 * <li>the given fragment is null</li>
+	 * <li>a cycle in would be created</li>
+	 * </ul>
+	 */
+	public VariableDeclarationExpression
+	newVariableDeclarationExpression() {
+		VariableDeclarationExpression result =
+					new VariableDeclarationExpression(this);
 		return result;
 	}
 
@@ -2143,6 +2331,24 @@ public final class AST {
 	}
 
 	/**
+	 * Creates and returns a new unparented object literal field expression node
+	 * owned by this AST. 
+	 *
+	 * @param key usually a literal
+ 	 * @param value an expression
+	 * @return a new unparented object literal field expression node
+	 */
+	public ObjectLiteralField newObjectLiteralField(Expression key, Expression value) {
+		if(key == null || value == null ){
+			throw new IllegalArgumentException();
+		}
+		ObjectLiteralField result = new ObjectLiteralField(this);
+		result.setFieldName(key);
+		result.setInitializer(value);
+		return result;
+	}
+	
+	/**
 	 * Creates and returns a new unparented parenthesized expression node
 	 * owned by this AST. By default, the expression is unspecified (but legal).
 	 *
@@ -2153,6 +2359,22 @@ public final class AST {
 		return result;
 	}
 
+	/**
+	 * Creates and returns a new unparented parenthesized expression node
+	 * owned by this AST. By default, the expression is unspecified (but legal).
+	 *
+	 *@param the expression included in parantheses
+	 * @return a new unparented parenthesized expression node
+	 */
+	public ParenthesizedExpression newParenthesizedExpression(Expression expression) {
+		if(expression == null ){
+			throw new IllegalArgumentException();
+		}
+		ParenthesizedExpression result = new ParenthesizedExpression(this);
+		result.setExpression(expression);
+		return result;
+	}
+	
 	/**
 	 * Creates and returns a new unparented infix expression node
 	 * owned by this AST. By default, the operator and left and right
@@ -2262,6 +2484,7 @@ public final class AST {
 		ArrayInitializer result = new ArrayInitializer(this);
 		return result;
 	}
+	
 
 	/**
 	 * Creates and returns a new unparented conditional expression node
@@ -2274,6 +2497,96 @@ public final class AST {
 		ConditionalExpression result = new ConditionalExpression(this);
 		return result;
 	}
+	
+	/**
+	 * Creates and returns a new unparented yield expression node
+	 * owned by this AST. By default, the argument is unspecified 
+	 * (but Legal)
+	 *
+	 * @return a new unparented yield expression node
+	 */
+	public YieldExpression newYieldExpression() {
+		YieldExpression result = new YieldExpression(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented arrow expression node
+	 * owned by this AST.
+	 *
+	 * @return a new unparented arrow expression node
+	 */
+	public ArrowFunctionExpression newArrowFunctionExpression() {
+		ArrowFunctionExpression result = new ArrowFunctionExpression(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented debugger statement node
+	 * owned by this AST.
+	 *
+	 * @return a new unparented debugger statement node
+	 */	
+	public DebuggerStatement newDebuggerStatement() {
+		DebuggerStatement result = new DebuggerStatement(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented rest element node
+	 * owned by this AST.
+	 *
+	 * @return a new unparented rest element node
+	 */	
+	public RestElementName newRestElementName() {
+		RestElementName result = new RestElementName(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented spread element node
+	 * owned by this AST.
+	 *
+	 * @return a new unparented spread element node
+	 */	
+	public SpreadElement newSpreadElement() {
+		SpreadElement result = new SpreadElement(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented meta property node
+	 * owned by this AST.
+	 *
+	 * @return a new unparented  meta property node
+	 */	
+	public MetaProperty newMetaProperty() {
+		MetaProperty result = new MetaProperty(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented meta property node
+	 * owned by this AST.
+	 *
+	 * @return a new unparented  meta property node
+	 */	
+	public ModuleSpecifier newModuleSpecifier() {
+		ModuleSpecifier result = new ModuleSpecifier(this);
+		return result;
+	}
+	
+	/**
+	 * Creates and returns a new unparented meta property node
+	 * owned by this AST.
+	 *
+	 * @return a new unparented  meta property node
+	 */	
+	public ExportDeclaration newExportDeclaration() {
+		ExportDeclaration result = new ExportDeclaration(this);
+		return result;
+	}
+
 
 	/**
 	 * Enables the recording of changes to the given compilation
@@ -2368,5 +2681,7 @@ public final class AST {
 		this.bits |= newValue;
 	}
 
+	
+	
 }
 

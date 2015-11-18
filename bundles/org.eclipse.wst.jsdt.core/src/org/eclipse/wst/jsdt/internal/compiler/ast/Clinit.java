@@ -27,7 +27,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.SourceTypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeConstants;
 import org.eclipse.wst.jsdt.internal.compiler.parser.Parser;
 import org.eclipse.wst.jsdt.internal.compiler.problem.AbortMethod;
-
+/**
+ * 
+ *@deprecated
+ */
 public class Clinit extends AbstractMethodDeclaration  {
 
 	public Clinit(CompilationResult compilationResult) {

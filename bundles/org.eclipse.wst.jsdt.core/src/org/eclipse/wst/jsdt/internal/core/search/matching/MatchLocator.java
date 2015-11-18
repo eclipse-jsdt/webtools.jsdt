@@ -2062,7 +2062,7 @@ protected void reportMatching(CompilationUnitDeclaration unit, boolean mustResol
 		System.out.print(" (locator: "+this.patternLocator.mustResolve); //$NON-NLS-1$
 		System.out.println(", nodeSet: "+nodeSet.mustResolve+')'); //$NON-NLS-1$
 	}
-	if (mustResolve) {
+	if (mustResolve && unit.scope != null) {
 		this.unitScope= unit.scope.compilationUnitScope();
 		// move the possible matching nodes that exactly match the search pattern to the matching nodes set
 		Object[] nodes = nodeSet.possibleMatchingNodesSet.values;

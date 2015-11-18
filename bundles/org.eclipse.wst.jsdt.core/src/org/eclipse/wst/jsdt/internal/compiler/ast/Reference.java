@@ -16,7 +16,10 @@ import org.eclipse.wst.jsdt.internal.compiler.flow.FlowContext;
 import org.eclipse.wst.jsdt.internal.compiler.flow.FlowInfo;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.FieldBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public abstract class Reference extends Expression implements IReference  {
 /**
  * BaseLevelReference constructor comment.

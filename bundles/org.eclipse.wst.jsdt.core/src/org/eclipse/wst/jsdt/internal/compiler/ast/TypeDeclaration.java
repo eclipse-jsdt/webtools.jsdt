@@ -45,7 +45,10 @@ import org.eclipse.wst.jsdt.internal.compiler.problem.AbortCompilationUnit;
 import org.eclipse.wst.jsdt.internal.compiler.problem.AbortMethod;
 import org.eclipse.wst.jsdt.internal.compiler.problem.AbortType;
 import org.eclipse.wst.jsdt.internal.compiler.problem.ProblemSeverities;
-
+/**
+ * 
+ *@deprecated
+ */
 public class TypeDeclaration extends Statement implements ProblemSeverities, ReferenceContext, ITypeDeclaration {
 	// Type decl kinds
 	public static final int CLASS_DECL = 1;

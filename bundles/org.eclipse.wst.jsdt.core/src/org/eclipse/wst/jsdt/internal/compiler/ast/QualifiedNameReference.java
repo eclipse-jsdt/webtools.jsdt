@@ -33,6 +33,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeIds;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.VariableBinding;
 
+/**
+ * 
+ *@deprecated
+ */
 public class QualifiedNameReference extends NameReference implements IQualifiedNameReference {
 
 	public char[][] tokens;

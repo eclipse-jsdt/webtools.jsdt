@@ -17,21 +17,21 @@ import java.util.Map;
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptModelStatus;
 import org.eclipse.wst.jsdt.core.IJavaScriptModelStatusConstants;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
+import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.IProblemRequestor;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.WorkingCopyOwner;
 import org.eclipse.wst.jsdt.core.compiler.CategorizedProblem;
-import org.eclipse.wst.jsdt.core.compiler.ValidationParticipant;
 import org.eclipse.wst.jsdt.core.compiler.ReconcileContext;
-import org.eclipse.wst.jsdt.core.dom.AST;
+import org.eclipse.wst.jsdt.core.compiler.ValidationParticipant;
 import org.eclipse.wst.jsdt.internal.compiler.ast.CompilationUnitDeclaration;
 import org.eclipse.wst.jsdt.internal.core.util.Messages;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
+import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
 
 /**
  * Reconcile a working copy and signal the changes through a delta.
@@ -206,27 +206,28 @@ public class ReconcileWorkingCopyOperation extends JavaModelOperation {
 			}
 
 			// create AST if needed
-			if (this.astLevel != IJavaScriptUnit.NO_AST
-					&& unit !=null/*unit is null if working copy is consistent && (problem detection not forced || non-Java project) -> don't create AST as per API*/) {
+			if (this.astLevel != IJavaScriptUnit.NO_AST){
+//					&& unit !=null/*unit is null if working copy is consistent && (problem detection not forced || non-Java project) -> don't create AST as per API*/) {
 				Map options = workingCopy.getJavaScriptProject().getOptions(true);
 				// convert AST
-				this.ast =
-					AST.convertCompilationUnit(
-						this.astLevel,
-						unit,
-						contents,
-						options,
-						this.resolveBindings,
-						workingCopy,
-						reconcileFlags,
-						this.progressMonitor);
+				this.ast = EsprimaParser.newParser().setSource(workingCopy).parse();
+				System.out.println("Parsed wc " + workingCopy);
+//					AST.convertCompilationUnit(
+//						this.astLevel,
+//						unit,
+//						contents,
+//						options,
+//						this.resolveBindings,
+//						workingCopy,
+//						reconcileFlags,
+//						this.progressMonitor);
 				if (this.ast != null) {
 					this.deltaBuilder.delta = new JavaElementDelta(workingCopy);
 					this.deltaBuilder.delta.changedAST(this.ast);
 				}
 				if (this.progressMonitor != null) this.progressMonitor.worked(1);
 			}
-	    } catch (JavaScriptModelException e) {
+	    } catch (Exception e) {
 	    	if (JavaProject.hasJavaNature(workingCopy.getJavaScriptProject().getProject()))
 	    		throw e;
 	    	// else JavaProject has lost its nature (or most likely was closed/deleted) while reconciling -> ignore

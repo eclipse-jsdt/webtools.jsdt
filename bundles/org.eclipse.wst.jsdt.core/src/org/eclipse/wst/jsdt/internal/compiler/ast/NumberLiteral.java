@@ -12,7 +12,10 @@ package org.eclipse.wst.jsdt.internal.compiler.ast;
 
 import org.eclipse.wst.jsdt.core.ast.IASTNode;
 import org.eclipse.wst.jsdt.core.ast.INumberLiteral;
-
+/**
+ * 
+ *@deprecated
+ */
 public abstract class NumberLiteral extends Literal implements INumberLiteral {
 
 	public char[] source;

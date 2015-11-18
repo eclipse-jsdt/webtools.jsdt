@@ -21,7 +21,10 @@ import org.eclipse.wst.jsdt.internal.compiler.flow.UnconditionalFlowInfo;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.LocalVariableBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class ForInStatement extends Statement implements IForInStatement {
 
 	public Statement  iterationVariable;

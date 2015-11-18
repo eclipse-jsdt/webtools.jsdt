@@ -19,6 +19,10 @@ import org.eclipse.wst.jsdt.internal.compiler.impl.Constant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 
 //dedicated treatment for the ||
+/**
+ * 
+ *@deprecated
+ */
 public class OR_OR_Expression extends BinaryExpression implements IOR_OR_Expression {
 
 	int rightInitStateIndex = -1;

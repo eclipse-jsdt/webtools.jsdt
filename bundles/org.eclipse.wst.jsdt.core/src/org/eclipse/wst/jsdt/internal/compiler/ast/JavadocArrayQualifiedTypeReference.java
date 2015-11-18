@@ -19,7 +19,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
 
-
+/**
+ * 
+ *@deprecated
+ */
 public class JavadocArrayQualifiedTypeReference extends ArrayQualifiedTypeReference implements IJsDocArrayQualifiedTypeReference {
 
 	public int tagSourceStart, tagSourceEnd;

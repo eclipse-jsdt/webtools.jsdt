@@ -20,7 +20,10 @@ import org.eclipse.wst.jsdt.internal.compiler.impl.Constant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BaseTypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class ConditionalExpression extends OperatorExpression implements IConditionalExpression {
 
 	public Expression condition, valueIfTrue, valueIfFalse;

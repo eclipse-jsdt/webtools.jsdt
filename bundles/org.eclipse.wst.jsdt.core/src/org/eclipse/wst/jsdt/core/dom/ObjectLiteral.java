@@ -32,7 +32,7 @@ public class ObjectLiteral extends Expression {
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
 	 */
-	private static final List PROPERTY_DESCRIPTORS;
+	private static final List<StructuralPropertyDescriptor> PROPERTY_DESCRIPTORS;
 
 	static {
 		List properyList = new ArrayList(3);

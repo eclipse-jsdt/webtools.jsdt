@@ -654,17 +654,30 @@ public abstract class ASTNode {
 	public static final int WITH_STATEMENT = 90;
 	public static final int LIST_EXPRESSION = 91;
 	public static final int EMPTY_EXPRESSION = 92;
-
-
-
-
-
+	public static final int YIELD_EXPRESSION = 93;
+	public static final int ARROW_FUNCTION_EXPRESSION = 94;
+	public static final int DEBUGGER_STATEMENT = 95;
+	public static final int FOR_OF_STATEMENT = 96;
+	public static final int PROPERTY_NAME = 97;
+	public static final int ARRAY_NAME = 98;
+	public static final int OBJECT_NAME = 99;
 	/**
 	 * Node type constant indicating a node of type
 	 * <code>Modifier</code>.
 	 * @see Modifier
 	 */
 	public static final int MODIFIER = 100;
+	
+	public static final int TEMPLATE_LITERAL = 101;
+	public static final int TEMPLATE_ELEMENT = 102;
+	public static final int ASSIGNMENT_NAME = 103;
+	public static final int REST_ELEMENT_NAME = 104;
+	public static final int SPREAD_ELEMENT = 105;
+	public static final int META_PROPERTY = 106;
+	public static final int MODULE_SPECIFIER = 107;
+	public static final int EXPORT_DECLARATION = 108;
+
+
 
 	/**
 	 * Returns the node class for the corresponding node type.
@@ -831,6 +844,34 @@ public abstract class ASTNode {
 				return RegularExpressionLiteral.class;
 			case LIST_EXPRESSION :
 				return ListExpression.class;
+			case YIELD_EXPRESSION:
+				return YieldExpression.class;
+			case ARROW_FUNCTION_EXPRESSION:
+				return ArrowFunctionExpression.class;
+			case DEBUGGER_STATEMENT:
+				return DebuggerStatement.class;
+			case PROPERTY_NAME:
+				return PropertyName.class;
+			case ARRAY_NAME:
+				return ArrayName.class;
+			case OBJECT_NAME:
+				return ObjectName.class;
+			case TEMPLATE_LITERAL:
+				return TemplateLiteral.class;
+			case TEMPLATE_ELEMENT:
+				return TemplateElement.class;
+			case ASSIGNMENT_NAME:
+				return AssignmentName.class;
+			case REST_ELEMENT_NAME:
+				return RestElementName.class;
+			case SPREAD_ELEMENT:
+				return SpreadElement.class;
+			case META_PROPERTY:
+				return MetaProperty.class;
+			case MODULE_SPECIFIER:
+				return ModuleSpecifier.class;
+			case EXPORT_DECLARATION:
+				return ExportDeclaration.class;
 		}
 		throw new IllegalArgumentException();
 	}
@@ -981,7 +1022,7 @@ public abstract class ASTNode {
 	 * A specialized implementation of a list of ASTNodes. The
 	 * implementation is based on an ArrayList.
 	 */
-	class NodeList extends AbstractList {
+	class NodeList extends AbstractList<ASTNode> {
 
 		/**
 		 * The underlying list in which the nodes of this list are
@@ -995,7 +1036,7 @@ public abstract class ASTNode {
 		 * a synthetic accessor method.
 		 * </p>
 		 */
-		ArrayList store = new ArrayList(0);
+		ArrayList<ASTNode> store = new ArrayList<ASTNode>(0);
 
 		/**
 		 * The property descriptor for this list.
@@ -1007,7 +1048,7 @@ public abstract class ASTNode {
 		 * Does not lose its position if the list is changed during
 		 * the iteration.
 		 */
-		class Cursor implements Iterator {
+		class Cursor implements Iterator<ASTNode> {
 			/**
 			 * The position of the cursor between elements. If the value
 			 * is N, then the cursor sits between the element at positions
@@ -1026,8 +1067,8 @@ public abstract class ASTNode {
 			/* (non-Javadoc)
 			 * Method declared on <code>Iterator</code>.
 			 */
-			public Object next() {
-				Object result = NodeList.this.store.get(this.position);
+			public ASTNode next() {
+				ASTNode result = NodeList.this.store.get(this.position);
 				this.position++;
 				return result;
 		    }
@@ -1092,14 +1133,14 @@ public abstract class ASTNode {
 		/* (non-javadoc)
 		 * @see AbstractList#get(int)
 		 */
-		public Object get(int index) {
+		public ASTNode get(int index) {
 			return this.store.get(index);
 		}
 
 		/* (non-javadoc)
 		 * @see List#set(int, java.lang.Object)
 		 */
-		public Object set(int index, Object element) {
+		public ASTNode set(int index, ASTNode element) {
 		    if (element == null) {
 		        throw new IllegalArgumentException();
 		    }
@@ -1108,8 +1149,8 @@ public abstract class ASTNode {
 				throw new IllegalArgumentException("AST node cannot be modified"); //$NON-NLS-1$
 			}
 			// delink old child from parent, and link new child to parent
-			ASTNode newChild = (ASTNode) element;
-			ASTNode oldChild = (ASTNode) this.store.get(index);
+			ASTNode newChild = element;
+			ASTNode oldChild = this.store.get(index);
 			if (oldChild == newChild) {
 				return oldChild;
 			}
@@ -1120,7 +1161,7 @@ public abstract class ASTNode {
 			ASTNode.checkNewChild(ASTNode.this, newChild, this.propertyDescriptor.cycleRisk, this.propertyDescriptor.elementType);
 			ASTNode.this.ast.preReplaceChildEvent(ASTNode.this, oldChild, newChild, this.propertyDescriptor);
 
-			Object result = this.store.set(index, newChild);
+			ASTNode result = this.store.set(index, newChild);
 			// n.b. setParent will call ast.modifying()
 			oldChild.setParent(null, null);
 			newChild.setParent(ASTNode.this, this.propertyDescriptor);
@@ -1131,7 +1172,7 @@ public abstract class ASTNode {
 		/* (non-javadoc)
 		 * @see List#add(int, java.lang.Object)
 		 */
-		public void add(int index, Object element) {
+		public void add(int index, ASTNode element) {
 		    if (element == null) {
 				// http://bugs.eclipse.org/255538 - Very frequent IllegalArgumentException in JSDT
 				// XXX: Workaround until we've gotten the AST corrected, silenty return
@@ -1143,7 +1184,7 @@ public abstract class ASTNode {
 				throw new IllegalArgumentException("AST node cannot be modified"); //$NON-NLS-1$
 			}
 			// link new child to parent
-			ASTNode newChild = (ASTNode) element;
+			ASTNode newChild = element;
 			ASTNode.checkNewChild(ASTNode.this, newChild, this.propertyDescriptor.cycleRisk, this.propertyDescriptor.elementType);
 			ASTNode.this.ast.preAddChildEvent(ASTNode.this, newChild, this.propertyDescriptor);
 
@@ -1158,13 +1199,13 @@ public abstract class ASTNode {
 		/* (non-javadoc)
 		 * @see List#remove(int)
 		 */
-		public Object remove(int index) {
+		public ASTNode remove(int index) {
 			if ((ASTNode.this.typeAndFlags & PROTECT) != 0) {
 				// this node is protected => cannot gain or lose children
 				throw new IllegalArgumentException("AST node cannot be modified"); //$NON-NLS-1$
 			}
 			// delink old child from parent
-			ASTNode oldChild = (ASTNode) this.store.get(index);
+			ASTNode oldChild = this.store.get(index);
 			if ((oldChild.typeAndFlags & PROTECT) != 0) {
 				// old child is protected => cannot be unparented
 				throw new IllegalArgumentException("AST node cannot be modified"); //$NON-NLS-1$
@@ -1173,7 +1214,7 @@ public abstract class ASTNode {
 			ASTNode.this.ast.preRemoveChildEvent(ASTNode.this, oldChild, this.propertyDescriptor);
 			// n.b. setParent will call ast.modifying()
 			oldChild.setParent(null, null);
-			Object result = this.store.remove(index);
+			ASTNode result = this.store.remove(index);
 			updateCursors(index, -1);
 			ASTNode.this.ast.postRemoveChildEvent(ASTNode.this, oldChild, this.propertyDescriptor);
 			return result;

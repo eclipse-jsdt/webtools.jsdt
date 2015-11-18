@@ -412,7 +412,7 @@ protected void consumeToken(int token) {
 		this.previousIdentifierPtr = this.identifierPtr;
 	}
 }
-public abstract ImportReference createAssistImportReference(char[][] tokens, long[] positions);
+//public abstract ImportReference createAssistImportReference(char[][] tokens, long[] positions);
 public abstract NameReference createQualifiedAssistNameReference(char[][] previousIdentifiers, char[] assistName, long[] positions);
 public abstract TypeReference createQualifiedAssistTypeReference(char[][] previousIdentifiers, char[] assistName, long[] positions);
 public abstract NameReference createSingleAssistNameReference(char[] assistName, long position);

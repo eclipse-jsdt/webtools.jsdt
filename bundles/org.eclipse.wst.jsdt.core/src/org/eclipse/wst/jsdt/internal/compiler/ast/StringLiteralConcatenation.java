@@ -17,6 +17,7 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 
 /**
  * Flatten string literal
+ * @deprecated
  */
 public class StringLiteralConcatenation extends StringLiteral implements IStringLiteralConcatenation {
 	private static final int INITIAL_SIZE = 5;

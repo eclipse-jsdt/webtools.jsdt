@@ -48,7 +48,7 @@ import java.util.List;
  * (repeatedly) as the API evolves.
  */
 public class VariableDeclarationStatement extends Statement {
-
+	
 	/**
 	 * The "modifiers" structural property of this node type (JLS2 API only).
 	 *  
@@ -81,6 +81,12 @@ public class VariableDeclarationStatement extends Statement {
 		new ChildListPropertyDescriptor(VariableDeclarationStatement.class, "fragments", VariableDeclarationFragment.class, CYCLE_RISK); //$NON-NLS-1$
 
 	/**
+	 * the kind structured property as introduced in Ecmascript 2015 
+	 */
+	public static final SimplePropertyDescriptor KIND_PROPERTY = 
+				new SimplePropertyDescriptor(VariableDeclarationStatement.class, "kind", VariableKind.class, MANDATORY); //$NON-NLS-1$
+
+	/**
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
@@ -97,19 +103,21 @@ public class VariableDeclarationStatement extends Statement {
 	private static final List PROPERTY_DESCRIPTORS_3_0;
 
 	static {
-		List propertyList = new ArrayList(4);
+		List propertyList = new ArrayList(5);
 		createPropertyList(VariableDeclarationStatement.class, propertyList);
 		addProperty(MODIFIERS_PROPERTY, propertyList);
 		addProperty(TYPE_PROPERTY, propertyList);
 		addProperty(FRAGMENTS_PROPERTY, propertyList);
 		addProperty(JAVADOC_PROPERTY, propertyList);
+		addProperty(KIND_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS_2_0 = reapPropertyList(propertyList);
 
-		propertyList = new ArrayList(4);
+		propertyList = new ArrayList(5);
 		createPropertyList(VariableDeclarationStatement.class, propertyList);
 		addProperty(MODIFIERS2_PROPERTY, propertyList);
 		addProperty(TYPE_PROPERTY, propertyList);
 		addProperty(FRAGMENTS_PROPERTY, propertyList);
+		addProperty(KIND_PROPERTY, propertyList);
 		addProperty(JAVADOC_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS_3_0 = reapPropertyList(propertyList);
 	}
@@ -146,6 +154,8 @@ public class VariableDeclarationStatement extends Statement {
 	 * Defaults to none. Not used in JLS3.
 	 */
 	private int modifierFlags = Modifier.NONE;
+	
+	private VariableKind kind = VariableKind.VAR;
 
 
 	JSdoc optionalDocComment = null;
@@ -204,7 +214,20 @@ public class VariableDeclarationStatement extends Statement {
 		// allow default implementation to flag the error
 		return super.internalGetSetIntProperty(property, get, value);
 	}
-
+/* (non-Javadoc)
+ * @see org.eclipse.wst.jsdt.core.dom.ASTNode#internalGetSetObjectProperty(org.eclipse.wst.jsdt.core.dom.SimplePropertyDescriptor, boolean, java.lang.Object)
+ */
+Object internalGetSetObjectProperty(SimplePropertyDescriptor property, boolean get, Object value) {
+	if (property == KIND_PROPERTY) {
+		if (get) {
+			return getKind();
+		} else {
+			setKind((VariableKind) value);
+			return null;
+		}
+	}
+	return super.internalGetSetObjectProperty(property, get, value);
+}
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
@@ -268,6 +291,7 @@ public class VariableDeclarationStatement extends Statement {
 		result.setType((Type) getType().clone(target));
 		result.setJavadoc(
 				(JSdoc) ASTNode.copySubtree(target, getJavadoc()));
+		result.setKind(getKind());
 		result.fragments().addAll(
 			ASTNode.copySubtrees(target, fragments()));
 		return result;
@@ -379,6 +403,16 @@ public class VariableDeclarationStatement extends Statement {
 		this.modifierFlags = pmodifiers;
 		postValueChange(MODIFIERS_PROPERTY);
 	}
+	
+	public VariableKind getKind() {
+		return kind;
+	}
+
+	public void setKind(VariableKind kind) {
+		preValueChange(KIND_PROPERTY);
+		this.kind = kind;
+		postValueChange(KIND_PROPERTY);
+	}
 
 	/**
 	 * Returns the base type declared in this variable declaration statement.
@@ -443,7 +477,7 @@ public class VariableDeclarationStatement extends Statement {
 	 * Method declared on ASTNode.
 	 */
 	int memSize() {
-		return super.memSize() + 4 * 4;
+		return super.memSize() + 5 * 4;
 	}
 
 	/* (omit javadoc for this method)
@@ -486,6 +520,7 @@ public class VariableDeclarationStatement extends Statement {
 	final ChildPropertyDescriptor internalJavadocProperty() {
 		return JAVADOC_PROPERTY;
 	}
+
 
 }
 

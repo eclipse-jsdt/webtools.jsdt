@@ -19,7 +19,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
-
+/**
+ * 
+ *@deprecated
+ */
 public class JavadocReturnStatement extends ReturnStatement implements IJsDocReturnStatement {
 
 	public JavadocReturnStatement(int s, int e) {

@@ -20,7 +20,10 @@ import org.eclipse.wst.jsdt.internal.compiler.flow.UnconditionalFlowInfo;
 import org.eclipse.wst.jsdt.internal.compiler.impl.Constant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class DoStatement extends Statement implements IDoStatement {
 
 	public Expression condition;

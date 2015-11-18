@@ -48,7 +48,11 @@ import org.eclipse.wst.jsdt.internal.compiler.problem.AbortMethod;
 import org.eclipse.wst.jsdt.internal.compiler.problem.AbortType;
 import org.eclipse.wst.jsdt.internal.compiler.problem.ProblemSeverities;
 
-
+/**
+ * 
+ *
+ *@deprecated
+ */
 public abstract class AbstractMethodDeclaration extends Statement
 	implements IAbstractFunctionDeclaration,  ProblemSeverities, ReferenceContext {
 

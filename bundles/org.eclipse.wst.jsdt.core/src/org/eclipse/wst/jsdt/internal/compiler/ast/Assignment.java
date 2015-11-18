@@ -29,6 +29,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.LocalVariableBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TagBits;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+/**
+ * 
+ * @deprecated
+ */
 public class Assignment extends Expression implements IAssignment {
 
 	public Expression lhs;

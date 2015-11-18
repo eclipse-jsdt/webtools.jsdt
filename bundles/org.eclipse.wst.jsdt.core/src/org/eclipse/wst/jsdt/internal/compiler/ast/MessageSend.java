@@ -33,7 +33,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ProblemReasons;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.problem.ProblemSeverities;
-
+/**
+ * 
+ *@deprecated
+ */
 public class MessageSend extends Expression implements InvocationSite, IFunctionCall {
 
 	public Expression receiver;

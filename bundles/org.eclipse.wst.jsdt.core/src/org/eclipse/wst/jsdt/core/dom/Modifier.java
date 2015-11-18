@@ -88,6 +88,13 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 		/** "volatile" modifier with flag value {@link Modifier#VOLATILE}. */
 		public static final ModifierKeyword VOLATILE_KEYWORD = new ModifierKeyword("volatile", VOLATILE);//$NON-NLS-1$
+		
+		/** "get" modifier with flag value {@link Modifier#GET}. */
+		public static final ModifierKeyword GET_KEYWORD = new ModifierKeyword("get", GET); //$NON-NLS-1$
+		/** "set" modifier with flag value {@link Modifier#SET}. */
+		public static final ModifierKeyword SET_KEYWORD = new ModifierKeyword("set", SET); //$NON-NLS-1$
+		
+		
 		static {
 			KEYWORDS = new HashMap(20);
 			ModifierKeyword[] ops = {
@@ -101,7 +108,9 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 					SYNCHRONIZED_KEYWORD,
 					TRANSIENT_KEYWORD,
 					VOLATILE_KEYWORD,
-					STRICTFP_KEYWORD
+					STRICTFP_KEYWORD,
+					GET_KEYWORD,
+					SET_KEYWORD
 				};
 			for (int i = 0; i < ops.length; i++) {
 				KEYWORDS.put(ops[i].toString(), ops[i]);
@@ -290,6 +299,18 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 *  
 	 */
 	public static final int VOLATILE = 0x0040;
+	
+	/**
+	 * "get" modifier constant (bit mask)
+	 *  as defined on ES2015
+	 * 
+	 */
+	public static final int GET = 0x0400;
+	
+	/**
+	 * "set" modifier constant (bit mask)
+	 */
+	public static final int SET = 0x0200;
 
 	static {
 		List properyList = new ArrayList(2);
@@ -440,7 +461,31 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	public static boolean isVolatile(int flags) {
 		return (flags & VOLATILE) != 0;
 	}
-
+	
+	/**
+	 * Returns whether the given flags includes the "get" modifier.
+	 *
+	 * @param flags the modifier flags
+	 * @return <code>true</code> if the <code>GET</code> bit is
+	 *   set, and <code>false</code> otherwise
+	 *  
+	 */
+	public static boolean isGet(int flags) {
+		return (flags & GET) != 0;
+	}	
+	
+	/**
+	 * Returns whether the given flags includes the "set" modifier.
+	 *
+	 * @param flags the modifier flags
+	 * @return <code>true</code> if the <code>SET</code> bit is
+	 *   set, and <code>false</code> otherwise
+	 *  
+	 */
+	public static boolean isSet(int flags) {
+		return (flags & SET) != 0;
+	}
+	
 	/**
 	 * Returns a list of structural property descriptors for this node type.
 	 * Clients must not modify the result.

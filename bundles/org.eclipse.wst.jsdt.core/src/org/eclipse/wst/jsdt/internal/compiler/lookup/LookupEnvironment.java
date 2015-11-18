@@ -320,15 +320,15 @@ public class LookupEnvironment implements ProblemReasons, TypeConstants {
 	 * are needed
 	 */
 	public void buildTypeBindings(CompilationUnitDeclaration unit, AccessRestriction accessRestriction) {
-		buildTypeBindings(unit, CharOperation.NO_CHAR_CHAR, accessRestriction, false);
+//		buildTypeBindings(unit, CharOperation.NO_CHAR_CHAR, accessRestriction, false);
 	}
 	
 	public void buildTypeBindings(CompilationUnitDeclaration unit, AccessRestriction accessRestriction, boolean shouldBuildGlobalSuperType) {
-		buildTypeBindings(unit, CharOperation.NO_CHAR_CHAR, accessRestriction, shouldBuildGlobalSuperType);
+//		buildTypeBindings(unit, CharOperation.NO_CHAR_CHAR, accessRestriction, shouldBuildGlobalSuperType);
 	}
 	
 	public void buildTypeBindings(CompilationUnitDeclaration unit, char[][] typeNames, AccessRestriction accessRestriction) {
-		buildTypeBindings(unit, typeNames, accessRestriction, false);
+//		buildTypeBindings(unit, typeNames, accessRestriction, false);
 	}
 
 	public void buildTypeBindings(CompilationUnitDeclaration unit, char[][] typeNames, AccessRestriction accessRestriction, boolean shouldBuildGlobalSuperType) {
@@ -338,10 +338,10 @@ public class LookupEnvironment implements ProblemReasons, TypeConstants {
 			scope = new CompilationUnitScope(unit, this);
 			addUnit = true;
 		}
-
+//
 		scope.setShouldBuildGlobalSuperType(shouldBuildGlobalSuperType);
-		scope.buildTypeBindings(typeNames, accessRestriction);
-
+//		scope.buildTypeBindings(typeNames, accessRestriction);
+//
 		if (addUnit) {
 			int unitsLength = units.length;
 			if (++lastUnitIndex >= unitsLength) {

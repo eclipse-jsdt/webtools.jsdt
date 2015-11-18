@@ -9,7 +9,10 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.wst.jsdt.internal.compiler.ast;
-
+/**
+ * 
+ *@deprecated
+ */
 public interface OperatorIds {
 	public static final int AND_AND = 0;
 	public static final int OR_OR = 1;

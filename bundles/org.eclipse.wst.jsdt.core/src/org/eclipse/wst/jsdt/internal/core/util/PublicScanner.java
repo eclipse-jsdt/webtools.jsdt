@@ -1568,7 +1568,11 @@ public int getNextToken() throws InvalidInputException {
 							}
 							break;
 						}
-						if (checkIfDivide(previousToken)){
+						// check if regular expression
+						if (checkIfRegExp()) {
+							currentToken = TokenNameRegExLiteral;
+							return currentToken;
+						}else{ 
 							if (getNextChar('='))
 							{
 								currentToken=TokenNameDIVIDE_EQUAL;
@@ -1578,19 +1582,6 @@ public int getNextToken() throws InvalidInputException {
 							return currentToken;
 						}
 
-						// check if regular expression
-						if (checkIfRegExp()) {
-							currentToken = TokenNameRegExLiteral;
-							return currentToken;
-						} else {
-							if (getNextChar('='))
-							{
-								currentToken=TokenNameDIVIDE_EQUAL;
-								return currentToken;
-							}
-							currentToken=TokenNameDIVIDE;
-							return currentToken;
-						}
 					}
 				case '\u001a' :
 					if (atEnd())

@@ -31,6 +31,7 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeConstants;
  * - leading enclosing instance
  * - trailing anonymous type
  * - generic type arguments for generic constructor invocation
+ * @deprecated
  */
 public class QualifiedAllocationExpression extends AllocationExpression implements IQualifiedAllocationExpression {
 

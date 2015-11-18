@@ -30,7 +30,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ProblemReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TagBits;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.VariableBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class SingleNameReference extends NameReference implements ISingleNameReference, OperatorIds {
 
 	public char[] token;

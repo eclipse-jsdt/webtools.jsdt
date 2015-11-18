@@ -71,6 +71,14 @@ public class JavaScriptUnit extends ASTNode {
 	 */
 	public static final ChildListPropertyDescriptor IMPORTS_PROPERTY =
 		new ChildListPropertyDescriptor(JavaScriptUnit.class, "imports", ImportDeclaration.class, NO_CYCLE_RISK); //$NON-NLS-1$
+	
+	/**
+	 * The "exports" structural property of this node type.
+	 *
+	 *  
+	 */
+	public static final ChildListPropertyDescriptor EXPORTS_PROPERTY =
+				new ChildListPropertyDescriptor(JavaScriptUnit.class, "exports", ExportDeclaration.class, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "package" structural property of this node type.
@@ -104,6 +112,7 @@ public class JavaScriptUnit extends ASTNode {
 		createPropertyList(JavaScriptUnit.class, properyList);
 		addProperty(PACKAGE_PROPERTY, properyList);
 		addProperty(IMPORTS_PROPERTY, properyList);
+		addProperty(EXPORTS_PROPERTY, properyList);
 		addProperty(TYPES_PROPERTY, properyList);
 		addProperty(STATEMENTS_PROPERTY, properyList);
 		PROPERTY_DESCRIPTORS = reapPropertyList(properyList);
@@ -143,6 +152,13 @@ public class JavaScriptUnit extends ASTNode {
 	 */
 	private ASTNode.NodeList imports =
 		new ASTNode.NodeList(IMPORTS_PROPERTY);
+	
+	/**
+	 * The list of import declarations in textual order order;
+	 * initially none (elementType: <code>ExportDeclaration</code>).
+	 */
+	private ASTNode.NodeList exports =
+				new ASTNode.NodeList(EXPORTS_PROPERTY);
 
 	/**
 	 * Line end table. If <code>lineEndTable[i] == p</code> then the
@@ -221,6 +237,7 @@ public class JavaScriptUnit extends ASTNode {
 			// visit children in normal left to right reading order
 			acceptChild(visitor, getPackage());
 			acceptChildren(visitor, this.imports);
+			acceptChildren(visitor, this.exports);
 			acceptChildren(visitor, this.types);
 			acceptChildren(visitor, this.statements);
 		}
@@ -237,6 +254,7 @@ public class JavaScriptUnit extends ASTNode {
 		result.setPackage(
 			(PackageDeclaration) ASTNode.copySubtree(target, getPackage()));
 		result.imports().addAll(ASTNode.copySubtrees(target, imports()));
+		result.exports().addAll(ASTNode.copySubtrees(target,exports()));
 		result.types().addAll(ASTNode.copySubtrees(target, types()));
 		result.statements().addAll(ASTNode.copySubtrees(target, statements()));
 		return result;
@@ -644,8 +662,18 @@ public class JavaScriptUnit extends ASTNode {
 	 * @return the live list of import declaration nodes
 	 *    (elementType: <code>ImportDeclaration</code>)
 	 */
-	public List imports() {
+	public List<ASTNode> imports() {
 		return this.imports;
+	}
+	/**
+	 * Returns the live list of nodes for the export declarations of this
+	 * javaScript unit, in order of appearance.
+	 *
+	 * @return the live list of export declaration nodes
+	 *    (elementType: <code>ExportDeclaration</code>)
+	 */
+	public List<ASTNode> exports() {
+		return this.exports;
 	}
 
 	/**
@@ -823,7 +851,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * Method declared on ASTNode.
 	 */
 	int memSize() {
-		int size = BASE_NODE_SIZE + 8 * 4;
+		int size = BASE_NODE_SIZE + 9 * 4;
 		if (this.lineEndTable != null) {
 			size += HEADERS + 4 * this.lineEndTable.length;
 		}
@@ -991,7 +1019,7 @@ public class JavaScriptUnit extends ASTNode {
 	 *
 	 * @param problems the list of problems
 	 */
-	void setProblems(IProblem[] problems) {
+	public void setProblems(IProblem[] problems) {
 		if (problems == null) {
 			throw new IllegalArgumentException();
 		}
@@ -1015,6 +1043,7 @@ public class JavaScriptUnit extends ASTNode {
 			size += getPackage().treeSize();
 		}
 		size += this.imports.listSize();
+		size += this.exports.listSize();
 		size += this.types.listSize();
 		size += this.statements.listSize();
 		// include disconnected comments
@@ -1045,7 +1074,7 @@ public class JavaScriptUnit extends ASTNode {
 		return this.types;
 	}
 
-	public List statements() {
+	public List<ASTNode> statements() {
 		return this.statements;
 	}
 

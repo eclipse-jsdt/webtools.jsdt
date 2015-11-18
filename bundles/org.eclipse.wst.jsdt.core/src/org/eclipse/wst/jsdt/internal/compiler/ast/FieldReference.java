@@ -40,7 +40,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeConstants;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeIds;
 import org.eclipse.wst.jsdt.internal.compiler.util.Util;
-
+/**
+ * 
+ *@deprecated
+ */
 public class FieldReference extends Reference implements InvocationSite, IFieldReference {
 
 	public Expression receiver;

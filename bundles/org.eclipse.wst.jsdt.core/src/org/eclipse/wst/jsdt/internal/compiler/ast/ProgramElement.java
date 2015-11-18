@@ -15,6 +15,10 @@ import org.eclipse.wst.jsdt.core.ast.IProgramElement;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 
+/**
+ * 
+ *@deprecated
+ */
 public abstract class ProgramElement extends ASTNode implements IProgramElement {
 
 	public abstract StringBuffer printStatement(int indent, StringBuffer output);

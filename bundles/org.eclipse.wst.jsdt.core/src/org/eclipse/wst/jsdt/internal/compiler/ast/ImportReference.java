@@ -14,7 +14,10 @@ import org.eclipse.wst.jsdt.core.ast.IImportReference;
 import org.eclipse.wst.jsdt.core.compiler.CharOperation;
 import org.eclipse.wst.jsdt.internal.compiler.ASTVisitor;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.CompilationUnitScope;
-
+/**
+ * 
+ *@deprecated
+ */
 public class ImportReference extends ASTNode implements IImportReference {
 
 	public char[][] tokens;

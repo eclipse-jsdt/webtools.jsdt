@@ -14,7 +14,10 @@ import org.eclipse.wst.jsdt.core.ast.IASTNode;
 import org.eclipse.wst.jsdt.core.ast.IIntLiteralMinValue;
 import org.eclipse.wst.jsdt.internal.compiler.impl.Constant;
 import org.eclipse.wst.jsdt.internal.compiler.impl.IntConstant;
-
+/**
+ * 
+ *@deprecated
+ */
 public class IntLiteralMinValue extends IntLiteral implements IIntLiteralMinValue {
 
 	final static char[] CharValue = new char[]{'-','2','1','4','7','4','8','3','6','4','8'};

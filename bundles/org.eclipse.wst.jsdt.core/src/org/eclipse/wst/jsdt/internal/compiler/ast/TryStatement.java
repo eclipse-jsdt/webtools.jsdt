@@ -28,7 +28,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeIds;
-
+/**
+ * 
+ *@deprecated
+ */
 public class TryStatement extends SubRoutineStatement implements ITryStatement {
 
 	public Block tryBlock;

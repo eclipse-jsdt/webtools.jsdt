@@ -16,7 +16,10 @@ import org.eclipse.wst.jsdt.internal.compiler.ASTVisitor;
 import org.eclipse.wst.jsdt.internal.compiler.impl.BooleanConstant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class FalseLiteral extends MagicLiteral implements IFalseLiteral {
 	static final char[] source = {'f', 'a', 'l', 's', 'e'};
 public FalseLiteral(int s , int e) {

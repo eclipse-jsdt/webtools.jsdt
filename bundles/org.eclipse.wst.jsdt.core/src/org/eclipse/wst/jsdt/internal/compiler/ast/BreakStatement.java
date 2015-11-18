@@ -17,7 +17,10 @@ import org.eclipse.wst.jsdt.internal.compiler.flow.FlowContext;
 import org.eclipse.wst.jsdt.internal.compiler.flow.FlowInfo;
 import org.eclipse.wst.jsdt.internal.compiler.flow.InsideSubRoutineFlowContext;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
-
+/**
+ * 
+ *@deprecated
+ */
 public class BreakStatement extends BranchStatement implements IBreakStatement {
 
 public BreakStatement(char[] label, int sourceStart, int e) {

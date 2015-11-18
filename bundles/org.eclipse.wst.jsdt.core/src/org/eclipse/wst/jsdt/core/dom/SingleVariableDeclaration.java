@@ -56,10 +56,17 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 
 	/**
 	 * The "name" structural property of this node type.
-	 *  
+	 *  @deprecated use #PATTERN_PROPERTY
 	 */
 	public static final ChildPropertyDescriptor NAME_PROPERTY =
-		new ChildPropertyDescriptor(SingleVariableDeclaration.class, "name", SimpleName.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+				new ChildPropertyDescriptor(SingleVariableDeclaration.class, "name", SimpleName.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+	/**
+	 * The "name" structural property of this node type.
+	 *  
+	 */
+	public static final ChildPropertyDescriptor  PATTERN_PROPERTY = 
+				new ChildPropertyDescriptor(SingleVariableDeclaration.class, "pattern", Name.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+	
 
 	/**
 	 * The "type" structural property of this node type.
@@ -111,6 +118,8 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 		addProperty(MODIFIERS_PROPERTY, propertyList);
 		addProperty(TYPE_PROPERTY, propertyList);
 		addProperty(NAME_PROPERTY, propertyList);
+		addProperty(PATTERN_PROPERTY, propertyList);
+		
 		addProperty(EXTRA_DIMENSIONS_PROPERTY, propertyList);
 		addProperty(INITIALIZER_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS_2_0 = reapPropertyList(propertyList);
@@ -121,6 +130,7 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 		addProperty(TYPE_PROPERTY, propertyList);
 		addProperty(VARARGS_PROPERTY, propertyList);
 		addProperty(NAME_PROPERTY, propertyList);
+		addProperty(PATTERN_PROPERTY, propertyList);
 		addProperty(EXTRA_DIMENSIONS_PROPERTY, propertyList);
 		addProperty(INITIALIZER_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS_3_0 = reapPropertyList(propertyList);
@@ -160,10 +170,10 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 	private int modifierFlags = Modifier.NONE;
 
 	/**
-	 * The variable name; lazily initialized; defaults to a unspecified,
+	 * The variable pattern name lazily initialized; defaults to a unspecified,
 	 * legal JavaScript identifier.
 	 */
-	private SimpleName variableName = null;
+	private Name pattern = null;
 
 	/**
 	 * The type; lazily initialized; defaults to a unspecified,
@@ -346,7 +356,7 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 		}
 		result.setType((Type) getType().clone(target));
 		result.setExtraDimensions(getExtraDimensions());
-		result.setName((SimpleName) getName().clone(target));
+		result.setPattern((Name) getPattern().clone(target));
 		result.setInitializer(
 			(Expression) ASTNode.copySubtree(target, getInitializer()));
 		return result;
@@ -371,7 +381,7 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 				acceptChildren(visitor, this.modifiers);
 			}
 			acceptChild(visitor, getType());
-			acceptChild(visitor, getName());
+			acceptChild(visitor, getPattern());
 			acceptChild(visitor, getInitializer());
 		}
 		visitor.endVisit(this);
@@ -464,30 +474,55 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 	 * Method declared on VariableDeclaration.
 	 */
 	public SimpleName getName() {
-		if (this.variableName == null) {
-			// lazy init must be thread-safe for readers
-			synchronized (this) {
-				if (this.variableName == null) {
-					preLazyInit();
-					this.variableName = new SimpleName(this.ast);
-					postLazyInit(this.variableName, NAME_PROPERTY);
-				}
-			}
+		if(this.getPattern().getNodeType() != SIMPLE_NAME){
+			return null;
 		}
-		return this.variableName;
+		return (SimpleName) this.getPattern();
 	}
 
 	/* (omit javadoc for this method)
 	 * Method declared on VariableDeclaration.
 	 */
 	public void setName(SimpleName variableName) {
-		if (variableName == null) {
+		this.setPattern(variableName);
+	}
+
+	/**
+	 * Returns the variable pattern for this node.
+	 * @return
+	 */
+	public Name getPattern() {
+		if (this.pattern == null) {
+			// lazy init must be thread-safe for readers
+			synchronized (this) {
+				if (this.pattern == null) {
+					preLazyInit();
+					this.pattern = new SimpleName(this.ast);
+					postLazyInit(this.pattern, PATTERN_PROPERTY);
+				}
+			}
+		}
+		return pattern;
+	}
+	/**
+	 * Sets the pattern of the variable declared in this variable declaration
+	 * to the given pattern.
+	 *
+	 * @param pattern the new pattern
+	 * @exception IllegalArgumentException if:
+	 * <ul>
+	 * <li>the node belongs to a different AST</li>
+	 * <li>the node already has a parent</li>
+	 * </ul>
+	 */
+	public void setPattern(Name pattern) {
+		if (pattern == null) {
 			throw new IllegalArgumentException();
 		}
-		ASTNode oldChild = this.variableName;
-		preReplaceChild(oldChild, variableName, NAME_PROPERTY);
-		this.variableName = variableName;
-		postReplaceChild(oldChild, variableName, NAME_PROPERTY);
+		ASTNode oldChild = this.pattern;
+		preReplaceChild(oldChild, pattern, PATTERN_PROPERTY);
+		this.pattern = pattern;
+		postReplaceChild(oldChild, pattern, PATTERN_PROPERTY);
 	}
 
 	/**
@@ -635,7 +670,7 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 			memSize()
 			+ (this.modifiers == null ? 0 : this.modifiers.listSize())
 			+ (this.type == null ? 0 : getType().treeSize())
-			+ (this.variableName == null ? 0 : getName().treeSize())
+			+ (this.pattern == null ? 0 : getPattern().treeSize())
 			+ (this.optionalInitializer == null ? 0 : getInitializer().treeSize());
 	}
 }

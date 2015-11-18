@@ -84,14 +84,26 @@ public class PrefixExpression extends Expression {
 		public static final Operator COMPLEMENT = new Operator("~");//$NON-NLS-1$
 		/** Logical complement "!" operator. */
 		public static final Operator NOT = new Operator("!");//$NON-NLS-1$
+		/**
+		 * typeof operator
+		 */
+		public static final Operator TYPE_OF = new Operator("typeof");  //$NON-NLS-1$
+		/**
+		 * delete operator
+		 */
+		public static final Operator DELETE = new Operator("delete"); //$NON-NLS-1$
+		/**
+		 * void operator
+		 */
+		public static final Operator VOID = new Operator("void"); //$NON-NLS-1$
 
 		/**
 		 * Map from token to operator (key type: <code>String</code>;
 		 * value type: <code>Operator</code>).
 		 */
-		private static final Map CODES;
+		private static final Map<String,Operator> CODES;
 		static {
-			CODES = new HashMap(20);
+			CODES = new HashMap<String,Operator>();
 			Operator[] ops = {
 					INCREMENT,
 					DECREMENT,
@@ -99,6 +111,9 @@ public class PrefixExpression extends Expression {
 					MINUS,
 					COMPLEMENT,
 					NOT,
+					DELETE,
+					VOID,
+					TYPE_OF
 				};
 			for (int i = 0; i < ops.length; i++) {
 				CODES.put(ops[i].toString(), ops[i]);
@@ -118,7 +133,7 @@ public class PrefixExpression extends Expression {
 		 * @return the prefix operator, or <code>null</code> if none
 		 */
 		public static Operator toOperator(String token) {
-			return (Operator) CODES.get(token);
+			return CODES.get(token);
 		}
 	}
 

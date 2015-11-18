@@ -177,7 +177,7 @@ public class RegularExpressionLiteral extends Expression {
 					throw new IllegalArgumentException();
 			}
 		} catch(InvalidInputException e) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Invalid Expression : "+ value); //$NON-NLS-1$
 		}
 		preValueChange(REGULAR_EXPRESSION_PROPERTY);
 		this.regularExpression = value;

@@ -21,6 +21,11 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+
+/**
+ * 
+ * @deprecated
+ */
 public class Argument extends LocalDeclaration implements IArgument {
 
 	public char [] comment;

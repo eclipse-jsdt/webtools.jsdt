@@ -45,7 +45,10 @@ import org.eclipse.wst.jsdt.internal.compiler.problem.AbortType;
 import org.eclipse.wst.jsdt.internal.compiler.problem.ProblemReporter;
 import org.eclipse.wst.jsdt.internal.compiler.problem.ProblemSeverities;
 import org.eclipse.wst.jsdt.internal.compiler.util.HashtableOfObject;
-
+/**
+ * 
+ *@deprecated
+ */
 public class CompilationUnitDeclaration
 	extends ASTNode
 	implements ProblemSeverities, ReferenceContext, IScriptFileDeclaration, IInferenceFile {
@@ -128,7 +131,7 @@ public class CompilationUnitDeclaration
 	 */
 	public void analyseCode() {
 
-		if (ignoreFurtherInvestigation )
+		if (ignoreFurtherInvestigation || this.scope == null)
 			return;
 		try {
 			if (types != null) {
@@ -425,36 +428,12 @@ public class CompilationUnitDeclaration
 	}
 
 	public void resolve() {
+		if(scope == null ) return ;
 		int startingTypeIndex = 0;
-		boolean isPackageInfo =  false;//isPackageInfo();
-		if (this.types != null && isPackageInfo) {
-            // resolve synthetic type declaration
-			final TypeDeclaration syntheticTypeDeclaration = types[0];
-			// set empty javadoc to avoid missing warning (see bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=95286)
-			if (syntheticTypeDeclaration.javadoc == null) {
-				syntheticTypeDeclaration.javadoc = new Javadoc(syntheticTypeDeclaration.declarationSourceStart, syntheticTypeDeclaration.declarationSourceStart);
-			}
-			syntheticTypeDeclaration.resolve(this.scope);
-			// resolve annotations if any
-//			if (this.currentPackage!= null && this.currentPackage.annotations != null) {
-//				resolveAnnotations(syntheticTypeDeclaration.staticInitializerScope, this.currentPackage.annotations, this.scope.getDefaultPackage());
-//			}
-			// resolve javadoc package if any
-			if (this.javadoc != null) {
-				this.javadoc.resolve(syntheticTypeDeclaration.staticInitializerScope);
-    		}
-			startingTypeIndex = 1;
-		} else {
-			// resolve compilation unit javadoc package if any
-			if (this.javadoc != null) {
-				this.javadoc.resolve(this.scope);
-    		}
-		}
-
 		try {
 			if (types != null) {
 				for (int i = startingTypeIndex, count = types.length; i < count; i++) {
-					types[i].resolve(scope);
+//					types[i].resolve(scope);
 				}
 			}
 			if (statements != null) {
@@ -462,7 +441,7 @@ public class CompilationUnitDeclaration
 					statements[i].resolve(scope);
 				}
 			}
-			reportNLSProblems();
+//			reportNLSProblems();
 		} catch (AbortCompilationUnit e) {
 			this.ignoreFurtherInvestigation = true;
 			return;
@@ -490,7 +469,6 @@ public class CompilationUnitDeclaration
 						programElement.resolve(scope);
 				}
 			}
-			reportNLSProblems();
 		} catch (AbortCompilationUnit e) {
 			this.ignoreFurtherInvestigation = true;
 			return;
@@ -498,104 +476,6 @@ public class CompilationUnitDeclaration
 	}
 
 
-	private void reportNLSProblems() {
-		if (this.nlsTags != null || this.stringLiterals != null) {
-			final int stringLiteralsLength = this.stringLiteralsPtr;
-			final int nlsTagsLength = this.nlsTags == null ? 0 : this.nlsTags.length;
-			if (stringLiteralsLength == 0) {
-				if (nlsTagsLength != 0) {
-					for (int i = 0; i < nlsTagsLength; i++) {
-						NLSTag tag = this.nlsTags[i];
-						if (tag != null) {
-							scope.problemReporter().unnecessaryNLSTags(tag.start, tag.end);
-						}
-					}
-				}
-			} else if (nlsTagsLength == 0) {
-				// resize string literals
-				if (this.stringLiterals.length != stringLiteralsLength) {
-					System.arraycopy(this.stringLiterals, 0, (stringLiterals = new StringLiteral[stringLiteralsLength]), 0, stringLiteralsLength);
-				}
-				Arrays.sort(this.stringLiterals, STRING_LITERAL_COMPARATOR);
-				for (int i = 0; i < stringLiteralsLength; i++) {
-					scope.problemReporter().nonExternalizedStringLiteral(this.stringLiterals[i]);
-				}
-			} else {
-				// need to iterate both arrays to find non matching elements
-				if (this.stringLiterals.length != stringLiteralsLength) {
-					System.arraycopy(this.stringLiterals, 0, (stringLiterals = new StringLiteral[stringLiteralsLength]), 0, stringLiteralsLength);
-				}
-				Arrays.sort(this.stringLiterals, STRING_LITERAL_COMPARATOR);
-				int indexInLine = 1;
-				int lastLineNumber = -1;
-				StringLiteral literal = null;
-				int index = 0;
-				int i = 0;
-				stringLiteralsLoop: for (; i < stringLiteralsLength; i++) {
-					literal = this.stringLiterals[i];
-					final int literalLineNumber = literal.lineNumber;
-					if (lastLineNumber != literalLineNumber) {
-						indexInLine = 1;
-						lastLineNumber = literalLineNumber;
-					} else {
-						indexInLine++;
-					}
-					if (index < nlsTagsLength) {
-						nlsTagsLoop: for (; index < nlsTagsLength; index++) {
-							NLSTag tag = this.nlsTags[index];
-							if (tag == null) continue nlsTagsLoop;
-							int tagLineNumber = tag.lineNumber;
-							if (literalLineNumber < tagLineNumber) {
-								scope.problemReporter().nonExternalizedStringLiteral(literal);
-								continue stringLiteralsLoop;
-							} else if (literalLineNumber == tagLineNumber) {
-								if (tag.index == indexInLine) {
-									this.nlsTags[index] = null;
-									index++;
-									continue stringLiteralsLoop;
-								} else {
-									nlsTagsLoop2: for (int index2 = index + 1; index2 < nlsTagsLength; index2++) {
-										NLSTag tag2 = this.nlsTags[index2];
-										if (tag2 == null) continue nlsTagsLoop2;
-										int tagLineNumber2 = tag2.lineNumber;
-										if (literalLineNumber == tagLineNumber2) {
-											if (tag2.index == indexInLine) {
-												this.nlsTags[index2] = null;
-												continue stringLiteralsLoop;
-											} else {
-												continue nlsTagsLoop2;
-											}
-										} else {
-											scope.problemReporter().nonExternalizedStringLiteral(literal);
-											continue stringLiteralsLoop;
-										}
-									}
-									scope.problemReporter().nonExternalizedStringLiteral(literal);
-									continue stringLiteralsLoop;
-								}
-							} else {
-								scope.problemReporter().unnecessaryNLSTags(tag.start, tag.end);
-								continue nlsTagsLoop;
-							}
-						}
-					}
-					// all nls tags have been processed, so remaining string literals are not externalized
-					break stringLiteralsLoop;
-				}
-				for (; i < stringLiteralsLength; i++) {
-					scope.problemReporter().nonExternalizedStringLiteral(this.stringLiterals[i]);
-				}
-				if (index < nlsTagsLength) {
-					for (; index < nlsTagsLength; index++) {
-						NLSTag tag = this.nlsTags[index];
-						if (tag != null) {
-							scope.problemReporter().unnecessaryNLSTags(tag.start, tag.end);
-						}
-					}
-				}
-			}
-		}
-	}
 
 	public void tagAsHavingErrors() {
 		ignoreFurtherInvestigation = true;

@@ -27,7 +27,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.LocalVariableBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeIds;
-
+/**
+ * 
+ *@deprecated
+ */
 public abstract class Expression extends Statement implements IExpression {
 
 	public Constant constant;

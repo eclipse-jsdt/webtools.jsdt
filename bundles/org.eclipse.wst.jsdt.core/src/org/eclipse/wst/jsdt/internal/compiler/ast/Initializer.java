@@ -19,7 +19,10 @@ import org.eclipse.wst.jsdt.internal.compiler.flow.FlowInfo;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.FieldBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.wst.jsdt.internal.compiler.parser.Parser;
-
+/**
+ * 
+ *@deprecated
+ */
 public class Initializer extends FieldDeclaration implements IInitializer {
 
 	public Block block;

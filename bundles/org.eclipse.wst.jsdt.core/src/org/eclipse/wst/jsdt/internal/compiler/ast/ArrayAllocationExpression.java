@@ -20,6 +20,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ArrayBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+/**
+ * 
+ * @deprecated
+ */
 public class ArrayAllocationExpression extends Expression implements IArrayAllocationExpression {
 
 	public TypeReference type;

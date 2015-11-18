@@ -21,6 +21,11 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.problem.AbortCompilation;
 
+
+/**
+ * 
+ * @deprecated
+ */
 public class ArrayQualifiedTypeReference extends QualifiedTypeReference implements IArrayQualifiedTypeReference {
 	int dimensions;
 

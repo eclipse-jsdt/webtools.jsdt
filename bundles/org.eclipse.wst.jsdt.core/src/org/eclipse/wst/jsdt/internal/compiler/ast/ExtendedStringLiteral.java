@@ -14,7 +14,10 @@ import org.eclipse.wst.jsdt.core.ast.IASTNode;
 import org.eclipse.wst.jsdt.core.ast.IExtendedStringLiteral;
 import org.eclipse.wst.jsdt.internal.compiler.ASTVisitor;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
-
+/**
+ * 
+ *@deprecated
+ */
 public class ExtendedStringLiteral extends StringLiteral implements IExtendedStringLiteral {
 
 	/**

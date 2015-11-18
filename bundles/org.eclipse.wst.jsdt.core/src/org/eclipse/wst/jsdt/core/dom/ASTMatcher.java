@@ -521,6 +521,7 @@ public class ASTMatcher {
 		return (
 			safeSubtreeMatch(node.getPackage(), o.getPackage())
 				&& safeSubtreeListMatch(node.imports(), o.imports())
+				&& safeSubtreeListMatch(node.exports(), o.exports())
 				&& safeSubtreeListMatch(node.types(), o.types()));
 	}
 
@@ -788,6 +789,23 @@ public class ASTMatcher {
 				&& safeSubtreeMatch(node.getCollection(), o.getCollection())
 				&& safeSubtreeMatch(node.getBody(), o.getBody()));
 	}
+	
+	/**
+	 * @param forOfStatement
+	 * @param other
+	 * @return
+	 */
+	public boolean match(ForOfStatement node, Object other) {
+		if(!(other instanceof ForOfStatement)){
+			return false;
+		}
+		ForOfStatement o = (ForOfStatement) other;
+		return (
+				safeSubtreeMatch(node.getIterationVariable(), o.getIterationVariable())
+				&& safeSubtreeMatch(node.getCollection(), o.getCollection())
+				&& safeSubtreeMatch(node.getBody(), o.getBody()));
+
+	}
 
 	/**
 	 * Returns whether the given node and the other object match.
@@ -843,7 +861,9 @@ public class ASTMatcher {
 		}
 		return (
 			safeSubtreeMatch(node.getName(), o.getName())
-				&& node.isOnDemand() == o.isOnDemand());
+				&& node.isOnDemand() == o.isOnDemand()
+				&& safeSubtreeMatch(node.getSource(), o.getSource())
+				&& safeSubtreeListMatch(node.specifiers(), o.specifiers()));
 	}
 
 
@@ -1513,6 +1533,28 @@ public class ASTMatcher {
 		SimpleName o = (SimpleName) other;
 		return node.getIdentifier().equals(o.getIdentifier());
 	}
+	
+	/**
+	 * Returns whether the given node and the other object match.
+	 * <p>
+	 * The default implementation provided by this class tests whether the
+	 * other object is a node of the same type with structurally isomorphic
+	 * child subtrees. Subclasses may override this method as needed.
+	 * </p>
+	 *
+	 * @param node the node
+	 * @param other the other object, or <code>null</code>
+	 * @return <code>true</code> if the subtree matches, or
+	 *   <code>false</code> if they do not match or the other object has a
+	 *   different node type or is <code>null</code>
+	 */
+	public boolean match(PropertyName node, Object other) {
+		if (!(other instanceof PropertyName)) {
+			return false;
+		}
+		PropertyName o = (PropertyName) other;
+		return node.getIdentifier().equals(o.getIdentifier());
+	}
 
 	/**
 	 * Returns whether the given node and the other object match.
@@ -2078,6 +2120,197 @@ public class ASTMatcher {
 		ObjectLiteralField o = (ObjectLiteralField) other;
 		return safeSubtreeMatch(node.getFieldName(), o.getFieldName())
 		&& safeSubtreeMatch(node.getInitializer(), o.getInitializer());
+	}
+
+	/**
+	 * Returns whether the given node and the other object match.
+	 * <p>
+	 * The default implementation provided by this class tests whether the
+	 * other object is a node of the same type with structurally isomorphic
+	 * child subtrees. Subclasses may override this method as needed.
+	 * </p>
+	 *
+	 * @param node the node
+	 * @param other the other object, or <code>null</code>
+	 * @return <code>true</code> if the subtree matches, or
+	 *   <code>false</code> if they do not match or the other object has a
+	 *   different node type or is <code>null</code>
+	 */
+	public boolean match(YieldExpression node , Object other) {
+		if (!(other instanceof YieldExpression)) {
+			return false;
+		}
+		YieldExpression o = (YieldExpression) other;
+		return (
+			node.getDelegate().equals(o.getDelegate())
+				&& safeSubtreeMatch(node.getArgument(), o.getArgument()));
+	}
+
+	/**
+	 * @param arrowFunctionExpression
+	 * @param other
+	 * @return
+	 */
+	public boolean match(ArrowFunctionExpression node, Object other) {
+		if( !(other instanceof ArrowFunctionExpression) ){
+			return false;
+		}
+		ArrowFunctionExpression o = (ArrowFunctionExpression) other;
+		return safeSubtreeMatch(node.getExpression(), o.getExpression())
+					&& safeSubtreeMatch(node.getBody(),o.getBody())
+					&& safeSubtreeListMatch(node.parameters(), o.parameters());
+	}
+
+	/**
+	 * @param debuggerStatement
+	 * @param other
+	 * @return
+	 */
+	public boolean match(DebuggerStatement debuggerStatement, Object other) {
+		return (other instanceof DebuggerStatement);
+	}
+
+	/**
+	 * @param arrayName
+	 * @param other
+	 * @return
+	 */
+	public boolean match(ArrayName node, Object other) {
+		if(!(other instanceof ArrayName)){
+			return false;
+		}
+		ArrayName o = (ArrayName)other;
+		return safeSubtreeListMatch(node.elements(), o.elements());
+	}
+
+	/**
+	 * @param objectName
+	 * @param other
+	 * @return
+	 */
+	public boolean match(ObjectName node, Object other) {
+		if(!(other instanceof ObjectName)){
+			return false;
+		}
+		ObjectName o = (ObjectName) other;
+		return safeSubtreeListMatch(node.objectProperties(), o.objectProperties());
+	}
+
+	/**
+	 * @param templateElement
+	 * @param other
+	 * @return
+	 */
+	public boolean match(TemplateElement templateElement, Object other) {
+		if(!(other instanceof TemplateElement)){
+			return false;
+		}
+		TemplateElement o = (TemplateElement) other;
+		return o.getRawValue().equals(templateElement.getRawValue()) 
+					&& (o.isTail()==templateElement.isTail());
+	}
+
+	/**
+	 * @param templateLiteral
+	 * @param other
+	 * @return
+	 */
+	public boolean match(TemplateLiteral templateLiteral, Object other) {
+		if(!(other instanceof TemplateLiteral)){
+			return false;
+		}
+		TemplateLiteral o = (TemplateLiteral)other;
+		return safeSubtreeMatch(o.getTag(), templateLiteral.getTag())
+					&& safeSubtreeListMatch(o.elements(),templateLiteral.elements())
+					&& safeSubtreeListMatch(o.expressions(), templateLiteral.expressions());
+	}
+
+	/**
+	 * @param assignmentName
+	 * @param other
+	 * @return
+	 */
+	public boolean match(AssignmentName assignmentName, Object other) {
+		if(!(other instanceof AssignmentName)){
+			return false;
+		}
+		AssignmentName o = (AssignmentName) other;
+		return safeSubtreeMatch(o.getLeft(), assignmentName.getLeft())
+					&& safeSubtreeMatch(o.getRight(), assignmentName.getRight());
+	}
+
+	/**
+	 * @param restElementName
+	 * @param other
+	 * @return
+	 */
+	public boolean match(RestElementName restElementName, Object other) {
+		if(!(other instanceof RestElementName)){
+			return false;
+		}
+		RestElementName o = (RestElementName)other;
+		return safeSubtreeMatch(o.getArgument(), restElementName.getArgument());
+	}
+
+	/**
+	 * @param spreadElement
+	 * @param other
+	 * @return
+	 */
+	public boolean match(SpreadElement spreadElement, Object other) {
+		if(!(other instanceof SpreadElement)){
+			return false;
+		}
+		SpreadElement o = (SpreadElement)other;
+		return safeSubtreeMatch(o.getArgument(),spreadElement.getArgument());
+	}
+
+	/**
+	 * @param metaProperty
+	 * @param other
+	 * @return
+	 */
+	public boolean match(MetaProperty metaProperty, Object other) {
+		if(!(other instanceof MetaProperty)){
+			return false;
+		}
+		MetaProperty o = (MetaProperty) other;
+		return o.getMeta().equals(metaProperty.getMeta()) 
+					&& o.getPropertyName().equals(metaProperty.getPropertyName());
+			
+	}
+
+	/**
+	 * @param moduleSpecifier
+	 * @param other
+	 * @return
+	 */
+	public boolean match(ModuleSpecifier moduleSpecifier, Object other) {
+		if(!(other instanceof ModuleSpecifier)){
+			return false;
+		}
+		ModuleSpecifier o = (ModuleSpecifier) other;
+		return (moduleSpecifier.isDefault() == o.isDefault())
+					&& (moduleSpecifier.isNamespace() == o.isNamespace())
+					&& safeSubtreeMatch(o.getLocal(), moduleSpecifier.getLocal())
+					&& safeSubtreeMatch(o.getDiscoverableName(), moduleSpecifier.getDiscoverableName());
+	}
+
+	/**
+	 * @param exportDeclaration
+	 * @param other
+	 * @return
+	 */
+	public boolean match(ExportDeclaration exportDeclaration, Object other) {
+		if(!(other instanceof ExportDeclaration)){
+			return false;
+		}
+		ExportDeclaration o = (ExportDeclaration) other;
+		return (exportDeclaration.isDefault() == o.isDefault())
+			&& (exportDeclaration.isAll() == o.isAll())
+			&& safeSubtreeMatch(exportDeclaration.getDeclaration(), o.getDeclaration())
+			&& safeSubtreeMatch(exportDeclaration.getSource(), o.getSource())
+			&& safeSubtreeListMatch(exportDeclaration.specifiers(), o.specifiers());			
 	}
 
 }

@@ -29,6 +29,11 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeConstants;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeIds;
 
+
+/**
+ * 
+ * @deprecated
+ */
 public abstract class ASTNode implements TypeConstants, TypeIds, IASTNode {
 
 	public int sourceStart, sourceEnd;

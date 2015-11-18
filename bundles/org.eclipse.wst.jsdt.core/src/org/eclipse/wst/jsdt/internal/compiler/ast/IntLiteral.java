@@ -19,7 +19,10 @@ import org.eclipse.wst.jsdt.internal.compiler.impl.IntConstant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.parser.ScannerHelper;
-
+/**
+ * 
+ *@deprecated
+ */
 public class IntLiteral extends NumberLiteral implements IIntLiteral {
 	public int value;
 

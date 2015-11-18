@@ -14,7 +14,10 @@ import org.eclipse.wst.jsdt.core.ast.IASTNode;
 import org.eclipse.wst.jsdt.core.ast.IPostfixExpression;
 import org.eclipse.wst.jsdt.internal.compiler.ASTVisitor;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
-
+/**
+ * 
+ *@deprecated
+ */
 public class PostfixExpression extends CompoundAssignment implements IPostfixExpression {
 
 public PostfixExpression(Expression lhs, Expression expression, int operator, int pos) {

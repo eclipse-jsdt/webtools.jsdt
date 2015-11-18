@@ -29,6 +29,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeConstants;
 
+/**
+ * 
+ * @deprecated
+ */
 public class AllocationExpression extends Expression implements InvocationSite, IAllocationExpression {
 		
 	public TypeReference type;

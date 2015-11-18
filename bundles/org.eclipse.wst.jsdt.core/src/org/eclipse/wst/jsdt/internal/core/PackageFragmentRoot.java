@@ -284,13 +284,13 @@ protected void computeFolderChildren(IContainer folder, boolean isIncluded, Stri
 			    		break;
 			    	case IResource.FILE:
 			    		// inclusion filter may only include files, in which case we still want to include the immediate parent package (lazily)
-			    		if (!hasIncluded
-			    				&& Util.isValidCompilationUnitName(memberName, sourceLevel, complianceLevel)
-								&& !Util.isExcluded(member, inclusionPatterns, exclusionPatterns)) {
-			    			hasIncluded = true;
-			    			IPackageFragment pkg = getPackageFragment(pkgName);
-			    			vChildren.add(pkg);
-			    		}
+//			    		if (!hasIncluded
+//			    				&& Util.isValidCompilationUnitName(memberName, sourceLevel, complianceLevel)
+//								&& !Util.isExcluded(member, inclusionPatterns, exclusionPatterns)) {
+//			    			hasIncluded = true;
+//			    			IPackageFragment pkg = getPackageFragment(pkgName);
+//			    			vChildren.add(pkg);
+//			    		}
 			    		break;
 				}
 			}

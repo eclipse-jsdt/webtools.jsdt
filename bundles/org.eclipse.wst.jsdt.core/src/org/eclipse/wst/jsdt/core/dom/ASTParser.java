@@ -34,6 +34,7 @@ import org.eclipse.wst.jsdt.internal.core.PackageFragment;
 import org.eclipse.wst.jsdt.internal.core.util.CodeSnippetParsingUtil;
 import org.eclipse.wst.jsdt.internal.core.util.RecordedParsingInformation;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
+import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
 
 /**
  * A JavaScript language parser for creating abstract syntax trees (ASTs).
@@ -644,7 +645,12 @@ public class ASTParser {
 			if (this.rawSource == null && this.typeRoot == null) {
 		   	  throw new IllegalStateException("source not specified"); //$NON-NLS-1$
 		   }
-	   		result = internalCreateAST(monitor);
+			if(this.typeRoot instanceof IJavaScriptUnit ){
+				result = EsprimaParser.newParser().setSource((IJavaScriptUnit)this.typeRoot).parse();
+				System.out.println("Esprima Parsed " + this.typeRoot);
+			}else{
+				result = internalCreateAST(monitor);
+			}
 		} finally {
 	   	   // re-init defaults to allow reuse (and avoid leaking)
 	   	   initializeDefaults();
@@ -809,14 +815,18 @@ public class ASTParser {
 							 * this.compilationUnitSource is an instance of org.eclipse.wst.jsdt.internal.core.CompilationUnit that implements
 							 * both org.eclipse.wst.jsdt.core.IJavaScriptUnit and org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit
 							 */
-							sourceUnit = (org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit) this.typeRoot;
+//							sourceUnit = (org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit) this.typeRoot;
 							/*
 							 * use a BasicCompilation that caches the source instead of using the compilationUnitSource directly
 							 * (if it is a working copy, the source can change between the parse and the AST convertion)
 							 * (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=75632)
 							 */
-							sourceUnit = new BasicCompilationUnit(sourceUnit.getContents(), sourceUnit.getPackageName(), new String(sourceUnit.getFileName()), this.project);
-							wcOwner = ((IJavaScriptUnit) this.typeRoot).getOwner();
+//							sourceUnit = new BasicCompilationUnit(sourceUnit.getContents(), sourceUnit.getPackageName(), new String(sourceUnit.getFileName()), this.project);
+							JavaScriptUnit result = EsprimaParser.newParser().setSource((IJavaScriptUnit) this.typeRoot).parse();
+							System.out.println("ASTParser.internalCreateAST calls esprima for "+this.typeRoot );
+							result.setTypeRoot(this.typeRoot);
+							return result;
+//							wcOwner = ((IJavaScriptUnit) this.typeRoot).getOwner();
 					} else if (this.typeRoot instanceof IClassFile) {
 						try {
 							String sourceString = this.typeRoot.getSource();

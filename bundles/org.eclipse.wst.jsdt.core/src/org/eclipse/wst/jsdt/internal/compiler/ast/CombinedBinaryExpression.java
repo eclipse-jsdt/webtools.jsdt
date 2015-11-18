@@ -45,6 +45,7 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeIds;
  *     from scratch, or else amend the references table as needed to cope with
  *     the resulting, separated expressions.</li>
  * </ul>
+ * @deprecated
  */
 public class CombinedBinaryExpression extends BinaryExpression implements ICombinedBinaryExpression {
 

@@ -22,6 +22,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.BaseTypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+/**
+ * 
+ * @deprecated
+ */
 public class ArrayInitializer extends Expression implements IArrayInitializer {
 
 	public Expression[] expressions;

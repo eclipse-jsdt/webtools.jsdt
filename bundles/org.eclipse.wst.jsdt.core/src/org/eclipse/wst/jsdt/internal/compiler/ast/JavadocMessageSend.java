@@ -26,7 +26,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.SourceTypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
-
+/**
+ * 
+ *@deprecated
+ */
 public class JavadocMessageSend extends MessageSend implements IJsDocMessageSend {
 
 	public int tagSourceStart, tagSourceEnd;

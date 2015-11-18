@@ -22,6 +22,11 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeIds;
 
+
+/**
+ * 
+ * @deprecated
+ */
 public class BinaryExpression extends OperatorExpression implements IBinaryExpression {
 
 /* Tracking helpers

@@ -208,10 +208,6 @@ public class InferEngine extends ASTVisitor implements IInferEngine {
 
 	protected InferredType inferredGlobal = null;
 
-	/**
-	 * @deprecated Will be removed
-	 */
-	static final char[] CONSTRUCTOR_ID = { 'c', 'o', 'n', 's', 't', 'r', 'u', 'c', 't', 'o', 'r' };
 	
 	/**
 	 * <p>

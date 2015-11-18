@@ -581,7 +581,7 @@ public class Compiler implements ITypeRequestor, ProblemSeverities, ITypeRequest
 				}
 				// initial type binding creation
 				this.addCompilationUnit(sourceUnits[i], parsedUnit);
-				lookupEnvironment.buildTypeBindings(parsedUnit, defined.values, null /*no access restriction*/);
+//				lookupEnvironment.buildTypeBindings(parsedUnit, defined.values, null /*no access restriction*/);
 				ImportReference currentPackage = parsedUnit.currentPackage;
 				if (currentPackage != null) {
 					unitResult.recordPackageName(currentPackage.tokens);
@@ -593,7 +593,7 @@ public class Compiler implements ITypeRequestor, ProblemSeverities, ITypeRequest
 			}
 		}
 		// binding resolution
-		lookupEnvironment.completeTypeBindings(allDefinedTypes.values);
+//		lookupEnvironment.completeTypeBindings(allDefinedTypes.values);
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2015 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Red Hat - getter/setter support
  *******************************************************************************/
 
 package org.eclipse.wst.jsdt.core.dom;
@@ -24,6 +25,9 @@ import java.util.List;
  */
 public class ObjectLiteralField extends Expression {
 
+	public enum FieldKind{
+		INIT, GET, SET;
+	}
 	/**
 	 * The "type" structural property of this node type.
 	 *  
@@ -36,20 +40,29 @@ public class ObjectLiteralField extends Expression {
 	 *  
 	 */
 	public static final ChildPropertyDescriptor INITIALIZER_PROPERTY =
-		new ChildPropertyDescriptor(ObjectLiteralField.class, "initializer", Expression.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
+		new ChildPropertyDescriptor(ObjectLiteralField.class, "initializer", Expression.class, OPTIONAL, CYCLE_RISK); //$NON-NLS-1$
+	
+	/**
+	 * The "expression" structural property of this node type.
+	 *  
+	 */
+	public static final SimplePropertyDescriptor KIND_PROPERTY =
+		new SimplePropertyDescriptor(ObjectLiteralField.class, "kind", FieldKind.class, MANDATORY); //$NON-NLS-1$
+
 
 	/**
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
 	 */
-	private static final List PROPERTY_DESCRIPTORS;
+	private static final List<StructuralPropertyDescriptor> PROPERTY_DESCRIPTORS;
 
 	static {
-		List properyList = new ArrayList(3);
+		List<StructuralPropertyDescriptor> properyList = new ArrayList<StructuralPropertyDescriptor>(3);
 		createPropertyList(ObjectLiteralField.class, properyList);
 		addProperty(FIELD_NAME_PROPERTY, properyList);
 		addProperty(INITIALIZER_PROPERTY, properyList);
+		addProperty(KIND_PROPERTY, properyList);
 		PROPERTY_DESCRIPTORS = reapPropertyList(properyList);
 	}
 
@@ -63,7 +76,7 @@ public class ObjectLiteralField extends Expression {
 	 * {@link StructuralPropertyDescriptor})
 	 *  
 	 */
-	public static List propertyDescriptors(int apiLevel) {
+	public static List<StructuralPropertyDescriptor> propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
 	}
 
@@ -78,6 +91,12 @@ public class ObjectLiteralField extends Expression {
 	 * expression.
 	 */
 	private Expression initializer = null;
+	
+	/**
+	 *  Ordinary fields have a kind value INIT;
+	 *   getters and setters have the kind values GET and SET, respectively.
+	 */
+	private FieldKind  kind = FieldKind.INIT;
 
 	/**
 	 * Creates a new AST node for a cast expression owned by the given
@@ -137,7 +156,10 @@ public class ObjectLiteralField extends Expression {
 		ObjectLiteralField result = new ObjectLiteralField(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
 		result.setFieldName( (Expression) getFieldName().clone(target));
-		result.setInitializer((Expression) getInitializer().clone(target));
+		result.setKind(kind);
+		if(initializer != null ){
+			result.setInitializer((Expression) getInitializer().clone(target));
+		}
 		return result;
 	}
 
@@ -219,7 +241,7 @@ public class ObjectLiteralField extends Expression {
 		}
 		return this.initializer;
 	}
-
+	
 	/**
 	 * Sets the expression of this cast expression.
 	 *
@@ -241,12 +263,37 @@ public class ObjectLiteralField extends Expression {
 		postReplaceChild(oldChild, expression, INITIALIZER_PROPERTY);
 	}
 
+	/**
+	 * Returns the kind for this literal
+	 * 
+	 * @return
+	 */
+	public FieldKind getKind(){
+		return this.kind;
+	}
+	
+	/**
+	 * Sets the kind for this object property 
+	 * Ordinary fields have a kind value INIT;
+	 * getters and setters have the kind values GET and SET, respectively.
+	 * 
+	 * @param fieldKind
+	 */
+	public void setKind(FieldKind fieldKind) {
+		if (fieldKind == null) {
+			throw new IllegalArgumentException();
+		}
+		preValueChange(KIND_PROPERTY);
+		this.kind = fieldKind;
+		postValueChange(KIND_PROPERTY);
+	}
+	
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
 	int memSize() {
 		// treat Code as free
-		return BASE_NODE_SIZE + 2 * 4;
+		return BASE_NODE_SIZE + 3 * 4;
 	}
 
 	/* (omit javadoc for this method)

@@ -22,6 +22,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.InvocationSite;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 
+/**
+ * 
+ * @deprecated
+ */
 public abstract class AbstractVariableDeclaration extends Statement implements  IAbstractVariableDeclaration, InvocationSite {
 	public int declarationEnd;
 	public int declarationSourceEnd;

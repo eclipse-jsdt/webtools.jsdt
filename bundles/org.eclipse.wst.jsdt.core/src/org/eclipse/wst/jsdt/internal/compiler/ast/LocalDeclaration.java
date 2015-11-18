@@ -28,7 +28,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.MethodScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.VariableBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class LocalDeclaration extends AbstractVariableDeclaration implements ILocalDeclaration {
 
 	public LocalVariableBinding binding;

@@ -1311,15 +1311,7 @@ public class NameLookup implements SuffixConstants {
 	 *	only exact name matches qualify when <code>false</code>
 	 */
 	public void seekPackageFragments(String name, boolean partialMatch, IJavaElementRequestor requestor) {
-/*		if (VERBOSE) {
-			Util.verbose(" SEEKING PACKAGE FRAGMENTS");  //$NON-NLS-1$
-			Util.verbose(" -> name: " + name);  //$NON-NLS-1$
-			Util.verbose(" -> partial match:" + partialMatch);  //$NON-NLS-1$
-		}
-		*/
 		for (int i = 0; i < this.packageFragmentRoots.length; i++) {
-
-
 			IJavaScriptElement[] children;
 			try {
 				if (this.searchFiles || packageFragmentRoots[i].isLibrary())
@@ -1330,85 +1322,10 @@ public class NameLookup implements SuffixConstants {
 					}
 				}
 			} catch (JavaScriptModelException e) {}
-
 		}
-
-
-
-//		if (partialMatch) {
-//			String[] splittedName = splitPackageName(name);
-//			Object[][] keys = this.packageFragments.keyTable;
-//			for (int i = 0, length = keys.length; i < length; i++) {
-//				if (requestor.isCanceled())
-//					return;
-//				String[] pkgName = (String[]) keys[i];
-//				if (pkgName != null && Util.startsWithIgnoreCase(pkgName, splittedName)) {
-//					Object value = this.packageFragments.valueTable[i];
-//					if (value instanceof PackageFragmentRoot) {
-//						PackageFragmentRoot root = (PackageFragmentRoot) value;
-//						requestor.acceptPackageFragment(root.getPackageFragment(pkgName));
-//					} else {
-//						IPackageFragmentRoot[] roots = (IPackageFragmentRoot[]) value;
-//						for (int j = 0, length2 = roots.length; j < length2; j++) {
-//							if (requestor.isCanceled())
-//								return;
-//							PackageFragmentRoot root = (PackageFragmentRoot) roots[j];
-//							requestor.acceptPackageFragment(root.getPackageFragment(pkgName));
-//						}
-//					}
-//				}
-//			}
-//		} else {
-//			String[] splittedName = splitPackageName(name);
-//			Object value = this.packageFragments.get(splittedName);
-//			if (value instanceof PackageFragmentRoot) {
-//				requestor.acceptPackageFragment(((PackageFragmentRoot) value).getPackageFragment(splittedName));
-//			} else {
-//				IPackageFragmentRoot[] roots = (IPackageFragmentRoot[]) value;
-//				if (roots != null) {
-//					for (int i = 0, length = roots.length; i < length; i++) {
-//						if (requestor.isCanceled())
-//							return;
-//						PackageFragmentRoot root = (PackageFragmentRoot) roots[i];
-//						requestor.acceptPackageFragment(root.getPackageFragment(splittedName));
-//					}
-//				}
-//			}
-//		}
-//		if (name==null || name.equals(IPackageFragment.DEFAULT_PACKAGE_NAME))
-//		{
-//			for (int i = 0; i < this.packageFragmentRoots.length; i++) {
-//				if (packageFragmentRoots[i] instanceof LibraryFragmentRoot)
-//				{
-//					IJavaScriptElement[] children;
-//					try {
-//						children = packageFragmentRoots[i].getChildren();
-//						for (int j = 0; j < children.length; j++) {
-//							requestor.acceptPackageFragment((IPackageFragment)children[j]);
-//						}
-//					} catch (JavaScriptModelException e) {
-//					}
-//				}
-//			}
-//		}
 	}
 
-//	private String [] splitPackageName(String name)
-//	{
-//		String[] strings;
-//		int index=Util.indexOfJavaLikeExtension(name);
-//		if (index>=0)
-//		{
-//			String extension=name.substring(index+1);
-//			name=name.substring(0,index);
-//			strings= Util.splitOn('.', name, 0, name.length());
-//			strings[strings.length-1]=strings[strings.length-1]+extension;
-//		}
-//		else
-//		strings  = Util.splitOn('.', name, 0, name.length());
-//
-//		return strings;
-//	}
+
 	/**
 	 * Notifies the given requestor of all types (classes and interfaces) in the
 	 * given package fragment with the given (unqualified) name.
@@ -2173,7 +2090,8 @@ public class NameLookup implements SuffixConstants {
 							bindingType,
 							matchRule, // not case sensitive
 							/*IJavaScriptSearchConstants.TYPE,*/ this.searchScope,
-							bindingAcceptor, IJavaScriptSearchConstants.WAIT_UNTIL_READY_TO_SEARCH,
+							bindingAcceptor, IJavaScriptSearchConstants.FORCE_IMMEDIATE_SEARCH,
+//							bindingAcceptor, IJavaScriptSearchConstants.WAIT_UNTIL_READY_TO_SEARCH,
 							false,
 							progressMonitor);
 					if (bindingAcceptor.getFoundPath()!=null)

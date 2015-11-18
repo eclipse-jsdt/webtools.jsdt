@@ -23,7 +23,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.Scope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.problem.AbortCompilation;
-
+/**
+ * 
+ *@deprecated
+ */
 public class QualifiedTypeReference extends TypeReference implements IQualifiedTypeReference {
 
 	public char[][] tokens;

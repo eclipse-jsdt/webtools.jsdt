@@ -14,7 +14,10 @@ import org.eclipse.wst.jsdt.core.ast.IASTNode;
 import org.eclipse.wst.jsdt.core.ast.IOperatorExpression;
 import org.eclipse.wst.jsdt.internal.compiler.flow.FlowInfo;
 import org.eclipse.wst.jsdt.internal.compiler.util.Util;
-
+/**
+ * 
+ *@deprecated
+ */
 public abstract class OperatorExpression extends Expression implements OperatorIds, IOperatorExpression {
 
 	public static int[][] OperatorSignatures = new int[NumberOfTables][];

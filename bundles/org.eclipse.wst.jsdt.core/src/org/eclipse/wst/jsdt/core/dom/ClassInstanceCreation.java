@@ -102,14 +102,13 @@ public class ClassInstanceCreation extends Expression {
 		new ChildPropertyDescriptor(ClassInstanceCreation.class, "anonymousClassDeclaration", AnonymousClassDeclaration.class, OPTIONAL, CYCLE_RISK); //$NON-NLS-1$
 
 	public static final ChildPropertyDescriptor MEMBER_PROPERTY =
-		new ChildPropertyDescriptor(ClassInstanceCreation.class, "member", AnonymousClassDeclaration.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
+		new ChildPropertyDescriptor(ClassInstanceCreation.class, "member", Expression.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
 	 */
-	private static final List PROPERTY_DESCRIPTORS_2_0;
 
 	/**
 	 * A list of property descriptors (element type:
@@ -119,19 +118,11 @@ public class ClassInstanceCreation extends Expression {
 	private static final List PROPERTY_DESCRIPTORS_3_0;
 
 	static {
-		List properyList = new ArrayList(5);
-		createPropertyList(ClassInstanceCreation.class, properyList);
-		addProperty(EXPRESSION_PROPERTY, properyList);
-		addProperty(NAME_PROPERTY, properyList);
-		addProperty(ARGUMENTS_PROPERTY, properyList);
-		addProperty(ANONYMOUS_CLASS_DECLARATION_PROPERTY, properyList);
-		addProperty(MEMBER_PROPERTY, properyList);
-		PROPERTY_DESCRIPTORS_2_0 = reapPropertyList(properyList);
-
-		properyList = new ArrayList(6);
+		List properyList = new ArrayList(6);
 		createPropertyList(ClassInstanceCreation.class, properyList);
 		addProperty(EXPRESSION_PROPERTY, properyList);
 		addProperty(TYPE_ARGUMENTS_PROPERTY, properyList);
+		addProperty(NAME_PROPERTY, properyList);
 		addProperty(TYPE_PROPERTY, properyList);
 		addProperty(ARGUMENTS_PROPERTY, properyList);
 		addProperty(ANONYMOUS_CLASS_DECLARATION_PROPERTY, properyList);
@@ -150,11 +141,7 @@ public class ClassInstanceCreation extends Expression {
 	 * {@link StructuralPropertyDescriptor})
 	 */
 	public static List propertyDescriptors(int apiLevel) {
-		if (apiLevel == AST.JLS2_INTERNAL) {
-			return PROPERTY_DESCRIPTORS_2_0;
-		} else {
 			return PROPERTY_DESCRIPTORS_3_0;
-		}
 	}
 
 	/**
@@ -302,9 +289,7 @@ public class ClassInstanceCreation extends Expression {
 				(Expression) ASTNode.copySubtree(target, getExpression()));
 		result.setMember(
 				(Expression) ASTNode.copySubtree(target, getMember()));
-		if (this.ast.apiLevel == AST.JLS2_INTERNAL) {
 			result.setName((Name) getName().clone(target));
-		}
 		if (this.ast.apiLevel >= AST.JLS3) {
 			result.typeArguments().addAll(ASTNode.copySubtrees(target, typeArguments()));
 			
@@ -416,11 +401,6 @@ public class ClassInstanceCreation extends Expression {
 	 * creation expression (JLS2 API only).
 	 *
 	 * @return the type name node
-	 * @exception UnsupportedOperationException if this operation is used in
-	 * an AST later than JLS2
-	 * @deprecated In the JLS3 API, this method is replaced by
-	 * {@link #getType()}, which returns a <code>Type</code> instead of a
-	 * <code>Name</code>.
 	 */
 	public Name getName() {
 		return internalGetName();
@@ -455,11 +435,6 @@ public class ClassInstanceCreation extends Expression {
 	 * <li>the node belongs to a different AST</li>
 	 * <li>the node already has a parent</li>`
 	 * </ul>
-	 * @exception UnsupportedOperationException if this operation is used in
-	 * an AST later than JLS2
-	 * @deprecated In the JLS3 API, this method is replaced by
-	 * {@link #setType(Type)}, which expects a <code>Type</code> instead of
-	 * a <code>Name</code>.
 	 */
 	public void setName(Name name) {
 		internalSetName(name);
@@ -470,7 +445,6 @@ public class ClassInstanceCreation extends Expression {
 	 * deprecation warnings.
 	 */
 	/*package*/ void internalSetName(Name name) {
-	    supportedOnlyIn2();
 		if (name == null) {
 			throw new IllegalArgumentException();
 		}

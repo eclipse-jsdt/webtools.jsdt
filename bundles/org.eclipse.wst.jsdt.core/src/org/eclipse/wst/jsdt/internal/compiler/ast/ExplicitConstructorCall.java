@@ -29,7 +29,10 @@ import org.eclipse.wst.jsdt.internal.compiler.lookup.TagBits;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeConstants;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.VariableBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class ExplicitConstructorCall extends Statement implements InvocationSite, IExplicitConstructorCall {
 
 	public Expression[] arguments;

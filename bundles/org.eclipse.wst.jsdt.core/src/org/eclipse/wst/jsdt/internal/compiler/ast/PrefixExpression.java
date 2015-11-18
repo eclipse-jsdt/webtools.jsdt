@@ -15,6 +15,10 @@ import org.eclipse.wst.jsdt.core.ast.IPrefixExpression;
 import org.eclipse.wst.jsdt.internal.compiler.ASTVisitor;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 
+/**
+ * 
+ *@deprecated
+ */
 public class PrefixExpression extends CompoundAssignment implements IPrefixExpression {
 
 /**

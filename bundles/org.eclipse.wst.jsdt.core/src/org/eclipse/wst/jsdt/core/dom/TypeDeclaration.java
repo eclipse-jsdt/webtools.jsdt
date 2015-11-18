@@ -103,10 +103,18 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 
 	/**
 	 * The "superclass" structural property of this node type (JLS2 API only).
-	 *  
+	 * @deprecated use {@link #SUPERCLASS_EXPRESSION_PROPERTY} 
 	 */
 	public static final ChildPropertyDescriptor SUPERCLASS_PROPERTY =
 		new ChildPropertyDescriptor(TypeDeclaration.class, "superclass", Name.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
+	
+	/**
+	 * The "superclass expression" structural property of this node type
+	 *  
+	 */
+	public static final ChildPropertyDescriptor SUPERCLASS_EXPRESSION_PROPERTY =
+		new ChildPropertyDescriptor(TypeDeclaration.class, "superclassExpression", Expression.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
+	
 
 	/**
 	 * The "superclassType" structural property of this node type (added in JLS3 API).
@@ -128,34 +136,18 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 	 * or null if uninitialized.
 	 *  
 	 */
-	private static final List PROPERTY_DESCRIPTORS_2_0;
+	private static final List<StructuralPropertyDescriptor> PROPERTY_DESCRIPTORS;
 
-	/**
-	 * A list of property descriptors (element type:
-	 * {@link StructuralPropertyDescriptor}),
-	 * or null if uninitialized.
-	 *  
-	 */
-	private static final List PROPERTY_DESCRIPTORS_3_0;
 
 	static {
-		List propertyList = new ArrayList(8);
+		List<StructuralPropertyDescriptor> propertyList = new ArrayList(8);
 		createPropertyList(TypeDeclaration.class, propertyList);
 		addProperty(JAVADOC_PROPERTY, propertyList);
 		addProperty(MODIFIERS_PROPERTY, propertyList);
 		addProperty(NAME_PROPERTY, propertyList);
 		addProperty(SUPERCLASS_PROPERTY, propertyList);
 		addProperty(BODY_DECLARATIONS_PROPERTY, propertyList);
-		PROPERTY_DESCRIPTORS_2_0 = reapPropertyList(propertyList);
-
-		propertyList = new ArrayList(9);
-		createPropertyList(TypeDeclaration.class, propertyList);
-		addProperty(JAVADOC_PROPERTY, propertyList);
-		addProperty(MODIFIERS2_PROPERTY, propertyList);
-		addProperty(NAME_PROPERTY, propertyList);
-		addProperty(SUPERCLASS_TYPE_PROPERTY, propertyList);
-		addProperty(BODY_DECLARATIONS_PROPERTY, propertyList);
-		PROPERTY_DESCRIPTORS_3_0 = reapPropertyList(propertyList);
+		PROPERTY_DESCRIPTORS = reapPropertyList(propertyList);
 	}
 
 	/**
@@ -170,19 +162,14 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 	 *  
 	 */
 	public static List propertyDescriptors(int apiLevel) {
-		if (apiLevel == AST.JLS2_INTERNAL) {
-			return PROPERTY_DESCRIPTORS_2_0;
-		} else {
-			return PROPERTY_DESCRIPTORS_3_0;
-		}
+		return PROPERTY_DESCRIPTORS;
 	}
 
 	/**
-	 * The optional superclass name; <code>null</code> if none.
-	 * Defaults to none. Note that this field is not used for
-	 * interface declarations. Not used in 3.0.
+	 * The optional superclass expression; <code>null</code> if none.
+	 * Defaults to none
 	 */
-	private Name optionalSuperclassName = null;
+	private Expression superclassExpression = null;
 
 	/**
 	 * The optional superclass type; <code>null</code> if none.
@@ -270,6 +257,14 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 				return null;
 			}
 		}
+		if (property == SUPERCLASS_EXPRESSION_PROPERTY) {
+			if (get) {
+				return getSuperclassExpression();
+			} else {
+				setSuperclassExpression((Expression) child);
+				return null;
+			}
+		}
 		if (property == SUPERCLASS_TYPE_PROPERTY) {
 			if (get) {
 				return getSuperclassType();
@@ -347,17 +342,12 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 		result.setSourceRange(this.getStartPosition(), this.getLength());
 		result.setJavadoc(
 			(JSdoc) ASTNode.copySubtree(target, getJavadoc()));
+		result.setSuperclassExpression(
+					(Expression) ASTNode.copySubtree(target, getSuperclassExpression()));
 		if (this.ast.apiLevel == AST.JLS2_INTERNAL) {
 			result.internalSetModifiers(getModifiers());
-			result.setSuperclass(
-					(Name) ASTNode.copySubtree(target, getSuperclass()));
 		}
 		result.setName((SimpleName) getName().clone(target));
-		if (this.ast.apiLevel >= AST.JLS3) {
-			result.modifiers().addAll(ASTNode.copySubtrees(target, modifiers()));
-			result.setSuperclassType(
-					(Type) ASTNode.copySubtree(target, getSuperclassType()));
-		}
 		result.bodyDeclarations().addAll(
 			ASTNode.copySubtrees(target, bodyDeclarations()));
 		return result;
@@ -378,19 +368,10 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
 			// visit children in normal left to right reading order
-			if (this.ast.apiLevel == AST.JLS2_INTERNAL) {
-				acceptChild(visitor, getJavadoc());
-				acceptChild(visitor, getName());
-				acceptChild(visitor, getSuperclass());
-				acceptChildren(visitor, this.bodyDeclarations);
-			}
-			if (this.ast.apiLevel >= AST.JLS3) {
-				acceptChild(visitor, getJavadoc());
-				acceptChildren(visitor, this.modifiers);
-				acceptChild(visitor, getName());
-				acceptChild(visitor, getSuperclassType());
-				acceptChildren(visitor, this.bodyDeclarations);
-			}
+			acceptChild(visitor, getJavadoc());
+			acceptChild(visitor, getName());
+			acceptChild(visitor, getSuperclassExpression());
+			acceptChildren(visitor, this.bodyDeclarations);
 		}
 		visitor.endVisit(this);
 	}
@@ -406,11 +387,6 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 	 *
 	 * @return the superclass name node, or <code>null</code> if
 	 *    there is none
-	 * @exception UnsupportedOperationException if this operation is used in
-	 * an AST later than JLS2
-	 * @deprecated In the JLS3 API, this method is replaced by
-	 * {@link #getSuperclassType()}, which returns a <code>Type</code>
-	 * instead of a <code>Name</code>.
 	 */
 	public Name getSuperclass() {
 		return internalGetSuperclass();
@@ -422,8 +398,7 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 	 *  
 	 */
 	/*package*/ final Name internalGetSuperclass() {
-		supportedOnlyIn2();
-		return this.optionalSuperclassName;
+		return (Name) this.superclassExpression;
 	}
 
 	/**
@@ -437,12 +412,9 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 	*
 	* @return the superclass type node, or <code>null</code> if
 	*    there is none
-	* @exception UnsupportedOperationException if this operation is used in
-	* a JLS2 AST
 	*  
 	*/
 	public Type getSuperclassType() {
-	    unsupportedIn2();
 		return this.optionalSuperclassType;
 	}
 
@@ -462,14 +434,40 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 	 * <li>the node belongs to a different AST</li>
 	 * <li>the node already has a parent</li>
 	 * </ul>
-	 * @exception UnsupportedOperationException if this operation is used in
-	 * an AST later than JLS2
-	 * @deprecated In the JLS3 API, this method is replaced by
-	 * {@link #setSuperclassType(Type)}, which expects a
-	 * <code>Type</code> instead of a <code>Name</code>.
 	 */
 	public void setSuperclass(Name superclassName) {
 		internalSetSuperclass(superclassName);
+	}
+
+	/**
+	* Returns the superclass expression declared in this type
+	* declaration, or <code>null</code> if there is none
+	*
+	* @return the superclass type node, or <code>null</code> if
+	*    there is none
+	*  
+	*/
+	public Expression getSuperclassExpression() {
+		return superclassExpression;
+	}
+
+	/**
+	 * Sets or clears the expression of the superclass declared in this type
+	 * declaration
+	 *
+	 * @param superclassName the superclass name node, or <code>null</code> if
+	 *    there is none
+	 * @exception IllegalArgumentException if:
+	 * <ul>
+	 * <li>the node belongs to a different AST</li>
+	 * <li>the node already has a parent</li>
+	 * </ul>
+	 */
+	public void setSuperclassExpression(Expression superclassExpression) {
+		ASTNode oldChild = this.superclassExpression;
+		preReplaceChild(oldChild, superclassExpression, SUPERCLASS_EXPRESSION_PROPERTY);
+		this.superclassExpression = superclassExpression;
+		postReplaceChild(oldChild, superclassExpression, SUPERCLASS_EXPRESSION_PROPERTY);
 	}
 
 	/**
@@ -478,10 +476,9 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 	 *  
 	 */
 	/*package*/ final void internalSetSuperclass(Name superclassName) {
-	    supportedOnlyIn2();
-		ASTNode oldChild = this.optionalSuperclassName;
+		ASTNode oldChild = this.superclassExpression;
 		preReplaceChild(oldChild, superclassName, SUPERCLASS_PROPERTY);
-		this.optionalSuperclassName = superclassName;
+		this.superclassExpression = superclassName;
 		postReplaceChild(oldChild, superclassName, SUPERCLASS_PROPERTY);
 	}
 
@@ -627,7 +624,7 @@ public class TypeDeclaration extends AbstractTypeDeclaration {
 			+ (this.optionalDocComment == null ? 0 : getJavadoc().treeSize())
 			+ (this.modifiers == null ? 0 : this.modifiers.listSize())
 			+ (this.typeName == null ? 0 : getName().treeSize())
-			+ (this.optionalSuperclassName == null ? 0 : getSuperclass().treeSize())
+			+ (this.superclassExpression == null ? 0 : getSuperclassExpression().treeSize())
 			+ (this.optionalSuperclassType == null ? 0 : getSuperclassType().treeSize())
 			+ this.bodyDeclarations.listSize();
 	}

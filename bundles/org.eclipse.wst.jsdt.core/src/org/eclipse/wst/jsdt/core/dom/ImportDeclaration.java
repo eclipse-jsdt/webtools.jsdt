@@ -37,6 +37,21 @@ import java.util.List;
  */
 public class ImportDeclaration extends ASTNode {
 
+	
+	/**
+	 * The "source" structural property of this node type.
+	 *  
+	 */
+	public static final ChildPropertyDescriptor SOURCE_PROPERTY =
+		new ChildPropertyDescriptor(ImportDeclaration.class, "source", StringLiteral.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+
+	/**
+	 * The "specifiers" structural property of this node type
+	 */
+	public static final ChildListPropertyDescriptor SPECIFIERS_PROPERTY =
+				new ChildListPropertyDescriptor(ImportDeclaration.class, "specifiers", ModuleSpecifier.class, NO_CYCLE_RISK); //$NON-NLS-1$
+
+	
 	/**
 	 * The "name" structural property of this node type.
 	 *  
@@ -69,31 +84,18 @@ public class ImportDeclaration extends ASTNode {
 	 * or null if uninitialized.
 	 *  
 	 */
-	private static final List PROPERTY_DESCRIPTORS_2_0;
-
-	/**
-	 * A list of property descriptors (element type:
-	 * {@link StructuralPropertyDescriptor}),
-	 * or null if uninitialized.
-	 *  
-	 */
-	private static final List PROPERTY_DESCRIPTORS_3_0;
+	private static final List<StructuralPropertyDescriptor> PROPERTY_DESCRIPTORS;
 
 	static {
-		List properyList = new ArrayList(3);
-		createPropertyList(ImportDeclaration.class, properyList);
-		addProperty(NAME_PROPERTY, properyList);
-		addProperty(ON_DEMAND_PROPERTY, properyList);
-		addProperty(ISFILE_PROPERTY, properyList);
-		PROPERTY_DESCRIPTORS_2_0 = reapPropertyList(properyList);
-
-		properyList = new ArrayList(4);
+		List<StructuralPropertyDescriptor> properyList = new ArrayList<StructuralPropertyDescriptor>(6);
 		createPropertyList(ImportDeclaration.class, properyList);
 		addProperty(STATIC_PROPERTY, properyList);
 		addProperty(NAME_PROPERTY, properyList);
 		addProperty(ON_DEMAND_PROPERTY, properyList);
 		addProperty(ISFILE_PROPERTY, properyList);
-		PROPERTY_DESCRIPTORS_3_0 = reapPropertyList(properyList);
+		addProperty(SOURCE_PROPERTY, properyList);
+		addProperty(SPECIFIERS_PROPERTY, properyList);
+		PROPERTY_DESCRIPTORS = reapPropertyList(properyList);
 	}
 
 	/**
@@ -107,14 +109,15 @@ public class ImportDeclaration extends ASTNode {
 	 * {@link StructuralPropertyDescriptor})
 	 *  
 	 */
-	public static List propertyDescriptors(int apiLevel) {
-		if (apiLevel == AST.JLS2_INTERNAL) {
-			return PROPERTY_DESCRIPTORS_2_0;
-		} else {
-			return PROPERTY_DESCRIPTORS_3_0;
-		}
+	public static List<StructuralPropertyDescriptor> propertyDescriptors(int apiLevel) {
+		return PROPERTY_DESCRIPTORS;
 	}
 
+	
+	private StringLiteral source;
+	
+	private NodeList specifiers = new NodeList(SPECIFIERS_PROPERTY);
+	
 	/**
 	 * The import name; lazily initialized; defaults to a unspecified,
 	 * legal JavaScript identifier.
@@ -188,7 +191,18 @@ public class ImportDeclaration extends ASTNode {
 		// allow default implementation to flag the error
 		return super.internalGetSetBooleanProperty(property, get, value);
 	}
-
+	
+	/* (omit javadoc for this method)
+	 * Method declared on ASTNode.
+	 */
+	final List internalGetChildListProperty(ChildListPropertyDescriptor property) {
+		if (property == SPECIFIERS_PROPERTY) {
+			return specifiers();
+		}
+		// allow default implementation to flag the error
+		return super.internalGetChildListProperty(property);
+	}
+	
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
@@ -198,6 +212,14 @@ public class ImportDeclaration extends ASTNode {
 				return getName();
 			} else {
 				setName((Name) child);
+				return null;
+			}
+		}
+		if (property == SOURCE_PROPERTY) {
+			if (get) {
+				return getSource();
+			} else {
+				setSource( (StringLiteral) child);
 				return null;
 			}
 		}
@@ -224,6 +246,8 @@ public class ImportDeclaration extends ASTNode {
 			result.setStatic(isStatic());
 		}
 		result.setName((Name) getName().clone(target));
+		result.setSource((StringLiteral) getSource().clone(target));
+		result.specifiers.addAll(ASTNode.copySubtrees(target, specifiers()));
 		return result;
 	}
 
@@ -242,6 +266,8 @@ public class ImportDeclaration extends ASTNode {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
 			acceptChild(visitor, getName());
+			acceptChild(visitor, getSource());
+			acceptChildren(visitor, this.specifiers);
 		}
 		visitor.endVisit(this);
 	}
@@ -340,7 +366,6 @@ public class ImportDeclaration extends ASTNode {
 	 *  
 	 */
 	public boolean isStatic() {
-		unsupportedIn2();
 		return isStatic;
 	}
 
@@ -354,10 +379,27 @@ public class ImportDeclaration extends ASTNode {
 	 *  
 	 */
 	public void setStatic(boolean isStatic) {
-		unsupportedIn2();
 		preValueChange(STATIC_PROPERTY);
 		this.isStatic = isStatic;
 		postValueChange(STATIC_PROPERTY);
+	}
+
+	public StringLiteral getSource() {
+		return source;
+	}
+
+	public void setSource(StringLiteral source) {
+		if (source == null) {
+			throw new IllegalArgumentException();
+		}
+		ASTNode oldChild = this.source;
+		preReplaceChild(oldChild, source, SOURCE_PROPERTY);
+		this.source = source;
+		postReplaceChild(oldChild, source, SOURCE_PROPERTY);
+	}
+	
+	public List specifiers(){
+		return this.specifiers;
 	}
 
 	/**
@@ -391,7 +433,7 @@ public class ImportDeclaration extends ASTNode {
 	 * Method declared on ASTNode.
 	 */
 	int memSize() {
-		return BASE_NODE_SIZE + 3 * 4;
+		return BASE_NODE_SIZE + 5 * 4;
 	}
 
 	/* (omit javadoc for this method)
@@ -400,6 +442,8 @@ public class ImportDeclaration extends ASTNode {
 	int treeSize() {
 		return
 			memSize()
+			+ this.specifiers.listSize()
+			+ (source == null ? 0 : getSource().treeSize())
 			+ (importName == null ? 0 : getName().treeSize());
 	}
 	

@@ -16,7 +16,10 @@ import org.eclipse.wst.jsdt.internal.compiler.ASTVisitor;
 import org.eclipse.wst.jsdt.internal.compiler.impl.BooleanConstant;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.BlockScope;
 import org.eclipse.wst.jsdt.internal.compiler.lookup.TypeBinding;
-
+/**
+ * 
+ *@deprecated
+ */
 public class TrueLiteral extends MagicLiteral implements ITrueLiteral {
 	static final char[] source = {'t' , 'r' , 'u' , 'e'};
 public TrueLiteral(int s , int e) {
