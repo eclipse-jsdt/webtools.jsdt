@@ -745,7 +745,7 @@ public class JavaSearchPage extends DialogPage implements ISearchPage {
 						// TODO: It's not OK to have null values here, so it should be investigated
 						for (int i = 0; i < elements.length; i++) {
 							if (elements[i] != null) {
-								initData= determineInitValuesFrom(elements[1]);
+								initData= determineInitValuesFrom(elements[i]);
 								break;
 							}
 						}
