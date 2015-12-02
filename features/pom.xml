@@ -25,6 +25,7 @@
   <modules>
     <module>org.eclipse.wst.jsdt_tests.feature</module>
     <module>org.eclipse.wst.jsdt.feature</module>
+    <module>org.eclipse.wst.jsdt.nodejs.feature</module>
     <module>org.eclipse.wst.jsdt_sdk.feature</module>
   </modules>
 </project>
