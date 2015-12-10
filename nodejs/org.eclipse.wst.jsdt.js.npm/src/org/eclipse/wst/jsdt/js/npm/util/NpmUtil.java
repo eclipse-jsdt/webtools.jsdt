@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.npm.util;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +19,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.wst.jsdt.js.node.util.PlatformUtil;
-import org.eclipse.wst.jsdt.js.node.util.WorkbenchResourceUtil;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 import org.eclipse.wst.jsdt.js.npm.PackageJson;
 import org.eclipse.wst.jsdt.js.npm.internal.NpmConstants;
-import org.eclipse.wst.jsdt.js.npm.internal.preference.NpmPreferenceHolder;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,12 +59,12 @@ public final class NpmUtil {
 	
 	
 	/**
-	 * @return absolute path to directory in which native npm call must be performed. Basically, the method scans 
+	 * @return path to directory in which native npm call must be performed. Basically, the method scans 
 	 * project for package.json file and returns it's parent, ignoring "node_modules"
 	 * @throws CoreException
 	 */
-	public static String getNpmWorkingDir(IProject project, final String... ignores) throws CoreException {
-		String workingDir = null;
+	public static IPath getNpmWorkingDir(IProject project, final String... ignores) throws CoreException {
+		IPath workingDir = null;
 		final List<IFile> foundFiles = new ArrayList<>();
 		if (project != null && project.exists()) {
 			project.accept(new IResourceVisitor() {
@@ -90,40 +88,8 @@ public final class NpmUtil {
 			});
 		}
 		if (!foundFiles.isEmpty()) {
-			workingDir = foundFiles.get(0).getParent().getFullPath().toOSString();
+			workingDir = foundFiles.get(0).getParent().getLocation();
 		}
 		return workingDir;
 	}
-		
-	public static String getNpmExecutableLocation() {
-		String npmExecutableLocation = null;
-		File npmExecutable = new File(NpmPreferenceHolder.getNpmLocation(), NpmUtil.getNpmExecutableName());
-		if (npmExecutable != null && npmExecutable.exists()) {
-			npmExecutableLocation = npmExecutable.getAbsolutePath();
-		}
-		return npmExecutableLocation;
-	}
-	
-	public static String getNpmExecutableName() {
-		String name = null;
-		switch(PlatformUtil.getOs()) {
-			case WINDOWS:
-				name = NpmConstants.NPM_CLI_JS;	
-				break;
-				
-			case MACOS:
-				name = NpmConstants.NPM;
-				break;
-				
-			case LINUX:
-				name = NpmConstants.NPM;
-				break;
-			
-			case OTHER:
-				name = NpmConstants.NPM;
-				break;
-		}
-		return name;
-	}
-
 }

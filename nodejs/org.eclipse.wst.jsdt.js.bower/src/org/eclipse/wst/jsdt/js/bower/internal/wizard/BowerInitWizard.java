@@ -25,7 +25,7 @@ import org.eclipse.wst.jsdt.js.bower.BowerPlugin;
 import org.eclipse.wst.jsdt.js.bower.internal.BowerConstants;
 import org.eclipse.wst.jsdt.js.bower.internal.Messages;
 import org.eclipse.wst.jsdt.js.bower.util.BowerUtil;
-import org.eclipse.wst.jsdt.js.node.util.WorkbenchResourceUtil;
+import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"

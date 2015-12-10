@@ -11,7 +11,7 @@
 package org.eclipse.wst.jsdt.js.bower;
 
 /**
- * All Bower CLI commands
+ * Bower CLI commands
  *
  * @see <a href="http://bower.io/docs/api/">http://bower.io/docs/api/</a>
  * @author "Ilya Buziuk (ibuziuk)"

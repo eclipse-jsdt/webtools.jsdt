@@ -52,8 +52,8 @@ import org.eclipse.wst.jsdt.js.bower.BowerJson;
 import org.eclipse.wst.jsdt.js.bower.BowerJson.Builder;
 import org.eclipse.wst.jsdt.js.bower.internal.BowerConstants;
 import org.eclipse.wst.jsdt.js.bower.internal.Messages;
-import org.eclipse.wst.jsdt.js.node.ui.PopUpPropertyDialog;
-import org.eclipse.wst.jsdt.js.node.util.WorkbenchResourceUtil;
+import org.eclipse.wst.jsdt.js.common.ui.PopUpPropertyDialog;
+import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"

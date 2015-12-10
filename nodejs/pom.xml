@@ -23,8 +23,9 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>org.eclipse.wst.jsdt.js.node</module>
-    <module>org.eclipse.wst.jsdt.js.bower</module>
-    <module>org.eclipse.wst.jsdt.js.npm</module>
+  	<module>org.eclipse.wst.jsdt.js.cli</module>
+  	<module>org.eclipse.wst.jsdt.js.common</module>
+  	<module>org.eclipse.wst.jsdt.js.bower</module>
+  	<module>org.eclipse.wst.jsdt.js.npm</module>
   </modules>
 </project>

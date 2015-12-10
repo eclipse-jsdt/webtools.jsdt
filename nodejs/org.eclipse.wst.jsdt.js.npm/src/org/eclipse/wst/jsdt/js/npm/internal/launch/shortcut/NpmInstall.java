@@ -10,13 +10,17 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.npm.internal.launch.shortcut;
 
+import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
 import org.eclipse.wst.jsdt.js.npm.NpmCommands;
+import org.eclipse.wst.jsdt.js.npm.internal.NpmConstants;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public class NpmInstall extends GenericNpmLaunch {
 	private static final String LAUNCH_NAME = "npm Install"; //$NON-NLS-1$
+	private static final CLICommand COMMAND = new CLICommand(NpmConstants.NPM, NpmCommands.INSTALL.getValue(),
+			null, null);
 	
 	@Override
 	protected String getCommandName() {
@@ -26,6 +30,11 @@ public class NpmInstall extends GenericNpmLaunch {
 	@Override
 	protected  String getLaunchName() {
 		return LAUNCH_NAME;
+	}
+
+	@Override
+	protected CLICommand getCLICommand() {
+		return COMMAND;
 	}
 
 }

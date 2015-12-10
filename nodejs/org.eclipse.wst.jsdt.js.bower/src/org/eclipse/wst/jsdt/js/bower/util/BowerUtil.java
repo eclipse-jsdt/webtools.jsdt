@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.bower.util;
 
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -23,11 +22,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.jsdt.js.bower.BowerJson;
 import org.eclipse.wst.jsdt.js.bower.Bowerrc;
 import org.eclipse.wst.jsdt.js.bower.internal.BowerConstants;
-import org.eclipse.wst.jsdt.js.bower.internal.preference.BowerPreferenceHolder;
-import org.eclipse.wst.jsdt.js.node.util.WorkbenchResourceUtil;
+import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -79,13 +78,13 @@ public final class BowerUtil {
 	}
 	
 	/**
-	 * @return absolute path to directory in which native bower call must be performed. Basically, the method scans 
+	 * @return path to directory in which native bower call must be performed. Basically, the method scans 
 	 * project for bower.json file and returns it's parent, ignoring components directories i.e "bower_components" 
 	 * or defined in .bowerrc file  
 	 * @throws CoreException
 	 */
-	public static String getBowerWorkingDir(IProject project, final String... ignores) throws CoreException {
-		String workingDir = null;
+	public static IPath getBowerWorkingDir(IProject project, final String... ignores) throws CoreException {
+		IPath workingDir = null;
 		final List<IFile> foundFiles = new ArrayList<>();
 		if (project != null && project.exists()) {
 			project.accept(new IResourceVisitor() {
@@ -109,7 +108,7 @@ public final class BowerUtil {
 			});
 		}
 		if (!foundFiles.isEmpty()) {
-			workingDir = foundFiles.get(0).getParent().getFullPath().toOSString();
+			workingDir = foundFiles.get(0).getParent().getLocation();
 		}
 		return workingDir;
 	}
@@ -135,15 +134,6 @@ public final class BowerUtil {
 			}
 		}
 		return directoryName;
-	}
-	
-	public static String getBowerExecutableLocation() {
-		String bowerExecutableLocation = null;
-		File bowerExecutable = new File(BowerPreferenceHolder.getBowerLocation(), BowerConstants.BOWER);
-		if (bowerExecutable != null && bowerExecutable.exists()) {
-			bowerExecutableLocation = bowerExecutable.getAbsolutePath();
-		}
-		return bowerExecutableLocation;
 	}
 
 }

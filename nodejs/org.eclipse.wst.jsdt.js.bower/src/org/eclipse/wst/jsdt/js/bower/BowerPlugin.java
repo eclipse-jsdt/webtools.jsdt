@@ -12,10 +12,8 @@ package org.eclipse.wst.jsdt.js.bower;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.wst.jsdt.js.bower.internal.preference.BowerPreferenceHolder;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -35,8 +33,6 @@ public class BowerPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		IPreferenceStore store = BowerPlugin.getDefault().getPreferenceStore();
-		BowerPreferenceHolder.setStore(store);
 	}
 
 	public void stop(BundleContext context) throws Exception {

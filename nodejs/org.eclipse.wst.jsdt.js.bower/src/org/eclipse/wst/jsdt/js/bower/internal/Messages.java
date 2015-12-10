@@ -17,14 +17,7 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getName().toString().toLowerCase();
-
-	public static String BowerPreferencePage_BowerLocationLabel;
-	public static String BowerPreferencePage_NotSpecifiedBowerWarning;
-	public static String BowerPreferencePage_NotValidBowerError;
-
-	public static String BowerErrorHandler_BowerNotDefinedTitle;
-	public static String BowerErrorHandler_BowerNotDefinedMessage;
-	
+		
 	public static String BowerLaunchConfigurationTab_launchMainTabName;
 	public static String BowerLaunchConfigurationTab_addParameter;
 	public static String BowerLaunchConfigurationTab_editParameter;
@@ -54,6 +47,9 @@ public class Messages extends NLS {
 	public static String BowerInitWizard_editAuthor;
 	public static String BowerInitWizard_addIgnore;
 	public static String BowerInitWizard_editIgnore;
+	
+	public static String BowerLaunchError_Title;
+	public static String BowerLaunchError_Message;
 	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

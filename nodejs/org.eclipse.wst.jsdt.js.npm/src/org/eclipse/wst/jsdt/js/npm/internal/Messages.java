@@ -17,13 +17,6 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getName().toString().toLowerCase();
-
-	public static String NpmPreferencePage_NpmLocationLabel;
-	public static String NpmPreferencePage_NotSpecifiedNpmWarning;
-	public static String NpmPreferencePage_NotValidNpmError;
-
-	public static String NpmErrorHandler_NpmNotDefinedTitle;
-	public static String NpmErrorHandler_NpmNotDefinedMessage;
 	
 	public static String NpmInitWizard_WindowTitle;
 	public static String NpmInitWizard_LaunchMainTabName;
@@ -58,6 +51,9 @@ public class Messages extends NLS {
 	public static String NpmInitWizard_ErrorDirNotDefiened;
 	public static String NpmInitWizard_ErrorDirNotExist;
 	public static String NpmInitWizard_ErrorPackageJsonAlreadyExist;
+	
+	public static String NpmLaunchError_Title;
+	public static String NpmLaunchError_Message;
 
 	
 	static {
