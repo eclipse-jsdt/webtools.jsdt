@@ -15,19 +15,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.webtools.jsdt</groupId>
-    <artifactId>jsdt-parent</artifactId>
+    <artifactId>nodejs</artifactId>
     <version>3.6.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>nodejs</artifactId>
-  <packaging>pom</packaging>
-
-  <modules>
-  	<module>org.eclipse.wst.jsdt.js.cli</module>
-  	<module>org.eclipse.wst.jsdt.js.common</module>
-  	<module>org.eclipse.wst.jsdt.js.bower</module>
-  	<module>org.eclipse.wst.jsdt.js.npm</module>
-  	<module>org.eclipse.wst.jsdt.js.grunt</module>
-  	<module>org.eclipse.wst.jsdt.js.gulp</module>
-  </modules>
+  <groupId>org.eclipse.webtools.jsdt.nodejs</groupId>
+  <artifactId>org.eclipse.wst.jsdt.js.gulp</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>eclipse-plugin</packaging>
 </project>

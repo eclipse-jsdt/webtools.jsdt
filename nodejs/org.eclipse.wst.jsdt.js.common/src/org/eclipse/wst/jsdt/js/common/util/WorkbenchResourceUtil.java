@@ -11,6 +11,7 @@
 package org.eclipse.wst.jsdt.js.common.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 
 import org.eclipse.core.resources.IContainer;
@@ -167,6 +168,29 @@ public final class WorkbenchResourceUtil {
 			} else if (r instanceof IFile && r.getName().equals(name) && r.exists()) {
 				return (IFile) r;
 			}
+		}
+		return null;
+	}
+	
+	public static File getFile(String path) {
+		if (path != null) {
+			File file = new File(path);
+			if (file.isFile() && file.exists()) {
+				return file;
+			}
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static IFile getFileForLocation(String path) {
+		if (path == null) {
+			return null;
+		}
+		IPath filePath = new Path(path);
+		IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(filePath);
+		if (files.length > 0) {
+			return files[0];
 		}
 		return null;
 	}

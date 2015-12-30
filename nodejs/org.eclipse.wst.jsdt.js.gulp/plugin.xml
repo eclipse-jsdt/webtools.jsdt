@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+			point="org.eclipse.ui.navigator.viewer">
+		<viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+			<includes>
+				<contentExtension pattern="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpFileContent" />
+			</includes>
+		</viewerContentBinding>
+	</extension>
+	
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent 
+            id="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpFileContent" 
+            name="Gulp Task Content Provider"
+            contentProvider="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpFileContentProvider"
+            labelProvider="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpLabelProvider" 
+            activeByDefault="true"
+            icon="icons/gulp_16.png"
+            priority="high" >
+         <triggerPoints>
+	            <and>
+	               <instanceof value="org.eclipse.core.resources.IResource"/>
+	               <test
+	                     forcePluginActivation="true"
+	                     property="org.eclipse.core.resources.name"
+	                     value="gulpfile.js"/>
+	            </and>
+         </triggerPoints>
+      </navigatorContent>
+   </extension>
+   
+   <extension point="org.eclipse.core.runtime.adapters">
+		<factory 
+            class="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpFileAdapterFactory" 
+            adaptableType="org.eclipse.wst.jsdt.js.common.build.system.ITask">
+            <adapter
+               type="org.eclipse.debug.ui.actions.ILaunchable">
+         	</adapter>
+		</factory>
+	</extension>
+	
+	<extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+     	 <shortcut
+            class="org.eclipse.wst.jsdt.js.gulp.internal.launch.shortcut.GulpLaunch"
+            description="Gulp Task"
+            helpContextId="org.eclipse.ui.externaltools.launchShortcutHelpContext.gulpShortcut"
+            icon="icons/gulp_16.png"
+            id="org.eclipse.wst.jsdt.js.gulp.internal.launch.shortcut.gulpLaunch"
+            label="Gulp Task"
+            modes="run">
+        <contextualLaunch>
+           <enablement>
+             <with variable="selection">
+               <count value="1"/>
+             </with>
+                <iterate>
+                  <instanceof value="org.eclipse.wst.jsdt.js.common.build.system.ITask" />
+               </iterate>
+           </enablement>
+           <contextLabel
+         	  mode="run"
+         	  label="Gulp Task"/>
+  		 </contextualLaunch>
+    	</shortcut>
+    </extension>
+    
+   <extension
+       point="org.eclipse.debug.core.launchConfigurationTypes">
+    <launchConfigurationType
+          id="org.eclipse.wst.jsdt.js.gulp.gulpLaunchConfigurationType"
+          delegate="org.eclipse.wst.jsdt.js.gulp.internal.launch.GulpLaunchConfigurationDelegate"
+          modes="run"
+          name="Gulp">
+    </launchConfigurationType>
+  </extension>
+  
+  <extension
+       point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+    <launchConfigurationTypeImage
+          configTypeID="org.eclipse.wst.jsdt.js.gulp.gulpLaunchConfigurationType"
+          icon="icons/gulp_16.png"
+          id="org.eclipse.wst.jsdt.js.gulpLaunchConfigurationTypeImage">
+    </launchConfigurationTypeImage>
+  </extension>
+  
+  <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+    <launchConfigurationTabGroup
+        type="org.eclipse.wst.jsdt.js.gulp.gulpLaunchConfigurationType"
+        class="org.eclipse.wst.jsdt.js.gulp.internal.launch.ui.GulpLaunchTabGroup"
+        id="org.eclipse.wst.jsdt.js.gulp.tabgroup">
+    </launchConfigurationTabGroup>
+  </extension>
+    
+</plugin>
+

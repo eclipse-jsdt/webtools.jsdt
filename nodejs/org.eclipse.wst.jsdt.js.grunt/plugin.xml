@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+			point="org.eclipse.ui.navigator.viewer">
+		<viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+			<includes>
+				<contentExtension pattern="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntFileContent" />
+			</includes>
+		</viewerContentBinding>
+	</extension>
+	
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent 
+            id="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntFileContent" 
+            name="Grunt Task Content Provider"
+            contentProvider="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntFileContentProvider"
+            labelProvider="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntLabelProvider" 
+            activeByDefault="true"
+            icon="icons/grunt_16.png"
+            priority="high" >
+         <triggerPoints>
+	            <and>
+	               <instanceof value="org.eclipse.core.resources.IResource"/>
+	               <test
+	                     forcePluginActivation="true"
+	                     property="org.eclipse.core.resources.name"
+	                     value="gruntfile.js"/>
+	            </and>
+         </triggerPoints>
+      </navigatorContent>
+   </extension>
+   
+   <extension point="org.eclipse.core.runtime.adapters">
+		<factory 
+            class="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntFileAdapterFactory" 
+            adaptableType="org.eclipse.wst.jsdt.js.common.build.system.ITask">
+            <adapter
+               type="org.eclipse.debug.ui.actions.ILaunchable">
+         	</adapter>
+		</factory>
+	</extension>
+	
+	<extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+     	 <shortcut
+            class="org.eclipse.wst.jsdt.js.grunt.internal.launch.shortcut.GruntLaunch"
+            description="Grunt Task"
+            helpContextId="org.eclipse.ui.externaltools.launchShortcutHelpContext.gruntShortcut"
+            icon="icons/grunt_16.png"
+            id="org.eclipse.wst.jsdt.js.grunt.internal.launch.shortcut.gruntLaunch"
+            label="Grunt Task"
+            modes="run">
+        <contextualLaunch>
+           <enablement>
+             <with variable="selection">
+               <count value="1"/>
+             </with>
+                <iterate>
+                  <instanceof value="org.eclipse.wst.jsdt.js.common.build.system.ITask" />
+               </iterate>
+           </enablement>
+           <contextLabel
+         	  mode="run"
+         	  label="Grunt Task"/>
+  		 </contextualLaunch>
+    	</shortcut>
+    </extension>
+    
+   <extension
+       point="org.eclipse.debug.core.launchConfigurationTypes">
+    <launchConfigurationType
+          id="org.eclipse.wst.jsdt.js.grunt.gruntLaunchConfigurationType"
+          delegate="org.eclipse.wst.jsdt.js.grunt.internal.launch.GruntLaunchConfigurationDelegate"
+          modes="run"
+          name="Grunt">
+    </launchConfigurationType>
+  </extension>
+  
+  <extension
+       point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+    <launchConfigurationTypeImage
+          configTypeID="org.eclipse.wst.jsdt.js.grunt.gruntLaunchConfigurationType"
+          icon="icons/grunt_16.png"
+          id="org.eclipse.wst.jsdt.js.gruntLaunchConfigurationTypeImage">
+    </launchConfigurationTypeImage>
+  </extension>
+  
+  <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+    <launchConfigurationTabGroup
+        type="org.eclipse.wst.jsdt.js.grunt.gruntLaunchConfigurationType"
+        class="org.eclipse.wst.jsdt.js.grunt.internal.launch.ui.GruntLaunchTabGroup"
+        id="org.eclipse.wst.jsdt.js.grunt.tabgroup">
+    </launchConfigurationTabGroup>
+  </extension>
+    
+</plugin>
+

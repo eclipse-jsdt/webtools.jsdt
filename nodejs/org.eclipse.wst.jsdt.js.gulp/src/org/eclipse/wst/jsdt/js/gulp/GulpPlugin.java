@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  * 	Contributors:
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.wst.jsdt.js.common;
+package org.eclipse.wst.jsdt.js.gulp;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -19,15 +19,15 @@ import org.osgi.framework.BundleContext;
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public class CommonPlugin extends AbstractUIPlugin {
+public class GulpPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.wst.jsdt.js.common"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.eclipse.wst.jsdt.js.gulp"; //$NON-NLS-1$
 
 	// The shared instance
-	private static CommonPlugin plugin;
+	private static GulpPlugin plugin;
 
-	public CommonPlugin() {
+	public GulpPlugin() {
 	}
 
 	public void start(BundleContext context) throws Exception {
@@ -40,7 +40,7 @@ public class CommonPlugin extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	public static CommonPlugin getDefault() {
+	public static GulpPlugin getDefault() {
 		return plugin;
 	}
 	
