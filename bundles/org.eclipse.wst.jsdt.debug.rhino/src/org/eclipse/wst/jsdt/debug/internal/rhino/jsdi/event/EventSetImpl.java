@@ -40,12 +40,11 @@ public final class EventSetImpl extends HashSet implements EventSet {
 	 * @see org.eclipse.wst.jsdt.debug.core.jsdi.event.EventSet#resume()
 	 */
 	public void resume() {
-		if (thread == null) {
-			vm.resume();
-		}
-		else {
+		if (thread != null) {
 			thread.resume();
 		}
+		// Context.enter() & Context.exit() without starting a script causes
+		// thread to be null here.  In this case we want to do nothing.
 	}
 
 	/* (non-Javadoc)
