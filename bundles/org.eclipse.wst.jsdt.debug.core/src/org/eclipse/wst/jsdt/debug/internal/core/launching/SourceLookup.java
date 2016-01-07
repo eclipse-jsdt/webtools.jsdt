@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 IBM Corporation and others.
+ * Copyright (c) 2010, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -156,8 +156,6 @@ public final class SourceLookup {
 	 * <ul>
 	 * <li>if the URI path is only a root ('/') than the returned path is changed to 'page.js'</li>
 	 * <li>if the source URI has a host specification, it is added to the beginning of the source path</li>
-	 * <li>if the total character count of any one segment of the path exceeds 15 chars, the path is pruned to avoid 
-	 * going over the windows 255 char path limit</li>
 	 * </ul>
 	 * @param sourceuri
 	 * @return the {@link IPath} to use to represent the given source {@link URI}
@@ -216,7 +214,6 @@ public final class SourceLookup {
 	/**
 	 * Makes some sanity adjustments to the path prior to trying to create it.
 	 * <ul>
-	 * <li>make sure no one segment is super long, the current threshold is 15 characters per segment</li>
 	 * <li>make sure no segment following the host part has '.js' in it. This prevents name collisions like:
 	 * www.domain.org/scripts/myscript.js/eval/1.js and www.domain.org/scripts/myscript.js - where myscript.js will cause a 
 	 * collision trying to create a file resource, as it could already exist as a folder and vice versa 
@@ -233,9 +230,6 @@ public final class SourceLookup {
 		for (int i = 0; i < path.segments().length; i++) {
 			segment = path.segment(i);
 			if(i > 0) {
-				if(segment.length() > 15) {
-					segment = segment.substring(0, 1) + segment.charAt(segment.length()-1);
-				}
 				if(i < path.segments().length-1) {
 					segment = segment.replaceAll("\\.js", "\\_js"); //$NON-NLS-1$ //$NON-NLS-2$
 					segment = segment.replaceAll("\\.html", "\\_html"); //$NON-NLS-1$ //$NON-NLS-2$
