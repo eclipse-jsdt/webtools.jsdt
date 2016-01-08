@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2009 The Chromium Authors. All rights reserved.
+  This program and the accompanying materials are made available
+  under the terms of the Eclipse Public License v1.0 which accompanies
+  this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+-->
+<feature
+      id="org.eclipse.wst.jsdt.chromium.debug"
+      label="%featureName"
+      version="0.3.9.qualifier"
+      provider-name="%providerName"
+      plugin="org.eclipse.wst.jsdt.chromium.debug">
+
+   <description url="http://code.google.com/p/chromedevtools/wiki/EclipseDebugger">
+      %description
+   </description>
+
+   <copyright>
+      Copyright (c) 2012 The Chromium Authors. All rights reserved.
+   </copyright>
+
+   <license url="%licenseUrl">
+      %licenseAgreement
+   </license>
+
+   <url>
+      <update label="ChromeDevTools Update Site" url="http://chromedevtools.googlecode.com/svn/update/dev/"/>
+   </url>
+
+   <requires>
+      <import feature="org.eclipse.wst.jsdt.chromium.sdk" version="0.3.9" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.filesystem" version="1.2.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.debug.ui" version="3.4.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.4.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.4.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.4.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.variables" version="3.2.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.4.1" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.wst.jsdt.chromium.debug.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.jsdt.chromium.debug.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   <plugin
+         id="org.eclipse.wst.jsdt.chromium.debug"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

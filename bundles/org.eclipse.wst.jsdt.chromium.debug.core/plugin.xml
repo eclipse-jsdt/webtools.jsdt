@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2009 The Chromium Authors. All rights reserved.
+  This program and the accompanying materials are made available
+  under the terms of the Eclipse Public License v1.0 which accompanies
+  this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+-->
+
+<plugin>
+
+  <!-- Breakpoint-related extensions -->
+  <extension point="org.eclipse.core.runtime.adapters">
+    <factory
+        class="org.eclipse.wst.jsdt.chromium.debug.core.model.BreakpointAdapterFactory"
+        adaptableType="org.eclipse.ui.texteditor.ITextEditor">
+      <adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget" /> 
+    </factory>
+  </extension>
+  
+  <extension point="org.eclipse.debug.core.breakpoints">
+      <breakpoint
+        class="org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumLineBreakpoint"
+        name="JS Line Breakpoints"
+        markerType="org.eclipse.wst.jsdt.chromium.debug.core.LineBP"
+        id="org.eclipse.wst.jsdt.chromium.debug.core.lineBreakpoint"/>
+      <breakpoint
+        class="org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumExceptionBreakpoint"
+        name="JS Exception Breakpoints"
+        markerType="org.eclipse.wst.jsdt.chromium.debug.core.ExceptionBP"
+        id="org.eclipse.wst.jsdt.chromium.debug.core.exceptionBreakpoint"/>
+  </extension>
+
+  <!-- "id" value is relative to PLUGIN_ID -->
+  <extension
+      id="LineBP"
+      name="JS Line Breakpoint Marker"
+      point="org.eclipse.core.resources.markers">
+    <super type="org.eclipse.debug.core.lineBreakpointMarker"/>
+    <persistent value="true"/>
+  </extension>
+
+  <extension
+      id="ExceptionBP"
+      name="JS Exception Breakpoint Marker"
+      point="org.eclipse.core.resources.markers">
+    <super type="org.eclipse.debug.core.breakpointMarker"/>
+    <persistent value="true"/>
+  </extension>
+
+
+  <!-- An in-memory filesystem for the remote scripts -->
+  <extension point="org.eclipse.core.filesystem.filesystems">
+     <filesystem scheme="chromiumdebug">
+        <run class="org.eclipse.wst.jsdt.chromium.debug.core.efs.ChromiumScriptFileSystem"/>
+     </filesystem>
+  </extension>
+
+  <extension point="org.eclipse.debug.core.sourceLocators">
+     <sourceLocator 
+        id="org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceDirector"
+        class="org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceDirector"
+        name="a ChromiumSourceDirector">
+     </sourceLocator>
+   </extension>
+
+  <extension point="org.eclipse.debug.core.sourcePathComputers">
+     <sourcePathComputer
+        id="org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceComputer"
+        class="org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceComputer">
+      </sourcePathComputer>
+  </extension>
+  
+  <extension point="org.eclipse.debug.core.sourceContainerTypes">
+    <sourceContainerType
+      name="JS Server Scripts"
+      class="org.eclipse.wst.jsdt.chromium.debug.core.VProjectSourceContainer$TypeDelegate"
+      id="org.eclipse.wst.jsdt.chromium.debug.core.VProjectSourceContainer.type"
+      description="Remote V8/Chrome VM JavaScript Scripts">
+    </sourceContainerType>
+  </extension>
+
+  
+  <extension point="org.eclipse.debug.core.sourceContainerTypes">
+    <sourceContainerType
+      name="%SourceNameMapperContainer.name"
+      class="org.eclipse.wst.jsdt.chromium.debug.core.SourceNameMapperContainer$TypeDelegate"
+      id="org.eclipse.wst.jsdt.chromium.debug.core.SourceNameMapperContainer.type"
+      description="%SourceNameMapperContainer.description">
+    </sourceContainerType>
+  </extension>
+  
+  <extension point="org.eclipse.core.expressions.propertyTesters">
+    <propertyTester
+       namespace="org.eclipse.wst.jsdt.chromium.debug.core"
+       id="org.eclipse.wst.jsdt.chromium.debug.core.FilePropertyTester$ForFile"
+       properties="isJsFile"
+       type="org.eclipse.core.resources.IFile"
+       class="org.eclipse.wst.jsdt.chromium.debug.core.FilePropertyTester$ForFile">
+    </propertyTester>
+  </extension>
+  
+  <extension point="org.eclipse.wst.jsdt.chromium.debug.core.model_IPredefinedSourceWrapProvider">
+    <wrap-provider class="org.eclipse.wst.jsdt.chromium.debug.core.model.HardcodedSourceWrapProvider"/>
+  </extension>
+
+  <extension-point id="model_JavaScriptFormatter"
+      name="org.eclipse.wst.jsdt.chromium.debug.core.model.JavaScriptFormatter"/>
+
+  <extension-point id="model_IPredefinedSourceWrapProvider"
+      name="org.eclipse.wst.jsdt.chromium.debug.core.model.IPredefinedSourceWrapProvider"/>
+      
+</plugin>

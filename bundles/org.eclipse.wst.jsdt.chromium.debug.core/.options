@@ -1,0 +1,3 @@
+org.eclipse.wst.jsdt.chromium.debug.core/debug=true
+org.eclipse.wst.jsdt.chromium.debug.core/debug/transport=true
+org.eclipse.wst.jsdt.chromium.debug.core/debug/v8DebuggerTool=true
