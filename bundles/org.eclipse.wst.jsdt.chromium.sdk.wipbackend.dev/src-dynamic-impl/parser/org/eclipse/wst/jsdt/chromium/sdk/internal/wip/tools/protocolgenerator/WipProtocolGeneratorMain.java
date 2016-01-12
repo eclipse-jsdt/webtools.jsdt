@@ -23,7 +23,7 @@ import org.json.simple.parser.ParseException;
 /**
  * Application that generates WIP interfaces, both input and output according to
  * specification available at
- * "http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/inspector/Inspector.json".
+ * "http://src.chromium.org/blink/trunk/Source/devtools/protocol.json".
  */
 public class WipProtocolGeneratorMain {
   public static void main(String[] args) {

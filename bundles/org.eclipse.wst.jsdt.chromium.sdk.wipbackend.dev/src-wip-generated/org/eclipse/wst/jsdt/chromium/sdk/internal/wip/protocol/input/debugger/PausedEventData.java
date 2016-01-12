@@ -28,7 +28,14 @@ public interface PausedEventData {
   /**
    Hit breakpoints IDs
    */
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
   java.util.List<String> hitBreakpoints();
+
+  /**
+   Async stack trace, if any.
+   */
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
+  org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger.StackTraceValue asyncStackTrace();
 
   public static final org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.WipEventType<org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger.PausedEventData> TYPE
       = new org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.WipEventType<org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger.PausedEventData>("Debugger.paused", org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger.PausedEventData.class) {
@@ -46,6 +53,9 @@ public interface PausedEventData {
     EXCEPTION,
     ASSERT,
     CSPVIOLATION,
+    DEBUGCOMMAND,
+    PROMISEREJECTION,
+    ASYNCOPERATION,
     OTHER,
   }
   /**

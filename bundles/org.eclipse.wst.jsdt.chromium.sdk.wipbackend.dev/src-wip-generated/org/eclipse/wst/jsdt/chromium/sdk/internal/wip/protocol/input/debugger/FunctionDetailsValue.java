@@ -1,6 +1,6 @@
 // Generated source.
 // Generator: org.eclipse.wst.jsdt.chromium.sdk.internal.wip.tools.protocolgenerator.Generator
-// Origin: http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/inspector/Inspector.json@118685
+// Origin: http://src.chromium.org/blink/trunk/Source/devtools/protocol.json@<unknown>
 
 package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger;
 
@@ -10,27 +10,20 @@ package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger;
 @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonType
 public interface FunctionDetailsValue {
   /**
-   Location of the function.
+   Location of the function, none for native functions.
    */
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
   org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger.LocationValue location();
 
   /**
-   Name of the function. Not present for anonymous functions.
+   Name of the function.
    */
-  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
-  String name();
+  String functionName();
 
   /**
-   Display name of the function(specified in 'displayName' property on the function object).
+   Whether this is a generator function.
    */
-  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
-  String displayName();
-
-  /**
-   Name of the function inferred from its initial assignment.
-   */
-  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
-  String inferredName();
+  boolean isGenerator();
 
   /**
    Scope chain for this closure.

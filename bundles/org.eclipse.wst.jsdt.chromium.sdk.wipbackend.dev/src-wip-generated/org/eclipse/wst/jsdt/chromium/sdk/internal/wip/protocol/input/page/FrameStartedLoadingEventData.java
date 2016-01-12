@@ -1,6 +1,6 @@
 // Generated source.
 // Generator: org.eclipse.wst.jsdt.chromium.sdk.internal.wip.tools.protocolgenerator.Generator
-// Origin: http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/inspector/Inspector.json@142888
+// Origin: http://src.chromium.org/blink/trunk/Source/devtools/protocol.json@<unknown>
 
 package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.page;
 
@@ -12,7 +12,7 @@ public interface FrameStartedLoadingEventData {
   /**
    Id of the frame that has started loading.
    */
-  String/*See org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.common.network.FrameIdTypedef*/ frameId();
+  String/*See org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.common.page.FrameIdTypedef*/ frameId();
 
   public static final org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.WipEventType<org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.page.FrameStartedLoadingEventData> TYPE
       = new org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.WipEventType<org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.page.FrameStartedLoadingEventData>("Page.frameStartedLoading", org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.page.FrameStartedLoadingEventData.class) {

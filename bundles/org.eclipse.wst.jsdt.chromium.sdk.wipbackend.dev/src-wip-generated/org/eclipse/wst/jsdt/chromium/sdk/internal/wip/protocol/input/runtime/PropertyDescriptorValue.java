@@ -1,6 +1,6 @@
 // Generated source.
 // Generator: org.eclipse.wst.jsdt.chromium.sdk.internal.wip.tools.protocolgenerator.Generator
-// Origin: http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/inspector/Inspector.json@135591
+// Origin: http://src.chromium.org/blink/trunk/Source/devtools/protocol.json@<unknown>
 
 package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.runtime;
 
@@ -10,7 +10,7 @@ package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.runtime;
 @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonType
 public interface PropertyDescriptorValue {
   /**
-   Property name.
+   Property name or symbol description.
    */
   String name();
 
@@ -59,5 +59,11 @@ public interface PropertyDescriptorValue {
    */
   @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
   Boolean isOwn();
+
+  /**
+   Property symbol object, if the property is of the <code>symbol</code> type.
+   */
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
+  org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.runtime.RemoteObjectValue symbol();
 
 }

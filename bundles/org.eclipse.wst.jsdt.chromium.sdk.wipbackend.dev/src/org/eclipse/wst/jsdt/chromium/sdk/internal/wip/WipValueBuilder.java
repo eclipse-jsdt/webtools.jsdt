@@ -78,7 +78,7 @@ class WipValueBuilder {
       public static SerializableValue wrapRefId(final String refId) {
         return new SerializableValue() {
           @Override public CallArgumentParam createCallArgumentParam() {
-            return new CallArgumentParam(false, null, refId);
+            return new CallArgumentParam(false, null, refId, null);
           }
           @Override public String getRefId() {
             return refId;
@@ -244,11 +244,11 @@ class WipValueBuilder {
         @Override
         public CallArgumentParam createCallArgumentParam() {
           if (jsValueType == JsValue.Type.TYPE_NULL) {
-            return new CallArgumentParam(true, null, null);
+            return new CallArgumentParam(true, null, null, null);
           } else if (jsValueType == JsValue.Type.TYPE_UNDEFINED) {
-            return new CallArgumentParam(false, null, null);
+            return new CallArgumentParam(false, null, null, null);
           } else {
-            return new CallArgumentParam(true, value, null);
+            return new CallArgumentParam(true, value, null, null);
           }
         }
       };
@@ -382,7 +382,7 @@ class WipValueBuilder {
 
       @Override
       public CallArgumentParam createCallArgumentParam() {
-        return new CallArgumentParam(false, null, valueData.objectId());
+        return new CallArgumentParam(false, null, valueData.objectId(), null);
       }
 
       protected ObjectProperties getLoadedProperties() throws MethodIsBlockingException {

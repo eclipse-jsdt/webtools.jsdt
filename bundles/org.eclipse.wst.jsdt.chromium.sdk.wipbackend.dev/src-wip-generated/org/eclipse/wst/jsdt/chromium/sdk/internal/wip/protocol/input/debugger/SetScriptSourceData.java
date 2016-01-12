@@ -1,6 +1,6 @@
 // Generated source.
 // Generator: org.eclipse.wst.jsdt.chromium.sdk.internal.wip.tools.protocolgenerator.Generator
-// Origin: http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/inspector/Inspector.json@89368
+// Origin: http://src.chromium.org/blink/trunk/Source/devtools/protocol.json@<unknown>
 
 package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger;
 
@@ -16,15 +16,15 @@ public interface SetScriptSourceData {
   java.util.List<org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger.CallFrameValue> callFrames();
 
   /**
-   VM-specific description of the changes applied.
+   Whether current call stack  was modified after applying the changes.
    */
   @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
-  Result result();
+  Boolean stackChanged();
 
   /**
-   VM-specific description of the changes applied.
+   Async stack trace, if any.
    */
-  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonType(allowsOtherProperties=true)
-  public interface Result extends org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonObjectBased {
-  }
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
+  org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.debugger.StackTraceValue asyncStackTrace();
+
 }

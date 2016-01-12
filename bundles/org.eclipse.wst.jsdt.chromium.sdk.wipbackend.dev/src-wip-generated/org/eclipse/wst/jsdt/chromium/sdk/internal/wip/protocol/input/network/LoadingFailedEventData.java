@@ -1,6 +1,6 @@
 // Generated source.
 // Generator: org.eclipse.wst.jsdt.chromium.sdk.internal.wip.tools.protocolgenerator.Generator
-// Origin: http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/inspector/Inspector.json@102140
+// Origin: http://src.chromium.org/blink/trunk/Source/devtools/protocol.json@<unknown>
 
 package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.network;
 
@@ -20,6 +20,11 @@ public interface LoadingFailedEventData {
   Number/*See org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.common.network.TimestampTypedef*/ timestamp();
 
   /**
+   Resource type.
+   */
+  org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.page.ResourceTypeEnum type();
+
+  /**
    User friendly error message.
    */
   String errorText();
@@ -29,6 +34,12 @@ public interface LoadingFailedEventData {
    */
   @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
   Boolean canceled();
+
+  /**
+   The reason why loading was blocked, if any.
+   */
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
+  org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.network.BlockedReasonEnum blockedReason();
 
   public static final org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.WipEventType<org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.network.LoadingFailedEventData> TYPE
       = new org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.WipEventType<org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.network.LoadingFailedEventData>("Network.loadingFailed", org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.network.LoadingFailedEventData.class) {

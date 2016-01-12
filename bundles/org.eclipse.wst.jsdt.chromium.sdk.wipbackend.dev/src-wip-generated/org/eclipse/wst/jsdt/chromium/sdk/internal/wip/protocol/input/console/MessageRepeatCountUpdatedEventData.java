@@ -5,7 +5,7 @@
 package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.console;
 
 /**
- Issued when subsequent message(s) are equal to the previous one(s).
+ Is not issued. Will be gone in the future versions of the protocol.
  */
 @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonType
 public interface MessageRepeatCountUpdatedEventData {

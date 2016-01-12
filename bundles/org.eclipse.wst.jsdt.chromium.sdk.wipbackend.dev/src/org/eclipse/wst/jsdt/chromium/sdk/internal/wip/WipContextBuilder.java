@@ -468,6 +468,8 @@ class WipContextBuilder {
         // We are in Dispatch thread.
         if (currentContext != WipDebugContextImpl.this) {
           return finishSuccessfulRestart(false, callback, relay);
+        /********************************************************************** 
+          FIXME Need to figure out when that happens and what to do
         }
         if (data.result().getUnderlyingObject().get("stack_update_needs_step_in") ==
             Boolean.TRUE) {
@@ -487,7 +489,8 @@ class WipContextBuilder {
             }
           };
           return currentContext.continueVm(StepAction.IN, 1,
-              continueCallback, guard.asSyncCallback());
+              continueCallback, guard.asSyncCallback()); 
+        */
         } else {
           resetFrames(data.callFrames());
           return finishSuccessfulRestart(false, callback, relay);

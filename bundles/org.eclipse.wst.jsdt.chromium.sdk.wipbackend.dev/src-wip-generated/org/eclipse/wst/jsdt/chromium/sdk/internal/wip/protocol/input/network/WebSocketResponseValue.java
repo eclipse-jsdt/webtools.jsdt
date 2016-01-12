@@ -1,6 +1,6 @@
 // Generated source.
 // Generator: org.eclipse.wst.jsdt.chromium.sdk.internal.wip.tools.protocolgenerator.Generator
-// Origin: http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/inspector/Inspector.json@140428
+// Origin: http://src.chromium.org/blink/trunk/Source/devtools/protocol.json@<unknown>
 
 package org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.network;
 
@@ -23,5 +23,23 @@ public interface WebSocketResponseValue {
    HTTP response headers.
    */
   org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.network.HeadersValue headers();
+
+  /**
+   HTTP response headers text.
+   */
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
+  String headersText();
+
+  /**
+   HTTP request headers.
+   */
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
+  org.eclipse.wst.jsdt.chromium.sdk.internal.wip.protocol.input.network.HeadersValue requestHeaders();
+
+  /**
+   HTTP request headers text.
+   */
+  @org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonOptionalField
+  String requestHeadersText();
 
 }
