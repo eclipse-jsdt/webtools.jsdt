@@ -26,8 +26,9 @@ import org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.JsonType;
 import org.eclipse.wst.jsdt.chromium.sdk.internal.protocolparser.dynamicimpl.DynamicParserImpl;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.junit.Ignore;
 import org.junit.Test;
-
+@Ignore
 public class FieldTypesTest {
   @Test
   public void testNullLongValue() throws JsonProtocolModelParseException,

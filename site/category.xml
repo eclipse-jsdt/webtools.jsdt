@@ -18,4 +18,20 @@
    <bundle id="org.eclipse.wst.jsdt.ui.importer" version="0.0.0">
       <category name="JSDT - Incubation"/>
    </bundle>
+
+   <feature id="org.eclipse.wst.jsdt.chromium.sdk" version="0.0.0">
+      <category name="JSDT - Incubation"/>
+   </feature>
+
+   <feature id="org.eclipse.wst.jsdt.chromium.debug" version="0.0.0">
+      <category name="JSDT - Incubation"/>
+   </feature>
+
+   <feature id="org.eclipse.wst.jsdt.chromium.debug.jsdtbridge" version="0.0.0">
+      <category name="JSDT - Incubation"/>
+   </feature>
+
+   <feature id="org.eclipse.wst.jsdt.chromium.sdk.wipbackends" version="0.0.0">
+      <category name="JSDT - Incubation"/>
+   </feature>
 </site>

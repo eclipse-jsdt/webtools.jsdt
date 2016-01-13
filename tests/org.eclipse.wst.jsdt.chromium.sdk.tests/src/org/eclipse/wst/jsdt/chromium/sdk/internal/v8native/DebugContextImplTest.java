@@ -25,6 +25,7 @@ import org.eclipse.wst.jsdt.chromium.sdk.DebugContext.StepAction;
 import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVm.BreakpointCallback;
 import org.eclipse.wst.jsdt.chromium.sdk.internal.browserfixture.AbstractAttachedTest;
 import org.eclipse.wst.jsdt.chromium.sdk.internal.transport.FakeConnection;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -38,6 +39,7 @@ public class DebugContextImplTest extends AbstractAttachedTest<FakeConnection>{
    * @throws Exception
    */
   @Test(timeout = 5000)
+  @Ignore
   public void checkContextIsInvalidatedOnContinue() throws Exception {
     final Breakpoint[] bp = new Breakpoint[1];
     final String[] failure = new String[1];
@@ -92,6 +94,7 @@ public class DebugContextImplTest extends AbstractAttachedTest<FakeConnection>{
    * @throws Exception
    */
   @Test(timeout = 5000)
+  @Ignore
   public void checkContextIsValidOffHand() throws Exception {
     final Breakpoint[] bp = new Breakpoint[1];
     final String[] failure = new String[1];

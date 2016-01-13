@@ -37,6 +37,15 @@
     <module>org.eclipse.wst.jsdt.debug.transport</module>
     <module>org.eclipse.wst.jsdt.debug.ui</module>
     
+    <module>org.eclipse.wst.jsdt.chromium.debug</module>
+    <module>org.eclipse.wst.jsdt.chromium.debug.core</module>
+    <module>org.eclipse.wst.jsdt.chromium.debug.jsdtbridge</module>
+    <module>org.eclipse.wst.jsdt.chromium.debug.ui</module>
+    <module>org.eclipse.wst.jsdt.chromium.sdk</module>
+    <module>org.eclipse.wst.jsdt.chromium.sdk.wip.eclipse</module>
+    <module>org.eclipse.wst.jsdt.chromium.sdk.wipbackend.dev</module>
+    <module>org.eclipse.wst.jsdt.chromium.sdk.wipbackend.protocol_1_0</module>
+    
     <!-- Experimental -->
     <module>org.eclipse.wst.jsdt.ui.importer</module>
   </modules>
