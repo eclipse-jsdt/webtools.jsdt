@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -133,6 +133,8 @@ public class JavadocView extends AbstractInfoView {
 	private boolean fIsUsingBrowserWidget;
 
 	private RGB fBackgroundColorRGB;
+	private RGB fForegroundColorRGB;
+	
 	/**
 	 * The font listener.
 	 * 
@@ -423,6 +425,8 @@ public class JavadocView extends AbstractInfoView {
  	 */
 	protected void setForeground(Color color) {
 		getControl().setForeground(color);
+		fForegroundColorRGB= color.getRGB();
+		refresh();
 	}
 
 	/*
@@ -443,7 +447,7 @@ public class JavadocView extends AbstractInfoView {
 		IJavaScriptElement input= getInput();
 		if (input == null) {
 			StringBuffer buffer= new StringBuffer(""); //$NON-NLS-1$
-			HTMLPrinter.insertPageProlog(buffer, 0, fBackgroundColorRGB, fgStyleSheet);
+			HTMLPrinter.insertPageProlog(buffer, 0, fForegroundColorRGB, fBackgroundColorRGB, fgStyleSheet);
 			setInput(buffer.toString());
 		} else {
 			setInput(computeInput(input));
@@ -617,7 +621,7 @@ public class JavadocView extends AbstractInfoView {
 
 		boolean flushContent= true;
 		if (buffer.length() > 0 || flushContent) {
-			HTMLPrinter.insertPageProlog(buffer, 0, fBackgroundColorRGB, fgStyleSheet);
+			HTMLPrinter.insertPageProlog(buffer, 0, fForegroundColorRGB, fBackgroundColorRGB, fgStyleSheet);
 			HTMLPrinter.addPageEpilog(buffer);
 			return buffer.toString();
 		}
