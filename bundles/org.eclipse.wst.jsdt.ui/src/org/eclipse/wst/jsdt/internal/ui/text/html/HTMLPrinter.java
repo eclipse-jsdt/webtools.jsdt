@@ -1,7 +1,7 @@
 // COPIED FROM org.eclipse.jface.internal.text.html
 // to get around "discouraged access" errors
 /*******************************************************************************
- * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,9 +23,13 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-
+import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
+import org.eclipse.wst.jsdt.ui.PreferenceConstants;
 import org.eclipse.jface.util.Util;
-
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.text.DefaultInformationControl;
 
 /**
@@ -69,8 +73,23 @@ public class HTMLPrinter {
 	}
 
 	private static void cacheColors(Display display) {
-		BG_COLOR_RGB= display.getSystemColor(SWT.COLOR_INFO_BACKGROUND).getRGB();
+		BG_COLOR_RGB= getHoverBackgroundColorRGB(display);
 		FG_COLOR_RGB= display.getSystemColor(SWT.COLOR_INFO_FOREGROUND).getRGB();
+	}
+	
+	/**
+	 * Returns the hover background color from the preferences to support dark
+	 * theme.
+	 * 
+	 * @param display
+	 * @return the hover background color from the preferences to support dark
+	 *         theme.
+	 */
+	private static RGB getHoverBackgroundColorRGB(Display display) {
+		IPreferenceStore store= JavaScriptPlugin.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.EDITOR_SOURCE_HOVER_BACKGROUND_COLOR_SYSTEM_DEFAULT)
+			? display.getSystemColor(SWT.COLOR_INFO_BACKGROUND).getRGB()
+			: PreferenceConverter.getColor(store, PreferenceConstants.EDITOR_SOURCE_HOVER_BACKGROUND_COLOR);
 	}
 	
 	private static void installColorUpdater(final Display display) {
@@ -181,7 +200,14 @@ public class HTMLPrinter {
 		appendColor(pageProlog, fgRGB);
 		pageProlog.append("\" bgcolor=\""); //$NON-NLS-1$
 		appendColor(pageProlog, bgRGB);
-		pageProlog.append("\">"); //$NON-NLS-1$
+		pageProlog.append("\""); //$NON-NLS-1$
+		String cssClass = getPreferenceThemeCSSClass();
+		if (cssClass != null) {
+			pageProlog.append(" class=\""); //$NON-NLS-1$
+			pageProlog.append(cssClass);
+			pageProlog.append("\""); //$NON-NLS-1$
+		}
+		pageProlog.append(">"); //$NON-NLS-1$
 	}
 
 	private static void appendColor(StringBuffer buffer, RGB rgb) {
@@ -196,6 +222,23 @@ public class HTMLPrinter {
 		if (hexValue.length() == 1)
 			buffer.append('0');
 		buffer.append(hexValue);
+	}
+
+	private static String getPreferenceThemeCSSClass() {
+		String themeId = getPreferenceThemeId();
+		if (themeId == null) {
+			return null;
+		}
+		int index = themeId.lastIndexOf("."); //$NON-NLS-1$
+		if (index == -1) {
+			return themeId;
+		}
+		return themeId.substring(index + 1, themeId.length());
+	}
+	
+	private static String getPreferenceThemeId() {
+		IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode("org.eclipse.e4.ui.css.swt.theme"); //$NON-NLS-1$
+		return preferences.get("themeid", null); //$NON-NLS-1$
 	}
 
 	public static void insertStyles(StringBuffer buffer, String[] styles) {
