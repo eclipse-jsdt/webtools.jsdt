@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2015, 2016 Red Hat, Inc. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -64,12 +64,10 @@ public class CLI {
 			throw new IllegalArgumentException(Messages.Error_NoProjectSpecified);
 		}
 		
-		if (workingDir == null) {
-			// use the project location as the working directory
-			this.workingDir = project.getLocation();
-		}
 		this.project = project;
-		this.workingDir = workingDir;
+		// Use the project's location as the working directory if dir is null
+		this.workingDir = (workingDir == null) ? project.getLocation() : workingDir;
+	
 	}
 	
 	public CLIResult execute(CLICommand command, IProgressMonitor monitor) throws CoreException {
@@ -90,7 +88,7 @@ public class CLI {
 		try {
 			ILaunchConfiguration cfg = type.newInstance(null, command.getToolName());
 			ILaunchConfigurationWorkingCopy wc = cfg.getWorkingCopy();
-			wc.setAttribute(IProcess.ATTR_PROCESS_LABEL, command.getToolName() + command.getCommand());
+			wc.setAttribute(IProcess.ATTR_PROCESS_LABEL, command.getToolName() + " " + command.getCommandName()); //$NON-NLS-1$
 			cfg = wc.doSave();
 			return cfg;
 		} catch (CoreException e) {

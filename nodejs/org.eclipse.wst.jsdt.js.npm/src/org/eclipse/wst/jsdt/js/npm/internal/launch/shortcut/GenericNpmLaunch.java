@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2015, 2016 Red Hat, Inc. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,18 +15,17 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.ILaunchShortcut;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ide.ResourceUtil;
-import org.eclipse.wst.jsdt.js.cli.core.CLI;
-import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
 import org.eclipse.wst.jsdt.js.npm.NpmPlugin;
-import org.eclipse.wst.jsdt.js.npm.internal.Messages;
 import org.eclipse.wst.jsdt.js.npm.internal.NpmConstants;
 import org.eclipse.wst.jsdt.js.npm.util.NpmUtil;
 
@@ -34,24 +33,16 @@ import org.eclipse.wst.jsdt.js.npm.util.NpmUtil;
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public abstract class GenericNpmLaunch implements ILaunchShortcut {
-	
-	protected abstract CLICommand getCLICommand();
-	
+		
 	protected abstract String getCommandName();
 
-	protected abstract String getLaunchName();
-	
 	@Override
 	public void launch(ISelection selection, String mode) {
-		if (selection instanceof IStructuredSelection) {
+		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
 			 Object element = ((IStructuredSelection)selection).getFirstElement();
-			 if (element != null && element instanceof IResource) {
-				try {
-					IResource selectedResource = (IResource) element;
-					launchNpm(selectedResource);
-				} catch (CoreException e) {
-					NpmPlugin.logError(e);
-				}
+			 if (element instanceof IResource) {
+				IResource selectedResource = (IResource) element;
+				launch(selectedResource, mode);
 			 }
 		}
 	}
@@ -61,22 +52,31 @@ public abstract class GenericNpmLaunch implements ILaunchShortcut {
 		IEditorInput editorInput = editor.getEditorInput();
 		IFile file = ResourceUtil.getFile(editorInput);
 		if (file != null && file.exists() && NpmConstants.PACKAGE_JSON.equals(file.getName())) {
-			try {
-				launchNpm(file);
-			} catch (CoreException e) {
-				NpmPlugin.logError(e);
-			}
+			launch(file, mode);
 		}
 	}
 	
-	private void launchNpm(IResource resource) throws CoreException {
+	private void launch(final IResource resource, final String mode) {
 		try {
-			 new CLI(resource.getProject(), getWorkingDirectory(resource)).execute(getCLICommand(), null);
+			IProject project = resource.getProject();
+			IPath workingDirectory = getWorkingDirectory(resource);
+			if (project.exists() && workingDirectory != null) {
+				String projectName = project.getName();
+				ILaunchConfigurationType npmLaunchType = DebugPlugin.getDefault().getLaunchManager()
+						.getLaunchConfigurationType(NpmConstants.LAUNCH_CONFIGURATION_ID);
+				ILaunchConfigurationWorkingCopy npmLaunch = npmLaunchType.newInstance(null, generateLaunchName(projectName));
+				npmLaunch.setAttribute(NpmConstants.LAUNCH_COMMAND, getCommandName());
+				npmLaunch.setAttribute(NpmConstants.LAUNCH_PROJECT, projectName);
+				npmLaunch.setAttribute(NpmConstants.LAUNCH_DIR, workingDirectory.toOSString());	
+				DebugUITools.launch(npmLaunch, mode);
+			}
 		} catch (CoreException e) {
-			NpmPlugin.logError(e);
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.NpmLaunchError_Title,
-					Messages.NpmLaunchError_Title, e.getStatus());
+			NpmPlugin.logError(e, e.getMessage());
 		}
+	}
+	
+	private String generateLaunchName(String projectName) {
+		return projectName + " [" + NpmConstants.NPM + " " + getCommandName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	protected IPath getWorkingDirectory(IResource resource) throws CoreException {

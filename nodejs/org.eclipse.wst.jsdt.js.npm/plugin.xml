@@ -70,18 +70,11 @@
       </wizard>
    </extension>
    <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.eclipse.wst.jsdt.js.JavaScriptTools"
-            class="org.eclipse.wst.jsdt.js.npm.internal.preference.NpmPreferencePage"
-            id="org.eclipse.wst.jsdt.js.npm.preferences.NpmPreferencesPage"
-            name="npm">
-      </page>
-   </extension>
-   <extension
-      point="org.eclipse.core.runtime.preferences">
-	   <initializer
-	         class="org.eclipse.wst.jsdt.js.npm.internal.preference.NpmPreferenceInitializer">
-	   </initializer>
-	</extension>
+       point="org.eclipse.debug.core.launchConfigurationTypes">
+    <launchConfigurationType
+          id="org.eclipse.wst.jsdt.js.npm.npmLaunchConfigurationType"
+          delegate="org.eclipse.wst.jsdt.js.npm.internal.launch.NpmLaunchConfigurationDelegate"
+          modes="run">
+    </launchConfigurationType>
+ </extension>
 </plugin>
