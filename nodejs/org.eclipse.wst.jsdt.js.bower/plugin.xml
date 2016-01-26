@@ -74,7 +74,9 @@
     <launchConfigurationType
           id="org.eclipse.wst.jsdt.js.bower.bowerLaunchConfigurationType"
           delegate="org.eclipse.wst.jsdt.js.bower.internal.launch.BowerLaunchConfigurationDelegate"
-          modes="run">
+          modes="run"
+          name=""
+     	  public="false">
     </launchConfigurationType>
  </extension>
 </plugin>

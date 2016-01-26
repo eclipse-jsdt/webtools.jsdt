@@ -74,7 +74,9 @@
     <launchConfigurationType
           id="org.eclipse.wst.jsdt.js.npm.npmLaunchConfigurationType"
           delegate="org.eclipse.wst.jsdt.js.npm.internal.launch.NpmLaunchConfigurationDelegate"
-          modes="run">
+          modes="run"
+          name=""
+     	  public="false">
     </launchConfigurationType>
  </extension>
 </plugin>
