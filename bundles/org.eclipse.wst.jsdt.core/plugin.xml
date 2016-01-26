@@ -32,14 +32,6 @@
 	schema="schema/JsGlobalScopeContainerInitializer.exsd"/>
 
 <!-- =================================================================================== -->
-<!-- Extension Point: Formatter of Source Code                                           -->
-<!-- =================================================================================== -->
-
-<extension-point name="%codeFormattersName" 
-	id="codeFormatter"
-	schema="schema/codeFormatter.exsd"/>
-
-<!-- =================================================================================== -->
 <!-- Extension Point: Compilation Participant                                            -->
 <!-- =================================================================================== -->
 
