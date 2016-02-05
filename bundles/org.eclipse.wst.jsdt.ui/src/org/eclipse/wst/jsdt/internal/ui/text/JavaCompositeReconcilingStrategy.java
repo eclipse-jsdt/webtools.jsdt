@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,7 +20,8 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 import org.eclipse.wst.jsdt.internal.ui.text.java.IProblemRequestorExtension;
-import org.eclipse.wst.jsdt.internal.ui.text.java.JavaReconcilingStrategy;
+//import org.eclipse.wst.jsdt.internal.ui.text.java.JavaReconcilingStrategy;
+import org.eclipse.wst.jsdt.internal.ui.text.java.JavascriptValidationStrategy;
 import org.eclipse.wst.jsdt.internal.ui.text.spelling.JavaSpellingReconcileStrategy;
 import org.eclipse.wst.jsdt.ui.text.IJavaScriptPartitions;
 
@@ -31,7 +32,8 @@ import org.eclipse.wst.jsdt.ui.text.IJavaScriptPartitions;
 public class JavaCompositeReconcilingStrategy  extends CompositeReconcilingStrategy {
 
 	private ITextEditor fEditor;
-	private JavaReconcilingStrategy fJavaStrategy;
+//	private JavaReconcilingStrategy fJavaStrategy;
+	private JavascriptValidationStrategy fJavascriptValidationStrategy;
 
 	/**
 	 * Creates a new Java reconciling strategy.
@@ -42,9 +44,11 @@ public class JavaCompositeReconcilingStrategy  extends CompositeReconcilingStrat
 	 */
 	public JavaCompositeReconcilingStrategy(ISourceViewer viewer, ITextEditor editor, String documentPartitioning) {
 		fEditor= editor;
-		fJavaStrategy= new JavaReconcilingStrategy(editor);
+//		fJavaStrategy= new JavaReconcilingStrategy(editor);
+		fJavascriptValidationStrategy = new JavascriptValidationStrategy(viewer); 
 		setReconcilingStrategies(new IReconcilingStrategy[] {
-			fJavaStrategy,
+//			fJavaStrategy,
+			fJavascriptValidationStrategy,
 			new JavaSpellingReconcileStrategy(viewer, EditorsUI.getSpellingService(), IJavaScriptPartitions.JAVA_PARTITIONING)
 		});
 	}
@@ -106,7 +110,7 @@ public class JavaCompositeReconcilingStrategy  extends CompositeReconcilingStrat
 	 * @param notify <code>true</code> if listeners should be notified
 	 */
 	public void notifyListeners(boolean notify) {
-		fJavaStrategy.notifyListeners(notify);
+//		fJavaStrategy.notifyListeners(notify);
 	}
 
 	/*
@@ -132,7 +136,7 @@ public class JavaCompositeReconcilingStrategy  extends CompositeReconcilingStrat
 	 * 
 	 */
 	public void aboutToBeReconciled() {
-		fJavaStrategy.aboutToBeReconciled();
-
+//		fJavaStrategy.aboutToBeReconciled();
+		fJavascriptValidationStrategy.aboutToBeReconciled();
 	}
 }
