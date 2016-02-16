@@ -18,8 +18,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.jsdt.js.cli.core.CLI;
 import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
 import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
@@ -51,7 +49,7 @@ public class NpmLaunchConfigurationDelegate  implements ILaunchConfigurationDele
 			 new CLI(project, dir).execute(command, monitor);
 		} catch (CoreException e) {
 			NpmPlugin.logError(e);
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.NpmLaunchError_Title,
+			WorkbenchResourceUtil.showErrorDialog(Messages.NpmLaunchError_Title,
 					Messages.NpmLaunchError_Message, e.getStatus());
 		}
 	}

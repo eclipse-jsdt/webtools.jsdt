@@ -21,11 +21,15 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -213,5 +217,14 @@ public final class WorkbenchResourceUtil {
 		return null;
 	}
 	
+	public static void showErrorDialog(final String title, final String message, final IStatus status) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				Shell shell = Display.getDefault().getActiveShell();
+				ErrorDialog.openError((shell != null) ? shell : new Shell(), title, message, status);
+			}
+		});
+	}
 	
 }

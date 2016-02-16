@@ -23,6 +23,7 @@ import org.eclipse.wst.jsdt.core.dom.ASTParser;
 import org.eclipse.wst.jsdt.core.dom.Expression;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.js.common.build.system.BuildSystemVisitor;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 
 /**
@@ -38,7 +39,7 @@ public class ASTUtil {
 		return (JavaScriptUnit) parser.createAST(null);
 	}
 	
-	public static Set<String> getTasks(String pathToFile, BuildSystemVisitor visitor) throws JavaScriptModelException {
+	public static Set<ITask> getTasks(String pathToFile, BuildSystemVisitor visitor) throws JavaScriptModelException {
 		File file = WorkbenchResourceUtil.getFile(pathToFile);
 		if (file != null) {
 			IFile ifile = WorkbenchResourceUtil.getFileForLocation(file.getAbsolutePath());

@@ -13,14 +13,14 @@ package org.eclipse.wst.jsdt.js.common.build.system.launch;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.wst.jsdt.js.common.CommonPlugin;
-import org.eclipse.wst.jsdt.js.common.build.system.Task;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public class LaunchConfigurationAutoFill {
 	
-	public static ILaunchConfiguration chooseLaunchConfiguration(ILaunchConfiguration[] configurations, Task task, String attribute) {
+	public static ILaunchConfiguration chooseLaunchConfiguration(ILaunchConfiguration[] configurations, ITask task, String attribute) {
 		try {
 			for (ILaunchConfiguration conf : configurations) {
 				String buildFileAttribute = conf.getAttribute(attribute, (String) null);

@@ -2,24 +2,25 @@
 <?eclipse version="3.4"?>
 <plugin>
 	<extension
-			point="org.eclipse.ui.navigator.viewer">
-		<viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+		point="org.eclipse.ui.navigator.viewer">
+		<viewerContentBinding 
+			viewerId="org.eclipse.ui.navigator.ProjectExplorer">
 			<includes>
-				<contentExtension pattern="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntFileContent" />
+				<contentExtension pattern="org.eclipse.wst.jsdt.js.grunt.internal.ui.gruntFileContent" />
 			</includes>
 		</viewerContentBinding>
 	</extension>
-	
-   <extension
+
+    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent 
-            id="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntFileContent" 
+            id="org.eclipse.wst.jsdt.js.grunt.internal.ui.gruntFileContent" 
             name="Grunt Task Content Provider"
             contentProvider="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntFileContentProvider"
             labelProvider="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntLabelProvider" 
             activeByDefault="true"
             icon="icons/grunt_16.png"
-            priority="high" >
+            priority="highest" >
          <triggerPoints>
 	            <and>
 	               <instanceof value="org.eclipse.core.resources.IResource"/>
@@ -31,18 +32,8 @@
          </triggerPoints>
       </navigatorContent>
    </extension>
-   
-   <extension point="org.eclipse.core.runtime.adapters">
-		<factory 
-            class="org.eclipse.wst.jsdt.js.grunt.internal.ui.GruntFileAdapterFactory" 
-            adaptableType="org.eclipse.wst.jsdt.js.common.build.system.ITask">
-            <adapter
-               type="org.eclipse.debug.ui.actions.ILaunchable">
-         	</adapter>
-		</factory>
-	</extension>
-	
-	<extension
+
+   <extension
          point="org.eclipse.debug.ui.launchShortcuts">
      	 <shortcut
             class="org.eclipse.wst.jsdt.js.grunt.internal.launch.shortcut.GruntLaunch"
@@ -56,10 +47,17 @@
            <enablement>
              <with variable="selection">
                <count value="1"/>
-             </with>
-                <iterate>
-                  <instanceof value="org.eclipse.wst.jsdt.js.common.build.system.ITask" />
+                <iterate ifEmpty="false">
+                  <or>
+	                  <instanceof value="org.eclipse.wst.jsdt.js.grunt.internal.GruntTask" />
+	                  <adapt type="org.eclipse.core.resources.IResource">
+			             <test property="org.eclipse.core.resources.name"
+	                     	   value="gruntfile.js">
+			             </test>
+	         		  </adapt>
+                  </or>
                </iterate>
+             </with>
            </enablement>
            <contextLabel
          	  mode="run"
@@ -94,6 +92,6 @@
         id="org.eclipse.wst.jsdt.js.grunt.tabgroup">
     </launchConfigurationTabGroup>
   </extension>
-    
+      
 </plugin>
 

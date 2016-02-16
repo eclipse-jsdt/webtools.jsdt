@@ -10,8 +10,8 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.grunt.internal.ui;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -22,7 +22,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
-import org.eclipse.wst.jsdt.js.common.build.system.Task;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 import org.eclipse.wst.jsdt.js.common.build.system.util.ASTUtil;
 import org.eclipse.wst.jsdt.js.grunt.GruntPlugin;
 import org.eclipse.wst.jsdt.js.grunt.internal.util.GruntVisitor;
@@ -75,17 +75,15 @@ public class GruntFileContentProvider implements ITreeContentProvider, IResource
 	 */
 	@Override
 	public Object[] getChildren(Object parentNode) {
-		Object[] children = null;
-		ArrayList<Task> tasks = new ArrayList<>();
+		Set<ITask> tasks = null;
 		if (parentNode instanceof IFile) {
 			try {
-				JavaScriptUnit unit = ASTUtil.getJavaScriptUnit((IFile) parentNode);
-				GruntVisitor visitor = new GruntVisitor();
+				IFile buildFile = (IFile) parentNode;
+				JavaScriptUnit unit = ASTUtil.getJavaScriptUnit(buildFile);
+				GruntVisitor visitor = new GruntVisitor(buildFile);
 				unit.accept(visitor);
-				children = visitor.getTasks().toArray();
-				for (Object o : children) {
-					tasks.add(new Task(o.toString(), (IFile) parentNode, false));
-				}
+				tasks = visitor.getTasks();
+
 			} catch (JavaScriptModelException e) {
 				GruntPlugin.logError(e, e.getMessage());
 			}

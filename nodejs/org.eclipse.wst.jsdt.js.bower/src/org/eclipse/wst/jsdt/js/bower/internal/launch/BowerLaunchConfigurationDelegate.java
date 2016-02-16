@@ -18,8 +18,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.jsdt.js.bower.BowerPlugin;
 import org.eclipse.wst.jsdt.js.bower.internal.BowerConstants;
 import org.eclipse.wst.jsdt.js.bower.internal.Messages;
@@ -51,7 +49,7 @@ public class BowerLaunchConfigurationDelegate implements ILaunchConfigurationDel
 			 new CLI(project, dir).execute(command, monitor);
 		} catch (CoreException e) {
 			BowerPlugin.logError(e);
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.BowerLaunchError_Title,
+			WorkbenchResourceUtil.showErrorDialog(Messages.BowerLaunchError_Title,
 					Messages.BowerLaunchError_Message, e.getStatus());
 		}
 	}

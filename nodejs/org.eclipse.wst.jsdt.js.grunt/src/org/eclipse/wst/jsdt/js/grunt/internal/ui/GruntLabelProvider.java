@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.grunt.internal.ui;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -18,7 +19,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.wst.jsdt.js.common.build.system.Task;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -28,7 +29,7 @@ public class GruntLabelProvider extends LabelProvider implements IStyledLabelPro
 	@Override
 	public Image getImage(Object element) {
 		//DESIGN-735 Need to create icon for JavaScript Build Systems
-		if (element instanceof Task) {
+		if (element instanceof ITask || element instanceof IFile) {
 			return ImageResource.getImage(ImageResource.IMG_GRUNTFILE);
 		}
 		return super.getImage(element);
@@ -46,8 +47,8 @@ public class GruntLabelProvider extends LabelProvider implements IStyledLabelPro
 
 	@Override
 	public StyledString getStyledText(Object object) {
-		if (object instanceof Task) {
-			return new StyledString(((Task) object).getName());
+		if (object instanceof ITask) {
+			return new StyledString(((ITask) object).getName());
 		}
 		return null;
 	}

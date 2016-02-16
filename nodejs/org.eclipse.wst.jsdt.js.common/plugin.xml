@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.navigator.viewer">
+		<viewerContentBinding 
+			viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+			<includes>
+				<contentExtension pattern="org.eclipse.wst.jsdt.js.common.ui.navigator.taskLinkHelper" />
+			</includes>
+		</viewerContentBinding>
+	</extension>
+	
+    <extension
+          point="org.eclipse.ui.navigator.linkHelper">
+       <linkHelper
+             class="org.eclipse.wst.jsdt.js.common.ui.navigator.TaskLinkHelper"
+             id="org.eclipse.wst.jsdt.js.common.ui.navigator.taskLinkHelper">
+          <editorInputEnablement>
+             <instanceof value="org.eclipse.ui.IFileEditorInput"/>
+          </editorInputEnablement>
+          <selectionEnablement>
+	        	<instanceof value="org.eclipse.wst.jsdt.js.common.build.system.ITask"/>
+          </selectionEnablement>
+       </linkHelper>
+    </extension>
+   
+   <extension point="org.eclipse.core.runtime.adapters">
+        <factory 
+            class="org.eclipse.wst.jsdt.js.common.build.system.FileAdapterFactory" 
+            adaptableType="org.eclipse.wst.jsdt.js.common.build.system.ITask">
+            <adapter
+               type="org.eclipse.debug.ui.actions.ILaunchable">
+            </adapter>
+        </factory>
+   </extension>
+	
+</plugin>
+

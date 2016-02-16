@@ -8,37 +8,18 @@
  * 	Contributors:
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.wst.jsdt.js.common.build.system;
+package org.eclipse.wst.jsdt.js.gulp.internal;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.wst.jsdt.js.common.build.system.AbstractTask;
+import org.eclipse.wst.jsdt.js.common.build.system.Location;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public class Task implements ITask {
-	private String name;
-	private boolean isDefault;
-	private IFile buildFile;
-	
-	public Task(String name, IFile buildFile, boolean isDefault) {
-		this.name = name;
-		this.buildFile = buildFile;
-		this.isDefault = isDefault;
-	}
-	
-	@Override
-	public String getName() {
-		return name;
-	}	
+public class GulpTask extends AbstractTask {
 
-	@Override
-	public boolean isDefault() {
-		return isDefault;
+	public GulpTask(String name, IFile buildFile, boolean isDefault, Location location) {
+		super(name, buildFile, isDefault, location);
 	}
-
-	@Override
-	public IFile getBuildFile() {
-		return buildFile;
-	}
-
 }

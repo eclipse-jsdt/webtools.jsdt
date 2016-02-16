@@ -14,24 +14,30 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.jsdt.core.dom.Expression;
 import org.eclipse.wst.jsdt.core.dom.FunctionInvocation;
 import org.eclipse.wst.jsdt.core.dom.SimpleName;
 import org.eclipse.wst.jsdt.js.common.build.system.BuildSystemVisitor;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
+import org.eclipse.wst.jsdt.js.common.build.system.Location;
 import org.eclipse.wst.jsdt.js.common.build.system.util.ASTUtil;
+import org.eclipse.wst.jsdt.js.gulp.internal.GulpTask;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public class GulpVisitor extends BuildSystemVisitor {
-	private Set<String> tasks;
+	private Set<ITask> tasks;
+	private IFile file;
 	
 	private static final String GULP = "gulp"; //$NON-NLS-1$
 	private static final String TASK= "task"; //$NON-NLS-1$
 	
-	public GulpVisitor() {
+	public GulpVisitor(IFile file) {
 		super();
-		this.tasks = new HashSet<String>();
+		this.file = file;
+		this.tasks = new HashSet<ITask>();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -42,15 +48,16 @@ public class GulpVisitor extends BuildSystemVisitor {
 
 		if (TASK.equals(functionName.toString()) && GULP.equals(expression.toString())) {
 			if (arguments.size() > 0) {
-				Expression task = arguments.get(0);
-				tasks.add(ASTUtil.beautify(task));
+				Expression e = arguments.get(0);
+				tasks.add(new GulpTask((ASTUtil.beautify(e)), file, false,
+						new Location(e.getStartPosition(), e.getLength())));
 			}
 		}
 
 		return true;
 	}
 	
-	public Set<String> getTasks() {
+	public Set<ITask> getTasks() {
 		return tasks;
 	}
 	

@@ -2,10 +2,10 @@
 <?eclipse version="3.4"?>
 <plugin>
 	<extension
-			point="org.eclipse.ui.navigator.viewer">
+		point="org.eclipse.ui.navigator.viewer">
 		<viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
 			<includes>
-				<contentExtension pattern="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpFileContent" />
+				<contentExtension pattern="org.eclipse.wst.jsdt.js.gulp.internal.ui.gulpFileContent" />
 			</includes>
 		</viewerContentBinding>
 	</extension>
@@ -13,13 +13,13 @@
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent 
-            id="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpFileContent" 
+            id="org.eclipse.wst.jsdt.js.gulp.internal.ui.gulpFileContent" 
             name="Gulp Task Content Provider"
             contentProvider="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpFileContentProvider"
             labelProvider="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpLabelProvider" 
             activeByDefault="true"
             icon="icons/gulp_16.png"
-            priority="high" >
+            priority="highest" >
          <triggerPoints>
 	            <and>
 	               <instanceof value="org.eclipse.core.resources.IResource"/>
@@ -32,17 +32,7 @@
       </navigatorContent>
    </extension>
    
-   <extension point="org.eclipse.core.runtime.adapters">
-		<factory 
-            class="org.eclipse.wst.jsdt.js.gulp.internal.ui.GulpFileAdapterFactory" 
-            adaptableType="org.eclipse.wst.jsdt.js.common.build.system.ITask">
-            <adapter
-               type="org.eclipse.debug.ui.actions.ILaunchable">
-         	</adapter>
-		</factory>
-	</extension>
-	
-	<extension
+   <extension
          point="org.eclipse.debug.ui.launchShortcuts">
      	 <shortcut
             class="org.eclipse.wst.jsdt.js.gulp.internal.launch.shortcut.GulpLaunch"
@@ -56,10 +46,17 @@
            <enablement>
              <with variable="selection">
                <count value="1"/>
-             </with>
-                <iterate>
-                  <instanceof value="org.eclipse.wst.jsdt.js.common.build.system.ITask" />
+                <iterate ifEmpty="false">
+                  <or>
+                      <instanceof value="org.eclipse.wst.jsdt.js.gulp.internal.GulpTask" />
+                      <adapt type="org.eclipse.core.resources.IResource">
+                          <test property="org.eclipse.core.resources.name"
+                                value="gulpfile.js">
+                          </test>
+                      </adapt>
+                 </or>
                </iterate>
+             </with>
            </enablement>
            <contextLabel
          	  mode="run"

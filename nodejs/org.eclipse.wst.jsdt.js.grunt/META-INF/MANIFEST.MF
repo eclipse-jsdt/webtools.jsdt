@@ -21,7 +21,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.jsdt.js.common;bundle-version="1.0.000",
  org.eclipse.wst.jsdt.js.cli;bundle-version="1.0.000",
  org.eclipse.ui.navigator,
- org.eclipse.wst.jsdt.core
+ org.eclipse.wst.jsdt.core,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.text
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin

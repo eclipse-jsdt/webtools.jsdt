@@ -11,6 +11,9 @@
 package org.eclipse.wst.jsdt.js.common.build.system.launch.ui;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.debug.internal.ui.SWTFactory;
@@ -32,6 +35,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.js.common.CommonPlugin;
 import org.eclipse.wst.jsdt.js.common.Messages;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 import org.eclipse.wst.jsdt.js.common.build.system.ui.IFileSelectionDialog;
 import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 
@@ -130,6 +134,16 @@ public abstract class GenericBuildSystemTab extends AbstractLaunchConfigurationT
 			}
 		}
 		return null;
+	}
+	
+	protected String[] getTaskNames(Set<ITask> tasks) {
+		List<String> names = new ArrayList<>();
+		if (!tasks.isEmpty()) {
+			for (ITask task : tasks) {
+				names.add(task.getName());
+			}
+		}
+		return names.toArray(new String[names.size()]);
 	}
 	
 

@@ -14,30 +14,36 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.jsdt.core.dom.Expression;
 import org.eclipse.wst.jsdt.core.dom.FunctionInvocation;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteral;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteralField;
 import org.eclipse.wst.jsdt.core.dom.SimpleName;
 import org.eclipse.wst.jsdt.js.common.build.system.BuildSystemVisitor;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
+import org.eclipse.wst.jsdt.js.common.build.system.Location;
 import org.eclipse.wst.jsdt.js.common.build.system.util.ASTUtil;
+import org.eclipse.wst.jsdt.js.grunt.internal.GruntTask;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public class GruntVisitor extends BuildSystemVisitor {
-	private Set<String> tasks;
+	private Set<ITask> tasks;
+	private IFile file;
 	private static final String GRUNT = "grunt"; //$NON-NLS-1$
 	private static final String REGISTER_TASK = "registerTask"; //$NON-NLS-1$
 	private static final String REGISTER_MULTI_TASK = "registerMultiTask"; //$NON-NLS-1$
 	private static final String INIT_CONFIG = "initConfig"; //$NON-NLS-1$
 	
-	public GruntVisitor() {
+	public GruntVisitor(IFile file) {
 		super();
-		this.tasks = new HashSet<String>();
+		this.file = file;
+		this.tasks = new HashSet<ITask>();
 	}
 	
-	public Set<String> getTasks() {
+	public Set<ITask> getTasks() {
 		return this.tasks;
 	}
 	
@@ -46,7 +52,9 @@ public class GruntVisitor extends BuildSystemVisitor {
 		SimpleName functionName = node.getName();
 		Expression expression = node.getExpression();
 		List<Expression> arguments = node.arguments();
-
+		
+		node.getStartPosition();
+		node.getLength();
 		if (functionName != null && expression != null && arguments != null) {
 			int argSize = arguments.size();
 			
@@ -54,7 +62,7 @@ public class GruntVisitor extends BuildSystemVisitor {
 			if (REGISTER_TASK.equals(functionName.toString()) && GRUNT.equals(expression.toString())) {
 				if (argSize == 2) {
 					Expression task = arguments.get(0);
-					tasks.add(ASTUtil.beautify(task)); 
+					tasks.add(new GruntTask(ASTUtil.beautify(task), file, false, new Location(task.getStartPosition(), task.getLength()))); 
 				}
 				return false;
 			
@@ -62,7 +70,7 @@ public class GruntVisitor extends BuildSystemVisitor {
 			} else if (REGISTER_MULTI_TASK.equals(functionName.toString()) && GRUNT.equals(expression.toString())) {
 				if (argSize == 3) {
 					Expression task = arguments.get(0);
-					tasks.add(ASTUtil.beautify(task));
+					tasks.add(new GruntTask(ASTUtil.beautify(task), file, false, new Location(task.getStartPosition(), task.getLength()))); 
 				}
 				return false;
 				
@@ -72,7 +80,8 @@ public class GruntVisitor extends BuildSystemVisitor {
 					ObjectLiteral jsObject = (ObjectLiteral) arguments.get(0);
 					List<ObjectLiteralField> fields = jsObject.fields();
 					for (ObjectLiteralField f : fields) {
-						tasks.add(f.getFieldName().toString());
+						Expression field = f.getFieldName();
+						tasks.add(new GruntTask((field.toString()), file, false, new Location(field.getStartPosition(), field.getLength())));
 					}
 				}
 				return false;

@@ -8,16 +8,19 @@
  * 	Contributors:
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.wst.jsdt.js.common.build.system;
+package org.eclipse.wst.jsdt.js.grunt.internal;
 
-import java.util.Set;
-
-import org.eclipse.wst.jsdt.core.dom.ASTVisitor;;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.wst.jsdt.js.common.build.system.AbstractTask;
+import org.eclipse.wst.jsdt.js.common.build.system.Location;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public abstract class BuildSystemVisitor extends ASTVisitor {
+public class GruntTask extends AbstractTask {
 
-	public abstract Set<ITask> getTasks();
+	public GruntTask(String name, IFile buildFile, boolean isDefault, Location location) {
+		super(name, buildFile, isDefault, location);
+	}
+
 }

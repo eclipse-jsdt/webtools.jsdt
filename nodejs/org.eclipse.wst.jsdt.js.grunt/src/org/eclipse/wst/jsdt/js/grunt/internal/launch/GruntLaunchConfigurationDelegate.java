@@ -18,8 +18,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.jsdt.js.cli.core.CLI;
 import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
 import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
@@ -49,11 +47,11 @@ public class GruntLaunchConfigurationDelegate implements ILaunchConfigurationDel
 
 	private void launchGrunt(IProject project, IPath dir, CLICommand command, IProgressMonitor monitor) {
 		try {
-			 new CLI(project, dir).execute(command, monitor);
+			new CLI(project, dir).execute(command, monitor);
 		} catch (CoreException e) {
 			GruntPlugin.logError(e);
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.GruntLaunchError_Title,
-					Messages.GruntLaunchError_Message, e.getStatus());
+			WorkbenchResourceUtil.showErrorDialog(Messages.GruntLaunchError_Title, Messages.GruntLaunchError_Message,
+					e.getStatus());
 		}
 	}
 	

@@ -23,10 +23,11 @@ import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.wst.jsdt.js.common.build.system.Task;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 import org.eclipse.wst.jsdt.js.common.build.system.launch.LaunchConfigurationAutoFill;
 import org.eclipse.wst.jsdt.js.grunt.GruntPlugin;
 import org.eclipse.wst.jsdt.js.grunt.internal.GruntConstants;
+import org.eclipse.wst.jsdt.js.grunt.internal.GruntTask;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -36,12 +37,15 @@ public class GruntLaunch implements ILaunchShortcut {
 	@Override
 	public void launch(ISelection selection, String mode) {
 		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-			 Object element = ((IStructuredSelection)selection).getFirstElement();
-			 element.toString();
-			 if (element instanceof Task) {
-				 Task task = (Task) element;
-				 launch(task,  mode);
-			 }
+			Object element = ((IStructuredSelection) selection).getFirstElement();
+			element.toString();
+			if (element instanceof ITask) {
+				ITask task = (ITask) element;
+				launch(task, mode);
+				// Launch for Gruntfile.js
+			} else if (element instanceof IFile) {
+				launch(createDefaultTask((IFile) element), mode);
+			}
 		}
 	}
 	
@@ -49,7 +53,7 @@ public class GruntLaunch implements ILaunchShortcut {
 	public void launch(IEditorPart arg0, String arg1) {	
 	}
 	
-	protected void launch(Task task, String mode) {
+	protected void launch(ITask task, String mode) {
 		try {
 			IFile buildFile = task.getBuildFile();
 			ILaunchConfigurationType gruntLaunchConfiguraionType = DebugPlugin.getDefault().getLaunchManager()
@@ -91,6 +95,10 @@ public class GruntLaunch implements ILaunchShortcut {
 		ILaunchConfigurationWorkingCopy launchConfiguration = launchConfigurationType.newInstance(null,
 				launchManager.generateLaunchConfigurationName(namePrefix));
 		return launchConfiguration;
+	}
+	
+	private ITask createDefaultTask(IFile resource) {
+		return new GruntTask("", resource, true, null); //$NON-NLS-1$
 	}
 	
 }
