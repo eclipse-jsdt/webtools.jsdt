@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
 import org.eclipse.wst.jsdt.chromium.debug.core.efs.ChromiumScriptFileSystem;
-import org.eclipse.wst.jsdt.chromium.sdk.Breakpoint;
-import org.eclipse.wst.jsdt.chromium.sdk.BreakpointTypeExtension;
+import org.eclipse.wst.jsdt.chromium.Breakpoint;
+import org.eclipse.wst.jsdt.chromium.BreakpointTypeExtension;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;

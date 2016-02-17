@@ -8,7 +8,7 @@ package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
 import java.io.IOException;
 
-import org.eclipse.wst.jsdt.chromium.sdk.Browser;
+import org.eclipse.wst.jsdt.chromium.Browser;
 
 /**
  * This interface allows clients to provide various strategies

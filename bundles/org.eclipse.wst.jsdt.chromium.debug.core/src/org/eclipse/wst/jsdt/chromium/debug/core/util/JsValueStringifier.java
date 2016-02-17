@@ -10,11 +10,11 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.SortedMap;
 
-import org.eclipse.wst.jsdt.chromium.sdk.JsArray;
-import org.eclipse.wst.jsdt.chromium.sdk.JsObject;
-import org.eclipse.wst.jsdt.chromium.sdk.JsValue;
-import org.eclipse.wst.jsdt.chromium.sdk.JsVariable;
-import org.eclipse.wst.jsdt.chromium.sdk.JsValue.Type;
+import org.eclipse.wst.jsdt.chromium.JsArray;
+import org.eclipse.wst.jsdt.chromium.JsObject;
+import org.eclipse.wst.jsdt.chromium.JsValue;
+import org.eclipse.wst.jsdt.chromium.JsVariable;
+import org.eclipse.wst.jsdt.chromium.JsValue.Type;
 
 /**
  * A converter of JsValues into human-readable strings used in various contexts.

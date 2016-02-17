@@ -6,7 +6,7 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import org.eclipse.wst.jsdt.chromium.sdk.Script;
+import org.eclipse.wst.jsdt.chromium.Script;
 import org.eclipse.core.resources.IFile;
 
 /**

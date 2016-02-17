@@ -13,7 +13,7 @@ import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumLineBreakpoint;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.IgnoreCountData;
 import org.eclipse.wst.jsdt.chromium.debug.core.util.ChromiumDebugPluginUtil;
-import org.eclipse.wst.jsdt.chromium.sdk.Breakpoint;
+import org.eclipse.wst.jsdt.chromium.Breakpoint;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;

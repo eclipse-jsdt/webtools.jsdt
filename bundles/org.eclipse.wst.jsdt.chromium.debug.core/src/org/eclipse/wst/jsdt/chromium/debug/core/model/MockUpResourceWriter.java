@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-import org.eclipse.wst.jsdt.chromium.sdk.Script;
+import org.eclipse.wst.jsdt.chromium.Script;
 import org.eclipse.osgi.util.NLS;
 
 /**

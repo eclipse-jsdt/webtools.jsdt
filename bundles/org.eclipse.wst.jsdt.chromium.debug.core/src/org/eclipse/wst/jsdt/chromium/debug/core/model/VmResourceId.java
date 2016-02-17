@@ -6,8 +6,8 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import org.eclipse.wst.jsdt.chromium.sdk.Script;
-import org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil;
+import org.eclipse.wst.jsdt.chromium.Script;
+import org.eclipse.wst.jsdt.chromium.util.BasicUtil;
 
 /**
  * Id of resources loaded in V8 VM. We only know that they may have name (typically filename or

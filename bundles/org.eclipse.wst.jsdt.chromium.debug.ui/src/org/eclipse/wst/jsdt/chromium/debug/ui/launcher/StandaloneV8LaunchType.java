@@ -10,7 +10,7 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.BreakpointSynchronizer;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.JavascriptVmEmbedder;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.JavascriptVmEmbedderFactory;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.NamedConnectionLoggerFactory;
-import org.eclipse.wst.jsdt.chromium.sdk.ConnectionLogger;
+import org.eclipse.wst.jsdt.chromium.ConnectionLogger;
 import org.eclipse.debug.core.ILaunch;
 
 public class StandaloneV8LaunchType extends LaunchTypeBase {

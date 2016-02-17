@@ -7,8 +7,8 @@
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.ScriptNameManipulator;
-import org.eclipse.wst.jsdt.chromium.sdk.DebugEventListener;
-import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVm;
+import org.eclipse.wst.jsdt.chromium.DebugEventListener;
+import org.eclipse.wst.jsdt.chromium.JavascriptVm;
 import org.eclipse.core.runtime.CoreException;
 
 /**

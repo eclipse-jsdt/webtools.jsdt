@@ -6,7 +6,7 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.ui;
 
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.getSafe;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.getSafe;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,11 +16,11 @@ import java.util.Map;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.model.TabSelector;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.WipTabSelector;
-import org.eclipse.wst.jsdt.chromium.sdk.Browser.TabConnector;
-import org.eclipse.wst.jsdt.chromium.sdk.Browser.TabFetcher;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBackend;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBrowser;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBrowser.WipTabConnector;
+import org.eclipse.wst.jsdt.chromium.Browser.TabConnector;
+import org.eclipse.wst.jsdt.chromium.Browser.TabFetcher;
+import org.eclipse.wst.jsdt.chromium.wip.WipBackend;
+import org.eclipse.wst.jsdt.chromium.wip.WipBrowser;
+import org.eclipse.wst.jsdt.chromium.wip.WipBrowser.WipTabConnector;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;

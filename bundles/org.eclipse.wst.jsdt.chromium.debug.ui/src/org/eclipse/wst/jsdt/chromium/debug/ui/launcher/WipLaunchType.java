@@ -12,13 +12,13 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.JavascriptVmEmbedderFactor
 import org.eclipse.wst.jsdt.chromium.debug.core.model.LaunchParams;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.NamedConnectionLoggerFactory;
 import org.eclipse.wst.jsdt.chromium.debug.ui.DialogBasedTabSelector;
-import org.eclipse.wst.jsdt.chromium.sdk.ConnectionLogger;
+import org.eclipse.wst.jsdt.chromium.ConnectionLogger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBackend;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.eclipse.BackendRegistry;
+import org.eclipse.wst.jsdt.chromium.wip.WipBackend;
+import org.eclipse.wst.jsdt.chromium.wip.eclipse.BackendRegistry;
 
 public class WipLaunchType extends LaunchTypeBase {
   @Override

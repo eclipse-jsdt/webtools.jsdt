@@ -7,7 +7,7 @@
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.util.ChromiumDebugPluginUtil;
-import org.eclipse.wst.jsdt.chromium.sdk.DebugContext;
+import org.eclipse.wst.jsdt.chromium.DebugContext;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;

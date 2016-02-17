@@ -20,7 +20,7 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.ConnectedTargetData;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.DebugTargetImpl;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResource;
 import org.eclipse.wst.jsdt.chromium.debug.core.util.ScriptTargetMapping;
-import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVmFactory;
+import org.eclipse.wst.jsdt.chromium.JavascriptVmFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdapterManager;

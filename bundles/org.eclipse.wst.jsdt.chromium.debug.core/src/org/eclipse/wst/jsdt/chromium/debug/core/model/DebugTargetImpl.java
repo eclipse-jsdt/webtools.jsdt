@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.BreakpointSynchronizer.Direction;
-import org.eclipse.wst.jsdt.chromium.sdk.util.Destructable;
-import org.eclipse.wst.jsdt.chromium.sdk.util.DestructingGuard;
+import org.eclipse.wst.jsdt.chromium.util.Destructable;
+import org.eclipse.wst.jsdt.chromium.util.DestructingGuard;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;

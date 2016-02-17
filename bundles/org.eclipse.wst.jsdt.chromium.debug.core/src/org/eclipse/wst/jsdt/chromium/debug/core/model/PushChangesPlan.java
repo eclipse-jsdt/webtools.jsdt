@@ -10,10 +10,10 @@ import java.io.IOException;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.util.ChromiumDebugPluginUtil;
 import org.eclipse.wst.jsdt.chromium.debug.core.util.ScriptTargetMapping;
-import org.eclipse.wst.jsdt.chromium.sdk.RelayOk;
-import org.eclipse.wst.jsdt.chromium.sdk.Script;
-import org.eclipse.wst.jsdt.chromium.sdk.SyncCallback;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript;
+import org.eclipse.wst.jsdt.chromium.RelayOk;
+import org.eclipse.wst.jsdt.chromium.Script;
+import org.eclipse.wst.jsdt.chromium.SyncCallback;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript;
 import org.eclipse.core.runtime.CoreException;
 
 /**

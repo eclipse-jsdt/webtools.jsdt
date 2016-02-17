@@ -9,7 +9,7 @@ package org.eclipse.wst.jsdt.chromium.debug.core.model;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.eclipse.wst.jsdt.chromium.sdk.ConnectionLogger;
+import org.eclipse.wst.jsdt.chromium.ConnectionLogger;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.ITerminate;
 

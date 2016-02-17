@@ -6,7 +6,7 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.join;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.join;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,18 +20,18 @@ import java.util.List;
 import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
 import org.eclipse.wst.jsdt.chromium.debug.core.ScriptNameManipulator;
 import org.eclipse.wst.jsdt.chromium.debug.core.util.JavaScriptRegExpSupport;
-import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVmFactory;
-import org.eclipse.wst.jsdt.chromium.sdk.ConnectionLogger;
-import org.eclipse.wst.jsdt.chromium.sdk.DebugEventListener;
-import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVm;
-import org.eclipse.wst.jsdt.chromium.sdk.StandaloneVm;
-import org.eclipse.wst.jsdt.chromium.sdk.TabDebugEventListener;
-import org.eclipse.wst.jsdt.chromium.sdk.UnsupportedVersionException;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBackend;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBrowser;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBrowser.WipTabConnector;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBrowserFactory;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBrowserTab;
+import org.eclipse.wst.jsdt.chromium.JavascriptVmFactory;
+import org.eclipse.wst.jsdt.chromium.ConnectionLogger;
+import org.eclipse.wst.jsdt.chromium.DebugEventListener;
+import org.eclipse.wst.jsdt.chromium.JavascriptVm;
+import org.eclipse.wst.jsdt.chromium.StandaloneVm;
+import org.eclipse.wst.jsdt.chromium.TabDebugEventListener;
+import org.eclipse.wst.jsdt.chromium.UnsupportedVersionException;
+import org.eclipse.wst.jsdt.chromium.wip.WipBackend;
+import org.eclipse.wst.jsdt.chromium.wip.WipBrowser;
+import org.eclipse.wst.jsdt.chromium.wip.WipBrowser.WipTabConnector;
+import org.eclipse.wst.jsdt.chromium.wip.WipBrowserFactory;
+import org.eclipse.wst.jsdt.chromium.wip.WipBrowserTab;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
 

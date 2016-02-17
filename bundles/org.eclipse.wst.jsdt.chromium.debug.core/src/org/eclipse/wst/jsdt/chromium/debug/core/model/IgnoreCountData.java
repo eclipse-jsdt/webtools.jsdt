@@ -1,7 +1,7 @@
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
-import org.eclipse.wst.jsdt.chromium.sdk.Breakpoint;
+import org.eclipse.wst.jsdt.chromium.Breakpoint;
 
 /**
  * A structure used to store ignore count parameter. It contains integer 'value' and

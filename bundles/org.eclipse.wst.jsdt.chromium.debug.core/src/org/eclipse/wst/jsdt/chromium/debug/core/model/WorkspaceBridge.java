@@ -8,9 +8,9 @@ package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
 import java.util.Collection;
 
-import org.eclipse.wst.jsdt.chromium.sdk.Breakpoint;
-import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVm;
-import org.eclipse.wst.jsdt.chromium.sdk.Script;
+import org.eclipse.wst.jsdt.chromium.Breakpoint;
+import org.eclipse.wst.jsdt.chromium.JavascriptVm;
+import org.eclipse.wst.jsdt.chromium.Script;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugException;

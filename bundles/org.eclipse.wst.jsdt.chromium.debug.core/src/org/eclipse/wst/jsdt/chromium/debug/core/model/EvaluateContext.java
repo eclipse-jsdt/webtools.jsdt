@@ -6,7 +6,7 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import org.eclipse.wst.jsdt.chromium.sdk.JsEvaluateContext;
+import org.eclipse.wst.jsdt.chromium.JsEvaluateContext;
 
 /**
  * Projection of {@link JsEvaluateContext} into Eclipse world.

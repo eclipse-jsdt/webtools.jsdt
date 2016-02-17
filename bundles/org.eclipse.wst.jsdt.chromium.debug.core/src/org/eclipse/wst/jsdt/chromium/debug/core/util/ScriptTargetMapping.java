@@ -11,8 +11,8 @@ import java.util.Collection;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.ConnectedTargetData;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResource;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.WorkspaceBridge;
-import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVm;
-import org.eclipse.wst.jsdt.chromium.sdk.Script;
+import org.eclipse.wst.jsdt.chromium.JavascriptVm;
+import org.eclipse.wst.jsdt.chromium.Script;
 import org.eclipse.core.resources.IFile;
 
 /**

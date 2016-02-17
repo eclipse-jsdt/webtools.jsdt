@@ -6,12 +6,12 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.containsSafe;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.containsSafe;
 
-import org.eclipse.wst.jsdt.chromium.sdk.JsVariable;
-import org.eclipse.wst.jsdt.chromium.sdk.util.JavaScriptExpressionBuilder;
-import org.eclipse.wst.jsdt.chromium.sdk.util.JavaScriptExpressionBuilder.ExpressionComponentFormatter;
-import org.eclipse.wst.jsdt.chromium.sdk.util.JavaScriptExpressionBuilder.VariableAccess;
+import org.eclipse.wst.jsdt.chromium.JsVariable;
+import org.eclipse.wst.jsdt.chromium.util.JavaScriptExpressionBuilder;
+import org.eclipse.wst.jsdt.chromium.util.JavaScriptExpressionBuilder.ExpressionComponentFormatter;
+import org.eclipse.wst.jsdt.chromium.util.JavaScriptExpressionBuilder.VariableAccess;
 
 /**
  * Tracks how one variable is obtained as an inner property of another variable.

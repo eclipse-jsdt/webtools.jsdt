@@ -19,19 +19,16 @@
       <category name="JSDT - Incubation"/>
    </bundle>
 
-   <feature id="org.eclipse.wst.jsdt.chromium.sdk" version="0.0.0">
+   <feature id="org.eclipse.wst.jsdt.chromium.debug.feature" version="0.0.0">
       <category name="JSDT - Incubation"/>
    </feature>
 
-   <feature id="org.eclipse.wst.jsdt.chromium.debug" version="0.0.0">
+   <feature id="org.eclipse.wst.jsdt.chromium_sdk.feature" version="0.0.0">
       <category name="JSDT - Incubation"/>
    </feature>
 
-   <feature id="org.eclipse.wst.jsdt.chromium.debug.jsdtbridge" version="0.0.0">
+   <feature id="org.eclipse.wst.jsdt.chromium_tests.feature" version="0.0.0">
       <category name="JSDT - Incubation"/>
    </feature>
 
-   <feature id="org.eclipse.wst.jsdt.chromium.sdk.wipbackends" version="0.0.0">
-      <category name="JSDT - Incubation"/>
-   </feature>
 </site>

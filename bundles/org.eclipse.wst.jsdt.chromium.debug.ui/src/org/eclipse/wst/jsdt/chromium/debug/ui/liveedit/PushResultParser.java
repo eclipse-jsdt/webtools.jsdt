@@ -17,10 +17,10 @@ import org.eclipse.wst.jsdt.chromium.debug.ui.liveedit.LiveEditDiffViewer.Functi
 import org.eclipse.wst.jsdt.chromium.debug.ui.liveedit.LiveEditDiffViewer.Side;
 import org.eclipse.wst.jsdt.chromium.debug.ui.liveedit.LiveEditDiffViewer.SourcePosition;
 import org.eclipse.wst.jsdt.chromium.debug.ui.liveedit.LiveEditDiffViewer.SourceText;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript.NewFunctionNode;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript.OldFunctionNode;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript.TextualDiff;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript.NewFunctionNode;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript.OldFunctionNode;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript.TextualDiff;
 import org.eclipse.osgi.util.NLS;
 
 /**

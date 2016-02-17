@@ -8,8 +8,8 @@ package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
 import java.io.IOException;
 
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBackend;
-import org.eclipse.wst.jsdt.chromium.sdk.wip.WipBrowser;
+import org.eclipse.wst.jsdt.chromium.wip.WipBackend;
+import org.eclipse.wst.jsdt.chromium.wip.WipBrowser;
 
 /**
  * This interface allows clients to provide various strategies

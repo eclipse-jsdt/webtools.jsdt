@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.util.RangeBinarySearch;
 import org.eclipse.wst.jsdt.chromium.debug.ui.PluginUtil;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.SourceViewer;

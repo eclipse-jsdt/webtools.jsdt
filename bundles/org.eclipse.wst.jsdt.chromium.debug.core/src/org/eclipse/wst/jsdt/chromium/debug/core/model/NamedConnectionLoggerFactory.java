@@ -6,7 +6,7 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import org.eclipse.wst.jsdt.chromium.sdk.ConnectionLogger;
+import org.eclipse.wst.jsdt.chromium.ConnectionLogger;
 
 /**
  * The factory provides {@link ConnectionLogger} that can be used to output connection

@@ -17,8 +17,8 @@ import org.eclipse.wst.jsdt.chromium.debug.ui.DialogUtils.Scope;
 import org.eclipse.wst.jsdt.chromium.debug.ui.DialogUtils.Updater;
 import org.eclipse.wst.jsdt.chromium.debug.ui.DialogUtils.ValueConsumer;
 import org.eclipse.wst.jsdt.chromium.debug.ui.DialogUtils.ValueSource;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript.CompileErrorFailure;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript.CompileErrorFailure;
 import org.eclipse.osgi.util.NLS;
 
 /**

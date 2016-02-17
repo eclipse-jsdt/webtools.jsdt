@@ -6,7 +6,7 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.toArray;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.toArray;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
-import org.eclipse.wst.jsdt.chromium.sdk.Breakpoint;
-import org.eclipse.wst.jsdt.chromium.sdk.CallFrame;
-import org.eclipse.wst.jsdt.chromium.sdk.DebugContext;
-import org.eclipse.wst.jsdt.chromium.sdk.DebugContext.StepAction;
-import org.eclipse.wst.jsdt.chromium.sdk.ExceptionData;
+import org.eclipse.wst.jsdt.chromium.Breakpoint;
+import org.eclipse.wst.jsdt.chromium.CallFrame;
+import org.eclipse.wst.jsdt.chromium.DebugContext;
+import org.eclipse.wst.jsdt.chromium.DebugContext.StepAction;
+import org.eclipse.wst.jsdt.chromium.ExceptionData;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;

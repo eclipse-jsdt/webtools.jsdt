@@ -10,9 +10,9 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
-import org.eclipse.wst.jsdt.chromium.sdk.JsScope;
-import org.eclipse.wst.jsdt.chromium.sdk.JsValue;
-import org.eclipse.wst.jsdt.chromium.sdk.JsVariable;
+import org.eclipse.wst.jsdt.chromium.JsScope;
+import org.eclipse.wst.jsdt.chromium.JsValue;
+import org.eclipse.wst.jsdt.chromium.JsVariable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;

@@ -6,8 +6,8 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.getSafe;
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.removeSafe;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.getSafe;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.removeSafe;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +20,7 @@ import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResource.Metadata;
 import org.eclipse.wst.jsdt.chromium.debug.core.util.ChromiumDebugPluginUtil;
 import org.eclipse.wst.jsdt.chromium.debug.core.util.UniqueKeyGenerator;
-import org.eclipse.wst.jsdt.chromium.sdk.Script;
+import org.eclipse.wst.jsdt.chromium.Script;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;

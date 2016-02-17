@@ -23,10 +23,9 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>org.eclipse.wst.jsdt.chromium.debug</module>
-    <module>org.eclipse.wst.jsdt.chromium.debug.jsdtbridge</module>
-    <module>org.eclipse.wst.jsdt.chromium.sdk</module>
-    <module>org.eclipse.wst.jsdt.chromium.sdk.wipbackends</module>
+    <module>org.eclipse.wst.jsdt.chromium.debug.feature</module>
+    <module>org.eclipse.wst.jsdt.chromium_sdk.feature</module>
+    <module>org.eclipse.wst.jsdt.chromium_tests.feature</module>
     <module>org.eclipse.wst.jsdt_tests.feature</module>
     <module>org.eclipse.wst.jsdt.feature</module>
     <module>org.eclipse.wst.jsdt.nodejs.feature</module>

@@ -6,7 +6,7 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.getSafe;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.getSafe;
 
 import java.util.HashMap;
 import java.util.Map;

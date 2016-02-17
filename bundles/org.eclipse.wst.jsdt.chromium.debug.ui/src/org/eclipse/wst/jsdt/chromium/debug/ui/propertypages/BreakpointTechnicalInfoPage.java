@@ -15,7 +15,7 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.DebugTargetImpl;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.WorkspaceBridge;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.WorkspaceBridge.BreakpointHandler;
 import org.eclipse.wst.jsdt.chromium.debug.core.util.ChromiumDebugPluginUtil;
-import org.eclipse.wst.jsdt.chromium.sdk.Breakpoint;
+import org.eclipse.wst.jsdt.chromium.Breakpoint;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;

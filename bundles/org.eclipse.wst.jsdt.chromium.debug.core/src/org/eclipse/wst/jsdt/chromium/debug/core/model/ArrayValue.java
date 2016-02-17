@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.wst.jsdt.chromium.sdk.JsArray;
+import org.eclipse.wst.jsdt.chromium.JsArray;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IIndexedValue;
 import org.eclipse.debug.core.model.IVariable;

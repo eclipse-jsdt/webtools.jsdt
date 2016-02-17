@@ -6,7 +6,7 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.sourcemap;
 
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.getSafe;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.getSafe;
 
 import java.util.Map;
 import java.util.NavigableMap;

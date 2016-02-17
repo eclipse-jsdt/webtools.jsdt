@@ -7,7 +7,7 @@
 package org.eclipse.wst.jsdt.chromium.debug.ui.actions;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.model.Variable;
-import org.eclipse.wst.jsdt.chromium.sdk.JsVariable;
+import org.eclipse.wst.jsdt.chromium.JsVariable;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IExpressionManager;
 import org.eclipse.debug.core.model.IWatchExpression;

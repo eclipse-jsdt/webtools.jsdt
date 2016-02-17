@@ -46,9 +46,9 @@ import org.eclipse.wst.jsdt.chromium.debug.ui.actions.ChooseVmControl;
 import org.eclipse.wst.jsdt.chromium.debug.ui.liveedit.LiveEditResultDialog.ErrorPositionHighlighter;
 import org.eclipse.wst.jsdt.chromium.debug.ui.liveedit.LiveEditDiffViewer.Input;
 import org.eclipse.wst.jsdt.chromium.debug.ui.liveedit.PushChangesWizard.FinisherDelegate;
-import org.eclipse.wst.jsdt.chromium.sdk.TextStreamPosition;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript.ChangeDescription;
-import org.eclipse.wst.jsdt.chromium.sdk.UpdatableScript.CompileErrorFailure;
+import org.eclipse.wst.jsdt.chromium.TextStreamPosition;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript.ChangeDescription;
+import org.eclipse.wst.jsdt.chromium.UpdatableScript.CompileErrorFailure;
 import org.eclipse.osgi.util.NLS;
 
 /**

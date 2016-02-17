@@ -13,7 +13,7 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.Value;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.ValueBase;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.WorkspaceBridge.JsLabelProvider;
 import org.eclipse.wst.jsdt.chromium.debug.ui.editors.JsEditor;
-import org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil;
+import org.eclipse.wst.jsdt.chromium.util.BasicUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.debug.core.DebugException;

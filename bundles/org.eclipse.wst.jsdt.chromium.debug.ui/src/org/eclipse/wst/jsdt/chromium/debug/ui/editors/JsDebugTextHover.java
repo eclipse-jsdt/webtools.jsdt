@@ -8,9 +8,9 @@ package org.eclipse.wst.jsdt.chromium.debug.ui.editors;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.model.EvaluateContext;
 import org.eclipse.wst.jsdt.chromium.debug.core.util.JsValueStringifier;
-import org.eclipse.wst.jsdt.chromium.sdk.JsEvaluateContext;
-import org.eclipse.wst.jsdt.chromium.sdk.JsEvaluateContext.ResultOrException;
-import org.eclipse.wst.jsdt.chromium.sdk.JsValue;
+import org.eclipse.wst.jsdt.chromium.JsEvaluateContext;
+import org.eclipse.wst.jsdt.chromium.JsEvaluateContext.ResultOrException;
+import org.eclipse.wst.jsdt.chromium.JsValue;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.text.IDocument;

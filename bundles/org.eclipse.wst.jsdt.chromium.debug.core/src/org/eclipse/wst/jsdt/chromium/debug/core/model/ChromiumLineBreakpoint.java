@@ -6,8 +6,8 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.containsSafe;
-import static org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil.removeSafe;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.containsSafe;
+import static org.eclipse.wst.jsdt.chromium.util.BasicUtil.removeSafe;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -19,15 +19,15 @@ import org.eclipse.wst.jsdt.chromium.debug.core.ScriptNameManipulator.ScriptName
 import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePosition;
 import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePositionMap;
 import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePositionMap.TranslateDirection;
-import org.eclipse.wst.jsdt.chromium.sdk.Breakpoint;
-import org.eclipse.wst.jsdt.chromium.sdk.Breakpoint.Target;
-import org.eclipse.wst.jsdt.chromium.sdk.BreakpointTypeExtension.ScriptRegExpSupport;
-import org.eclipse.wst.jsdt.chromium.sdk.IgnoreCountBreakpointExtension;
-import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVm;
-import org.eclipse.wst.jsdt.chromium.sdk.JavascriptVm.BreakpointCallback;
-import org.eclipse.wst.jsdt.chromium.sdk.RelayOk;
-import org.eclipse.wst.jsdt.chromium.sdk.SyncCallback;
-import org.eclipse.wst.jsdt.chromium.sdk.util.BasicUtil;
+import org.eclipse.wst.jsdt.chromium.Breakpoint;
+import org.eclipse.wst.jsdt.chromium.Breakpoint.Target;
+import org.eclipse.wst.jsdt.chromium.BreakpointTypeExtension.ScriptRegExpSupport;
+import org.eclipse.wst.jsdt.chromium.IgnoreCountBreakpointExtension;
+import org.eclipse.wst.jsdt.chromium.JavascriptVm;
+import org.eclipse.wst.jsdt.chromium.JavascriptVm.BreakpointCallback;
+import org.eclipse.wst.jsdt.chromium.RelayOk;
+import org.eclipse.wst.jsdt.chromium.SyncCallback;
+import org.eclipse.wst.jsdt.chromium.util.BasicUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
