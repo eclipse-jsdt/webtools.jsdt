@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2015,2016 Red Hat, Inc. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -41,7 +41,7 @@ public final class BowerUtil {
 
 	public static boolean isBowerJsonExist(final IProject project) throws CoreException {
 		IFile bowerJson = null;
-		if (project != null && project.exists()) {
+		if (project != null && project.isAccessible()) {
 			bowerJson = WorkbenchResourceUtil.findFileRecursively(project, BowerConstants.BOWER_JSON);
 		}
 		return (bowerJson != null && bowerJson.exists());
