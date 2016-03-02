@@ -280,6 +280,67 @@ public class DefaultASTVisitor extends ASTVisitor {
 	public void endVisit(WithStatement node) {
 		endVisitNode(node);
 	}
+	
+	public void endVisit(ForOfStatement node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(YieldExpression node) {
+		endVisitNode(node);
+		}
+
+	public void endVisit(DebuggerStatement node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(ArrayName node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(ObjectName node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(TemplateElement node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(TemplateLiteral node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(AssignmentName node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(RestElementName node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(SpreadElement node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(MetaProperty node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(ModuleSpecifier node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(ExportDeclaration node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(TypeDeclarationExpression node) {
+		endVisitNode(node);
+	}
+
+	public void endVisit(FunctionDeclarationStatement node) {
+		endVisitNode(node);
+	}
+	
 	protected void endVisitNode(ASTNode node) {
 		// do nothing
 	}
@@ -527,9 +588,79 @@ public class DefaultASTVisitor extends ASTVisitor {
 	public boolean visit(WithStatement node) {
 		return visitNode(node);
 	}
+	
+	public boolean visit(ForOfStatement node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(Modifier node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(YieldExpression node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(ArrowFunctionExpression node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(DebuggerStatement node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(ArrayName node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(ObjectName node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(TemplateElement node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(TemplateLiteral node) {
+		return visitNode(node);	
+	}
+
+	public boolean visit(AssignmentName node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(RestElementName node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(SpreadElement node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(MetaProperty node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(ModuleSpecifier node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(ExportDeclaration node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(TypeDeclarationExpression node) {
+		return visitNode(node);
+	}
+
+	public boolean visit(FunctionDeclarationStatement node) {
+		return visitNode(node);
+	}
 
 	protected boolean visitNode(ASTNode node) {
 		return true;
 	}
+	
+	
 
 }

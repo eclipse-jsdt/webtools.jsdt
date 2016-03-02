@@ -42,6 +42,7 @@ import org.eclipse.wst.jsdt.core.dom.ForInStatement;
 import org.eclipse.wst.jsdt.core.dom.ForOfStatement;
 import org.eclipse.wst.jsdt.core.dom.ForStatement;
 import org.eclipse.wst.jsdt.core.dom.FunctionDeclaration;
+import org.eclipse.wst.jsdt.core.dom.FunctionDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.FunctionExpression;
 import org.eclipse.wst.jsdt.core.dom.FunctionInvocation;
 import org.eclipse.wst.jsdt.core.dom.IfStatement;
@@ -78,6 +79,7 @@ import org.eclipse.wst.jsdt.core.dom.ThisExpression;
 import org.eclipse.wst.jsdt.core.dom.ThrowStatement;
 import org.eclipse.wst.jsdt.core.dom.TryStatement;
 import org.eclipse.wst.jsdt.core.dom.TypeDeclaration;
+import org.eclipse.wst.jsdt.core.dom.TypeDeclarationExpression;
 import org.eclipse.wst.jsdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclaration;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationExpression;
@@ -184,6 +186,8 @@ public class DOMASTConverter extends EStreeVisitor{
 				return convertForOfStatement(object);
 			case ClassDeclaration:
 				return convertClassDeclaration(object);
+			case ClassExpression: 
+				return convertClassExpression(object);
 			case ClassBody: 
 				// ClassBody is represented with a single TypeDeclaration 
 				// pushing the TypeDeclaration created for ClassDeclaration
@@ -250,7 +254,7 @@ public class DOMASTConverter extends EStreeVisitor{
 			case ImportDefaultSpecifier:
 				return convertImportSpecifer(object, true, false);
 			case ImportNamespaceSpecifier:
-				return convertImportSpecifer(object, true, false);
+				return convertImportSpecifer(object, false, true);
 			case ExportNamedDeclaration:
 				return convertExportDeclaration(object, false, false);
 			case ExportSpecifier:
@@ -259,10 +263,12 @@ public class DOMASTConverter extends EStreeVisitor{
 				return convertExportDeclaration(object, false, true);
 			case ExportDefaultDeclaration:
 				return convertExportDeclaration(object, true, false);
+		
 			default:
 				throw new UnimplementedException(nodeType.getTypeString() + " conversion is not implemented"); //$NON-NLS-1$
 		}
 	}
+
 
 
 
@@ -280,6 +286,7 @@ public class DOMASTConverter extends EStreeVisitor{
 		//Set source range for all the nodes.
 		//we can safely move this to visit
 		setRange(object, current);
+		
 		ASTNode parent = null;
 		if( nodeType != ESTreeNodeTypes.Program){ //Nodes can be empty only for Program
 			Assert.isTrue(!nodes.empty());
@@ -333,6 +340,9 @@ public class DOMASTConverter extends EStreeVisitor{
 			System.out.println(sb);
 			throw e;
 		}
+		if(current.getStartPosition() < 0){
+			throw new IllegalStateException();
+		}
 
 		return VisitOptions.CONTINUE;
 	}
@@ -366,7 +376,20 @@ public class DOMASTConverter extends EStreeVisitor{
 			ScriptObjectMirror range = (ScriptObjectMirror)o;
 			Number x = (Number) range.getSlot(0);
 			Number y = (Number) range.getSlot(1);
-			node.setSourceRange(x.intValue(), y.intValue()-x.intValue());
+			final int startPosition= x.intValue();
+			final int length =  y.intValue()-x.intValue();
+			node.setSourceRange(startPosition, length);
+			// FunctionDeclarationStatement and FunctionExpression are 
+			// wrappers around FunctionDeclaration and actual FunctionDeclaration 
+			// is never pushed to stack so we propagate source range here.
+			if(node.getNodeType() == ASTNode.FUNCTION_DECLARATION_STATEMENT ){
+				FunctionDeclarationStatement fds = (FunctionDeclarationStatement)node;
+				fds.getDeclaration().setSourceRange(startPosition, length);
+			}
+			if(node.getNodeType() == ASTNode.FUNCTION_EXPRESSION ){
+				FunctionExpression fe = (FunctionExpression)node;
+				fe.getMethod().setSourceRange(startPosition,length);
+			}
 		}
 	}
 	
@@ -385,6 +408,10 @@ public class DOMASTConverter extends EStreeVisitor{
 				FunctionDeclaration fdec = (FunctionDeclaration)parent;
 				fdec.setBody((Block)statement);
 				break;
+			case FUNCTION_DECLARATION_STATEMENT:
+				FunctionDeclarationStatement fdecS = (FunctionDeclarationStatement)parent;
+				fdecS.getDeclaration().setBody((Block)statement);
+				break;
 			case ARROW_FUNCTION_EXPRESSION:
 				ArrowFunctionExpression af = (ArrowFunctionExpression) parent;
 				af.setBody((Block)statement);
@@ -401,14 +428,16 @@ public class DOMASTConverter extends EStreeVisitor{
 				LabeledStatement ls = (LabeledStatement)parent;
 				ls.setBody((Statement)statement);
 				break;
-			case IF_STATEMENT:
-				IfStatement is = (IfStatement)parent;
-				if(key!= null && key.equals("consequent")){
-					is.setElseStatement((Statement)statement);
-				}else{
-					is.setThenStatement((Statement)statement);
+			case IF_STATEMENT : {
+				IfStatement is = (IfStatement) parent;
+				if ("alternate".equals(key)) {
+					is.setElseStatement((Statement) statement);
+				}
+				else if ("consequent".equals(key)) {
+					is.setThenStatement((Statement) statement);
 				}
 				break;
+			}
 			case SWITCH_STATEMENT:
 				SwitchStatement ss  = (SwitchStatement) parent;
 				if(statement.getNodeType() != SWITCH_CASE){
@@ -465,6 +494,7 @@ public class DOMASTConverter extends EStreeVisitor{
 				typeDec.bodyDeclarations().add(statement);
 				break;
 			case TYPE_DECLARATION_STATEMENT:
+			case TYPE_DECLARATION_EXPRESSION:
 				//TypeDeclaration is already assigned during convert.
 				break;
 			case EXPORT_DECLARATION:
@@ -548,6 +578,27 @@ public class DOMASTConverter extends EStreeVisitor{
 					fe.getMethod().parameters().add(svd);
 				}else{
 					fe.getMethod().setName((SimpleName) expression);
+				}
+				break;
+			case FUNCTION_DECLARATION_STATEMENT:
+				
+				FunctionDeclarationStatement fdecS = (FunctionDeclarationStatement)parent;
+				if("params".equals(key)){
+					SingleVariableDeclaration svd  = ast.newSingleVariableDeclaration();
+					svd.setPattern((Name) expression);
+					fdecS.getDeclaration().parameters().add(svd);
+				}
+				//value and key applies to  MethodDefiniton
+				if("value".equals(key)){
+					FunctionExpression fex = (FunctionExpression)expression;
+					Block b = (Block) ASTNode.copySubtree(ast, fex.getMethod().getBody());
+					fdecS.getDeclaration().setBody(b);
+				}
+				if("key".equals(key)){
+					fdecS.getDeclaration().setMethodName(expression);
+				}
+				if("id".equals(key)){
+					fdecS.getDeclaration().setMethodName(expression);
 				}
 				break;
 			case FUNCTION_DECLARATION:
@@ -765,7 +816,7 @@ public class DOMASTConverter extends EStreeVisitor{
 			case REST_ELEMENT_NAME:
 				RestElementName ren = (RestElementName) parent;
 				if("argument".equals(key)){
-					ren.setArgument((Name) expression);
+					ren.setArgument(expression);
 				}
 				break;
 			case SPREAD_ELEMENT:
@@ -866,14 +917,7 @@ public class DOMASTConverter extends EStreeVisitor{
 	
 	private VisitOptions convertIdentifier(final ScriptObjectMirror object) {
 		final String s = (String)object.getMember("name");
-		SimpleName name = null;
-		try{
-			name = ast.newSimpleName(s);
-		}catch(IllegalArgumentException e){
-			// SimpleName does not allow keywords 
-			// try propertyName.
-			name = ast.newPropertyName(s);
-		}
+		SimpleName name = ast.newSimpleName(s);
 		nodes.push(name);
 		return VisitOptions.CONTINUE;
 	}
@@ -944,7 +988,15 @@ public class DOMASTConverter extends EStreeVisitor{
 		FunctionDeclaration dec = ast.newFunctionDeclaration();
 		Boolean isGenerator = (Boolean)object.getMember("generator");
 		dec.setGenerator(isGenerator.booleanValue());
-		nodes.push(dec);
+		int parentType = nodes.peek().getNodeType();
+		if(parentType == ASTNode.EXPORT_DECLARATION 
+				|| parentType == ASTNode.TYPE_DECLARATION
+				){
+			nodes.push(dec);			
+		}else
+		{
+			nodes.push(ast.newFunctionDeclarationStatement(dec));
+		}
 		return VisitOptions.CONTINUE;
 	}
 
@@ -1152,6 +1204,19 @@ public class DOMASTConverter extends EStreeVisitor{
 		AbstractTypeDeclaration td = ast.newTypeDeclaration();
 		TypeDeclarationStatement tds = ast.newTypeDeclarationStatement(td);
 		nodes.push(tds);
+		nodes.push(td);
+		return VisitOptions.CONTINUE;
+	}
+	
+
+	/**
+	 * @param object
+	 * @return
+	 */
+	private VisitOptions convertClassExpression(ScriptObjectMirror object) {
+		AbstractTypeDeclaration td = ast.newTypeDeclaration();
+		TypeDeclarationExpression tde = ast.newTypeDeclarationExpression(td);
+		nodes.push(tde);
 		nodes.push(td);
 		return VisitOptions.CONTINUE;
 	}

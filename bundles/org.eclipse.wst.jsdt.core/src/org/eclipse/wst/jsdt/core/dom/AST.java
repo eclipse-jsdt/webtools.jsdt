@@ -900,23 +900,6 @@ public final class AST {
 	}
 
 	/**
-	 * Creates and returns a new unparented property name node for the given
-	 * identifier. The identifier should be a legal JavaScript identifier,
-	 * 
-	 * @param identifier the identifier
-	 * @return a new unparented propertyName node
-	 * @exception IllegalArgumentException if the identifier is invalid
-	 */
-	public SimpleName newPropertyName(String identifier) {
-		if(identifier == null ){
-			throw new IllegalArgumentException();
-		}
-		PropertyName result = new PropertyName(this);
-		result.setIdentifier(identifier);
-		return result;
-	}
-	
-	/**
 	 * Creates and returns a new unparented array name node. 
 	 * 
 	 * @return a new Array name node
@@ -1656,6 +1639,31 @@ public final class AST {
 		if (this.apiLevel >= AST.JLS3) {
 			result.setDeclaration(decl);
 		}
+		return result;
+	}
+	
+	/**
+	 * Creates a new unparented local type declaration expression node
+	 * owned by this AST, for the given type declaration.
+	 * <p>
+	 * This method can be used to convert any kind of type declaration
+	 * (<code>AbstractTypeDeclaration</code>) into an expression
+	 * (<code>Expression</code>) by wrapping it.
+	 * </p>
+	 *
+	 *
+	 * @param declaratopn the type declaration
+	 * @return a new unparented local type declaration expression node
+	 * @exception IllegalArgumentException if:
+	 * <ul>
+	 * <li>the node belongs to a different AST</li>
+	 * <li>the node already has a parent</li>
+	 * <li>a cycle in would be created</li>
+	 * </ul>
+	 */
+	public TypeDeclarationExpression newTypeDeclarationExpression(AbstractTypeDeclaration declaration) {
+		TypeDeclarationExpression result = new TypeDeclarationExpression(this);
+		result.setDeclaration(declaration);
 		return result;
 	}
 
@@ -2586,7 +2594,19 @@ public final class AST {
 		ExportDeclaration result = new ExportDeclaration(this);
 		return result;
 	}
-
+	
+	/**
+	 * @param statement
+	 * @return
+	 */
+	public Statement newFunctionDeclarationStatement(FunctionDeclaration declaration) {
+		if(declaration == null ){
+			throw new IllegalArgumentException();
+		}
+		FunctionDeclarationStatement result = new FunctionDeclarationStatement(this);
+		result.setDeclaration(declaration);
+		return result;
+	}
 
 	/**
 	 * Enables the recording of changes to the given compilation
@@ -2680,8 +2700,6 @@ public final class AST {
 	void setFlag(int newValue) {
 		this.bits |= newValue;
 	}
-
-	
 	
 }
 

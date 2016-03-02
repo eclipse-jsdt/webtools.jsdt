@@ -14,10 +14,6 @@ package org.eclipse.wst.jsdt.core.dom;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.wst.jsdt.core.compiler.InvalidInputException;
-import org.eclipse.wst.jsdt.internal.compiler.parser.Scanner;
-import org.eclipse.wst.jsdt.internal.compiler.parser.TerminalTokens;
-
 /**
  * AST node for a simple name. A simple name is an identifier other than
  * a keyword, future reserved word, null literal and boolean literal.
@@ -174,25 +170,7 @@ public class SimpleName extends Name {
 	 * @exception IllegalArgumentException if the identifier is invalid
 	 */
 	public void setIdentifier(String identifier) {
-		// update internalSetIdentifier if this is changed
 		if (identifier == null) {
-			throw new IllegalArgumentException();
-		}
-		Scanner scanner = this.ast.scanner;
-		char[] source = identifier.toCharArray();
-		scanner.setSource(source);
-		final int length = source.length;
-		scanner.resetTo(0, length - 1);
-		try {
-			int tokenType = scanner.scanIdentifier();
-			if (tokenType != TerminalTokens.TokenNameIdentifier) {
-				throw new IllegalArgumentException();
-			}
-			if (scanner.currentPosition != length) {
-				// this is the case when there is only one identifier see 87849
-				throw new IllegalArgumentException();
-			}
-		} catch(InvalidInputException e) {
 			throw new IllegalArgumentException();
 		}
 		preValueChange(IDENTIFIER_PROPERTY);

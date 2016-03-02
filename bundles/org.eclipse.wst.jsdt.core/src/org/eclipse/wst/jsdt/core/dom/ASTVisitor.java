@@ -1024,22 +1024,6 @@ public abstract class ASTVisitor {
 	 * visited, and <code>false</code> if the children of this node should
 	 * be skipped
 	 */
-	public boolean visit(PropertyName node) {
-		return true;
-	}
-
-	/**
-	 * Visits the given type-specific AST node.
-	 * <p>
-	 * The default implementation does nothing and return true.
-	 * Subclasses may reimplement.
-	 * </p>
-	 *
-	 * @param node the node to visit
-	 * @return <code>true</code> if the children of this node should be
-	 * visited, and <code>false</code> if the children of this node should
-	 * be skipped
-	 */
 	public boolean visit(SimpleType node) {
 		return true;
 	}
@@ -1560,10 +1544,51 @@ public abstract class ASTVisitor {
 	
 
 	/**
-	 * @param exportDeclaration
-	 * @return
+	 * Visits the given type-specific AST node.
+	 * <p>
+	 * The default implementation does nothing and return true.
+	 * Subclasses may reimplement.
+	 * </p>
+	 *
+	 * @param node the node to visit
+	 * @return <code>true</code> if the children of this node should be
+	 * visited, and <code>false</code> if the children of this node should
+	 * be skipped
 	 */
 	public boolean visit(ExportDeclaration exportDeclaration) {
+		return true;
+	}
+	
+	/**
+	 * Visits the given type-specific AST node.
+	 * <p>
+	 * The default implementation does nothing and return true.
+	 * Subclasses may reimplement.
+	 * </p>
+	 *
+	 * @param node the node to visit
+	 * @return <code>true</code> if the children of this node should be
+	 * visited, and <code>false</code> if the children of this node should
+	 * be skipped
+	 */
+	public boolean visit(TypeDeclarationExpression typeDeclarationExpression) {
+		return true;
+	}
+	
+
+	/**
+	 * Visits the given type-specific AST node.
+	 * <p>
+	 * The default implementation does nothing and return true.
+	 * Subclasses may reimplement.
+	 * </p>
+	 *
+	 * @param node the node to visit
+	 * @return <code>true</code> if the children of this node should be
+	 * visited, and <code>false</code> if the children of this node should
+	 * be skipped
+	 */
+	public boolean visit(FunctionDeclarationStatement functionDeclarationStatement) {
 		return true;
 	}
 
@@ -2604,5 +2629,20 @@ public abstract class ASTVisitor {
 	public void endVisit(ExportDeclaration exportDeclaration) {
 		// default implementation: do nothing
 	}
+
+	/**
+	 * @param typeDeclarationExpression
+	 */
+	public void endVisit(TypeDeclarationExpression typeDeclarationExpression) {
+		// default implementation: do nothing
+	}
+
+	/**
+	 * @param functionDeclarationStatement
+	 */
+	public void endVisit(FunctionDeclarationStatement functionDeclarationStatement) {
+		// default implementation: do nothing
+	}
+
 
 }

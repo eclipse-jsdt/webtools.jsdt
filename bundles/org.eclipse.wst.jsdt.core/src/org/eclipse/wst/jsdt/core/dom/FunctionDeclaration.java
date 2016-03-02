@@ -758,7 +758,8 @@ public class FunctionDeclaration extends BodyDeclaration {
 			synchronized (this) {
 				if (this.returnType == null && !this.returnType2Initialized) {
 					preLazyInit();
-					this.returnType = this.ast.newPrimitiveType(PrimitiveType.VOID);
+					this.returnType = this.ast.newPrimitiveType(PrimitiveType.ANY_CODE);
+					this.returnType.setSourceRange(this.getStartPosition(), 0);
 					this.returnType2Initialized = true;
 					postLazyInit(this.returnType, RETURN_TYPE2_PROPERTY);
 				}

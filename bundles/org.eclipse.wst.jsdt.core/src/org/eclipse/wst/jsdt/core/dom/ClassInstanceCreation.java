@@ -411,7 +411,6 @@ public class ClassInstanceCreation extends Expression {
 	 * deprecation warnings.
 	 */
 	/*package*/ Name internalGetName() {
-	    supportedOnlyIn2();
 		if (this.typeName == null) {
 			// lazy init must be thread-safe for readers
 			synchronized (this) {

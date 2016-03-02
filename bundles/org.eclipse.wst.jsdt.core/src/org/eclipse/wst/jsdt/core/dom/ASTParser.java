@@ -15,9 +15,9 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.jsdt.core.IClassFile;
-import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
+import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.ITypeRoot;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
@@ -646,8 +646,7 @@ public class ASTParser {
 		   	  throw new IllegalStateException("source not specified"); //$NON-NLS-1$
 		   }
 			if(this.typeRoot instanceof IJavaScriptUnit ){
-				result = EsprimaParser.newParser().setSource((IJavaScriptUnit)this.typeRoot).parse();
-				System.out.println("Esprima Parsed " + this.typeRoot);
+				result = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit)this.typeRoot).parse();
 			}else{
 				result = internalCreateAST(monitor);
 			}
@@ -822,8 +821,7 @@ public class ASTParser {
 							 * (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=75632)
 							 */
 //							sourceUnit = new BasicCompilationUnit(sourceUnit.getContents(), sourceUnit.getPackageName(), new String(sourceUnit.getFileName()), this.project);
-							JavaScriptUnit result = EsprimaParser.newParser().setSource((IJavaScriptUnit) this.typeRoot).parse();
-							System.out.println("ASTParser.internalCreateAST calls esprima for "+this.typeRoot );
+							JavaScriptUnit result = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit) this.typeRoot).parse();
 							result.setTypeRoot(this.typeRoot);
 							return result;
 //							wcOwner = ((IJavaScriptUnit) this.typeRoot).getOwner();

@@ -658,9 +658,8 @@ public abstract class ASTNode {
 	public static final int ARROW_FUNCTION_EXPRESSION = 94;
 	public static final int DEBUGGER_STATEMENT = 95;
 	public static final int FOR_OF_STATEMENT = 96;
-	public static final int PROPERTY_NAME = 97;
-	public static final int ARRAY_NAME = 98;
-	public static final int OBJECT_NAME = 99;
+	public static final int ARRAY_NAME = 97;
+	public static final int OBJECT_NAME = 98;
 	/**
 	 * Node type constant indicating a node of type
 	 * <code>Modifier</code>.
@@ -668,14 +667,16 @@ public abstract class ASTNode {
 	 */
 	public static final int MODIFIER = 100;
 	
-	public static final int TEMPLATE_LITERAL = 101;
-	public static final int TEMPLATE_ELEMENT = 102;
-	public static final int ASSIGNMENT_NAME = 103;
-	public static final int REST_ELEMENT_NAME = 104;
-	public static final int SPREAD_ELEMENT = 105;
-	public static final int META_PROPERTY = 106;
-	public static final int MODULE_SPECIFIER = 107;
-	public static final int EXPORT_DECLARATION = 108;
+	public static final int TEMPLATE_LITERAL = 99;
+	public static final int TEMPLATE_ELEMENT = 101;
+	public static final int ASSIGNMENT_NAME = 102;
+	public static final int REST_ELEMENT_NAME = 103;
+	public static final int SPREAD_ELEMENT = 104;
+	public static final int META_PROPERTY = 105;
+	public static final int MODULE_SPECIFIER = 106;
+	public static final int EXPORT_DECLARATION = 107;
+	public static final int TYPE_DECLARATION_EXPRESSION = 108;
+	public static final int FUNCTION_DECLARATION_STATEMENT = 109;
 
 
 
@@ -850,8 +851,6 @@ public abstract class ASTNode {
 				return ArrowFunctionExpression.class;
 			case DEBUGGER_STATEMENT:
 				return DebuggerStatement.class;
-			case PROPERTY_NAME:
-				return PropertyName.class;
 			case ARRAY_NAME:
 				return ArrayName.class;
 			case OBJECT_NAME:
@@ -872,6 +871,10 @@ public abstract class ASTNode {
 				return ModuleSpecifier.class;
 			case EXPORT_DECLARATION:
 				return ExportDeclaration.class;
+			case TYPE_DECLARATION_EXPRESSION:
+				return TypeDeclarationExpression.class;
+			case FUNCTION_DECLARATION_STATEMENT:
+				return FunctionDeclarationStatement.class;
 		}
 		throw new IllegalArgumentException();
 	}

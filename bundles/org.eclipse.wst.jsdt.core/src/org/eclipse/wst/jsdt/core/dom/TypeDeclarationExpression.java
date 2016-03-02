@@ -14,40 +14,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * RestElement pattern
- * 
- * @author Gorkem Ercan	
- * 
+ * A type declaration expression AST node type.
+ * <p>
+ * This kind of node is used to convert a type declaration
+ * node into an expression node by wrapping it.
+ * </p>
+ * *
  * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
  * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
  * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
  * (repeatedly) as the API evolves.
  * 
+ * @author Gorkem Ercan
  */
-public class RestElementName extends Name {
+public class TypeDeclarationExpression extends Expression {
 	
-
 	/**
-	 * The "argument" structural property of this node type
+	 * The "declaration" structural property of this node type (added in JLS3 API).
+	 *  
 	 */
-	public static final ChildPropertyDescriptor ARGUMENT_PROPERTY =
-				new ChildPropertyDescriptor(RestElementName.class, "argument", Expression.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+	public static final ChildPropertyDescriptor DECLARATION_PROPERTY =
+		new ChildPropertyDescriptor(TypeDeclarationExpression.class, "declaration", AbstractTypeDeclaration.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
 
-
-	
 	/**
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
+	 *  
 	 */
 	private static final List<StructuralPropertyDescriptor> PROPERTY_DESCRIPTORS;
 
 	static {
 		List<StructuralPropertyDescriptor> propertyList = new ArrayList<StructuralPropertyDescriptor>(2);
-		createPropertyList(RestElementName.class, propertyList);
-		addProperty(ARGUMENT_PROPERTY, propertyList);
+		createPropertyList(TypeDeclarationExpression.class, propertyList);
+		addProperty(DECLARATION_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS = reapPropertyList(propertyList);
 	}
+	
 	/**
 	 * Returns a list of structural property descriptors for this node type.
 	 * Clients must not modify the result.
@@ -59,27 +62,16 @@ public class RestElementName extends Name {
 	 * {@link StructuralPropertyDescriptor})
 	 *  
 	 */
-	public static List<StructuralPropertyDescriptor> propertyDescriptors(int apiLevel) {
+	public static List propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
 	}
 	
-	private Expression argument;
-	
-	/**
-	 * @param ast
-	 */
-	RestElementName(AST ast) {
+	private AbstractTypeDeclaration declaration = null;
+
+	TypeDeclarationExpression(AST ast) {
 		super(ast);
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.wst.jsdt.core.dom.Name#appendName(java.lang.StringBuffer)
-	 */
-	void appendName(StringBuffer buffer) {
-		buffer.append(this.toString());
-	}
-
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#internalStructuralPropertiesForType(int)
 	 */
@@ -87,42 +79,69 @@ public class RestElementName extends Name {
 		return propertyDescriptors(apiLevel);
 	}
 
+	/**
+	 * Returns the abstract type declaration of this local type declaration
+	 * expression
+	 * @return the type declaration node
+	 */
+	public AbstractTypeDeclaration getDeclaration() {
+		if (this.declaration == null) {
+			// lazy init must be thread-safe for readers
+			synchronized (this) {
+				if (this.declaration == null) {
+					preLazyInit();
+					this.declaration = new TypeDeclaration(this.ast);
+					postLazyInit(this.declaration, DECLARATION_PROPERTY);
+				}
+			}
+		}
+		return this.declaration;
+	}
+
+	/**
+	 * Sets the abstract type declaration of this local type declaration
+	 *
+	 * @param decl the type declaration node
+	 * @exception IllegalArgumentException if:
+	 * <ul>
+	 * <li>the node belongs to a different AST</li>
+	 * <li>the node already has a parent</li>
+	 * <li>a cycle in would be created</li>
+	 * </ul>
+	 */
+	public void setDeclaration(AbstractTypeDeclaration declaration) {
+		if (declaration == null) {
+			throw new IllegalArgumentException();
+		}
+		// a TypeDeclarationStatement may occur inside an
+		// TypeDeclaration - must check cycles
+		ASTNode oldChild = this.declaration;
+		preReplaceChild(oldChild, declaration, DECLARATION_PROPERTY);
+		this.declaration = declaration;
+		postReplaceChild(oldChild, declaration, DECLARATION_PROPERTY);
+	}
+	
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
 	final ASTNode internalGetSetChildProperty(ChildPropertyDescriptor property, boolean get, ASTNode child) {
-		if (property == ARGUMENT_PROPERTY) {
+		if (property == DECLARATION_PROPERTY) {
 			if (get) {
-				return getArgument();
+				return getDeclaration();
 			} else {
-				setArgument((Name) child);
+				setDeclaration((AbstractTypeDeclaration) child);
 				return null;
 			}
 		}
 		// allow default implementation to flag the error
 		return super.internalGetSetChildProperty(property, get, child);
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#getNodeType0()
 	 */
 	int getNodeType0() {
-		return REST_ELEMENT_NAME;
-	}
-
-
-	public Expression getArgument() {
-		return argument;
-	}
-
-	public void setArgument(Expression argument) {
-		if (argument == null) {
-			throw new IllegalArgumentException();
-		}
-		ASTNode oldChild = this.argument;
-		preReplaceChild(oldChild, argument, ARGUMENT_PROPERTY);
-		this.argument = argument;
-		postReplaceChild(oldChild, argument, ARGUMENT_PROPERTY);
+		return TYPE_DECLARATION_EXPRESSION;
 	}
 
 	/* (non-Javadoc)
@@ -136,9 +155,9 @@ public class RestElementName extends Name {
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#clone0(org.eclipse.wst.jsdt.core.dom.AST)
 	 */
 	ASTNode clone0(AST target) {
-		RestElementName result = new RestElementName(target);
+		TypeDeclarationExpression result = new TypeDeclarationExpression(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
-		result.setArgument((Expression) getArgument().clone(target));
+		result.setDeclaration((AbstractTypeDeclaration) getDeclaration().clone(target));
 		return result;
 	}
 
@@ -146,8 +165,9 @@ public class RestElementName extends Name {
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#accept0(org.eclipse.wst.jsdt.core.dom.ASTVisitor)
 	 */
 	void accept0(ASTVisitor visitor) {
-		if(visitor.visit(this)){
-			acceptChild(visitor, getArgument());
+		boolean visitChildren = visitor.visit(this);
+		if (visitChildren){
+			acceptChild(visitor, getDeclaration());
 		}
 		visitor.endVisit(this);
 	}
@@ -156,14 +176,16 @@ public class RestElementName extends Name {
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#treeSize()
 	 */
 	int treeSize() {
-		return memSize() 
-			+ (this.argument == null ?0 :getArgument().treeSize());
+		return memSize()
+					+ (this.declaration == null ? 0 : getDeclaration().treeSize());
+
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#memSize()
 	 */
 	int memSize() {
-		return BASE_NAME_NODE_SIZE + 4 ;
+		return BASE_NODE_SIZE + 1 + 4;
 	}
+
 }

@@ -19,7 +19,7 @@ import java.util.List;
  * Block comments (also called "traditional" comments in JLS 3.7)
  * begin with "/&#42;", may contain line breaks, and must end
  * with "&#42;/". Block comment normally exclude comments
- * that begin with "/&#42;#42;", which are instead classified as doc
+ * that begin with "/&#42;&#42;", which are instead classified as doc
  * comments ({@link JSdoc}).
  * </p>
  * <p>

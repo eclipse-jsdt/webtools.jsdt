@@ -205,7 +205,7 @@ class NaiveASTFlattener extends ASTVisitor {
 	public boolean visit(ArrayName node){
 		this.buffer.append("["); //$NON-NLS-1$
 		for(Iterator<?> it = node.elements().iterator(); it.hasNext();){
-			Name n = (Name) it.next();
+			Expression n = (Expression) it.next();
 			n.accept(this);
 			if(it.hasNext()){
 				this.buffer.append(","); //$NON-NLS-1$
@@ -1080,14 +1080,6 @@ class NaiveASTFlattener extends ASTVisitor {
 		return false;
 	}
 	
-	/*
-	 * @see ASTVisitor#visit(SimpleName)
-	 */
-	public boolean visit(PropertyName node) {
-		this.buffer.append(node.getIdentifier());
-		return false;
-	}
-
 	/*
 	 * @see ASTVisitor#visit(SimpleType)
 	 */

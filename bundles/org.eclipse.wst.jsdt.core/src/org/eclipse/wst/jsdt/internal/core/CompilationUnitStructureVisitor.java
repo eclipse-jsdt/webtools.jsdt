@@ -18,36 +18,46 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
+import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
+import org.eclipse.wst.jsdt.core.Signature;
 import org.eclipse.wst.jsdt.core.compiler.CharOperation;
 import org.eclipse.wst.jsdt.core.compiler.IProblem;
 import org.eclipse.wst.jsdt.core.dom.ASTNode;
-import org.eclipse.wst.jsdt.core.dom.ASTVisitor;
-import org.eclipse.wst.jsdt.core.dom.ArrayInitializer;
-import org.eclipse.wst.jsdt.core.dom.Assignment;
+import org.eclipse.wst.jsdt.core.dom.Block;
+import org.eclipse.wst.jsdt.core.dom.DefaultASTVisitor;
 import org.eclipse.wst.jsdt.core.dom.Expression;
-import org.eclipse.wst.jsdt.core.dom.ForStatement;
+import org.eclipse.wst.jsdt.core.dom.ExpressionStatement;
+import org.eclipse.wst.jsdt.core.dom.FieldAccess;
 import org.eclipse.wst.jsdt.core.dom.FunctionDeclaration;
+import org.eclipse.wst.jsdt.core.dom.FunctionDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.FunctionExpression;
 import org.eclipse.wst.jsdt.core.dom.FunctionInvocation;
+import org.eclipse.wst.jsdt.core.dom.ImportDeclaration;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.core.dom.Modifier;
+import org.eclipse.wst.jsdt.core.dom.ModuleSpecifier;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteral;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteralField;
+import org.eclipse.wst.jsdt.core.dom.SimpleName;
 import org.eclipse.wst.jsdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.wst.jsdt.core.dom.TypeDeclaration;
+import org.eclipse.wst.jsdt.core.dom.TypeDeclarationExpression;
+import org.eclipse.wst.jsdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.VariableKind;
 import org.eclipse.wst.jsdt.core.infer.IInferEngine;
 import org.eclipse.wst.jsdt.internal.compiler.classfmt.ClassFileConstants;
 
+
 /**
  * Visitor for computing the children of an IJavaScriptUnit.
  * 
  * @author Gorkem Ercan
  */
-public class CompilationUnitStructureVisitor extends ASTVisitor{
+public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 
 	/**
 	 * The handle to the compilation unit being parsed
@@ -58,6 +68,11 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 	 * The info object for the compilation unit being parsed
 	 */
 	private final CompilationUnitElementInfo unitInfo;
+
+	/**
+	 * The import container info - null until created
+	 */
+	protected JavaElementInfo importContainerInfo = null;
 	
 	/**
 	 * Stack of parent scope info objects. The info on the
@@ -95,16 +110,28 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 		this.newElements =newElements;
 	}
 	
-	public boolean visit(ForStatement node){
+	protected boolean visitNode(ASTNode node) {
 		return false;
 	}
 	
-	public boolean visit(Assignment node){
-		return false;
+	public boolean visit(ExpressionStatement node){
+		return true;
 	}
 	
-	public boolean visit(ArrayInitializer node){
-		return false;
+	public boolean visit(Block node){
+		return true;
+	}
+	
+	public boolean visit(TypeDeclarationExpression node){
+		return true;
+	}
+	
+	public boolean visit(TypeDeclarationStatement node){
+		return true;
+	}
+	
+	public boolean visit(FieldAccess node){
+		return true;
 	}
 	
 	public boolean visit(FunctionInvocation node ){
@@ -126,10 +153,15 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 		return false;
 	}
 	
+	public boolean visit(FunctionDeclarationStatement node){
+		node.getDeclaration().accept(this);
+		return false;
+	}
+	
 	public boolean visit(ObjectLiteral node){
 		JavaElementInfo parentInfo = this.infoStack.peek();
 		JavaElement parentHandle= this.handleStack.peek();
-		SourceType handle = new SourceType(parentHandle, "", true);
+		SourceType handle = new SourceType(parentHandle, "", true); //$NON-NLS-1$
 		resolveDuplicates(handle);
 		SourceTypeElementInfo info = 
 					new SourceTypeElementInfo( parentHandle instanceof ClassFile , true);
@@ -139,7 +171,7 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 		info.setNameSourceEnd(node.getStartPosition() + node.getLength());
 		info.setSourceRangeEnd(node.getStartPosition() + node.getLength());
 //		JavaModelManager manager = JavaModelManager.getJavaModelManager();
-		info.setSuperclassName("".toCharArray());	
+		info.setSuperclassName("".toCharArray());	 //$NON-NLS-1$
 		
 		addToChildren(parentInfo, handle);
 		this.newElements.put(handle, info);
@@ -249,15 +281,6 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 	}
 	
 	public boolean visit(VariableDeclarationStatement node){
-		JavaElementInfo parentInfo = this.infoStack.peek();
-		JavaElement parentHandle= this.handleStack.peek();
-		
-//		Assert.isTrue( parentHandle.getElementType() == IJavaScriptElement.TYPE
-//				|| parentHandle.getElementType() == IJavaScriptElement.JAVASCRIPT_UNIT
-//				|| parentHandle.getElementType() == IJavaScriptElement.CLASS_FILE
-//				|| parentHandle.getElementType() == IJavaScriptElement.METHOD
-//				) ;
-		
 		List<?> fragments = node.fragments();
 		
 		for (Iterator iterator = fragments.iterator(); iterator.hasNext();) {
@@ -265,7 +288,83 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 			fragment.accept(this);
 		}
 		return false;
-		
+	}
+	
+	
+	private void visitImportModule(ImportDeclaration parent, ModuleSpecifier module){
+		JavaElement parentHandle= this.handleStack.peek();
+		if (!(parentHandle.getElementType() == IJavaScriptElement.JAVASCRIPT_UNIT)) {
+			Assert.isTrue(false); // Should not happen
+		}
+
+		IJavaScriptUnit parentCU= (IJavaScriptUnit)parentHandle;
+		//create the import container and its info
+		ImportContainer importContainer= (ImportContainer)parentCU.getImportContainer();
+		if (this.importContainerInfo == null) {
+			this.importContainerInfo = new JavaElementInfo();
+			JavaElementInfo parentInfo = this.infoStack.peek();
+			addToChildren(parentInfo, importContainer);
+			this.newElements.put(importContainer, this.importContainerInfo);
+		}
+
+		final SimpleName localName = module.getLocal();
+		StringBuilder nameString = new StringBuilder(parent.getSource().getLiteralValue());
+		nameString.append(" as ");
+		nameString.append(localName.getIdentifier());
+		String elementName = JavaModelManager.getJavaModelManager().intern(nameString.toString());
+		org.eclipse.wst.jsdt.internal.core.ImportDeclaration handle = 
+					new org.eclipse.wst.jsdt.internal.core.ImportDeclaration(importContainer, elementName, parent.isOnDemand());
+		resolveDuplicates(handle);
+
+		ImportDeclarationElementInfo info = new ImportDeclarationElementInfo();
+		info.setNameSourceStart(localName.getStartPosition());
+		info.setNameSourceEnd(localName.getStartPosition() + localName.getLength());
+		info.setSourceRangeStart(parent.getStartPosition());
+		info.setSourceRangeEnd(parent.getStartPosition() + parent.getLength());
+
+		addToChildren(this.importContainerInfo, handle);
+		this.newElements.put(handle, info);
+	}
+	
+	public boolean visit(ImportDeclaration node){
+		List specifiers = node.specifiers();
+		if(specifiers.isEmpty()){
+			JavaElement parentHandle= this.handleStack.peek();
+			if (!(parentHandle.getElementType() == IJavaScriptElement.JAVASCRIPT_UNIT)) {
+				Assert.isTrue(false); // Should not happen
+			}
+
+			IJavaScriptUnit parentCU= (IJavaScriptUnit)parentHandle;
+			//create the import container and its info
+			ImportContainer importContainer= (ImportContainer)parentCU.getImportContainer();
+			if (this.importContainerInfo == null) {
+				this.importContainerInfo = new JavaElementInfo();
+				JavaElementInfo parentInfo = this.infoStack.peek();
+				addToChildren(parentInfo, importContainer);
+				this.newElements.put(importContainer, this.importContainerInfo);
+			}
+
+			String elementName = JavaModelManager.getJavaModelManager().intern(node.getSource().getLiteralValue() );
+			org.eclipse.wst.jsdt.internal.core.ImportDeclaration handle = 
+						new org.eclipse.wst.jsdt.internal.core.ImportDeclaration(importContainer, elementName, false);
+			resolveDuplicates(handle);
+
+			ImportDeclarationElementInfo info = new ImportDeclarationElementInfo();
+			info.setNameSourceStart(node.getStartPosition());
+			info.setNameSourceEnd(node.getStartPosition() + node.getLength());
+			info.setSourceRangeStart(node.getStartPosition());
+			info.setSourceRangeEnd(node.getStartPosition() + node.getLength());
+
+			addToChildren(this.importContainerInfo, handle);
+			this.newElements.put(handle, info);
+
+		}else{
+			for (Iterator iterator = specifiers.iterator(); iterator.hasNext();) {
+				ModuleSpecifier module = (ModuleSpecifier) iterator.next();
+				visitImportModule(node, module);
+			}
+		}
+		return false;
 	}
 	
 	public boolean visit(VariableDeclarationFragment node){
@@ -292,7 +391,7 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 			String typeString = null;
 			switch (initializerType) {
 				case ASTNode.BOOLEAN_LITERAL :
-					typeString = "boolean";
+					typeString = Signature.createTypeSignature("boolean", false);
 					break;
 				case ASTNode.NUMBER_LITERAL :
 					typeString = "Number";
@@ -332,9 +431,9 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 	
 	public void endVisit(JavaScriptUnit node){
 		// set import container children
-//		if (this.importContainerInfo != null) {
-//			setChildren(this.importContainerInfo);
-//		}
+		if (this.importContainerInfo != null) {
+			setChildren(this.importContainerInfo);
+		}
 
 		// set children
 		setChildren(this.unitInfo);
@@ -367,7 +466,7 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 		if(node.getSuperclassExpression() != null ){
 			superclass = node.getSuperclassExpression().toString().toCharArray();
 		}
-		info.setSuperclassName(superclass == null ? "".toCharArray() : manager.intern(superclass));
+		info.setSuperclassName(superclass == null ? "".toCharArray() : manager.intern(superclass)); //$NON-NLS-1$
 		addToChildren(parentInfo, handle);
 		this.newElements.put(handle, info);
 		this.infoStack.push(info);
@@ -380,10 +479,6 @@ public class CompilationUnitStructureVisitor extends ASTVisitor{
 		setChildren(info);
 		this.handleStack.pop();	
 	}
-	
-
-	
-	
 	
 	private void addToChildren(JavaElementInfo parentInfo, JavaElement handle) {
 		ArrayList<IJavaScriptElement> childrenList =  this.children.get(parentInfo);

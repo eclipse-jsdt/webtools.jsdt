@@ -1,8 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-SymbolicName: org.eclipse.wst.jsdt.nashorn.extension
+Bundle-Name: %bundleName
+Bundle-SymbolicName: org.eclipse.wst.jsdt.nashorn.api;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Fragment-Host: system.bundle
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: %providerName
+Bundle-ActivationPolicy: lazy
 Export-Package: jdk.nashorn.api.scripting,
  jdk.internal.dynalink,
  jdk.internal.dynalink.beans,
@@ -37,4 +40,3 @@ Export-Package: jdk.nashorn.api.scripting,
  jdk.nashorn.internal.scripts,
  jdk.nashorn.tools,
  jdk.nashorn.tools.resources
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8

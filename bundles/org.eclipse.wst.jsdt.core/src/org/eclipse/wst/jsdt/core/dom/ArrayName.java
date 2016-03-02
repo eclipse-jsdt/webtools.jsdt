@@ -17,13 +17,13 @@ import java.util.List;
 /**
  * Array pattern 
  * 
- * @author Gorkem Ercan
  *
  * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
  * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
  * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
  * (repeatedly) as the API evolves.
  *
+ * @author Gorkem Ercan
  */
 public class ArrayName extends Name{
 
@@ -32,7 +32,7 @@ public class ArrayName extends Name{
 	 * The "elements" structural property of this node type.
 	 */
 	public static final ChildListPropertyDescriptor ELEMENTS_PROPERTY =
-				new ChildListPropertyDescriptor(ArrayName.class, "elements", Name.class, CYCLE_RISK); //$NON-NLS-1$
+				new ChildListPropertyDescriptor(ArrayName.class, "elements", Expression.class, CYCLE_RISK); //$NON-NLS-1$
 	
 	
 	/**

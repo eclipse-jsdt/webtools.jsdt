@@ -935,7 +935,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @see ASTParser
 	 *  
 	 */
-	void setCommentTable(Comment[] commentTable) {
+	public void setCommentTable(Comment[] commentTable) {
 		// double check table to ensure that all comments have
 		// source positions and are in strictly increasing order
 		if (commentTable == null) {
