@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -144,7 +144,7 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 //		fPixelConverter= new PixelConverter(parent);
 		setShell(parent.getShell());
 		
-		Composite complianceComposite= createComplianceTabContent(parent);
+		Composite complianceComposite = createComplianceTabContent(parent);
 		
 		validateSettings(null, null, null);
 	
@@ -198,19 +198,19 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 		layout.numColumns= 1;
 		fControlsComposite.setLayout(layout);
 
-		int nColumns= 3;
+		//int nColumns= 3;
 
-		layout= new GridLayout();
-		layout.numColumns= nColumns;
+		//layout= new GridLayout();
+		//layout.numColumns= nColumns;
 
-		Group group= new Group(fControlsComposite, SWT.NONE);
+		/*Group group= new Group(fControlsComposite, SWT.NONE);
 		group.setFont(fControlsComposite.getFont());
 		group.setText(PreferencesMessages.ComplianceConfigurationBlock_compliance_group_label); 
 		group.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));
 		group.setLayout(layout);
-	
-		String label= PreferencesMessages.ComplianceConfigurationBlock_compiler_compliance_label; 
-		Combo combo = addComboBox(group, label, PREF_COMPLIANCE, values3456, values3456Labels, 1);
+	*/
+		//String label= PreferencesMessages.ComplianceConfigurationBlock_compiler_compliance_label; 
+		//Combo combo = addComboBox(group, label, PREF_COMPLIANCE, values3456, values3456Labels, 1);
 //		combo.setEnabled(false);
 
 //		label= PreferencesMessages.ComplianceConfigurationBlock_default_settings_label; 
