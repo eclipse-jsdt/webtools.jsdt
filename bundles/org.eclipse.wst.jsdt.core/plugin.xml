@@ -45,6 +45,8 @@
 
 <extension-point id="inferrenceSupport" name="%extension-point.name.0" schema="schema/inferrenceSupport.exsd"/>
 <extension-point id="sourcePathProvider" name="%extension-point.name.1" schema="schema/sourcePathProvider.exsd"/>
+<extension-point id="JSRuntimeType" name="%extension-point.name.2" schema="schema/JSRuntimeType.exsd"/>
+<extension-point id="JSRuntimeInstallProvider" name="%extension-point.name.3" schema="schema/JSRuntimeInstallProvider.exsd"/>
 
 <!-- =================================================================================== -->
 <!-- Extension: JavaScript Nature                                                              -->
