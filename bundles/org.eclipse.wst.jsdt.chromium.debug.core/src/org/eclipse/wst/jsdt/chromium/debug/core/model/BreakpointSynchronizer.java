@@ -1,8 +1,11 @@
-// Copyright (c) 2010 The Chromium Authors. All rights reserved.
+// Copyright (c) 2010, 2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
 // http://www.eclipse.org/legal/epl-v10.html
+//
+// Contributors:
+//      Ilya Buziuk <ilyabuziuk@gmail.com> - https://bugs.eclipse.org/bugs/show_bug.cgi?id=486061
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
@@ -699,10 +702,10 @@ public class BreakpointSynchronizer {
         new ArrayList<ChromiumExceptionBreakpoint>(2);
 
     for (IBreakpoint breakpoint :
-        breakpointManager.getBreakpoints(VProjectWorkspaceBridge.DEBUG_MODEL_ID)) {
+        breakpointManager.getBreakpoints()) {
       {
         ChromiumLineBreakpoint chromiumLineBreakpoint =
-            ChromiumBreakpointAdapter.tryCastBreakpoint(breakpoint);
+            ChromiumBreakpointAdapter.tryCastBreakpointOnAddition(breakpoint);
         if (chromiumLineBreakpoint != null) {
           lineBreakpoints.add(chromiumLineBreakpoint);
           continue;

@@ -1,8 +1,11 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
+// Copyright (c) 2009, 2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
 // http://www.eclipse.org/legal/epl-v10.html
+//
+// Contributors:
+//      Ilya Buziuk <ilyabuziuk@gmail.com> - https://bugs.eclipse.org/bugs/show_bug.cgi?id=486061
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
@@ -50,7 +53,7 @@ public class ChromiumLineBreakpoint extends LineBreakpoint {
 
   /** Condition */
   private static final String CONDITION_ATTR = ChromiumDebugPlugin.PLUGIN_ID + ".condition"; //$NON-NLS-1$
-
+  
   /**
    * Default constructor is required for the breakpoint manager to re-create
    * persisted breakpoints. After instantiating a breakpoint, the setMarker
@@ -83,6 +86,22 @@ public class ChromiumLineBreakpoint extends LineBreakpoint {
     run(getMarkerRule(resource), runnable);
   }
 
+	/**
+	 * Constructor for creating {@link ChromiumLineBreakpoint} from
+	 * {@link JavaScriptBreakpoint} and using it's {@link IMarker}
+	 * 
+	 * @param IBreakpoint
+	 *            {@link JavaScriptBreakpoint}
+	 * @throws CoreException
+	 * @author Ilya Buziuk <ilyabuziuk@gmail.com>
+	 * @see https://bugs.eclipse.org/bugs/show_bug.cgi?id=486061
+	 */
+	ChromiumLineBreakpoint(IBreakpoint breakpoint) throws CoreException {
+		if (breakpoint != null) {
+			setMarker(breakpoint.getMarker());
+		}
+	}
+  
   @Override
   public boolean isEnabled() {
     try {
@@ -92,6 +111,7 @@ public class ChromiumLineBreakpoint extends LineBreakpoint {
       return false;
     }
   }
+  
 
   private void setMarkerAttribute(String attributeName, Object value) {
     try {

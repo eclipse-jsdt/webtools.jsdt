@@ -1,8 +1,11 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
+// Copyright (c) 2009, 2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
 // http://www.eclipse.org/legal/epl-v10.html
+//
+// Contributors:
+//      Ilya Buziuk <ilyabuziuk@gmail.com> - https://bugs.eclipse.org/bugs/show_bug.cgi?id=486061
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
@@ -476,7 +479,24 @@ public class VProjectWorkspaceBridge implements WorkspaceBridge {
         }
         return ChromiumBreakpointAdapter.tryCastBreakpoint(breakpoint);
       }
-    }
+
+      
+		@Override
+		ChromiumLineBreakpoint tryCastBreakpointOnAddition(IBreakpoint breakpoint) {
+			if (connectedTargetData.getDebugTarget().isDisconnected()) {
+				return null;
+			}
+			return ChromiumBreakpointAdapter.tryCastBreakpointOnAddition(breakpoint);
+		}
+
+		@Override
+		ChromiumLineBreakpoint tryCastBreakpointOnRemoval(IBreakpoint breakpoint) {
+			if (connectedTargetData.getDebugTarget().isDisconnected()) {
+				return null;
+			}
+			return ChromiumBreakpointAdapter.tryCastBreakpointOnRemoval(breakpoint);
+		}
+	}
 
     private class ExceptionBreakpointHandler extends
         BreakpointMapperBase<ExceptionBreakpointHandler.FakeSdkBreakpoint,
@@ -630,11 +650,22 @@ public class VProjectWorkspaceBridge implements WorkspaceBridge {
         }
         return ChromiumExceptionBreakpoint.tryCastBreakpoint(breakpoint);
       }
+
+	@Override
+	ChromiumExceptionBreakpoint tryCastBreakpointOnAddition(IBreakpoint breakpoint) {
+		return tryCastBreakpoint(breakpoint);
+
+	}
+
+	@Override
+	ChromiumExceptionBreakpoint tryCastBreakpointOnRemoval(IBreakpoint breakpoint) {
+		return tryCastBreakpoint(breakpoint);
+	}
     }
 
     private abstract class BreakpointMapperBase<SDK, UI> {
       boolean breakpointAdded(IBreakpoint breakpoint) {
-        UI castBreakpoint = tryCastBreakpoint(breakpoint);
+        UI castBreakpoint = tryCastBreakpointOnAddition(breakpoint);
         if (castBreakpoint == null) {
           return false;
         }
@@ -652,7 +683,7 @@ public class VProjectWorkspaceBridge implements WorkspaceBridge {
       }
 
       boolean breakpointRemoved(IBreakpoint breakpoint, IMarkerDelta delta) {
-        UI castBreakpoint = tryCastBreakpoint(breakpoint);
+        UI castBreakpoint = tryCastBreakpointOnRemoval(breakpoint);
         if (castBreakpoint == null) {
           return false;
         }
@@ -669,6 +700,8 @@ public class VProjectWorkspaceBridge implements WorkspaceBridge {
       abstract void breakpointRemoved(UI breakpoint, IMarkerDelta delta);
 
       abstract UI tryCastBreakpoint(IBreakpoint breakpoint);
+      abstract UI tryCastBreakpointOnAddition(IBreakpoint breakpoint);
+      abstract UI tryCastBreakpointOnRemoval(IBreakpoint breakpoint);
 
       protected BreakpointInTargetMap<SDK, UI> getMap() {
         return map;
