@@ -63,17 +63,6 @@ ${type_declaration}</template>
 <template name="classbody" id="org.eclipse.wst.jsdt.ui.text.codetemplates.classbody" description="%CodeTemplates.classbody" context="org.eclipse.jsdt.classbody_context" enabled="true">
 </template>
 
-<!--
-<template name="interfacebody" id="org.eclipse.wst.jsdt.ui.text.codetemplates.interfacebody" description="%CodeTemplates.interfacebody" context="org.eclipse.jsdt.interfacebody_context" enabled="true">
-</template>
-
-<template name="enumbody" id="org.eclipse.wst.jsdt.ui.text.codetemplates.enumbody" description="%CodeTemplates.enumbody" context="org.eclipse.jsdt.enumbody_context" enabled="true">
-</template>
-
-<template name="annotationbody" id="org.eclipse.wst.jsdt.ui.text.codetemplates.annotationbody" description="%CodeTemplates.annotationbody" context="org.eclipse.jsdt.annotationbody_context" enabled="true">
-</template>
--->
-
 <template name="catchblock" id="org.eclipse.wst.jsdt.ui.text.codetemplates.catchblock" description="%CodeTemplates.catchblock" context="org.eclipse.jsdt.catchblock_context" enabled="true">// ${todo} %CodeTemplates.catchblock.tododesc
 ${exception_var}.printStackTrace();</template>
 
