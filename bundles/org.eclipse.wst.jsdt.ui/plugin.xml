@@ -264,7 +264,17 @@
 			<partition type="__java_javadoc"/>
 		</javaCompletionProposalComputer>
 	</extension>
-	
+	<!-- keyword proposals -->
+	<extension
+		point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
+		id="KeywordCompletionProposalComputer">
+		<javaCompletionProposalComputer
+			class="org.eclipse.wst.jsdt.internal.ui.text.java.KeywordCompletionProposalComputer"
+			categoryId="org.eclipse.wst.jsdt.ui.defaultProposalCategory">
+			<partition type="__dftl_partition_content_type"/>
+		</javaCompletionProposalComputer>
+	</extension>
+
 	<!-- the parameterized content assist action and keybindings for our contributed computers -->
 	<extension
 		point="org.eclipse.ui.commands">

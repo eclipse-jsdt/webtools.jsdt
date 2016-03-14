@@ -11,9 +11,8 @@
 package org.eclipse.wst.jsdt.internal.codeassist.impl;
 
 public interface Keywords {
-	int COUNT = 48;
+	int COUNT = 38;
 
-	char[] ABSTRACT = "abstract".toCharArray(); //$NON-NLS-1$
 	char[] ASSERT = "assert".toCharArray(); //$NON-NLS-1$
 	char[] BREAK = "break".toCharArray(); //$NON-NLS-1$
 	char[] CASE = "case".toCharArray(); //$NON-NLS-1$
@@ -28,28 +27,19 @@ public interface Keywords {
 	char[] FINALLY = "finally".toCharArray(); //$NON-NLS-1$
 	char[] FOR = "for".toCharArray(); //$NON-NLS-1$
 	char[] IF = "if".toCharArray(); //$NON-NLS-1$
-	char[] IMPLEMENTS = "implements".toCharArray(); //$NON-NLS-1$
 	char[] IMPORT = "import".toCharArray(); //$NON-NLS-1$
 	char[] INSTANCEOF = "instanceof".toCharArray(); //$NON-NLS-1$
-	char[] INTERFACE = "interface".toCharArray(); //$NON-NLS-1$
 	char[] NATIVE = "native".toCharArray(); //$NON-NLS-1$
 	char[] NEW = "new".toCharArray(); //$NON-NLS-1$
-	char[] PACKAGE = "package".toCharArray(); //$NON-NLS-1$
-	char[] PRIVATE = "private".toCharArray(); //$NON-NLS-1$
-	char[] PROTECTED = "protected".toCharArray(); //$NON-NLS-1$
-	char[] PUBLIC = "public".toCharArray(); //$NON-NLS-1$
 	char[] RETURN = "return".toCharArray(); //$NON-NLS-1$
 	char[] STATIC = "static".toCharArray(); //$NON-NLS-1$
 	char[] STRICTFP = "strictfp".toCharArray(); //$NON-NLS-1$
 	char[] SUPER = "super".toCharArray(); //$NON-NLS-1$
 	char[] SWITCH = "switch".toCharArray(); //$NON-NLS-1$
-	char[] SYNCHRONIZED = "synchronized".toCharArray(); //$NON-NLS-1$
 	char[] THIS = "this".toCharArray(); //$NON-NLS-1$
 	char[] THROW = "throw".toCharArray(); //$NON-NLS-1$
 	char[] THROWS = "throws".toCharArray(); //$NON-NLS-1$
-	char[] TRANSIENT = "transient".toCharArray(); //$NON-NLS-1$
 	char[] TRY = "try".toCharArray(); //$NON-NLS-1$
-	char[] VOLATILE = "volatile".toCharArray(); //$NON-NLS-1$
 	char[] WHILE = "while".toCharArray(); //$NON-NLS-1$
 	char[] TRUE = "true".toCharArray(); //$NON-NLS-1$
 	char[] FALSE = "false".toCharArray(); //$NON-NLS-1$
