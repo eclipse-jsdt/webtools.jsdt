@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.core.tests;
 
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -24,11 +25,12 @@ public RunJSDTCoreTests(String name) {
 	super(name);
 }
 public static Test suite() {
-	TestSuite suite = new TestSuite("JSDT 'Model' Tests");
+	TestSuite suite = new TestSuite("JSDT 'Model' Tests"); //$NON-NLS-1$
 	suite.addTest(RunDOMTests.suite());
 	suite.addTest(RunFormatterTests.suite());
 	suite.addTest(RunModelTests.suite());
 	suite.addTestSuite(SequenceReaderTests.class);
+	suite.addTest(new JUnit4TestAdapter(RunJSRuntimeTests.class));
 	return suite;
 }
 }

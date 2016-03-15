@@ -63,5 +63,27 @@
        <requires id="non.existing"/>
     </validationParticipant>
 	 </extension>
+  <extension
+        point="org.eclipse.wst.jsdt.core.JSRuntimeType">
+     <runtimeType
+           id="js.runtime.test.type"
+           name="jsruntimetesttype">
+     </runtimeType>
+     <runtimeType
+           id="js.runtime.test.type.2"
+           name="jsruntimetesttype2">
+     </runtimeType>
+  </extension>
+  <extension
+        point="org.eclipse.wst.jsdt.core.JSRuntimeInstallProvider">
+     <runtimeProvider
+           class="org.eclipse.wst.jsdt.core.tests.internal.runtime.TestJSRuntimeProvider1"
+           runtimeTypeId="js.runtime.test.type">
+     </runtimeProvider>
+     <runtimeProvider
+           class="org.eclipse.wst.jsdt.core.tests.internal.runtime.TestJSRuntimeProvider2"
+           runtimeTypeId="js.runtime.test.type.2">
+     </runtimeProvider>
+  </extension>
 	
 </plugin>
