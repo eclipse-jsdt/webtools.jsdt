@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2008 IBM Corporation and others.
+ * Copyright (c) 2004, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -857,51 +857,7 @@ public class ASTParser {
 					} else {
 						throw new IllegalStateException();
 					}
-					if (this.partial) {
-						searcher = new NodeSearcher(this.focalPointPosition);
-					}
-					int flags = 0;
-					if (this.statementsRecovery) flags |= IJavaScriptUnit.ENABLE_STATEMENTS_RECOVERY;
-					if (needToResolveBindings) {
-						if (this.bindingsRecovery) flags |= IJavaScriptUnit.ENABLE_BINDINGS_RECOVERY;
-						try {
-							// parse and resolve
-							compilationUnitDeclaration =
-								JavaScriptUnitResolver.resolve(
-									sourceUnit,
-									this.project,
-									searcher,
-									this.compilerOptions,
-									this.workingCopyOwner,
-									flags,
-									monitor);
-						} catch (JavaScriptModelException e) {
-							flags &= ~IJavaScriptUnit.ENABLE_BINDINGS_RECOVERY;
-							compilationUnitDeclaration = JavaScriptUnitResolver.parse(
-									sourceUnit,
-									searcher,
-									this.compilerOptions,
-									flags);
-							needToResolveBindings = false;
-						}
-					} else {
-						compilationUnitDeclaration = JavaScriptUnitResolver.parse(
-								sourceUnit,
-								searcher,
-								this.compilerOptions,
-								flags);
-						needToResolveBindings = false;
-					}
-					JavaScriptUnit result = JavaScriptUnitResolver.convert(
-						compilationUnitDeclaration,
-						sourceUnit.getContents(),
-						this.apiLevel,
-						this.compilerOptions,
-						needToResolveBindings,
-						wcOwner,
-						needToResolveBindings ? new DefaultBindingResolver.BindingTables() : null,
-						flags,
-						monitor);
+					JavaScriptUnit result = EsprimaParser.newParser().setSource(String.valueOf(sourceUnit.getContents())).parse();
 					result.setTypeRoot(this.typeRoot);
 					return result;
 				} finally {
