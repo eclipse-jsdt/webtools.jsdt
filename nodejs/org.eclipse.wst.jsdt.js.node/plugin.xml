@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.core.expressions.propertyTesters">
+    	<propertyTester
+      		id="org.eclipse.wst.jsdt.js.node.packageJson.propertyTester"
+      		type="org.eclipse.core.resources.IResource"
+      		namespace="org.eclipse.wst.jsdt.js.node.packageJson"
+      		properties="hasPackageJson"
+      		class="org.eclipse.wst.jsdt.js.node.internal.propertytesters.PackageJsonPropertyTester">
+    	</propertyTester>
+   </extension>
+	<extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+     	 <shortcut
+            class="org.eclipse.wst.jsdt.js.node.internal.launch.shortcut.NodeLaunch"
+            description="Node"
+            helpContextId="org.eclipse.ui.externaltools.launchShortcutHelpContext.NodeShortcut"
+            icon="icons/transparent.gif"
+            id="org.eclipse.wst.jsdt.js.node.internal.launch.shortcut.NodeLaunch"
+            label="Node"
+            modes="run,debug">
+           <contextualLaunch>   
+              <enablement>   
+                 <with   
+                       variable= "selection">   
+                    <count   
+                          value= "1" >   
+                    </count>   
+                    <iterate>
+                       <or>
+                       	   <and>
+	                          <instanceof value="org.eclipse.core.resources.IFile"/>
+	                          <test property="org.eclipse.debug.ui.matchesPattern" value="package.json"/>
+	                       </and>                           
+	                       <and>
+	                          <instanceof value="org.eclipse.core.resources.IProject"/>
+	                          <test property="org.eclipse.wst.jsdt.js.node.packageJson.hasPackageJson" value="true" forcePluginActivation="true"/>
+	                       </and>
+	                   </or>
+                    </iterate>   
+                 </with>   
+              </enablement>   
+           </contextualLaunch> 
+    	</shortcut>
+    </extension>
+    
+   <extension
+       point="org.eclipse.debug.core.launchConfigurationTypes">
+    <launchConfigurationType
+          id="org.eclipse.wst.jsdt.js.node.NodeLaunchConfigurationType"
+          delegate="org.eclipse.wst.jsdt.js.node.internal.launch.NodeLaunchConfigurationDelegate"
+          modes="run,debug"
+          name="Node">
+    </launchConfigurationType>
+  </extension>
+  
+  <extension
+       point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+    <launchConfigurationTypeImage
+          configTypeID="org.eclipse.wst.jsdt.js.node.NodeLaunchConfigurationType"
+          icon="icons/transparent.gif"
+          id="org.eclipse.wst.jsdt.js.NodeLaunchConfigurationTypeImage">
+    </launchConfigurationTypeImage>
+  </extension>
+  
+  <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+    <launchConfigurationTabGroup
+        type="org.eclipse.wst.jsdt.js.node.NodeLaunchConfigurationType"
+        class="org.eclipse.wst.jsdt.js.node.internal.launch.ui.NodeLaunchTabGroup"
+        id="org.eclipse.wst.jsdt.js.node.tabgroup">
+    </launchConfigurationTabGroup>
+  </extension>
+  <extension
+        point="org.eclipse.wst.jsdt.core.JSRuntimeType">
+     <runtimeType
+           id="org.eclipse.wst.jsdt.js.node.runtimeType"
+           name="Node.js Runtime">
+     </runtimeType>
+  </extension>
+  <extension
+        point="org.eclipse.wst.jsdt.core.JSRuntimeInstallProvider">
+     <runtimeProvider
+           class="org.eclipse.wst.jsdt.js.node.runtime.NodeJSRuntimeProvider"
+           runtimeTypeId="org.eclipse.wst.jsdt.js.node.runtimeType">
+     </runtimeProvider>
+  </extension>
+</plugin>
+
