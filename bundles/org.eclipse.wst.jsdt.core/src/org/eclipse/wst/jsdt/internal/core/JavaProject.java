@@ -87,6 +87,7 @@ import org.eclipse.wst.jsdt.internal.core.util.MementoTokenizer;
 import org.eclipse.wst.jsdt.internal.core.util.Messages;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
 import org.eclipse.wst.jsdt.launching.JavaRuntime;
+import org.eclipse.wst.validation.internal.plugin.ValidationPlugin;
 import org.osgi.service.prefs.BackingStoreException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -779,10 +780,12 @@ public class JavaProject
 	/**
 	 * Configure the project with Java nature.
 	 */
+	@SuppressWarnings("restriction")
 	public void configure() throws CoreException {
-
-		// register Java builder
-		addToBuildSpec(JavaScriptCore.BUILDER_ID);
+		// register Validation builder
+		// Avoiding new projects to have the old JS builder, 
+		// instead make them use the Validator builder		
+		addToBuildSpec(ValidationPlugin.VALIDATION_BUILDER_ID);
 	}
 
 	/*
@@ -1009,13 +1012,11 @@ public class JavaProject
 	/**
 	 * Removes the Java nature from the project.
 	 */
+	@SuppressWarnings("restriction")
 	public void deconfigure() throws CoreException {
-
-		// deregister Java builder
-		removeFromBuildSpec(JavaScriptCore.BUILDER_ID);
-
-		// remove .classpath file
-//		getProject().getFile(ClasspathHelper.CLASSPATH_FILENAME).delete(false, null);
+		// deregister any builder
+		removeFromBuildSpec(JavaScriptCore.BUILDER_ID); // For backwards compatibility
+		removeFromBuildSpec(ValidationPlugin.VALIDATION_BUILDER_ID);	
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2007 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,7 +15,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.jsdt.core.compiler.CharOperation;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
 
-class ClasspathMultiDirectory extends ClasspathDirectory {
+public class ClasspathMultiDirectory extends ClasspathDirectory {
 
 IContainer sourceFolder;
 char[][] inclusionPatterns; // used by builders when walking source folders
@@ -57,5 +57,26 @@ protected boolean isExcluded(IResource resource) {
 public String toString() {
 	return "Source classpath directory " + sourceFolder.getFullPath().toString() + //$NON-NLS-1$
 		" with " + super.toString(); //$NON-NLS-1$
+}
+
+/**
+ * @return the sourceFolder
+ */
+public IContainer getSourceFolder() {
+	return sourceFolder;
+}
+
+/**
+ * @return the inclusionPatterns
+ */
+public char[][] getInclusionPatterns() {
+	return inclusionPatterns;
+}
+
+/**
+ * @return the exclusionPatterns
+ */
+public char[][] getExclusionPatterns() {
+	return exclusionPatterns;
 }
 }
