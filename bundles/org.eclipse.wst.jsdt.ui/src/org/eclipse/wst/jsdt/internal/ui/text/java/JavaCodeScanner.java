@@ -190,6 +190,7 @@ public final class JavaCodeScanner extends AbstractJavaScanner {
 		IJavaScriptColorConstants.JAVA_KEYWORD_RETURN,
 		IJavaScriptColorConstants.JAVA_OPERATOR,
 		IJavaScriptColorConstants.JAVA_BRACKET,
+		IJavaScriptColorConstants.JAVASCRIPT_TEMPLATE_LITERAL,
 		ANNOTATION_COLOR_KEY,
 	};
 

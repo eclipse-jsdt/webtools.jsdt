@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -32,6 +32,7 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 	private static final int STRING= 5;
 	private static final int REGULAR_EXPRESSION = 6;
 	private static final int SHEBANG_LINE= 7;
+	private static final int JS_TEMPLATE_LITERAL = 8;
 
 	// beginning of prefixes and postfixes
 	private static final int NONE= 0;
@@ -44,6 +45,11 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 	private static final int REGULAR_EXPRESSION_END=7;
 	private static final int BACKSLASH_CARRIAGE_RETURN = 8; // anti-postfix for STRING, CHARACTER
 	private static final int HASH= 9; // prefix for SHEBANG
+	private static final int BACKQUOTE = 10; // prefix for JS_TEMPLATE_LITERAL
+	private static final int DOLLAR = 11; // prefix for template literal expression
+	private static final int DOLLAR_CURLYBRACE_LEFT = 12; // prefix for template literal expression
+	private static final int CURLYBRACE_RIGHT = 13; // postfix for template literal expression
+	
 
 	/** The scanner. */
 	private final BufferedDocumentScanner fScanner= new BufferedDocumentScanner(1000);	// faster implementation
@@ -59,6 +65,9 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 	private int fLast;
 	/** The amount of characters already read on first call to nextToken(). */
 	private int fPrefixLength;
+	
+	/** The depth of nested expressions within a template literal */
+	private int fTemplateLiteralExpressionDepth = 0;
 
 	private final IToken[] fTokens= new IToken[] {
 		new Token(null),
@@ -68,7 +77,8 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 		new Token(JAVA_CHARACTER),
 		new Token(JAVA_STRING),
 		new Token(JAVA_STRING),	// regular expression same as string
-		new Token(JAVA_SHEBANG_LINE)
+		new Token(JAVA_SHEBANG_LINE),
+		new Token(JAVASCRIPT_TEMPLATE_LITERAL)
 	};
 
 	public FastJavaPartitionScanner() {
@@ -171,6 +181,7 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 					case REGULAR_EXPRESSION:
 					case CHARACTER:
 					case STRING:
+					case JS_TEMPLATE_LITERAL:
 
 						int last;
 						int newState;
@@ -194,7 +205,12 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 							last= NONE;
 							newState= STRING;
 							break;
-
+							
+						case '`':
+							last = NONE;
+							newState = JAVASCRIPT;
+							break;
+							
 						case '\r':
 							last= CARRIAGE_RETURN;
 							newState= JAVASCRIPT;
@@ -209,7 +225,7 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 							last= HASH;
 							newState= JAVASCRIPT;
 							break;
-							
+																			
 						default:
 							last= NONE;
 							newState= JAVASCRIPT;
@@ -315,7 +331,19 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 						consume();
 						break;
 					}
-
+					
+				case '`':
+					fLast = NONE; // ignore fLast
+					if (fTokenLength > 0) {
+						fTemplateLiteralExpressionDepth = 0;
+						return preFix(JAVASCRIPT, JS_TEMPLATE_LITERAL, NONE, 1);	
+					} else {						
+						preFix(JAVASCRIPT, JS_TEMPLATE_LITERAL, NONE, 1);
+						fTokenOffset += fTokenLength;
+						fTokenLength = fPrefixLength;
+						break;
+					}
+					
 				case '\'':
 					fLast= NONE; // ignore fLast
 					if (fTokenLength > 0)
@@ -401,7 +429,38 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 					break;
 				}
 				break;
-
+				
+	 		case JS_TEMPLATE_LITERAL:
+	 			switch (currentChar) {					
+				case '$':
+					fLast = DOLLAR;
+					fTokenLength++;
+					break;	 				
+	 			case '{':
+	 				if (fLast == DOLLAR) {
+	 					fTemplateLiteralExpressionDepth++;
+	 					fTokenLength++;
+	 				}
+	 				break;
+	 			case '}':
+	 				if (fLast != BACKSLASH && fTemplateLiteralExpressionDepth > 0) {
+	 					fTemplateLiteralExpressionDepth--;
+	 					fTokenLength++;
+	 				}
+	 				break;
+	 			case '`':
+	 				if (fLast != BACKSLASH && fTemplateLiteralExpressionDepth == 0) {
+	 					return postFix(JS_TEMPLATE_LITERAL);
+	 				} else {
+	 					consume();
+	 					break;
+	 				}
+	 			default:
+	 				consume();
+	 				break;
+	 			}
+	 			break;
+	 			
 	 		case STRING:
 	 			switch (currentChar) {
 	 			case '\\':
@@ -522,6 +581,7 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 		case SLASH:
 		case STAR:
 		case HASH:
+		case BACKQUOTE:
 			return 1;
 
 		case SLASH_STAR:
@@ -565,6 +625,9 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 
 		else if (contentType.equals(JAVA_MULTI_LINE_COMMENT))
 			return MULTI_LINE_COMMENT;
+		
+		else if (contentType.equals(JAVASCRIPT_TEMPLATE_LITERAL))
+			return JS_TEMPLATE_LITERAL;
 
 		else if (contentType.equals(JAVA_DOC))
 			return JSDOC;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -52,7 +52,8 @@ public class JavaScriptTextTools {
 		IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT,
 		IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT,
 		IJavaScriptPartitions.JAVA_STRING,
-		IJavaScriptPartitions.JAVA_CHARACTER
+		IJavaScriptPartitions.JAVA_CHARACTER,
+		IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL
 	};
 
 	/**
@@ -73,7 +74,9 @@ public class JavaScriptTextTools {
 	private JavaCodeScanner fCodeScanner;
 	/** The JavaScript multi-line comment scanner. */
 	private JavaCommentScanner fMultilineCommentScanner;
-	/** The JavaScript single-line comment scanner. */
+	/** The JavaScript template literal scanner. */
+	private SingleTokenJavaScanner fTemplateLiteralScanner;
+	/** The JavaScript single-line comment scanner. */	
 	private JavaCommentScanner fSinglelineCommentScanner;
 	/** The JavaScript string scanner. */
 	private SingleTokenJavaScanner fStringScanner;
@@ -164,6 +167,7 @@ public class JavaScriptTextTools {
 		fColorManager= new JavaColorManager(autoDisposeOnDisplayDispose);
 		fCodeScanner= new JavaCodeScanner(fColorManager, store);
 		fMultilineCommentScanner= new JavaCommentScanner(fColorManager, store, coreStore, IJavaScriptColorConstants.JAVA_MULTI_LINE_COMMENT);
+		fTemplateLiteralScanner = new SingleTokenJavaScanner(fColorManager, store, IJavaScriptColorConstants.JAVASCRIPT_TEMPLATE_LITERAL);
 		fSinglelineCommentScanner= new JavaCommentScanner(fColorManager, store, coreStore, IJavaScriptColorConstants.JAVA_SINGLE_LINE_COMMENT);
 		fStringScanner= new SingleTokenJavaScanner(fColorManager, store, IJavaScriptColorConstants.JAVA_STRING);
 		fJavaDocScanner= new JavaDocScanner(fColorManager, store, coreStore);
@@ -177,6 +181,7 @@ public class JavaScriptTextTools {
 		fCodeScanner= null;
 		fMultilineCommentScanner= null;
 		fSinglelineCommentScanner= null;
+		fTemplateLiteralScanner = null;
 		fStringScanner= null;
 		fJavaDocScanner= null;
 
@@ -248,6 +253,8 @@ public class JavaScriptTextTools {
 			fCodeScanner.adaptToPreferenceChange(event);
 		if (fMultilineCommentScanner.affectsBehavior(event))
 			fMultilineCommentScanner.adaptToPreferenceChange(event);
+		if (fTemplateLiteralScanner.affectsBehavior(event))
+			fTemplateLiteralScanner.adaptToPreferenceChange(event);
 		if (fSinglelineCommentScanner.affectsBehavior(event))
 			fSinglelineCommentScanner.adaptToPreferenceChange(event);
 		if (fStringScanner.affectsBehavior(event))

@@ -1206,6 +1206,54 @@ public class PreferenceConstants {
 	public final static String EDITOR_MULTI_LINE_COMMENT_UNDERLINE= IJavaScriptColorConstants.JAVA_MULTI_LINE_COMMENT + EDITOR_UNDERLINE_SUFFIX; 
 
 	/**
+	 * A named preference that holds the color used to render template literals.
+	 * <p>
+	 * Value is of type <code>String</code>. A RGB color value encoded as a string
+	 * using class <code>PreferenceConverter</code>
+	 * </p>
+	 * 
+	 * @see org.eclipse.jface.resource.StringConverter
+	 * @see org.eclipse.jface.preference.PreferenceConverter
+	 */
+	public final static String EDITOR_TEMPLATE_LITERAL_COLOR= IJavaScriptColorConstants.JAVASCRIPT_TEMPLATE_LITERAL;
+
+	/**
+	 * A named preference that controls whether template literals are rendered in bold.
+	 * <p>
+	 * Value is of type <code>Boolean</code>. If <code>true</code> template literals are rendered
+	 * in bold. If <code>false</code> the are rendered using no font style attribute.
+	 * </p>
+	 */
+	public final static String EDITOR_TEMPLATE_LITERAL_BOLD= IJavaScriptColorConstants.JAVASCRIPT_TEMPLATE_LITERAL + EDITOR_BOLD_SUFFIX; 
+
+	/**
+	 * A named preference that controls whether template literals are rendered in italic.
+	 * <p>
+	 * Value is of type <code>Boolean</code>. If <code>true</code> template literals are rendered
+	 * in italic. If <code>false</code> the are rendered using no italic font style attribute.
+	 * </p>
+	 */
+	public final static String EDITOR_TEMPLATE_LITERAL_ITALIC= IJavaScriptColorConstants.JAVASCRIPT_TEMPLATE_LITERAL + EDITOR_ITALIC_SUFFIX;
+	
+	/**
+	 * A named preference that controls whether template literals are rendered in strikethrough.
+	 * <p>
+	 * Value is of type <code>Boolean</code>. If <code>true</code> template literals are rendered
+	 * in strikethrough. If <code>false</code> the are rendered using no strikethrough font style attribute.
+	 * </p>
+	 */
+	public final static String EDITOR_TEMPLATE_LITERAL_STRIKETHROUGH= IJavaScriptColorConstants.JAVASCRIPT_TEMPLATE_LITERAL + EDITOR_STRIKETHROUGH_SUFFIX;
+	
+	/**
+	 * A named preference that controls whether template literals are rendered in underline.
+	 * <p>
+	 * Value is of type <code>Boolean</code>. If <code>true</code> template literals are rendered
+	 * in underline. If <code>false</code> the are rendered using no underline font style attribute.
+	 * </p>
+	 */
+	public final static String EDITOR_TEMPLATE_LITERAL_UNDERLINE= IJavaScriptColorConstants.JAVASCRIPT_TEMPLATE_LITERAL + EDITOR_UNDERLINE_SUFFIX; 
+	
+	/**
 	 * A named preference that holds the color used to render single line comments.
 	 * <p>
 	 * Value is of type <code>String</code>. A RGB color value encoded as a string
@@ -3396,6 +3444,14 @@ public class PreferenceConstants {
 		
 		store.setDefault(PreferenceConstants.EDITOR_MULTI_LINE_COMMENT_BOLD, false);
 		store.setDefault(PreferenceConstants.EDITOR_MULTI_LINE_COMMENT_ITALIC, false);
+		
+		setDefaultAndFireEvent(
+				store,
+				PreferenceConstants.EDITOR_TEMPLATE_LITERAL_COLOR,
+				findRGB(registry, IJavaThemeConstants.EDITOR_TEMPLATE_LITERAL_COLOR, new RGB(32, 74, 135)));
+		
+		store.setDefault(PreferenceConstants.EDITOR_TEMPLATE_LITERAL_BOLD, false);
+		store.setDefault(PreferenceConstants.EDITOR_TEMPLATE_LITERAL_ITALIC, false);
 
 		setDefaultAndFireEvent(
 				store, 

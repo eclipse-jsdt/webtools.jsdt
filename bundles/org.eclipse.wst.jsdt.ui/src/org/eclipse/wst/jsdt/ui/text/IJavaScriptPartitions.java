@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -34,6 +34,11 @@ public interface IJavaScriptPartitions {
 	 * The identifier multi-line (JLS2: TraditionalComment) comment partition content type.
 	 */
 	String JAVA_MULTI_LINE_COMMENT= "__java_multiline_comment"; //$NON-NLS-1$
+	
+	/**
+	 * The identifier template-literal partition content type.
+	 */
+	String JAVASCRIPT_TEMPLATE_LITERAL = "__javascript_template_literal"; //$NON-NLS-1$
 
 	/**
 	 * The identifier of the Javadoc (JLS2: DocumentationComment) partition content type.

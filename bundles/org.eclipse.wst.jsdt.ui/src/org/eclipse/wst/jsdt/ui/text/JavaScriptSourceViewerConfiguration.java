@@ -130,6 +130,10 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 	 */
 	private AbstractJavaScanner fMultilineCommentScanner;
 	/**
+	 * The JavaScript template literal scanner.
+	 */
+	private AbstractJavaScanner fTemplateLiteralScanner;
+	/**
 	 * The JavaScript single-line comment scanner.
 	 *
 	 */
@@ -205,6 +209,16 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 	 */
 	protected RuleBasedScanner getMultilineCommentScanner() {
 		return fMultilineCommentScanner;
+	}
+	
+	/**
+	 * Returns the JavaScript template literal scanner for this 
+	 * configuration.
+	 * 
+	 * @return the JavaScript template literal scanner
+	 */
+	protected RuleBasedScanner getTemplateLiteralScanner() {
+		return fTemplateLiteralScanner;
 	}
 
 	/**
@@ -292,6 +306,7 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 		Assert.isTrue(isNewSetup());
 		fCodeScanner = new JavaCodeScanner(getColorManager(), fPreferenceStore);
 		fMultilineCommentScanner = new JavaCommentScanner(getColorManager(), fPreferenceStore, IJavaScriptColorConstants.JAVA_MULTI_LINE_COMMENT);
+		fTemplateLiteralScanner = new JavaCommentScanner(getColorManager(), fPreferenceStore, IJavaScriptColorConstants.JAVASCRIPT_TEMPLATE_LITERAL);
 		fSinglelineCommentScanner = new JavaCommentScanner(getColorManager(), fPreferenceStore, IJavaScriptColorConstants.JAVA_SINGLE_LINE_COMMENT);
 		fStringScanner = new SingleTokenJavaScanner(getColorManager(), fPreferenceStore, IJavaScriptColorConstants.JAVA_STRING);
 		fJavaDocScanner = new JavaDocScanner(getColorManager(), fPreferenceStore);
@@ -317,6 +332,10 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 		dr = new DefaultDamagerRepairer(getMultilineCommentScanner());
 		reconciler.setDamager(dr, IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
 		reconciler.setRepairer(dr, IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
+		
+		dr = new DefaultDamagerRepairer(getTemplateLiteralScanner());
+		reconciler.setDamager(dr, IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL);
+		reconciler.setRepairer(dr, IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL);
 
 		dr = new DefaultDamagerRepairer(getSinglelineCommentScanner());
 		reconciler.setDamager(dr, IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT);
@@ -361,6 +380,9 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 
 			ContentAssistProcessor multiLineProcessor = new JavaCompletionProcessor(getEditor(), assistant, IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
 			assistant.setContentAssistProcessor(multiLineProcessor, IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
+			
+			ContentAssistProcessor templateLiteralProcessor = new JavaCompletionProcessor(getEditor(), assistant, IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL);
+			assistant.setContentAssistProcessor(templateLiteralProcessor,  IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL);
 
 			ContentAssistProcessor javadocProcessor = new JavadocCompletionProcessor(getEditor(), assistant);
 			assistant.setContentAssistProcessor(javadocProcessor, IJavaScriptPartitions.JAVA_DOC);
@@ -417,8 +439,12 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 	@Override
 	public IAutoEditStrategy[] getAutoEditStrategies(final ISourceViewer sourceViewer, final String contentType) {
 		String partitioning = getConfiguredDocumentPartitioning(sourceViewer);
-		if (IJavaScriptPartitions.JAVA_DOC.equals(contentType) || IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT.equals(contentType))
+		if (IJavaScriptPartitions.JAVA_DOC.equals(contentType) 
+					|| IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT.equals(contentType) 
+					|| IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL.equals(contentType))
+		{
 			return new IAutoEditStrategy[]{new JavaDocAutoIndentStrategy(partitioning)};
+		}
 		else if (IJavaScriptPartitions.JAVA_STRING.equals(contentType))
 			return new IAutoEditStrategy[]{new SmartSemicolonAutoEditStrategy(partitioning), new JavaStringAutoIndentStrategy(partitioning)};
 		else if (IJavaScriptPartitions.JAVA_CHARACTER.equals(contentType) || IDocument.DEFAULT_CONTENT_TYPE.equals(contentType))
@@ -435,8 +461,12 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 	public ITextDoubleClickStrategy getDoubleClickStrategy(final ISourceViewer sourceViewer, final String contentType) {
 		if (IJavaScriptPartitions.JAVA_DOC.equals(contentType))
 			return new JavadocDoubleClickStrategy();
-		if (IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT.equals(contentType) || IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT.equals(contentType))
+		if (IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT.equals(contentType) 
+					|| IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT.equals(contentType)
+					|| IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL.equals(contentType))
+		{
 			return new DefaultTextDoubleClickStrategy();
+		}
 		else if (IJavaScriptPartitions.JAVA_STRING.equals(contentType) || IJavaScriptPartitions.JAVA_CHARACTER.equals(contentType))
 			return new JavaStringDoubleClickSelector(getConfiguredDocumentPartitioning(sourceViewer));
 		if (fJavaDoubleClickSelector == null) {
@@ -648,7 +678,14 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 	 */
 	@Override
 	public String[] getConfiguredContentTypes(final ISourceViewer sourceViewer) {
-		return new String[]{IDocument.DEFAULT_CONTENT_TYPE, IJavaScriptPartitions.JAVA_DOC, IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT, IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT, IJavaScriptPartitions.JAVA_STRING, IJavaScriptPartitions.JAVA_CHARACTER};
+		return new String[] {
+					IDocument.DEFAULT_CONTENT_TYPE, 
+					IJavaScriptPartitions.JAVA_DOC, 
+					IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT, 
+					IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT, 
+					IJavaScriptPartitions.JAVA_STRING, 
+					IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL,
+					IJavaScriptPartitions.JAVA_CHARACTER};
 	}
 
 	/*
@@ -790,6 +827,7 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 		presenter.setInformationProvider(provider, IDocument.DEFAULT_CONTENT_TYPE);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_DOC);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
+		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_STRING);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_CHARACTER);
@@ -838,6 +876,7 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 		presenter.setInformationProvider(provider, IDocument.DEFAULT_CONTENT_TYPE);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_DOC);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
+		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_STRING);
 		presenter.setInformationProvider(provider, IJavaScriptPartitions.JAVA_CHARACTER);
@@ -878,6 +917,8 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 			fCodeScanner.adaptToPreferenceChange(event);
 		if (fMultilineCommentScanner.affectsBehavior(event))
 			fMultilineCommentScanner.adaptToPreferenceChange(event);
+		if (fTemplateLiteralScanner.affectsBehavior(event))
+			fTemplateLiteralScanner.adaptToPreferenceChange(event);
 		if (fSinglelineCommentScanner.affectsBehavior(event))
 			fSinglelineCommentScanner.adaptToPreferenceChange(event);
 		if (fStringScanner.affectsBehavior(event))

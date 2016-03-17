@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -285,14 +285,14 @@ class JavaEditorColoringConfigurationBlock extends AbstractConfigurationBlock {
 	
 	private static final String COMPILER_TASK_TAGS= JavaScriptCore.COMPILER_TASK_TAGS;
 	/**
-	 * The keys of the overlay store. 
+	 * The keys of the overlay store. The order of these keys within the array are important.
 	 */
 	private final String[][] fSyntaxColorListModel= new String[][] {
 			{ PreferencesMessages.JavaEditorPreferencePage_javaDocKeywords, PreferenceConstants.EDITOR_JAVADOC_KEYWORD_COLOR }, 
 			{ PreferencesMessages.JavaEditorPreferencePage_javaDocHtmlTags, PreferenceConstants.EDITOR_JAVADOC_TAG_COLOR }, 
 			{ PreferencesMessages.JavaEditorPreferencePage_javaDocLinks, PreferenceConstants.EDITOR_JAVADOC_LINKS_COLOR }, 
 			{ PreferencesMessages.JavaEditorPreferencePage_javaDocOthers, PreferenceConstants.EDITOR_JAVADOC_DEFAULT_COLOR }, 
-			{ PreferencesMessages.JavaEditorPreferencePage_multiLineComment, PreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR }, 
+			{ PreferencesMessages.JavaEditorPreferencePage_multiLineComment, PreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR },			
 			{ PreferencesMessages.JavaEditorPreferencePage_singleLineComment, PreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR }, 
 			{ PreferencesMessages.JavaEditorPreferencePage_javaCommentTaskTags, PreferenceConstants.EDITOR_TASK_TAG_COLOR }, 
 			{ PreferencesMessages.JavaEditorPreferencePage_keywords, PreferenceConstants.EDITOR_JAVA_KEYWORD_COLOR }, 
@@ -300,6 +300,7 @@ class JavaEditorColoringConfigurationBlock extends AbstractConfigurationBlock {
 			{ PreferencesMessages.JavaEditorPreferencePage_operators, PreferenceConstants.EDITOR_JAVA_OPERATOR_COLOR }, 
 			{ PreferencesMessages.JavaEditorPreferencePage_brackets, PreferenceConstants.EDITOR_JAVA_BRACKET_COLOR },
 			{ PreferencesMessages.JavaEditorPreferencePage_strings, PreferenceConstants.EDITOR_STRING_COLOR }, 
+			{ PreferencesMessages.JavaEditorPreferencePage_templateLiteral, PreferenceConstants.EDITOR_TEMPLATE_LITERAL_COLOR },
 			{ PreferencesMessages.JavaEditorPreferencePage_others, PreferenceConstants.EDITOR_JAVA_DEFAULT_COLOR },
 	};
 	

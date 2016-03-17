@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2008 IBM Corporation and others.
+ * Copyright (c) 2007, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -33,6 +33,11 @@ public interface IJavaThemeConstants {
 	 */
 	public final String EDITOR_MULTI_LINE_COMMENT_COLOR= ID_PREFIX + PreferenceConstants.EDITOR_MULTI_LINE_COMMENT_COLOR;
 
+	/**
+	 * Theme constant for the color used to render template literals.
+	 */
+	public final String EDITOR_TEMPLATE_LITERAL_COLOR = ID_PREFIX + PreferenceConstants.EDITOR_TEMPLATE_LITERAL_COLOR;
+	
 	/**
 	 * Theme constant for the color used to render java keywords.
 	 */

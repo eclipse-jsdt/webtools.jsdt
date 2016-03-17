@@ -327,7 +327,7 @@ public class FormatAllAction extends SelectionDispatchAction {
 			formatter.setMasterStrategy(new JavaFormattingStrategy());
 			formatter.setSlaveStrategy(new CommentFormattingStrategy(), IJavaScriptPartitions.JAVA_DOC);
 			formatter.setSlaveStrategy(new CommentFormattingStrategy(), IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT);
-			formatter.setSlaveStrategy(new CommentFormattingStrategy(), IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);		
+			formatter.setSlaveStrategy(new CommentFormattingStrategy(), IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
 
 			try {
 				startSequentialRewriteMode(document);

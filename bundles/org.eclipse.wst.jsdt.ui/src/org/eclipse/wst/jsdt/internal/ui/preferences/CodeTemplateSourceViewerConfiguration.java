@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -117,6 +117,7 @@ public class CodeTemplateSourceViewerConfiguration extends SimpleJavaSourceViewe
 		assistant.setContentAssistProcessor(fProcessor, IJavaScriptPartitions.JAVA_CHARACTER);
 		assistant.setContentAssistProcessor(fProcessor, IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT);
 		assistant.setContentAssistProcessor(fProcessor, IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
+		assistant.setContentAssistProcessor(fProcessor, IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL);
 		assistant.setContentAssistProcessor(fProcessor, IJavaScriptPartitions.JAVA_DOC);
 
 		assistant.enableAutoInsert(store.getBoolean(PreferenceConstants.CODEASSIST_AUTOINSERT));

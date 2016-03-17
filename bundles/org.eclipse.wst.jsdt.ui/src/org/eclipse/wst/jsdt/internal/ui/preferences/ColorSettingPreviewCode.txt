@@ -12,7 +12,9 @@ function foo() {
     var var1 = new Object();
     var obj = { carMake: 'Amet', carModel: 'Porro', carYear: 2012 };
     var s = "abc123";
-    clear(var1);
+    clear(var1);    
+    var template = `This is a template literal value,
+      it may span multiple lines.`;
 }
 
 function pop() {

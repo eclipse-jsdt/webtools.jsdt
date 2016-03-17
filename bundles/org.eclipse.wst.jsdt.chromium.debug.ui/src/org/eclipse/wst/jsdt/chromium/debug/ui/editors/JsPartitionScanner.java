@@ -1,4 +1,4 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
+// Copyright (c) 2009-2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
@@ -25,8 +25,10 @@ public class JsPartitionScanner extends RuleBasedPartitionScanner {
   static final String PARTITIONING = "ChromiumJavaScriptPartitioning"; //$NON-NLS-1$
   static final String MULTILINE_COMMENT= "__js_multiline_comment"; //$NON-NLS-1$
   static final String JSDOC = "__jsdoc"; //$NON-NLS-1$
+  static final String TEMPLATE_LITERAL = "__js_template_literal"; 
   static final String[] PARTITION_TYPES = {
     MULTILINE_COMMENT,
+    TEMPLATE_LITERAL,
     JSDOC
   };
 
@@ -65,6 +67,7 @@ public class JsPartitionScanner extends RuleBasedPartitionScanner {
   public JsPartitionScanner() {
     IToken jsDocToken= new Token(JSDOC);
     IToken multilineCommentToken= new Token(MULTILINE_COMMENT);
+    IToken templateLiteralToken = new Token(TEMPLATE_LITERAL);
 
     setPredicateRules(new IPredicateRule[] {
         new EndOfLineRule("//", Token.UNDEFINED), //$NON-NLS-1$
@@ -72,7 +75,8 @@ public class JsPartitionScanner extends RuleBasedPartitionScanner {
         new SingleLineRule("'", "'", Token.UNDEFINED, '\\'), //$NON-NLS-2$ //$NON-NLS-1$
         new EmptyCommentPredicateRule(multilineCommentToken),
         new MultiLineRule("/**", "*/", jsDocToken, (char) 0, true),  //$NON-NLS-1$ //$NON-NLS-2$
-        new MultiLineRule("/*", "*/", multilineCommentToken, (char) 0, true) //$NON-NLS-1$ //$NON-NLS-2$
+        new MultiLineRule("/*", "*/", multilineCommentToken, (char) 0, true), //$NON-NLS-1$ //$NON-NLS-2$
+        new MultiLineRule("`", "`", templateLiteralToken, (char) 0, true) //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 }

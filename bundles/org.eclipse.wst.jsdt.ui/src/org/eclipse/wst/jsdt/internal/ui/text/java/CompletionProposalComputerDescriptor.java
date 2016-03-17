@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2011 IBM Corporation and others.
+ * Copyright (c) 2005, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -86,6 +86,7 @@ final class CompletionProposalComputerDescriptor {
 		partitions.add(IJavaScriptPartitions.JAVA_MULTI_LINE_COMMENT);
 		partitions.add(IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT);
 		partitions.add(IJavaScriptPartitions.JAVA_STRING);
+		partitions.add(IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL);
 		partitions.add(IJavaScriptPartitions.JAVA_CHARACTER);
 		
 		PARTITION_SET= Collections.unmodifiableSet(partitions);

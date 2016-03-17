@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -202,6 +202,7 @@ public class AddBlockCommentAction extends BlockCommentAction {
 	private boolean isSpecialPartition(String partType) {
 		return partType == IJavaScriptPartitions.JAVA_CHARACTER
 				|| partType == IJavaScriptPartitions.JAVA_STRING
+				|| partType == IJavaScriptPartitions.JAVASCRIPT_TEMPLATE_LITERAL
 				|| partType == IJavaScriptPartitions.JAVA_SINGLE_LINE_COMMENT;
 	}
 

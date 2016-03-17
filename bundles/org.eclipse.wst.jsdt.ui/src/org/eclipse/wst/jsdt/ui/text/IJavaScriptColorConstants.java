@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -40,6 +40,11 @@ public interface IJavaScriptColorConstants {
 	 * (value <code>"java_multi_line_comment"</code>).
 	 */
 	String JAVA_MULTI_LINE_COMMENT= "java_multi_line_comment"; //$NON-NLS-1$
+	
+	/**
+	 * The color key for template literals in JavaScript code
+	 */
+	String JAVASCRIPT_TEMPLATE_LITERAL = "javascript_template_literal"; //$NON-NLS-1$
 
 	/** The color key for single-line comments in JavaScript code
 	 * (value <code>"java_single_line_comment"</code>).
