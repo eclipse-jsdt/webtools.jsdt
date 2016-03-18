@@ -47,7 +47,5 @@
     <module>org.eclipse.wst.jsdt.chromium.wipbackend.dev</module>
     <module>org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0</module>
     
-    <!-- Experimental -->
-    <module>org.eclipse.wst.jsdt.ui.importer</module>
   </modules>
 </project>

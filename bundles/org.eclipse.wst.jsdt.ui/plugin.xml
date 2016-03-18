@@ -6011,6 +6011,18 @@
          <themeid refid="org.eclipse.e4.ui.css.theme.e4_dark"></themeid>
       </stylesheet>
    </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectConfigurators">
+      <projectConfigurator
+            class="org.eclipse.wst.jsdt.internal.ui.importer.JSDTProjectNature"
+            label="%importerLabel">
+         <activeWhen>
+            <hasFileWithSuffixRecursively
+                  suffix=".js">
+            </hasFileWithSuffixRecursively>
+         </activeWhen>
+      </projectConfigurator>
+   </extension>
    
    
     <!--======================================================================================-->

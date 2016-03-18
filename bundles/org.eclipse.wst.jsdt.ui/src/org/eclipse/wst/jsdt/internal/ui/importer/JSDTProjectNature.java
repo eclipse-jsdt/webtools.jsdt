@@ -6,9 +6,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * - Mickael Istria (Red Hat Inc.(
+ * - Mickael Istria (Red Hat Inc.)
  *******************************************************************************/
-package org.eclipse.wst.jsdt.ui.importer;
+package org.eclipse.wst.jsdt.internal.ui.importer;
 
 import java.io.File;
 import java.util.Collections;
@@ -27,20 +27,20 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.ui.wizards.datatransfer.ProjectConfigurator;
-import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.internal.core.util.ConvertUtility;
+import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 
 public class JSDTProjectNature implements ProjectConfigurator {
 	
-	private final static String FILE_EXTENSION = ".js";
+	private final static String FILE_EXTENSION = ".js"; //$NON-NLS-1$
 
 	private final static class JavaScriptResourceExistsFinder implements IResourceVisitor {
 		private boolean hasJSFile;
 		private Set<IPath> ignoredDirectories;
 		
-		public JavaScriptResourceExistsFinder(Set<IPath> ignoredDirectories) {
-			this.ignoredDirectories = ignoredDirectories;
+		public JavaScriptResourceExistsFinder(Set<IPath> ignoredDirectoryPaths) {
+			this.ignoredDirectories = ignoredDirectoryPaths;
 		}
 		
 		@Override
@@ -118,9 +118,9 @@ public class JSDTProjectNature implements ProjectConfigurator {
 		try {
 			project.accept(javaResourceFinder);
 		} catch (CoreException ex) {
-			Activator.getDefault().getLog().log(new Status(
+			JavaScriptPlugin.log(new Status(
 					IStatus.ERROR,
-					Activator.PLUGIN_ID,
+					JavaScriptCore.PLUGIN_ID,
 					ex.getMessage(),
 					ex));
 			return false;
@@ -130,7 +130,6 @@ public class JSDTProjectNature implements ProjectConfigurator {
 
 	@Override
 	public IWizard getConfigurationWizard() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -138,12 +137,11 @@ public class JSDTProjectNature implements ProjectConfigurator {
 	public void configure(IProject project, Set<IPath> ignoredDirectories, IProgressMonitor monitor) {
 		try {
 			new ConvertUtility(project).configure(monitor);
-			IJavaScriptProject jsProject = (IJavaScriptProject) project.getNature(JavaScriptCore.NATURE_ID);
-			// TODO exclude ignored Directories from source folders ?
+			// Configure source folders?
 		} catch (Exception ex) {
-			Activator.getDefault().getLog().log(new Status(
+			JavaScriptPlugin.getDefault().getLog().log(new Status(
 					IStatus.ERROR,
-					Activator.PLUGIN_ID,
+					JavaScriptCore.PLUGIN_ID,
 					ex.getMessage(),
 					ex));
 		}
@@ -162,6 +160,6 @@ public class JSDTProjectNature implements ProjectConfigurator {
 	@Override
 	public Set<File> findConfigurableLocations(File root, IProgressMonitor monitor) {
 		// No easy way to detect project directories just by finding .js file in a dir
-		return Collections.EMPTY_SET;
+		return Collections.emptySet();
 	}
 }
