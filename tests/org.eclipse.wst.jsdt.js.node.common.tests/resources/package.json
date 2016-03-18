@@ -1,0 +1,17 @@
+{
+  "name": "test name",
+  "description": "test description",
+  "author": "test author",
+  "contributors": [
+    {
+      "email": "jsmith@gmail.com",
+      "name": "John Smith"
+    },
+    {
+      "email": "cjones@gmail.com",
+      "name": "Chris Jones"
+    }
+  ],
+  "license": "test license",
+  "private": true
+}
