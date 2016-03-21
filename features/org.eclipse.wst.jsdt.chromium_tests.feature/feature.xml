@@ -9,7 +9,7 @@
 <feature
       id="org.eclipse.wst.jsdt.chromium_tests.feature"
       label="%featureName"
-      version="0.3.9.qualifier"
+      version="0.4.0.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="1.0.1.qualifier">
