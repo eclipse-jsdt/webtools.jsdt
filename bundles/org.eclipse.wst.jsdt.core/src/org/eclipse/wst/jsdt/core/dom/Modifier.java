@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -36,17 +36,17 @@ import java.util.Map;
  * Note that JavaScript model class {@link org.eclipse.wst.jsdt.core.Flags} also
  * provides the same constants as this class.
  * </p>
- * 
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ *
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	/**
  	 * Modifier keywords (typesafe enumeration).
- 	 *  
+ 	 *
 	 */
 	public static class ModifierKeyword {
 
@@ -88,13 +88,21 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 		/** "volatile" modifier with flag value {@link Modifier#VOLATILE}. */
 		public static final ModifierKeyword VOLATILE_KEYWORD = new ModifierKeyword("volatile", VOLATILE);//$NON-NLS-1$
-		
-		/** "get" modifier with flag value {@link Modifier#GET}. */
+
+		/**
+		 * "get" modifier with flag value {@link Modifier#GET}.
+		 *
+		 * @since 2.0
+		 */
 		public static final ModifierKeyword GET_KEYWORD = new ModifierKeyword("get", GET); //$NON-NLS-1$
-		/** "set" modifier with flag value {@link Modifier#SET}. */
+		/**
+		 * "set" modifier with flag value {@link Modifier#SET}.
+		 *
+		 * @since 2.0
+		 */
 		public static final ModifierKeyword SET_KEYWORD = new ModifierKeyword("set", SET); //$NON-NLS-1$
-		
-		
+
+
 		static {
 			KEYWORDS = new HashMap(20);
 			ModifierKeyword[] ops = {
@@ -198,6 +206,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 		 * @return the keyword for the modifier
 		 * @see #toKeyword(String)
 		 */
+		@Override
 		public String toString() {
 			return this.keyword;
 		}
@@ -206,20 +215,20 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	/**
 	 * "abstract" modifier constant (bit mask).
 	 * Applicable to types and methods.
-	 *  
+	 *
 	 */
 	public static final int ABSTRACT = 0x0400;
 
 	/**
 	 * "final" modifier constant (bit mask).
 	 * Applicable to types, methods, fields, and variables.
-	 *  
+	 *
 	 */
 	public static final int FINAL = 0x0010;
 
 	/**
 	 * The "keyword" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor KEYWORD_PROPERTY =
 		new SimplePropertyDescriptor(Modifier.class, "keyword", Modifier.ModifierKeyword.class, MANDATORY); //$NON-NLS-1$
@@ -227,20 +236,20 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	/**
 	 * "native" modifier constant (bit mask).
 	 * Applicable only to methods.
-	 *  
+	 *
 	 */
 	public static final int NATIVE = 0x0100;
 
 	/**
 	 * Modifier constant (bit mask, value 0) indicating no modifiers.
-	 *  
+	 *
 	 */
 	public static final int NONE = 0x0000;
 
 	/**
 	 * "private" modifier constant (bit mask).
 	 * Applicable to types, methods, constructors, and fields.
-	 *  
+	 *
 	 */
 	public static final int PRIVATE = 0x0002;
 
@@ -254,61 +263,64 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	/**
 	 * "protected" modifier constant (bit mask).
 	 * Applicable to types, methods, constructors, and fields.
-	 *  
+	 *
 	 */
 	public static final int PROTECTED = 0x0004;
 
 	/**
 	 * "public" modifier constant (bit mask).
 	 * Applicable to types, methods, constructors, and fields.
-	 *  
+	 *
 	 */
 	public static final int PUBLIC = 0x0001;
 
 	/**
 	 * "static" modifier constant (bit mask).
 	 * Applicable to types, methods, fields, and initializers.
-	 *  
+	 *
 	 */
 	public static final int STATIC = 0x0008;
 
 	/**
 	 * "strictfp" modifier constant (bit mask).
 	 * Applicable to types and methods.
-	 *  
+	 *
 	 */
 	public static final int STRICTFP = 0x0800;
 
 	/**
 	 * "synchronized" modifier constant (bit mask).
 	 * Applicable only to methods.
-	 *  
+	 *
 	 */
 	public static final int SYNCHRONIZED = 0x0020;
 
 	/**
 	 * "transient" modifier constant (bit mask).
 	 * Applicable only to fields.
-	 *  
+	 *
 	 */
 	public static final int TRANSIENT = 0x0080;
 
 	/**
 	 * "volatile" modifier constant (bit mask).
 	 * Applicable only to fields.
-	 *  
+	 *
 	 */
 	public static final int VOLATILE = 0x0040;
-	
+
 	/**
-	 * "get" modifier constant (bit mask)
-	 *  as defined on ES2015
-	 * 
+	 * "get" modifier constant (bit mask) as defined on ES2015
+	 *
+	 * @since 2.0
+	 *
 	 */
 	public static final int GET = 0x0400;
-	
+
 	/**
 	 * "set" modifier constant (bit mask)
+	 *
+	 * @since 2.0
 	 */
 	public static final int SET = 0x0200;
 
@@ -326,7 +338,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>ABSTRACT</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isAbstract(int flags) {
 		return (flags & ABSTRACT) != 0;
@@ -339,7 +351,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>FINAL</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isFinal(int flags) {
 		return (flags & FINAL) != 0;
@@ -352,7 +364,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>NATIVE</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isNative(int flags) {
 		return (flags & NATIVE) != 0;
@@ -365,7 +377,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>PRIVATE</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isPrivate(int flags) {
 		return (flags & PRIVATE) != 0;
@@ -378,7 +390,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>PROTECTED</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isProtected(int flags) {
 		return (flags & PROTECTED) != 0;
@@ -391,7 +403,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>PUBLIC</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isPublic(int flags) {
 		return (flags & PUBLIC) != 0;
@@ -404,7 +416,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>STATIC</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isStatic(int flags) {
 		return (flags & STATIC) != 0;
@@ -417,7 +429,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>STRICTFP</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isStrictfp(int flags) {
 		return (flags & STRICTFP) != 0;
@@ -430,7 +442,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>SYNCHRONIZED</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isSynchronized(int flags) {
 		return (flags & SYNCHRONIZED) != 0;
@@ -443,7 +455,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>TRANSIENT</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isTransient(int flags) {
 		return (flags & TRANSIENT) != 0;
@@ -456,36 +468,40 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * @param flags the modifier flags
 	 * @return <code>true</code> if the <code>VOLATILE</code> bit is
 	 *   set, and <code>false</code> otherwise
-	 *  
+	 *
 	 */
 	public static boolean isVolatile(int flags) {
 		return (flags & VOLATILE) != 0;
 	}
-	
+
 	/**
 	 * Returns whether the given flags includes the "get" modifier.
 	 *
-	 * @param flags the modifier flags
-	 * @return <code>true</code> if the <code>GET</code> bit is
-	 *   set, and <code>false</code> otherwise
-	 *  
+	 * @param flags
+	 *            the modifier flags
+	 * @return <code>true</code> if the <code>GET</code> bit is set, and
+	 *         <code>false</code> otherwise
+	 * @since 2.0
+	 *
 	 */
 	public static boolean isGet(int flags) {
 		return (flags & GET) != 0;
-	}	
-	
+	}
+
 	/**
 	 * Returns whether the given flags includes the "set" modifier.
 	 *
-	 * @param flags the modifier flags
-	 * @return <code>true</code> if the <code>SET</code> bit is
-	 *   set, and <code>false</code> otherwise
-	 *  
+	 * @param flags
+	 *            the modifier flags
+	 * @return <code>true</code> if the <code>SET</code> bit is set, and
+	 *         <code>false</code> otherwise
+	 * @since 2.0
+	 *
 	 */
 	public static boolean isSet(int flags) {
 		return (flags & SET) != 0;
 	}
-	
+
 	/**
 	 * Returns a list of structural property descriptors for this node type.
 	 * Clients must not modify the result.
@@ -495,7 +511,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
@@ -503,7 +519,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	/**
 	 * The modifier keyword; defaults to an unspecified modifier.
-	 *  
+	 *
 	 */
 	private ModifierKeyword modifierKeyword = ModifierKeyword.PUBLIC_KEYWORD;
 
@@ -515,7 +531,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * </p>
 	 *
 	 * @param ast the AST that is to own this node
-	 *  
+	 *
 	 */
 	Modifier(AST ast) {
 		super(ast);
@@ -524,8 +540,9 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
-	 *  
+	 *
 	 */
+	@Override
 	void accept0(ASTVisitor visitor) {
 		visitor.visit(this);
 		visitor.endVisit(this);
@@ -533,8 +550,9 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
-	 *  
+	 *
 	 */
+	@Override
 	ASTNode clone0(AST target) {
 		Modifier result = new Modifier(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
@@ -546,7 +564,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Returns the modifier keyword of this modifier node.
 	 *
 	 * @return the modifier keyword
-	 *  
+	 *
 	 */
 	public ModifierKeyword getKeyword() {
 		return this.modifierKeyword;
@@ -554,8 +572,9 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
-	 *  
+	 *
 	 */
+	@Override
 	final int getNodeType0() {
 		return MODIFIER;
 	}
@@ -563,6 +582,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final Object internalGetSetObjectProperty(SimplePropertyDescriptor property, boolean get, Object value) {
 		if (property == KEYWORD_PROPERTY) {
 			if (get) {
@@ -579,6 +599,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final List internalStructuralPropertiesForType(int apiLevel) {
 		return propertyDescriptors(apiLevel);
 	}
@@ -587,7 +608,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the abstract modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the abstract modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isAbstract() {
 		return this.modifierKeyword == ModifierKeyword.ABSTRACT_KEYWORD;
@@ -604,7 +625,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the final modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the final modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isFinal() {
 		return this.modifierKeyword == ModifierKeyword.FINAL_KEYWORD;
@@ -613,6 +634,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	/**
 	 * @see IExtendedModifier#isModifier()
 	 */
+	@Override
 	public boolean isModifier() {
 		return true;
 	}
@@ -621,7 +643,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the native modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the native modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isNative() {
 		return this.modifierKeyword == ModifierKeyword.NATIVE_KEYWORD;
@@ -631,7 +653,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the private modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the private modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isPrivate() {
 		return this.modifierKeyword == ModifierKeyword.PRIVATE_KEYWORD;
@@ -641,7 +663,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the protected modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the protected modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isProtected() {
 		return this.modifierKeyword == ModifierKeyword.PROTECTED_KEYWORD;
@@ -651,7 +673,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the public modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the public modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isPublic() {
 		return this.modifierKeyword == ModifierKeyword.PUBLIC_KEYWORD;
@@ -661,7 +683,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the static modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the static modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isStatic() {
 		return this.modifierKeyword == ModifierKeyword.STATIC_KEYWORD;
@@ -671,7 +693,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the strictfp modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the strictfp modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isStrictfp() {
 		return this.modifierKeyword == ModifierKeyword.STRICTFP_KEYWORD;
@@ -681,7 +703,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the synchronized modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the synchronized modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isSynchronized() {
 		return this.modifierKeyword == ModifierKeyword.SYNCHRONIZED_KEYWORD;
@@ -691,7 +713,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the transient modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the transient modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isTransient() {
 		return this.modifierKeyword == ModifierKeyword.TRANSIENT_KEYWORD;
@@ -701,7 +723,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 * Answer true if the receiver is the volatile modifier, false otherwise.
 	 *
 	 * @return true if the receiver is the volatile modifier, false otherwise
-	 *  
+	 *
 	 */
 	public boolean isVolatile() {
 		return this.modifierKeyword == ModifierKeyword.VOLATILE_KEYWORD;
@@ -709,8 +731,9 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
-	 *  
+	 *
 	 */
+	@Override
 	int memSize() {
 		// treat ModifierKeyword as free
 		return BASE_NODE_SIZE + 1 * 4;
@@ -721,7 +744,7 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 	 *
 	 * @param modifierKeyord the modifier keyword
 	 * @exception IllegalArgumentException if the argument is <code>null</code>
-	 *  
+	 *
 	 */
 	public void setKeyword(ModifierKeyword modifierKeyord) {
 		if (modifierKeyord == null) {
@@ -734,8 +757,9 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
-	 *  
+	 *
 	 */
+	@Override
 	final boolean subtreeMatch0(ASTMatcher matcher, Object other) {
 		// dispatch to correct overloaded match method
 		return matcher.match(this, other);
@@ -743,8 +767,9 @@ public final class Modifier extends ASTNode implements IExtendedModifier {
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
-	 *  
+	 *
 	 */
+	@Override
 	int treeSize() {
 		return memSize();
 	}

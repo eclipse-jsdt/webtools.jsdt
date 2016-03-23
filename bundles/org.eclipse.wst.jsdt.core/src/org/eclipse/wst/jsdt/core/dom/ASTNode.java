@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -118,9 +118,9 @@ import java.util.Map;
  * @see ASTParser
  * @see ASTVisitor
  *
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public abstract class ASTNode {
@@ -583,7 +583,7 @@ public abstract class ASTNode {
 	 * Node type constant indicating a node of type
 	 * <code>BlockComment</code>.
 	 * @see BlockComment
-	 *  
+	 *
 	 */
 	public static final int BLOCK_COMMENT = 64;
 
@@ -591,7 +591,7 @@ public abstract class ASTNode {
 	 * Node type constant indicating a node of type
 	 * <code>TagElement</code>.
 	 * @see TagElement
-	 *  
+	 *
 	 */
 	public static final int TAG_ELEMENT = 65;
 
@@ -599,7 +599,7 @@ public abstract class ASTNode {
 	 * Node type constant indicating a node of type
 	 * <code>TextElement</code>.
 	 * @see TextElement
-	 *  
+	 *
 	 */
 	public static final int TEXT_ELEMENT = 66;
 
@@ -607,7 +607,7 @@ public abstract class ASTNode {
 	 * Node type constant indicating a node of type
 	 * <code>MemberRef</code>.
 	 * @see MemberRef
-	 *  
+	 *
 	 */
 	public static final int MEMBER_REF = 67;
 
@@ -615,7 +615,7 @@ public abstract class ASTNode {
 	 * Node type constant indicating a node of type
 	 * <code>FunctionRef</code>.
 	 * @see FunctionRef
-	 *  
+	 *
 	 */
 	public static final int FUNCTION_REF = 68;
 
@@ -623,7 +623,7 @@ public abstract class ASTNode {
 	 * Node type constant indicating a node of type
 	 * <code>FunctionRefParameter</code>.
 	 * @see FunctionRefParameter
-	 *  
+	 *
 	 */
 	public static final int FUNCTION_REF_PARAMETER = 69;
 
@@ -631,7 +631,7 @@ public abstract class ASTNode {
 	 * Node type constant indicating a node of type
 	 * <code>EnhancedForStatement</code>.
 	 * @see EnhancedForStatement
-	 *  
+	 *
 	 */
 	public static final int ENHANCED_FOR_STATEMENT = 70;
 
@@ -639,7 +639,7 @@ public abstract class ASTNode {
 	 * Node type constant indicating a node of type
 	 * <code>QualifiedType</code>.
 	 * @see QualifiedType
-	 *  
+	 *
 	 */
 	public static final int QUALIFIED_TYPE = 75;
 
@@ -654,11 +654,17 @@ public abstract class ASTNode {
 	public static final int WITH_STATEMENT = 90;
 	public static final int LIST_EXPRESSION = 91;
 	public static final int EMPTY_EXPRESSION = 92;
+	/** @since 2.0 */
 	public static final int YIELD_EXPRESSION = 93;
+	/** @since 2.0 */
 	public static final int ARROW_FUNCTION_EXPRESSION = 94;
+	/** @since 2.0 */
 	public static final int DEBUGGER_STATEMENT = 95;
+	/** @since 2.0 */
 	public static final int FOR_OF_STATEMENT = 96;
+	/** @since 2.0 */
 	public static final int ARRAY_NAME = 97;
+	/** @since 2.0 */
 	public static final int OBJECT_NAME = 98;
 	/**
 	 * Node type constant indicating a node of type
@@ -666,16 +672,26 @@ public abstract class ASTNode {
 	 * @see Modifier
 	 */
 	public static final int MODIFIER = 100;
-	
+
+	/** @since 2.0 */
 	public static final int TEMPLATE_LITERAL = 99;
+	/** @since 2.0 */
 	public static final int TEMPLATE_ELEMENT = 101;
+	/** @since 2.0 */
 	public static final int ASSIGNMENT_NAME = 102;
+	/** @since 2.0 */
 	public static final int REST_ELEMENT_NAME = 103;
+	/** @since 2.0 */
 	public static final int SPREAD_ELEMENT = 104;
+	/** @since 2.0 */
 	public static final int META_PROPERTY = 105;
+	/** @since 2.0 */
 	public static final int MODULE_SPECIFIER = 106;
+	/** @since 2.0 */
 	public static final int EXPORT_DECLARATION = 107;
+	/** @since 2.0 */
 	public static final int TYPE_DECLARATION_EXPRESSION = 108;
+	/** @since 2.0 */
 	public static final int FUNCTION_DECLARATION_STATEMENT = 109;
 
 
@@ -952,7 +968,7 @@ public abstract class ASTNode {
 	 * The standard parser (<code>ASTParser</code>) sets this
 	 * flag on the nodes it creates.
 	 * </p>
-	 *  
+	 *
 	 */
 	public static final int ORIGINAL = 2;
 
@@ -1063,6 +1079,7 @@ public abstract class ASTNode {
 			/* (non-Javadoc)
 			 * Method declared on <code>Iterator</code>.
 			 */
+			@Override
 			public boolean hasNext() {
 				return this.position < NodeList.this.store.size();
 			}
@@ -1070,6 +1087,7 @@ public abstract class ASTNode {
 			/* (non-Javadoc)
 			 * Method declared on <code>Iterator</code>.
 			 */
+			@Override
 			public ASTNode next() {
 				ASTNode result = NodeList.this.store.get(this.position);
 				this.position++;
@@ -1079,6 +1097,7 @@ public abstract class ASTNode {
 			/* (non-Javadoc)
 			 * Method declared on <code>Iterator</code>.
 			 */
+			@Override
 			public void remove() {
 				throw new UnsupportedOperationException();
 			}
@@ -1129,6 +1148,7 @@ public abstract class ASTNode {
 		/* (non-javadoc)
 		 * @see java.util.AbstractCollection#size()
 		 */
+		@Override
 		public int size() {
 			return this.store.size();
 		}
@@ -1136,6 +1156,7 @@ public abstract class ASTNode {
 		/* (non-javadoc)
 		 * @see AbstractList#get(int)
 		 */
+		@Override
 		public ASTNode get(int index) {
 			return this.store.get(index);
 		}
@@ -1143,6 +1164,7 @@ public abstract class ASTNode {
 		/* (non-javadoc)
 		 * @see List#set(int, java.lang.Object)
 		 */
+		@Override
 		public ASTNode set(int index, ASTNode element) {
 		    if (element == null) {
 		        throw new IllegalArgumentException();
@@ -1175,6 +1197,7 @@ public abstract class ASTNode {
 		/* (non-javadoc)
 		 * @see List#add(int, java.lang.Object)
 		 */
+		@Override
 		public void add(int index, ASTNode element) {
 		    if (element == null) {
 				// http://bugs.eclipse.org/255538 - Very frequent IllegalArgumentException in JSDT
@@ -1202,6 +1225,7 @@ public abstract class ASTNode {
 		/* (non-javadoc)
 		 * @see List#remove(int)
 		 */
+		@Override
 		public ASTNode remove(int index) {
 			if ((ASTNode.this.typeAndFlags & PROTECT) != 0) {
 				// this node is protected => cannot gain or lose children
@@ -1527,7 +1551,7 @@ public abstract class ASTNode {
 	 * <code>0</code> for set operations
 	 * @exception RuntimeException if this node does not have the
 	 * given property, or if the given value cannot be set as specified
-	 *  
+	 *
 	 */
 	int internalGetSetIntProperty(SimplePropertyDescriptor property, boolean get, int value) {
 		throw new RuntimeException("Node does not have this property");  //$NON-NLS-1$
@@ -1798,7 +1822,7 @@ public abstract class ASTNode {
 		Class childClass = newChild.getClass();
 		if (nodeType != null && !nodeType.isAssignableFrom(childClass)) {
 			// new child is not of the right type
-			
+
 			// fix for inner function handling, Etienne Pfister
 			if(!(newChild instanceof org.eclipse.wst.jsdt.core.dom.FunctionDeclaration)) {
 				throw new ClassCastException();
@@ -1970,7 +1994,7 @@ public abstract class ASTNode {
      *    }
      * }
      * </pre>
-     *  
+     *
      */
 	final void preLazyInit() {
 		// IMPORTANT: this method is called by readers
@@ -2237,6 +2261,7 @@ public abstract class ASTNode {
 	 * @return {@inheritDoc}
 	 * @see #subtreeMatch(ASTMatcher matcher, Object other)
 	 */
+	@Override
 	public final boolean equals(Object obj) {
 		return this == obj; // equivalent to Object.equals
 	}
@@ -2246,6 +2271,7 @@ public abstract class ASTNode {
 	 * This makes it consistent with the fact that a equals methods has been provided.
 	 * @see java.lang.Object#hashCode()
 	 */
+	@Override
 	public final int hashCode() {
 		return super.hashCode();
 	}
@@ -2467,7 +2493,7 @@ public abstract class ASTNode {
 		NodeList.Cursor cursor = children.newCursor();
 		try {
 			while (cursor.hasNext()) {
-				ASTNode child = (ASTNode) cursor.next();
+				ASTNode child = cursor.next();
 				child.accept(visitor);
 			}
 		} finally {
@@ -2549,6 +2575,7 @@ public abstract class ASTNode {
 	 *
 	 * @return a debug string
 	 */
+	@Override
 	public final String toString() {
 		StringBuffer buffer = new StringBuffer();
 		int p = buffer.length();
@@ -2673,7 +2700,7 @@ public abstract class ASTNode {
 			bodyChild=bodyChild.parent;
 		}
 		return null;
-		
+
 	}
 
 }

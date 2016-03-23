@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -60,109 +60,113 @@ import java.util.List;
  * no modifiers). The source range extends through the last character of the
  * ";" token (if no body), or the last character of the block (if body).
  * </p>
- * 
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ *
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public class FunctionDeclaration extends BodyDeclaration {
 
 	/**
 	 * The "javadoc" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor JAVADOC_PROPERTY =
 		internalJavadocPropertyFactory(FunctionDeclaration.class);
 
 	/**
 	 * The "modifiers" structural property of this node type (JLS2 API only).
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor MODIFIERS_PROPERTY =
 		internalModifiersPropertyFactory(FunctionDeclaration.class);
 
 	/**
 	 * The "modifiers" structural property of this node type (added in JLS3 API).
-	 *  
+	 *
 	 */
 	public static final ChildListPropertyDescriptor MODIFIERS2_PROPERTY =
 		internalModifiers2PropertyFactory(FunctionDeclaration.class);
 
 	/**
 	 * The "constructor" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor CONSTRUCTOR_PROPERTY =
 		new SimplePropertyDescriptor(FunctionDeclaration.class, "constructor", boolean.class, MANDATORY); //$NON-NLS-1$
 
 	/**
 	 * The "name" structural property of this node type.
-	 * @deprecated 
+	 * @deprecated
 	 */
+	@Deprecated
 	public static final ChildPropertyDescriptor NAME_PROPERTY =
 		new ChildPropertyDescriptor(FunctionDeclaration.class, "name", SimpleName.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "methodName" structural property of this node type.
-	 *  
+	 *
+	 * @since 2.0
 	 */
 	public static final ChildPropertyDescriptor METHOD_NAME_PROPERTY =
 				new ChildPropertyDescriptor(FunctionDeclaration.class, "methodName", Expression.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "returnType" structural property of this node type (JLS2 API only).
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor RETURN_TYPE_PROPERTY =
 		new ChildPropertyDescriptor(FunctionDeclaration.class, "returnType", Type.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "returnType2" structural property of this node type (added in JLS3 API).
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor RETURN_TYPE2_PROPERTY =
 		new ChildPropertyDescriptor(FunctionDeclaration.class, "returnType2", Type.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "extraDimensions" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor EXTRA_DIMENSIONS_PROPERTY =
 		new SimplePropertyDescriptor(FunctionDeclaration.class, "extraDimensions", int.class, MANDATORY); //$NON-NLS-1$
 
 	/**
 	 * The "parameters" structural property of this node type).
-	 *  
+	 *
 	 */
 	public static final ChildListPropertyDescriptor PARAMETERS_PROPERTY =
 		new ChildListPropertyDescriptor(FunctionDeclaration.class, "parameters", SingleVariableDeclaration.class, CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "thrownExceptions" structural property of this node type).
-	 *  
+	 *
 	 */
 	public static final ChildListPropertyDescriptor THROWN_EXCEPTIONS_PROPERTY =
 		new ChildListPropertyDescriptor(FunctionDeclaration.class, "thrownExceptions", Name.class, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "body" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor BODY_PROPERTY =
 		new ChildPropertyDescriptor(FunctionDeclaration.class, "body", Block.class, OPTIONAL, CYCLE_RISK); //$NON-NLS-1$
-	
+
 	/**
-	 * The "generator" property 
+	 * The "generator" property
+	 *
+	 * @since 2.0
 	 */
-	public static final SimplePropertyDescriptor GENERATOR_PROPERTY = 
+	public static final SimplePropertyDescriptor GENERATOR_PROPERTY =
 				new SimplePropertyDescriptor(FunctionDeclaration.class, "generator", boolean.class, MANDATORY); //$NON-NLS-1$
 
 	/**
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
-	 *  
+	 *
 	 */
 	private static final List PROPERTY_DESCRIPTORS_2_0;
 
@@ -170,7 +174,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
-	 *  
+	 *
 	 */
 	private static final List PROPERTY_DESCRIPTORS_3_0;
 
@@ -213,7 +217,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * @param apiLevel the API level; one of the AST.JLS* constants
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List propertyDescriptors(int apiLevel) {
 		if (apiLevel == AST.JLS2_INTERNAL) {
@@ -234,7 +238,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * legal JavaScript identifier.
 	 */
 	private Expression methodName = null;
-	
+
 
 	/**
 	 * The parameter declarations
@@ -254,7 +258,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 
 	/**
 	 * Indicated whether the return type has been initialized.
-	 *  
+	 *
 	 */
 	private boolean returnType2Initialized = false;
 
@@ -262,7 +266,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * The number of array dimensions that appear after the parameters, rather
 	 * than after the return type itself; defaults to 0.
 	 *
-	 *  
+	 *
 	 */
 	private int extraArrayDimensions = 0;
 
@@ -278,7 +282,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * Defaults to none.
 	 */
 	private Block optionalBody = null;
-	
+
 	/**
 	 * Indicates if the function is a generator function.
 	 */
@@ -305,8 +309,9 @@ public class FunctionDeclaration extends BodyDeclaration {
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
-	 *  
+	 *
 	 */
+	@Override
 	final List internalStructuralPropertiesForType(int apiLevel) {
 		return propertyDescriptors(apiLevel);
 	}
@@ -314,6 +319,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final int internalGetSetIntProperty(SimplePropertyDescriptor property, boolean get, int value) {
 		if (property == MODIFIERS_PROPERTY) {
 			if (get) {
@@ -338,6 +344,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final boolean internalGetSetBooleanProperty(SimplePropertyDescriptor property, boolean get, boolean value) {
 		if (property == CONSTRUCTOR_PROPERTY) {
 			if (get) {
@@ -355,7 +362,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 				return false;
 			}
 		}
-		
+
 		// allow default implementation to flag the error
 		return super.internalGetSetBooleanProperty(property, get, value);
 	}
@@ -363,6 +370,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final ASTNode internalGetSetChildProperty(ChildPropertyDescriptor property, boolean get, ASTNode child) {
 		if (property == JAVADOC_PROPERTY) {
 			if (get) {
@@ -419,6 +427,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final List internalGetChildListProperty(ChildListPropertyDescriptor property) {
 		if (property == MODIFIERS2_PROPERTY) {
 			return modifiers();
@@ -436,6 +445,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on BodyDeclaration.
 	 */
+	@Override
 	final ChildPropertyDescriptor internalJavadocProperty() {
 		return JAVADOC_PROPERTY;
 	}
@@ -443,6 +453,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on BodyDeclaration.
 	 */
+	@Override
 	final ChildListPropertyDescriptor internalModifiers2Property() {
 		return MODIFIERS2_PROPERTY;
 	}
@@ -450,6 +461,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on BodyDeclaration.
 	 */
+	@Override
 	final SimplePropertyDescriptor internalModifiersProperty() {
 		return MODIFIERS_PROPERTY;
 	}
@@ -457,6 +469,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final int getNodeType0() {
 		return FUNCTION_DECLARATION;
 	}
@@ -464,6 +477,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	ASTNode clone0(AST target) {
 		FunctionDeclaration result = new FunctionDeclaration(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
@@ -482,12 +496,12 @@ public class FunctionDeclaration extends BodyDeclaration {
 		result.setConstructor(isConstructor());
 		result.setGenerator(isGenerator());
 		result.setExtraDimensions(getExtraDimensions());
-		
+
 		Expression name = getMethodName();
 		if(name != null){
 			result.setMethodName((Expression)name.clone(target));
 		}
-		
+
 		result.parameters().addAll(
 			ASTNode.copySubtrees(target, parameters()));
 		result.thrownExceptions().addAll(
@@ -500,6 +514,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final boolean subtreeMatch0(ASTMatcher matcher, Object other) {
 		// dispatch to correct overloaded match method
 		return matcher.match(this, other);
@@ -508,6 +523,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	void accept0(ASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
@@ -550,10 +566,16 @@ public class FunctionDeclaration extends BodyDeclaration {
 		postValueChange(CONSTRUCTOR_PROPERTY);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public boolean isGenerator() {
 		return this.isGenerator;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public void setGenerator(boolean isGenerator) {
 		preValueChange(GENERATOR_PROPERTY);
 		this.isGenerator = isGenerator;
@@ -568,6 +590,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * @return the method name node
 	 * @deprecated use {@link #getMethodName()}
 	 */
+	@Deprecated
 	public SimpleName getName() {
 		return (SimpleName) this.methodName;
 	}
@@ -584,8 +607,9 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * <li>the node already has a parent</li>
 	 * </ul>
 	 * @deprecated use {@link #setMethodName(Expression)}
-	 * 
+	 *
 	 */
+	@Deprecated
 	public void setName(SimpleName methodName) {
 		ASTNode oldChild = this.methodName;
 		preReplaceChild(oldChild, methodName, NAME_PROPERTY);
@@ -593,10 +617,16 @@ public class FunctionDeclaration extends BodyDeclaration {
 		postReplaceChild(oldChild, methodName, NAME_PROPERTY);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public Expression getMethodName() {
 		return methodName;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public void setMethodName(Expression methodName) {
 		ASTNode oldChild = this.methodName;
 		preReplaceChild(oldChild, methodName, METHOD_NAME_PROPERTY);
@@ -626,7 +656,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * @exception UnsupportedOperationException if this operation is used in
 	 * a JLS2 AST
 	 * @see SingleVariableDeclaration#isVarargs()
-	 *  
+	 *
 	 */
 	public boolean isVarargs() {
 		// more efficient than just calling unsupportedIn2() to check
@@ -669,6 +699,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * @deprecated In the JLS3 API, this method is replaced by {@link #getReturnType2()},
 	 * which may return <code>null</code>.
 	 */
+	@Deprecated
 	public Type getReturnType() {
 		return internalGetReturnType();
 	}
@@ -676,7 +707,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/**
 	 * Internal synonym for deprecated method. Used to avoid
 	 * deprecation warnings.
-	 *  
+	 *
 	 */
 	/*package*/ final Type internalGetReturnType() {
 		supportedOnlyIn2();
@@ -713,6 +744,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * @deprecated In the JLS3 API, this method is replaced by
 	 * {@link #setReturnType2(Type)}, which accepts <code>null</code>.
 	 */
+	@Deprecated
 	public void setReturnType(Type type) {
 		internalSetReturnType(type);
 	}
@@ -720,7 +752,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/**
 	 * Internal synonym for deprecated method. Used to avoid
 	 * deprecation warnings.
-	 *  
+	 *
 	 */
 	/*package*/ void internalSetReturnType(Type type) {
 	    supportedOnlyIn2();
@@ -749,7 +781,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * or <code>null</code> if none
 	 * @exception UnsupportedOperationException if this operation is used in
 	 * a JLS2 AST
-	 *  
+	 *
 	 */
 	public Type getReturnType2() {
 	    unsupportedIn2();
@@ -788,7 +820,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * <li>the node belongs to a different AST</li>
 	 * <li>the node already has a parent</li>
 	 * </ul>
-	 *  
+	 *
 	 */
 	public void setReturnType2(Type type) {
 	    unsupportedIn2();
@@ -815,7 +847,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * </p>
 	 *
 	 * @return the number of extra array dimensions
-	 *  
+	 *
 	 */
 	public int getExtraDimensions() {
 		return this.extraArrayDimensions;
@@ -836,7 +868,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	 * @param dimensions the number of array dimensions
 	 * @exception IllegalArgumentException if the number of dimensions is
 	 *    negative
-	 *  
+	 *
 	 */
 	public void setExtraDimensions(int dimensions) {
 		if (dimensions < 0) {
@@ -906,6 +938,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int memSize() {
 		return super.memSize() + 10 * 4;
 	}
@@ -913,6 +946,7 @@ public class FunctionDeclaration extends BodyDeclaration {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int treeSize() {
 		return
 			memSize()

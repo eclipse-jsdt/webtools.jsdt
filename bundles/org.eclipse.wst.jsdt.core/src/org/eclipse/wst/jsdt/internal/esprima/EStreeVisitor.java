@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2015, 2016 Red Hat, Inc. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,15 +19,15 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 /**
  * @author Gorkem Ercan
- *
+ * @since 2.0
  */
 public class EStreeVisitor {
-	
-	public enum VisitOptions{ 
+
+	public enum VisitOptions{
 		/**
 		 * Traverse children
 		 */
-		CONTINUE, 
+		CONTINUE,
 		/**
 		 * Skip children
 		 */
@@ -36,15 +36,15 @@ public class EStreeVisitor {
 		 * Break traversal
 		 */
 		BREAK }
-	
+
 	class WorkElement{
-		
+
 		ScriptObjectMirror node;
 		boolean endVisit;
 		String key;
-		
+
 		/**
-		 * 
+		 *
 		 */
 		public WorkElement(ScriptObjectMirror node,String key, boolean endVisit) {
 			this.node = node;
@@ -52,9 +52,9 @@ public class EStreeVisitor {
 			this.endVisit = endVisit;
 		}
 	}
-	
+
 	final private Stack<WorkElement> workStack = new Stack<WorkElement>();
-	
+
 	public void traverse(ScriptObjectMirror root) {
 		workStack.push(new WorkElement(root,null, false));
 
@@ -71,7 +71,7 @@ public class EStreeVisitor {
 			if (element.endVisit || vo == VisitOptions.SKIP) { // skip children
 				continue;
 			}
-			
+
 			// Find children and add them to worklist
 			ESTreeNodeTypes nodeType = getNodeType(element);
 			Assert.isNotNull(nodeType);
@@ -81,7 +81,7 @@ public class EStreeVisitor {
 				if (o instanceof ScriptObjectMirror) {
 					ScriptObjectMirror candidate = (ScriptObjectMirror) o;
 					if (candidate.isArray()) {
-						// Create WorkElements for Array in reverse order 
+						// Create WorkElements for Array in reverse order
 						// to keep the order coming out of stack
 						Object[] arrayElements = candidate.entrySet().toArray();
 						for (int j = arrayElements.length-1; j > -1; j--) {
@@ -99,7 +99,7 @@ public class EStreeVisitor {
 			}
 		}
 	}
-	
+
 	private VisitOptions callVisit(WorkElement element){
 		ESTreeNodeTypes nodeType = getNodeType(element);
 		Assert.isNotNull(nodeType);
@@ -114,13 +114,13 @@ public class EStreeVisitor {
 		ESTreeNodeTypes nodeType = ESTreeNodeTypes.valueOf(type);
 		return nodeType;
 	}
-	
+
 	public VisitOptions visit(ScriptObjectMirror object, ESTreeNodeTypes nodeType, String key){
 		return VisitOptions.CONTINUE;
 	}
-	
+
 	public VisitOptions endVisit(ScriptObjectMirror object, ESTreeNodeTypes nodeType, String key){
 		return VisitOptions.CONTINUE;
-	}	
+	}
 
 }

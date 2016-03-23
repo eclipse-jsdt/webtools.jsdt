@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,34 +17,38 @@ import java.util.List;
 
 
 /**
- * 
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ *
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public class ObjectLiteralField extends Expression {
 
+	/**
+	 * @since 2.0
+	 */
 	public enum FieldKind{
 		INIT, GET, SET;
 	}
 	/**
 	 * The "type" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor FIELD_NAME_PROPERTY =
 		new ChildPropertyDescriptor(ObjectLiteralField.class, "fieldName", Expression.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "expression" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor INITIALIZER_PROPERTY =
 		new ChildPropertyDescriptor(ObjectLiteralField.class, "initializer", Expression.class, OPTIONAL, CYCLE_RISK); //$NON-NLS-1$
-	
+
 	/**
 	 * The "expression" structural property of this node type.
-	 *  
+	 *
+	 * @since 2.0
 	 */
 	public static final SimplePropertyDescriptor KIND_PROPERTY =
 		new SimplePropertyDescriptor(ObjectLiteralField.class, "kind", FieldKind.class, MANDATORY); //$NON-NLS-1$
@@ -74,7 +78,7 @@ public class ObjectLiteralField extends Expression {
 	 * <code>AST.JLS*</code> constants
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List<StructuralPropertyDescriptor> propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
@@ -91,7 +95,7 @@ public class ObjectLiteralField extends Expression {
 	 * expression.
 	 */
 	private Expression initializer = null;
-	
+
 	/**
 	 *  Ordinary fields have a kind value INIT;
 	 *   getters and setters have the kind values GET and SET, respectively.
@@ -114,6 +118,7 @@ public class ObjectLiteralField extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final List internalStructuralPropertiesForType(int apiLevel) {
 		return propertyDescriptors(apiLevel);
 	}
@@ -121,6 +126,7 @@ public class ObjectLiteralField extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final ASTNode internalGetSetChildProperty(ChildPropertyDescriptor property, boolean get, ASTNode child) {
 		if (property == INITIALIZER_PROPERTY) {
 			if (get) {
@@ -145,6 +151,7 @@ public class ObjectLiteralField extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final int getNodeType0() {
 		return OBJECT_LITERAL_FIELD;
 	}
@@ -152,6 +159,7 @@ public class ObjectLiteralField extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	ASTNode clone0(AST target) {
 		ObjectLiteralField result = new ObjectLiteralField(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
@@ -166,6 +174,7 @@ public class ObjectLiteralField extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final boolean subtreeMatch0(ASTMatcher matcher, Object other) {
 		// dispatch to correct overloaded match method
 		return matcher.match(this, other);
@@ -174,6 +183,7 @@ public class ObjectLiteralField extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	void accept0(ASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
@@ -241,7 +251,7 @@ public class ObjectLiteralField extends Expression {
 		}
 		return this.initializer;
 	}
-	
+
 	/**
 	 * Sets the expression of this cast expression.
 	 *
@@ -265,19 +275,21 @@ public class ObjectLiteralField extends Expression {
 
 	/**
 	 * Returns the kind for this literal
-	 * 
+	 *
 	 * @return
+	 * @since 2.0
 	 */
 	public FieldKind getKind(){
 		return this.kind;
 	}
-	
+
 	/**
-	 * Sets the kind for this object property 
-	 * Ordinary fields have a kind value INIT;
-	 * getters and setters have the kind values GET and SET, respectively.
-	 * 
+	 * Sets the kind for this object property Ordinary fields have a kind
+	 * value INIT; getters and setters have the kind values GET and SET,
+	 * respectively.
+	 *
 	 * @param fieldKind
+	 * @since 2.0
 	 */
 	public void setKind(FieldKind fieldKind) {
 		if (fieldKind == null) {
@@ -287,10 +299,11 @@ public class ObjectLiteralField extends Expression {
 		this.kind = fieldKind;
 		postValueChange(KIND_PROPERTY);
 	}
-	
+
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int memSize() {
 		// treat Code as free
 		return BASE_NODE_SIZE + 3 * 4;
@@ -299,6 +312,7 @@ public class ObjectLiteralField extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int treeSize() {
 		return
 			memSize()

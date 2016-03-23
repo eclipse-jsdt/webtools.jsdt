@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,48 +27,52 @@ import java.util.List;
  * ImportDeclaration:
  *    <b>import</b> [ <b>static</b> ] Name [ <b>.</b> <b>*</b> ] <b>;</b>
  * </pre>
- * 
+ *
  * <p><b>Note: This Class only applies to ECMAScript 4 which is not yet supported</b></p>
  *
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public class ImportDeclaration extends ASTNode {
 
-	
+
 	/**
 	 * The "source" structural property of this node type.
-	 *  
+	 *
+	 * @since 2.0
+	 *
 	 */
 	public static final ChildPropertyDescriptor SOURCE_PROPERTY =
 		new ChildPropertyDescriptor(ImportDeclaration.class, "source", StringLiteral.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "specifiers" structural property of this node type
+	 *
+	 * @since 2.0
 	 */
 	public static final ChildListPropertyDescriptor SPECIFIERS_PROPERTY =
 				new ChildListPropertyDescriptor(ImportDeclaration.class, "specifiers", ModuleSpecifier.class, NO_CYCLE_RISK); //$NON-NLS-1$
 
-	
+
 	/**
 	 * The "name" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor NAME_PROPERTY =
 		new ChildPropertyDescriptor(ImportDeclaration.class, "name", Name.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "onDemand" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor ON_DEMAND_PROPERTY =
 		new SimplePropertyDescriptor(ImportDeclaration.class, "onDemand", boolean.class, MANDATORY); //$NON-NLS-1$
 
 	/**
 	 * The "static" structural property of this node type (added in JLS3 API).
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor STATIC_PROPERTY =
 		new SimplePropertyDescriptor(ImportDeclaration.class, "static", boolean.class, MANDATORY); //$NON-NLS-1$
@@ -77,12 +81,12 @@ public class ImportDeclaration extends ASTNode {
 	public static final SimplePropertyDescriptor ISFILE_PROPERTY =
 		new SimplePropertyDescriptor(ImportDeclaration.class, "isFile", boolean.class, MANDATORY); //$NON-NLS-1$
 
-	
+
 	/**
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
-	 *  
+	 *
 	 */
 	private static final List<StructuralPropertyDescriptor> PROPERTY_DESCRIPTORS;
 
@@ -107,17 +111,17 @@ public class ImportDeclaration extends ASTNode {
 
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List<StructuralPropertyDescriptor> propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
 	}
 
-	
+
 	private StringLiteral source;
-	
+
 	private NodeList specifiers = new NodeList(SPECIFIERS_PROPERTY);
-	
+
 	/**
 	 * The import name; lazily initialized; defaults to a unspecified,
 	 * legal JavaScript identifier.
@@ -132,7 +136,7 @@ public class ImportDeclaration extends ASTNode {
 	/**
 	 * Static versus regular; defaults to regular import.
 	 * Added in JLS3; not used in JLS2.
-	 *  
+	 *
 	 */
 	private boolean isStatic = false;
 
@@ -156,6 +160,7 @@ public class ImportDeclaration extends ASTNode {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final List internalStructuralPropertiesForType(int apiLevel) {
 		return propertyDescriptors(apiLevel);
 	}
@@ -163,6 +168,7 @@ public class ImportDeclaration extends ASTNode {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final boolean internalGetSetBooleanProperty(SimplePropertyDescriptor property, boolean get, boolean value) {
 		if (property == ON_DEMAND_PROPERTY) {
 			if (get) {
@@ -191,10 +197,11 @@ public class ImportDeclaration extends ASTNode {
 		// allow default implementation to flag the error
 		return super.internalGetSetBooleanProperty(property, get, value);
 	}
-	
+
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final List internalGetChildListProperty(ChildListPropertyDescriptor property) {
 		if (property == SPECIFIERS_PROPERTY) {
 			return specifiers();
@@ -202,10 +209,11 @@ public class ImportDeclaration extends ASTNode {
 		// allow default implementation to flag the error
 		return super.internalGetChildListProperty(property);
 	}
-	
+
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final ASTNode internalGetSetChildProperty(ChildPropertyDescriptor property, boolean get, ASTNode child) {
 		if (property == NAME_PROPERTY) {
 			if (get) {
@@ -230,6 +238,7 @@ public class ImportDeclaration extends ASTNode {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final int getNodeType0() {
 		return IMPORT_DECLARATION;
 	}
@@ -237,6 +246,7 @@ public class ImportDeclaration extends ASTNode {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	ASTNode clone0(AST target) {
 		ImportDeclaration result = new ImportDeclaration(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
@@ -254,6 +264,7 @@ public class ImportDeclaration extends ASTNode {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final boolean subtreeMatch0(ASTMatcher matcher, Object other) {
 		// dispatch to correct overloaded match method
 		return matcher.match(this, other);
@@ -262,6 +273,7 @@ public class ImportDeclaration extends ASTNode {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	void accept0(ASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
@@ -363,7 +375,7 @@ public class ImportDeclaration extends ASTNode {
 	 *    and <code>false</code> if this is a regular import
 	 * @exception UnsupportedOperationException if this operation is used in
 	 * a JLS2 AST
-	 *  
+	 *
 	 */
 	public boolean isStatic() {
 		return isStatic;
@@ -376,7 +388,7 @@ public class ImportDeclaration extends ASTNode {
 	 *    and <code>false</code> if this is a regular import
 	 * @exception UnsupportedOperationException if this operation is used in
 	 * a JLS2 AST
-	 *  
+	 *
 	 */
 	public void setStatic(boolean isStatic) {
 		preValueChange(STATIC_PROPERTY);
@@ -384,10 +396,16 @@ public class ImportDeclaration extends ASTNode {
 		postValueChange(STATIC_PROPERTY);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public StringLiteral getSource() {
 		return source;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public void setSource(StringLiteral source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
@@ -397,7 +415,10 @@ public class ImportDeclaration extends ASTNode {
 		this.source = source;
 		postReplaceChild(oldChild, source, SOURCE_PROPERTY);
 	}
-	
+
+	/**
+	 * @since 2.0
+	 */
 	public List specifiers(){
 		return this.specifiers;
 	}
@@ -432,6 +453,7 @@ public class ImportDeclaration extends ASTNode {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int memSize() {
 		return BASE_NODE_SIZE + 5 * 4;
 	}
@@ -439,6 +461,7 @@ public class ImportDeclaration extends ASTNode {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int treeSize() {
 		return
 			memSize()
@@ -446,7 +469,7 @@ public class ImportDeclaration extends ASTNode {
 			+ (source == null ? 0 : getSource().treeSize())
 			+ (importName == null ? 0 : getName().treeSize());
 	}
-	
+
 	public boolean isFileImport()
 	{
 		return isFile;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,28 +14,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MetaProperty node 
+ * MetaProperty node
+ * 
  * <pre>
  * 	new.target
  * </pre>
- * @author Gorkem Ercan
  * 
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
- * (repeatedly) as the API evolves.
+ * @author Gorkem Ercan
+ *
+ *         Provisional API: This class/interface is part of an interim API
+ *         that is still under development and expected to change
+ *         significantly before reaching stability. It is being made available
+ *         at this early stage to solicit feedback from pioneering adopters on
+ *         the understanding that any code that uses this API will almost
+ *         certainly be broken (repeatedly) as the API evolves.
+ * @since 2.0
  */
 public class MetaProperty extends Expression {
 
 	/**
 	 * The "meta" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor META_PROP_PROPERTY =
 		new SimplePropertyDescriptor(MetaProperty.class, "meta", String.class, MANDATORY); //$NON-NLS-1$
 	/**
 	 * The "propertyName" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor PROPERTY_NAME_PROPERTY =
 		new SimplePropertyDescriptor(MetaProperty.class, "propertyName", String.class, MANDATORY); //$NON-NLS-1$
@@ -54,7 +59,7 @@ public class MetaProperty extends Expression {
 		addProperty(PROPERTY_NAME_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS = reapPropertyList(propertyList);
 	}
-	
+
 	/**
 	 * Returns a list of structural property descriptors for this node type.
 	 * Clients must not modify the result.
@@ -64,15 +69,15 @@ public class MetaProperty extends Expression {
 
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List<StructuralPropertyDescriptor> propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
 	}
-	
+
 	private String meta;
 	private String propertyName;
-	
+
 	/**
 	 * @param ast
 	 */
@@ -83,13 +88,15 @@ public class MetaProperty extends Expression {
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#internalStructuralPropertiesForType(int)
 	 */
+	@Override
 	List internalStructuralPropertiesForType(int apiLevel) {
 		return propertyDescriptors(apiLevel);
 	}
-	
+
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final Object internalGetSetObjectProperty(SimplePropertyDescriptor property, boolean get, Object value) {
 		if (property == META_PROP_PROPERTY) {
 			if (get) {
@@ -114,6 +121,7 @@ public class MetaProperty extends Expression {
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#getNodeType0()
 	 */
+	@Override
 	int getNodeType0() {
 		return META_PROPERTY;
 	}
@@ -141,12 +149,13 @@ public class MetaProperty extends Expression {
 		}
 		preValueChange(PROPERTY_NAME_PROPERTY);
 		this.propertyName = propertyName;
-		postValueChange(PROPERTY_NAME_PROPERTY);	
+		postValueChange(PROPERTY_NAME_PROPERTY);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#subtreeMatch0(org.eclipse.wst.jsdt.core.dom.ASTMatcher, java.lang.Object)
 	 */
+	@Override
 	boolean subtreeMatch0(ASTMatcher matcher, Object other) {
 		return matcher.match(this, other);
 	}
@@ -154,6 +163,7 @@ public class MetaProperty extends Expression {
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#clone0(org.eclipse.wst.jsdt.core.dom.AST)
 	 */
+	@Override
 	ASTNode clone0(AST target) {
 		MetaProperty result = new MetaProperty(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
@@ -165,6 +175,7 @@ public class MetaProperty extends Expression {
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#accept0(org.eclipse.wst.jsdt.core.dom.ASTVisitor)
 	 */
+	@Override
 	void accept0(ASTVisitor visitor) {
 		visitor.visit(this);
 		visitor.endVisit(this);
@@ -174,6 +185,7 @@ public class MetaProperty extends Expression {
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#treeSize()
 	 */
+	@Override
 	int treeSize() {
 		return memSize() ;
 	}
@@ -181,6 +193,7 @@ public class MetaProperty extends Expression {
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.core.dom.ASTNode#memSize()
 	 */
+	@Override
 	int memSize() {
 		return BASE_NODE_SIZE + 2 * 4 + stringSize(meta) + stringSize(propertyName);
 	}

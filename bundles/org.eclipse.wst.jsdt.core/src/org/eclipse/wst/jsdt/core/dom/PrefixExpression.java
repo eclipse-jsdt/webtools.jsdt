@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,10 +23,10 @@ import java.util.Map;
  * PrefixExpression:
  *    PrefixOperator Expression
  * </pre>
- * 
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ *
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public class PrefixExpression extends Expression {
@@ -68,6 +68,7 @@ public class PrefixExpression extends Expression {
 		 *
 		 * @return the character sequence for the operator
 		 */
+		@Override
 		public String toString() {
 			return token;
 		}
@@ -86,14 +87,20 @@ public class PrefixExpression extends Expression {
 		public static final Operator NOT = new Operator("!");//$NON-NLS-1$
 		/**
 		 * typeof operator
+		 * 
+		 * @since 2.0
 		 */
 		public static final Operator TYPE_OF = new Operator("typeof");  //$NON-NLS-1$
 		/**
 		 * delete operator
+		 * 
+		 * @since 2.0
 		 */
 		public static final Operator DELETE = new Operator("delete"); //$NON-NLS-1$
 		/**
 		 * void operator
+		 * 
+		 * @since 2.0
 		 */
 		public static final Operator VOID = new Operator("void"); //$NON-NLS-1$
 
@@ -139,14 +146,14 @@ public class PrefixExpression extends Expression {
 
 	/**
 	 * The "operator" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor OPERATOR_PROPERTY =
 		new SimplePropertyDescriptor(PrefixExpression.class, "operator", PrefixExpression.Operator.class, MANDATORY); //$NON-NLS-1$
 
 	/**
 	 * The "operand" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor OPERAND_PROPERTY =
 		new ChildPropertyDescriptor(PrefixExpression.class, "operand", Expression.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
@@ -175,7 +182,7 @@ public class PrefixExpression extends Expression {
 
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
@@ -207,6 +214,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final List internalStructuralPropertiesForType(int apiLevel) {
 		return propertyDescriptors(apiLevel);
 	}
@@ -214,6 +222,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final Object internalGetSetObjectProperty(SimplePropertyDescriptor property, boolean get, Object value) {
 		if (property == OPERATOR_PROPERTY) {
 			if (get) {
@@ -230,6 +239,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final ASTNode internalGetSetChildProperty(ChildPropertyDescriptor property, boolean get, ASTNode child) {
 		if (property == OPERAND_PROPERTY) {
 			if (get) {
@@ -246,6 +256,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final int getNodeType0() {
 		return PREFIX_EXPRESSION;
 	}
@@ -253,6 +264,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	ASTNode clone0(AST target) {
 		PrefixExpression result = new PrefixExpression(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
@@ -264,6 +276,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final boolean subtreeMatch0(ASTMatcher matcher, Object other) {
 		// dispatch to correct overloaded match method
 		return matcher.match(this, other);
@@ -272,6 +285,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	void accept0(ASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
@@ -348,6 +362,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int memSize() {
 		// treat Operator as free
 		return BASE_NODE_SIZE + 2 * 4;
@@ -356,6 +371,7 @@ public class PrefixExpression extends Expression {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int treeSize() {
 		return
 			memSize()

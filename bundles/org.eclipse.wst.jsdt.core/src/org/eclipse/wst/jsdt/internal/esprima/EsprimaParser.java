@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -34,11 +34,10 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.runtime.ECMAException;
 
 /**
- * A wrapper around EsprimaParser that uses nashorn to 
- * execute the parser. 
- * 
- * @author Gorkem Ercan
+ * A wrapper around EsprimaParser that uses nashorn to execute the parser.
  *
+ * @author Gorkem Ercan
+ * @since 2.0
  */
 public class EsprimaParser {
 	/**
@@ -55,20 +54,20 @@ public class EsprimaParser {
 	 * "tolerant" option for esprima
 	 */
 	private static final String ESPRIMA_OPT_TOLERANT = "tolerant"; //$NON-NLS-1$
-	
+
 	private static ScriptEngine engine;
 	private static CompiledScript compiledEsprima;
 	private Bindings bindings;
 	private String rawContent;
 	private IJavaScriptUnit unit;
-	
+
 	private boolean tolerant = Boolean.TRUE;
 	private boolean range = Boolean.TRUE;
 	private boolean errorReporting = Boolean.TRUE;
 	private boolean includeJsdocs = Boolean.FALSE;
 
 	/**
-	 * 
+	 *
 	 */
 	private EsprimaParser() {
 		this.bindings = engine.createBindings();
@@ -103,19 +102,19 @@ public class EsprimaParser {
 		return new EsprimaParser();
 	}
 
-	
+
 	public EsprimaParser setSource(String content){
 		this.unit = null;
 		this.rawContent = content;
 		return this;
 	}
-	
+
 	public EsprimaParser setSource(IJavaScriptUnit content){
 		this.rawContent = null;
 		this.unit = content;
 		return this;
 	}
-	
+
 	public JavaScriptUnit parse() {
 		String content = rawContent;
 		if(unit != null ){
@@ -143,7 +142,7 @@ public class EsprimaParser {
 			if(!(e.getEcmaError() instanceof ScriptObjectMirror)){
 				e.printStackTrace();
 			}
-			ScriptObjectMirror ecmaError = (ScriptObjectMirror)e.getEcmaError(); 
+			ScriptObjectMirror ecmaError = (ScriptObjectMirror)e.getEcmaError();
 			result.setProblems(new DefaultProblem[]{createProblem(ecmaError)});
 		}
 		return result;
@@ -151,43 +150,43 @@ public class EsprimaParser {
 
 
 	/**
-	 * Sets the tolerant parsing option to false. 
+	 * Sets the tolerant parsing option to false.
 	 * The default value for tolerant is true.
-	 * 
+	 *
 	 * @return parser
 	 */
 	public EsprimaParser noTolerantParsing(){
 		this.tolerant = false;
 		return this;
 	}
-	
+
 	/**
 	 * Sets the range based location option to false.
 	 * The default is true;
-	 * 
+	 *
 	 * @return parser
 	 */
 	public EsprimaParser noRangeLocationInfo(){
 		this.range = false;
 		return this;
 	}
-	
+
 	/**
-	 * Turns the error reporting off causing the return JavaScriptUnit 
+	 * Turns the error reporting off causing the return JavaScriptUnit
 	 * not to include the errors.
-	 * 
+	 *
 	 * @return
 	 */
 	public EsprimaParser noErrorReporting(){
 		this.errorReporting = false;
 		return this;
 	}
-	
+
 	public EsprimaParser includeComments(){
 		this.includeJsdocs = true;
 		return this;
 	}
-	
+
 
 	/**
 	 * @param jsObject
@@ -203,7 +202,7 @@ public class EsprimaParser {
 		if (esprima == null) {
 			throw new RuntimeException("Esprima parser was not loaded correctly"); //$NON-NLS-1$
 		}
-		HashMap<String, Boolean> options = getOptions(); 
+		HashMap<String, Boolean> options = getOptions();
 		final ScriptObjectMirror tree = (ScriptObjectMirror) esprima.callMember("parse", content, options);
 		return tree;
 	}
@@ -215,11 +214,11 @@ public class EsprimaParser {
 		options.put(ESPRIMA_OPT_ATTACH_COMMENT, includeJsdocs);
 		return options;
 	}
-	
+
 	/**
-	 * Add the errors reported on the "errors" array to 
+	 * Add the errors reported on the "errors" array to
 	 * result.
-	 * 
+	 *
 	 * @param jsObject
 	 * @param result
 	 */
@@ -232,37 +231,37 @@ public class EsprimaParser {
 		}
 		result.setProblems(problems);
 	}
-	
+
 	private DefaultProblem createProblem(final ScriptObjectMirror error){
 		String description = (String) error.getMember("description");
 		Number index = (Number) error.getMember("index");
 		Number line = (Number) error.getMember("lineNumber");
-		
+
 		char[] fileName = null;
 		if(unit != null){
 			CompilationUnit cu = (CompilationUnit)unit;
 			fileName = cu.getFileName();
 		}
-		
+
 		DefaultProblem result = new DefaultProblem(fileName,
 					description,
-					0, 
-					null, 
-					ProblemSeverities.Error, 
-					0, 
+					0,
+					null,
+					ProblemSeverities.Error,
+					0,
 					0,
 					line.intValue(),
 					index.intValue());
 		return result;
 	}
-	
+
 	/**
 	 * @param jsObject
 	 * @param result
 	 */
 	private void buildComments(ScriptObjectMirror jsObject, JavaScriptUnit result, AST ast) {
 		ScriptObjectMirror comments = (ScriptObjectMirror) jsObject.getMember("comments");
-		
+
 		int commentSize = comments.size();
 		Comment[] resultComments = new Comment[commentSize];
 		for(int i = 0; i< commentSize; i++){
@@ -284,7 +283,7 @@ public class EsprimaParser {
 		Comment comment = null;
 		if("Line".equals(type)){
 			comment = ast.newLineComment();
-		}else if(value.startsWith("**")){	
+		}else if(value.startsWith("**")){
 			comment = ast.newJSdoc();
 		}else{
 			comment = ast.newBlockComment();
@@ -295,6 +294,6 @@ public class EsprimaParser {
 		comment.setSourceRange(x.intValue(), y.intValue()-x.intValue());
 		return comment;
 	}
-	
+
 
 }

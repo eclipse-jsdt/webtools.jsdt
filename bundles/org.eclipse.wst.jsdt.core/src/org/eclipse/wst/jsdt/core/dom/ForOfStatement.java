@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -24,29 +24,32 @@ import java.util.List;
  * }
  * </pre>
  * <p>
- * Note: When variables are declared in the initializer
- * of a for statement such as "<code>for (var i of collection);</code>",
- * they should be represented as a single
- * <code>VariableDeclarationStatement</code>
+ * Note: When variables are declared in the initializer of a for statement
+ * such as "<code>for (var i of collection);</code>", they should be
+ * represented as a single <code>VariableDeclarationStatement</code>
  * </p>
+ *
+ * Provisional API: This class/interface is part of an interim API that is
+ * still under development and expected to change significantly before
+ * reaching stability. It is being made available at this early stage to
+ * solicit feedback from pioneering adopters on the understanding that any
+ * code that uses this API will almost certainly be broken (repeatedly) as the
+ * API evolves.
  * 
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
- * (repeatedly) as the API evolves.
+ * @since 2.0
  */
 public class ForOfStatement extends Statement {
 
 	/**
 	 * The "iteration variable" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor ITERATION_VARIABLE_PROPERTY =
 		new ChildPropertyDescriptor(ForOfStatement.class, "iterationVariable", Statement.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "expression" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor COLLECTION_PROPERTY =
 		new ChildPropertyDescriptor(ForOfStatement.class, "collection", Expression.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
@@ -54,7 +57,7 @@ public class ForOfStatement extends Statement {
 
 	/**
 	 * The "body" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor BODY_PROPERTY =
 		new ChildPropertyDescriptor(ForOfStatement.class, "body", Statement.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
@@ -84,7 +87,7 @@ public class ForOfStatement extends Statement {
 
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
@@ -115,6 +118,7 @@ public class ForOfStatement extends Statement {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final List internalStructuralPropertiesForType(int apiLevel) {
 		return propertyDescriptors(apiLevel);
 	}
@@ -123,6 +127,7 @@ public class ForOfStatement extends Statement {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final ASTNode internalGetSetChildProperty(ChildPropertyDescriptor property, boolean get, ASTNode child) {
 		if (property == ITERATION_VARIABLE_PROPERTY) {
 			if (get) {
@@ -155,6 +160,7 @@ public class ForOfStatement extends Statement {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final int getNodeType0() {
 		return FOR_OF_STATEMENT;
 	}
@@ -162,6 +168,7 @@ public class ForOfStatement extends Statement {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	ASTNode clone0(AST target) {
 		ForOfStatement result = new ForOfStatement(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
@@ -178,6 +185,7 @@ public class ForOfStatement extends Statement {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	final boolean subtreeMatch0(ASTMatcher matcher, Object other) {
 		// dispatch to correct overloaded match method
 		return matcher.match(this, other);
@@ -186,6 +194,7 @@ public class ForOfStatement extends Statement {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	void accept0(ASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
@@ -291,6 +300,7 @@ public class ForOfStatement extends Statement {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int memSize() {
 		return super.memSize() + 4 * 4;
 	}
@@ -298,6 +308,7 @@ public class ForOfStatement extends Statement {
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */
+	@Override
 	int treeSize() {
 		return
 			memSize()
