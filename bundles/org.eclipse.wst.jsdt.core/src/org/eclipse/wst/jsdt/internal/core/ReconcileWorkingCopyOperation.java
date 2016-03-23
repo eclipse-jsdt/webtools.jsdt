@@ -28,10 +28,12 @@ import org.eclipse.wst.jsdt.core.WorkingCopyOwner;
 import org.eclipse.wst.jsdt.core.compiler.CategorizedProblem;
 import org.eclipse.wst.jsdt.core.compiler.ReconcileContext;
 import org.eclipse.wst.jsdt.core.compiler.ValidationParticipant;
+import org.eclipse.wst.jsdt.core.dom.AST;
+import org.eclipse.wst.jsdt.core.dom.ASTParser;
+import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.internal.compiler.ast.CompilationUnitDeclaration;
 import org.eclipse.wst.jsdt.internal.core.util.Messages;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
-import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
 
 /**
  * Reconcile a working copy and signal the changes through a delta.
@@ -210,8 +212,9 @@ public class ReconcileWorkingCopyOperation extends JavaModelOperation {
 //					&& unit !=null/*unit is null if working copy is consistent && (problem detection not forced || non-Java project) -> don't create AST as per API*/) {
 				Map options = workingCopy.getJavaScriptProject().getOptions(true);
 				// convert AST
-				this.ast = EsprimaParser.newParser().setSource(workingCopy).parse();
-				System.out.println("Parsed wc " + workingCopy);
+				ASTParser parser = ASTParser.newParser(AST.JLS3);
+				parser.setSource(workingCopy);
+				this.ast = (JavaScriptUnit) parser.createAST(this.progressMonitor);
 //					AST.convertCompilationUnit(
 //						this.astLevel,
 //						unit,
