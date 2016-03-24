@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2015-2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -104,7 +104,7 @@ public class EsprimaParserTests {
 		EsprimaParser parser = EsprimaParser.newParser();
 		assertNotNull(parser);
 	}
-	
+
 	@Test
 	public void parseMultipleCalls(){
 		JavaScriptUnit unit = parse("var a = 1;");
@@ -116,7 +116,7 @@ public class EsprimaParserTests {
 		unit = parse("var a = null;");
 		assertNotNull(unit);
 	}
-	
+
 	@Test
 	public void checkRange(){
 		JavaScriptUnit unit = parse("var a = 1;");
@@ -124,9 +124,9 @@ public class EsprimaParserTests {
 		assertEquals(0,unit.getStartPosition());
 		assertEquals(10, unit.getLength());
 	}
-	
-	
-	
+
+
+
 	@Test
 	public void testVariableDeclaration_VAR(){
 		JavaScriptUnit unit = parse("var a,b;");
@@ -142,7 +142,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testVariableDeclaration_LET(){
 		JavaScriptUnit unit = parse("let a,b;");
@@ -158,7 +158,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testSimpleAssignment(){
 		JavaScriptUnit unit = parse("a += 123;");
@@ -166,14 +166,14 @@ public class EsprimaParserTests {
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.EXPRESSION_STATEMENT){
-				Assignment assignment = (Assignment) ((ExpressionStatement)astNode).getExpression(); 
+				Assignment assignment = (Assignment) ((ExpressionStatement)astNode).getExpression();
 				assertSame(Operator.PLUS_ASSIGN, assignment.getOperator());
 				return;
 			}
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testThisExpression(){
 		JavaScriptUnit unit = parse("this;");
@@ -187,7 +187,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testArrayExpression(){
 		JavaScriptUnit unit = parse("[1,2,3];");
@@ -200,8 +200,8 @@ public class EsprimaParserTests {
 			}
 		}
 		fail();
-	}	
-	
+	}
+
 	@Test
 	public void testObjectExpression(){
 		JavaScriptUnit unit = parse("o={ test:9 };");
@@ -223,7 +223,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testPosxFixExpression(){
 		JavaScriptUnit unit = parse("123++;");
@@ -231,14 +231,14 @@ public class EsprimaParserTests {
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.EXPRESSION_STATEMENT){
-				PostfixExpression pf = (PostfixExpression) ((ExpressionStatement)astNode).getExpression(); 
+				PostfixExpression pf = (PostfixExpression) ((ExpressionStatement)astNode).getExpression();
 				assertSame(PostfixExpression.Operator.INCREMENT, pf.getOperator());
 				return;
 			}
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testPreFixExpression(){
 		JavaScriptUnit unit = parse("delete a;");
@@ -246,7 +246,7 @@ public class EsprimaParserTests {
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.EXPRESSION_STATEMENT){
-				PrefixExpression pf = (PrefixExpression) ((ExpressionStatement)astNode).getExpression(); 
+				PrefixExpression pf = (PrefixExpression) ((ExpressionStatement)astNode).getExpression();
 				assertSame(PrefixExpression.Operator.DELETE, pf.getOperator());
 				SimpleName operand = (SimpleName) pf.getOperand();
 				assertEquals("a", operand.getIdentifier());
@@ -263,7 +263,7 @@ public class EsprimaParserTests {
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.EXPRESSION_STATEMENT){
-				InfixExpression pf = (InfixExpression) ((ExpressionStatement)astNode).getExpression(); 
+				InfixExpression pf = (InfixExpression) ((ExpressionStatement)astNode).getExpression();
 				assertSame(InfixExpression.Operator.PLUS, pf.getOperator());
 				SimpleName operand = (SimpleName) pf.getLeftOperand();
 				assertEquals("d", operand.getIdentifier());
@@ -279,7 +279,7 @@ public class EsprimaParserTests {
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.EXPRESSION_STATEMENT){
-				InfixExpression pf = (InfixExpression) ((ExpressionStatement)astNode).getExpression(); 
+				InfixExpression pf = (InfixExpression) ((ExpressionStatement)astNode).getExpression();
 				assertSame(InfixExpression.Operator.CONDITIONAL_AND, pf.getOperator());
 				SimpleName operand = (SimpleName) pf.getLeftOperand();
 				assertEquals("d", operand.getIdentifier());
@@ -288,7 +288,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testArrayAccess(){
 		JavaScriptUnit unit = parse("a[b];");
@@ -302,7 +302,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testFieldAccess(){
 		JavaScriptUnit unit = parse("a.b;");
@@ -316,7 +316,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testConditionalExpression(){
 		JavaScriptUnit unit = parse("a==1?b:c;");
@@ -348,7 +348,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testListExpression(){
 		JavaScriptUnit unit = parse("a,b.y,a[3];");
@@ -363,7 +363,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testClassInstanceCreation(){
 		JavaScriptUnit unit = parse("new ab(c,d);");
@@ -377,8 +377,8 @@ public class EsprimaParserTests {
 			}
 		}
 		fail();
-	}	
-	
+	}
+
 	@Test
 	public void testFunctionExpression_withIdentifierPattern(){
 		JavaScriptUnit unit = parse("f = function(a){};");
@@ -396,8 +396,8 @@ public class EsprimaParserTests {
 			}
 		}
 		fail();
-	}	
-	
+	}
+
 	@Test
 	public void testGeneratorFunctionExpression(){
 		JavaScriptUnit unit = parse("f = function* (a){};");
@@ -440,9 +440,9 @@ public class EsprimaParserTests {
 			}
 		}
 		fail();
-	}	
-	
-	
+	}
+
+
 	@Test
 	public void testArrowFunctionExpression(){
 		JavaScriptUnit unit = parse("foo = (bar) => 5+1;");
@@ -458,8 +458,8 @@ public class EsprimaParserTests {
 			}
 		}
 		fail();
-	}	
-	
+	}
+
 	@Test
 	public void testBlockStatement(){
 		JavaScriptUnit unit = parse("{a=2;};");
@@ -479,7 +479,7 @@ public class EsprimaParserTests {
 			}
 		}
 		fail();
-	}	
+	}
 
 	@Test
 	public void testYieldExpression(){
@@ -493,7 +493,7 @@ public class EsprimaParserTests {
 		assertFalse(yieldE.getDelegate());
 		assertNotNull(yieldE.getArgument());
 	}
-	
+
 	@Test
 	public void testEmptyStatement(){
 		JavaScriptUnit unit = parse("{;};");
@@ -508,8 +508,8 @@ public class EsprimaParserTests {
 			}
 		}
 		fail();
-	}	
-	
+	}
+
 	@Test
 	public void testDebuggerStatement(){
 		JavaScriptUnit unit = parse("{debugger;};");
@@ -525,7 +525,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testWithStatement(){
 		JavaScriptUnit unit = parse("with(console){log(\"test\");};");
@@ -561,7 +561,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testLabeledStatement(){
 		JavaScriptUnit unit = parse("abc: a=7+1;");
@@ -570,14 +570,14 @@ public class EsprimaParserTests {
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.LABELED_STATEMENT){
 				LabeledStatement ls = (LabeledStatement)astNode;
-				assertEquals("abc", ls.getLabel().getIdentifier());			
+				assertEquals("abc", ls.getLabel().getIdentifier());
 				assertTrue(ls.getBody() instanceof ExpressionStatement);
 				return;
 			}
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testBreakStatement(){
 		JavaScriptUnit unit = parse("while(e){break;};");
@@ -597,7 +597,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testContinueStatement(){
 		JavaScriptUnit unit = parse("while(e){continue;};");
@@ -617,7 +617,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testIfStatement(){
 		JavaScriptUnit unit = parse("if(a){ab;}else ac;");
@@ -636,7 +636,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testSwitchStatement(){
 		JavaScriptUnit unit = parse("switch(a) {};");
@@ -653,7 +653,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testSwitchCaseStatement(){
 		JavaScriptUnit unit = parse("switch(a) {case a:b;};");
@@ -671,8 +671,8 @@ public class EsprimaParserTests {
 			}
 		}
 		fail();
-	}	
-	
+	}
+
 	@Test
 	public void testNestedSwitchCaseStatement(){
 		JavaScriptUnit unit = parse("switch(a) {case a: switch(b){case c: d;};};");
@@ -689,7 +689,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testThrowStatement(){
 		JavaScriptUnit unit = parse("throw d;");
@@ -706,7 +706,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testTryCatchFinallyStatement(){
 		JavaScriptUnit unit = parse("try{}catch(e){}finally{}");
@@ -724,7 +724,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testTryCatchObjectPattern(){
 		JavaScriptUnit unit = parse("try{}catch({a,b}){}");
@@ -741,7 +741,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testWhileStatement(){
 		JavaScriptUnit unit = parse("while(e){};");
@@ -759,7 +759,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testDoWhileStatement(){
 		JavaScriptUnit unit = parse("do{}while(e);");
@@ -777,7 +777,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testForStatement(){
 		JavaScriptUnit unit = parse("for(let i=0;i<10;i++){};");
@@ -798,7 +798,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testForInStatement(){
 		JavaScriptUnit unit = parse("for(let i in a){};");
@@ -819,7 +819,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testForInStatement_1(){
 		JavaScriptUnit unit = parse("for(i in a){};");
@@ -834,7 +834,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testForOfStatement(){
 		JavaScriptUnit unit = parse("for(let i of a){};");
@@ -855,7 +855,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testAnonymousFunction(){
 		JavaScriptUnit unit = parse("f(function(){});");
@@ -887,13 +887,13 @@ public class EsprimaParserTests {
 				FunctionExpression func = (FunctionExpression)es.getExpression();
 				assertFalse(func.getMethod().parameters().isEmpty());
 				assertEquals(1, func.getMethod().parameters().size());
-				
+
 				return;
 			}
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testRegularExpression(){
 		JavaScriptUnit unit = parse("/.{0}/;");
@@ -910,11 +910,11 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
-	
+
+
 	@Test
 	public void testRegularExpressionWithES6flags(){
-		
+
 		JavaScriptUnit unit = parse("/\\u{00000001d306}/u");
 		assertNotNull(unit);
 		List<ASTNode> statements = unit.statements();
@@ -927,7 +927,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testClassDeclaration(){
 		JavaScriptUnit unit = parse("class MyClass extends YourClass{}");
@@ -946,13 +946,13 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testMethodDefiniton(){
 		JavaScriptUnit unit = parse("class MyClass extends YourClass{" +
 																"constructor(){};" +
 																"get test(){};" +
-																"static aStaticMethod(){" + 
+																"static aStaticMethod(){" +
 																"var a=1;};}");
 		assertNotNull(unit);
 		List<ASTNode> statements = unit.statements();
@@ -970,7 +970,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testSuper(){
 		JavaScriptUnit unit = parse("class MyClass extends YourClass{" +
@@ -1004,7 +1004,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testRestElement(){
 		JavaScriptUnit unit = parse("function foo (bar, ...rest) {}");
@@ -1026,7 +1026,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testArrayPattern(){
 		JavaScriptUnit unit = parse("f = function([foo, bar]){};");
@@ -1051,7 +1051,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testAssignmentPattern(){
 		JavaScriptUnit unit = parse("function f([d = 0, ...e]){};");
@@ -1096,7 +1096,7 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testTemplateLiteral(){
 		JavaScriptUnit unit = parse("`this blog lives ${cheer} at ${host}`");
@@ -1122,10 +1122,10 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testTagTemplateLiteral(){
-		JavaScriptUnit unit = parse("aTag `this blog lives ${cheer} at ${host}`");
+		JavaScriptUnit unit = parse("aTag`this blog lives ${cheer} at ${host}`");
 		assertNotNull(unit);
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
@@ -1145,14 +1145,14 @@ public class EsprimaParserTests {
 				assertTrue(el.isTail());
 				SimpleName name = (SimpleName)tl.expressions().get(0);
 				assertEquals("cheer", name.getIdentifier());
-				assertEquals("aTag `this blog lives ${cheer} at ${host}`", tl.toString());
+				assertEquals("aTag`this blog lives ${cheer} at ${host}`", tl.toString());
 				return;
-				
+
 			}
 		}
 		fail();
 	}
-	
+
 	@Test
 	public void testSpreadElement(){
 		JavaScriptUnit unit = parse("[...document.querySelectorAll('div')]");
@@ -1167,7 +1167,7 @@ public class EsprimaParserTests {
 		assertNotNull(sel.getArgument());
 		assertEquals(ASTNode.FUNCTION_INVOCATION, sel.getArgument().getNodeType());
 	}
-	
+
 	@Test
 	public void testMetaProperty(){
 		JavaScriptUnit unit = parse("function f(){new.target;}");
@@ -1182,7 +1182,7 @@ public class EsprimaParserTests {
 		assertEquals("target", mp.getPropertyName());
 		assertEquals("new.target", mp.toString());
 	}
-	
+
 	@Test
 	public void testFunctionDeclaration(){
 		JavaScriptUnit unit = parse("function fName(){return;}");
@@ -1194,28 +1194,28 @@ public class EsprimaParserTests {
 		assertEquals(fd.getName(), fd.getMethodName());
 		assertEquals("fName", ((SimpleName)fd.getMethodName()).getIdentifier());
 	}
-	
+
 	@Test
 	public void testAbortingError(){
 		JavaScriptUnit unit = parse("if(true){a =;};");
-		assertNotNull(unit);	
+		assertNotNull(unit);
 		assertEquals(1, unit.getMessages().length);
 	}
-	
+
 	@Test
 	public void testAbortingError_2(){
 		JavaScriptUnit unit = parse("}");
-		assertNotNull(unit);	
+		assertNotNull(unit);
 		assertEquals(1, unit.getMessages().length);
 	}
-	
+
 	@Test
 	public void testTolerantError(){
 		JavaScriptUnit unit = parse(" 234++\n   123++");
-		assertNotNull(unit);	
+		assertNotNull(unit);
 		assertEquals(2, unit.getMessages().length);
 	}
-	
+
 	@Test
 	public void testObjectDeclare(){
 		JavaScriptUnit unit = parse("var app = {\n"
@@ -1246,7 +1246,7 @@ public class EsprimaParserTests {
 		assertFalse(specifier.isDefault());
 		assertFalse(specifier.isNamespace());
 	}
-	
+
 	@Test
 	public void testImport_2(){
 		JavaScriptUnit unit = parse("import {foo as baz} from 'lib';");
@@ -1260,7 +1260,7 @@ public class EsprimaParserTests {
 		assertFalse(specifier.isDefault());
 		assertFalse(specifier.isNamespace());
 	}
-	
+
 	@Test
 	public void testImport_3(){
 		JavaScriptUnit unit = parse("import foo from 'lib';");
@@ -1273,7 +1273,7 @@ public class EsprimaParserTests {
 		assertTrue(specifier.isDefault());
 		assertFalse(specifier.isNamespace());
 	}
-	
+
 	@Test
 	public void testImport_4(){
 		JavaScriptUnit unit = parse("import * as foo from 'lib';");
@@ -1286,7 +1286,7 @@ public class EsprimaParserTests {
 		assertFalse(specifier.isDefault());
 		assertTrue(specifier.isNamespace());
 	}
-	
+
 	@Test
 	public void testExport_1(){
 		JavaScriptUnit unit = parse("export {foo, bar};");
@@ -1296,7 +1296,7 @@ public class EsprimaParserTests {
 		ModuleSpecifier specifier = (ModuleSpecifier) export.specifiers().get(0);
 		assertEquals("foo",specifier.getLocal().getIdentifier());
 	}
-	
+
 	@Test
 	public void testExport_2(){
 		JavaScriptUnit unit = parse("export {foo} from 'mod';");
@@ -1307,7 +1307,7 @@ public class EsprimaParserTests {
 		ModuleSpecifier specifier = (ModuleSpecifier) export.specifiers().get(0);
 		assertEquals("foo",specifier.getLocal().getIdentifier());
 	}
-	
+
 	@Test
 	public void testExport_3(){
 		JavaScriptUnit unit = parse("export var foo = 1;");
@@ -1315,7 +1315,7 @@ public class EsprimaParserTests {
 		ExportDeclaration export = (ExportDeclaration) unit.exports().get(0);
 		assertNotNull(export.getDeclaration());
 	}
-	
+
 	@Test
 	public void testExport_4(){
 		JavaScriptUnit unit = parse("export default function () {}");
@@ -1324,7 +1324,7 @@ public class EsprimaParserTests {
 		assertNotNull(export.getDeclaration());
 		assertTrue(export.isDefault());
 	}
-	
+
 	@Test
 	public void testExport_5(){
 		JavaScriptUnit unit = parse("export * from 'mod';");
@@ -1332,7 +1332,7 @@ public class EsprimaParserTests {
 		ExportDeclaration export = (ExportDeclaration) unit.exports().get(0);
 		assertTrue(export.isAll());
 	}
-	
+
 	@Test
 	public void testExport_6(){
 		JavaScriptUnit unit = parse("export function* agen(){}");
@@ -1358,8 +1358,8 @@ public class EsprimaParserTests {
 		assertNotNull(commentList);
 		assertEquals(3,commentList.size());
 	}
-	
-	@Test 
+
+	@Test
 	public void testClassExpression(){
 		JavaScriptUnit unit = parse("(class A extends 0{})");
 		assertFalse(unit.statements().isEmpty());
@@ -1369,8 +1369,8 @@ public class EsprimaParserTests {
 		TypeDeclaration td = (TypeDeclaration)dex.getDeclaration();
 		assertEquals("A", td.getName().getIdentifier());
 	}
-	
-	@Test 
+
+	@Test
 	public void tesArrayPatternAssignment(){
 		JavaScriptUnit unit = parse("[...a[0]] = 0;");
 		assertFalse(unit.statements().isEmpty());
@@ -1385,9 +1385,9 @@ public class EsprimaParserTests {
 		ArrayAccess access = (ArrayAccess)rest.getArgument();
 		assertEquals("a", ((SimpleName)access.getArray()).getIdentifier());
 		assertEquals("0", ((NumberLiteral)access.getIndex()).getToken());
-		
+
 	}
-	@Test 
+	@Test
 	public void tesArrayPatternAssignment_2(){
 		JavaScriptUnit unit = parse("[a,b=0,[c,...a[0]]={}]=0;");
 		assertFalse(unit.statements().isEmpty());
@@ -1398,8 +1398,8 @@ public class EsprimaParserTests {
 		ArrayName arrayName = (ArrayName)assignment.getLeftHandSide();
 		assertEquals(3,arrayName.elements().size());
 	}
-	
-	@Test 
+
+	@Test
 	public void tesArrayPattern(){
 		JavaScriptUnit unit = parse("for([a,b[a],{c,d=e,[f]:[g,h().a,(0).k,...i[0]]}] in 0);");
 		assertFalse(unit.statements().isEmpty());
@@ -1410,7 +1410,7 @@ public class EsprimaParserTests {
 		ArrayName name  = (ArrayName)es.getExpression();
 		assertEquals(3, name.elements().size());
 	}
-	
+
 	@Test
 	public void testFunctionDeclarationStatement(){
 		JavaScriptUnit unit = parse("if (foo) function a(){} else{}");
@@ -1419,7 +1419,7 @@ public class EsprimaParserTests {
 		IfStatement ifstmt = (IfStatement) unit.statements().get(0);
 		assertEquals(ASTNode.FUNCTION_DECLARATION_STATEMENT, ifstmt.getThenStatement().getNodeType() );
 	}
-	
+
 	@Test
 	public void testFunctionDeclarationStatement_2(){
 		JavaScriptUnit unit = parse("while (foo)function a(){}");
@@ -1428,7 +1428,7 @@ public class EsprimaParserTests {
 		WhileStatement wstmt = (WhileStatement) unit.statements().get(0);
 		assertEquals(ASTNode.FUNCTION_DECLARATION_STATEMENT, wstmt.getBody().getNodeType() );
 	}
-	
+
 	@Test
 	public void testVariableDeclarationAsStatement(){
 		JavaScriptUnit unit = parse("if (foo) var bar = 0; else{}");
@@ -1437,19 +1437,19 @@ public class EsprimaParserTests {
 		IfStatement ifstmt = (IfStatement) unit.statements().get(0);
 		assertEquals(ASTNode.VARIABLE_DECLARATION_STATEMENT, ifstmt.getThenStatement().getNodeType());
 	}
-	
+
 	// #### Everything.js tests.
-	
+
 	@Test
 	public void testEverythingJS_es5(){
 		testEverythingJs("es5.js");
 	}
-	
+
 	@Test
 	public void testEverythingJS_es2015_script(){
 		testEverythingJs("es2015-script.js");
 	}
-	
+
 	@Test
 	public void testEverythingJS_es2015_module(){
 		testEverythingJs("es2015-module.js");
@@ -1458,14 +1458,14 @@ public class EsprimaParserTests {
 	private JavaScriptUnit parse(String content){
 		return EsprimaParser.newParser().includeComments().setSource(content).parse();
 	}
-	
+
 	private void testEverythingJs(String file){
 		InputStream in = this.getClass().getResourceAsStream(file);
 		JavaScriptUnit unit = EsprimaParser.newParser().setSource(readFile(in)).parse();
 		assertNotNull(unit);
 		assertFalse(unit.statements().isEmpty());
 	}
-	
+
 	private String readFile(InputStream input){
 		BufferedReader br = null;
 		StringBuilder sb = new StringBuilder();
@@ -1489,5 +1489,5 @@ public class EsprimaParserTests {
 		}
 		return sb.toString();
 	}
-	
+
 }

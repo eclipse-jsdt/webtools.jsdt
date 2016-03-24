@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.wst.jsdt.core.dom.flatten.TrivialJsCodeGenerator;
+
 /**
  * Abstract superclass of all Abstract Syntax Tree (AST) node types.
  * <p>
@@ -2623,9 +2625,7 @@ public abstract class ASTNode {
 	 * @param buffer the string buffer to append to
 	 */
 	final void appendPrintString(StringBuffer buffer) {
-		NaiveASTFlattener printer = new NaiveASTFlattener();
-		this.accept(printer);
-		buffer.append(printer.getResult());
+		buffer.append(TrivialJsCodeGenerator.generate(this));
 	}
 
 	/**
