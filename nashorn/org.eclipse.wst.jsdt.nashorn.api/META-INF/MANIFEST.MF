@@ -40,3 +40,4 @@ Export-Package: jdk.nashorn.api.scripting,
  jdk.nashorn.internal.scripts,
  jdk.nashorn.tools,
  jdk.nashorn.tools.resources
+Import-Package: org.eclipse.wst.jsdt.nashorn.extension.loader

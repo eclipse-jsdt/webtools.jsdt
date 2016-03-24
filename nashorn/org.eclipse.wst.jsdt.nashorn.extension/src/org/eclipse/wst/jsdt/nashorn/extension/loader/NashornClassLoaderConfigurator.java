@@ -18,9 +18,14 @@ import org.eclipse.osgi.internal.hookregistry.HookRegistry;
  * 
  */
 public class NashornClassLoaderConfigurator implements HookConfigurator {
-
+	
+	static final boolean DEBUG = Boolean.getBoolean("jsdt.nashorn.extension.debug");
+	
 	@Override
 	public void addHooks(HookRegistry hookRegistry) {
+		if(DEBUG){
+			System.out.println("NashornClassLoaderConfigurator is loading NashornLoaderHook");
+		}
 		hookRegistry.addClassLoaderHook(new NashornLoaderHook());
 	}
 }

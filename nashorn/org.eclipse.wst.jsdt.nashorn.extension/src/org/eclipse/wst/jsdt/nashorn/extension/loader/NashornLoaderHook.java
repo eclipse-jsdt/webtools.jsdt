@@ -32,7 +32,7 @@ import org.eclipse.osgi.storage.BundleInfo.Generation;
  *
  */
 public class NashornLoaderHook extends ClassLoaderHook {
-	private static final String BUNDLE_ID_NASHORN_API = "org.eclipse.wst.jsdt.nashorn.api";
+	private static final String BUNDLE_ID_JSDT_CORE = "org.eclipse.wst.jsdt.core";
 	
 	static final class NashornClassLoader extends ModuleClassLoader{
 		
@@ -83,9 +83,15 @@ public class NashornLoaderHook extends ClassLoaderHook {
 		@Override
 		public Class<?> findLocalClass(String classname) throws ClassNotFoundException {
 			if(classname.startsWith("jdk.nashorn") || classname.startsWith("jdk.internal.dynalink")){
+				if(NashornClassLoaderConfigurator.DEBUG){
+					System.out.println("NashornLoaderHook is loading " + classname);
+				}
 				URLClassLoader loader = getNashornClassLoader();
 				Class<?> clazz =  loader.loadClass(classname);
 				if(clazz != null){
+					if(NashornClassLoaderConfigurator.DEBUG){
+						System.out.println("NashornLoaderHook Loaded" + clazz);
+					}
 					return clazz;
 				}
 			}
@@ -94,6 +100,9 @@ public class NashornLoaderHook extends ClassLoaderHook {
 		
 		private URLClassLoader getNashornClassLoader(){
 			if (nashornLoader == null) {
+				if(NashornClassLoaderConfigurator.DEBUG){
+					System.out.println("Creating a URLClassLoader for nashorn.jar");
+				}
 				try {
 					File javaHomeFile = new File(System.getProperty("java.home")).getCanonicalFile();
 					if (!javaHomeFile.isDirectory()) {
@@ -115,7 +124,10 @@ public class NashornLoaderHook extends ClassLoaderHook {
 	@Override
 	public ModuleClassLoader createClassLoader(ClassLoader parent, EquinoxConfiguration configuration,
 			BundleLoader delegate, Generation generation) {
-		if(BUNDLE_ID_NASHORN_API.equals(generation.getRevision().getBundle().getSymbolicName())){
+		if(BUNDLE_ID_JSDT_CORE.equals(generation.getRevision().getBundle().getSymbolicName())){
+			if(NashornClassLoaderConfigurator.DEBUG){
+				System.out.println("NashornLoaderHook is creating NashornClassLoader");
+			}
 			return new NashornClassLoader(parent, configuration, delegate, generation);
 		}
 		return super.createClassLoader(parent, configuration, delegate, generation);

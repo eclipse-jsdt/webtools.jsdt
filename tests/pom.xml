@@ -31,4 +31,17 @@
     <module>org.eclipse.wst.jsdt.chromium.tests</module>
     <module>org.eclipse.wst.jsdt.chromium.debug.core.tests</module>
   </modules>
+ <build>
+  <plugins>
+      <plugin>
+         <groupId>org.eclipse.tycho</groupId>
+         <artifactId>tycho-surefire-plugin</artifactId>
+         <version>${tycho.version}</version>
+         <configuration>
+               <showEclipseLog>true</showEclipseLog>
+			   <argLine>-Dorg.osgi.framework.bundle.parent=ext</argLine> 
+	   </configuration>
+	   </plugin>
+    </plugins> 
+	</build> 
 </project>
