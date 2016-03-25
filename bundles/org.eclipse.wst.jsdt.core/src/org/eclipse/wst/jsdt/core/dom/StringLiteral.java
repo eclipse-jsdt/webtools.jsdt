@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,23 +14,21 @@ package org.eclipse.wst.jsdt.core.dom;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.wst.jsdt.core.compiler.InvalidInputException;
-import org.eclipse.wst.jsdt.internal.compiler.parser.Scanner;
-import org.eclipse.wst.jsdt.internal.compiler.parser.TerminalTokens;
+import org.eclipse.wst.jsdt.core.util.JsStringScanner;
 
 /**
  * String literal nodes.
- * 
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ *
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public class StringLiteral extends Expression {
 
 	/**
 	 * The "escapedValue" structural property of this node type.
-	 *  
+	 *
 	 */
 	public static final SimplePropertyDescriptor ESCAPED_VALUE_PROPERTY =
 		new SimplePropertyDescriptor(StringLiteral.class, "escapedValue", String.class, MANDATORY); //$NON-NLS-1$
@@ -58,7 +56,7 @@ public class StringLiteral extends Expression {
 
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
@@ -172,19 +170,10 @@ public class StringLiteral extends Expression {
 		if (token == null) {
 			throw new IllegalArgumentException("Token cannot be null"); //$NON-NLS-1$
 		}
-		Scanner scanner = this.ast.scanner;
-		char[] source = token.toCharArray();
-		scanner.setSource(source);
-		scanner.resetTo(0, source.length);
 		try {
-			int tokenType = scanner.getNextToken();
-			switch(tokenType) {
-				case TerminalTokens.TokenNameStringLiteral:
-					break;
-				default:
-					throw new IllegalArgumentException("Invalid string literal : >" + token + "<"); //$NON-NLS-1$//$NON-NLS-2$
-			}
-		} catch(InvalidInputException e) {
+			new JsStringScanner(token).scan();
+		}
+		catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid string literal : >" + token + "<");//$NON-NLS-1$//$NON-NLS-2$
 		}
 		preValueChange(ESCAPED_VALUE_PROPERTY);
@@ -221,30 +210,7 @@ public class StringLiteral extends Expression {
 	 * @exception IllegalArgumentException if the literal value cannot be converted
 	 */
 	public String getLiteralValue() {
-		String s = getEscapedValue();
-		int len = s.length();
-		char zeroth = s.charAt(0);
-		char last = s.charAt(len - 1);
-		if (len < 2 || (zeroth != '\"' && zeroth != '\'') || (last != '\"' && last != '\'')) {
-			throw new IllegalArgumentException();
-		}
-
-		Scanner scanner = this.ast.scanner;
-		char[] source = s.toCharArray();
-		scanner.setSource(source);
-		scanner.resetTo(0, source.length);
-		try {
-			int tokenType = scanner.getNextToken();
-			switch(tokenType) {
-				case TerminalTokens.TokenNameStringLiteral:
-				case TerminalTokens.TokenNameCharacterLiteral:
-					return scanner.getCurrentStringLiteral();
-				default:
-					throw new IllegalArgumentException();
-			}
-		} catch(InvalidInputException e) {
-			throw new IllegalArgumentException();
-		}
+		return new JsStringScanner(getEscapedValue()).scan();
 	}
 
 	/**
@@ -292,6 +258,15 @@ public class StringLiteral extends Expression {
 					break;
 				case '\r' :
 					b.append("\\r"); //$NON-NLS-1$
+					break;
+				case '\u000B' :
+					b.append("\\v"); //$NON-NLS-1$
+					break;
+				case '\u2028' :
+					b.append("\\u2028"); //$NON-NLS-1$
+					break;
+				case '\u2029' :
+					b.append("\\u2029"); //$NON-NLS-1$
 					break;
 				case '\"':
 					b.append("\\\""); //$NON-NLS-1$
