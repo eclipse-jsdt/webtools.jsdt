@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 IBM Corporation and others.
+ * Copyright (c) 2012,2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,8 @@
 
 package org.eclipse.wst.jsdt.core.tests.compiler.parser;
 
+
+import static org.junit.Assert.*;
 import java.io.ByteArrayInputStream;
 
 import org.eclipse.core.resources.IFile;
@@ -20,8 +22,16 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
 
-public class SelectionTest3 extends AbstractSelectionTest {
+
+@SuppressWarnings("nls")
+public class SelectionTest3  {
+	@Rule
+	  public TestName name = new TestName();	
+	
 private String fContents1 = "/*\n" + 
 " * Attempt content assist on each function, verify that the proposal shows up, that\n" + 
 " * camel case CA works, the the propsoal looks correct, the proposal info is displayed,\n" + 
@@ -103,16 +113,7 @@ private String fContents1 = "/*\n" +
 "	zooKeeper7();\n" + 
 "}\n";
 
-static {
-//		TESTS_NUMBERS = new int[] { 53 };	
-}
-//public static Test suite() {
-//	return buildAllCompliancesTestSuite(SelectionTest3.class);
-//}
-	
-public SelectionTest3(String testName) {
-	super(testName);
-}
+
 /**
  * @param string
  */
@@ -127,6 +128,7 @@ private IJavaScriptUnit getUnit(String string) throws Exception {
 	return (IJavaScriptUnit) JavaScriptCore.create(file);
 }
 
+@Test
 public void test01() throws Exception {
 	IJavaScriptUnit unit = getUnit(fContents1);
 	
@@ -136,6 +138,7 @@ public void test01() throws Exception {
 	assertEquals("unexpected element", "zooKeeper", selected[0].getElementName());
 	assertEquals("unexpected element type", IJavaScriptElement.METHOD, selected[0].getElementType());
 }
+@Test
 public void test02() throws Exception {
 	IJavaScriptUnit unit = getUnit(fContents1);
 	
@@ -145,6 +148,8 @@ public void test02() throws Exception {
 	assertEquals("unexpected element", "zooKeeper2", selected[0].getElementName());
 	assertEquals("unexpected element type", IJavaScriptElement.METHOD, selected[0].getElementType());
 }
+
+@Test
 public void test03() throws Exception {
 	IJavaScriptUnit unit = getUnit(fContents1);
 	
@@ -154,6 +159,8 @@ public void test03() throws Exception {
 	assertEquals("unexpected element", "zooKeeper3", selected[0].getElementName());
 	assertEquals("unexpected element type", IJavaScriptElement.METHOD, selected[0].getElementType());
 }
+
+@Test
 public void test04() throws Exception {
 	IJavaScriptUnit unit = getUnit(fContents1);
 	
@@ -163,6 +170,8 @@ public void test04() throws Exception {
 	assertEquals("unexpected element", "zooKeeper5", selected[0].getElementName());
 	assertEquals("unexpected element type", IJavaScriptElement.METHOD, selected[0].getElementType());
 }
+
+@Test
 public void test05() throws Exception {
 	IJavaScriptUnit unit = getUnit(fContents1);
 	
@@ -171,6 +180,10 @@ public void test05() throws Exception {
 	assertEquals("unexpected number of elements", 1, selected.length);
 	assertEquals("unexpected element", "zooKeeper6", selected[0].getElementName());
 	assertEquals("unexpected element type", IJavaScriptElement.METHOD, selected[0].getElementType());
+}
+
+private String getName(){
+	return this.name.getMethodName();
 }
 
 }

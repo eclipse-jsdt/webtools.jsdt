@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 IBM Corporation and others.
+ * Copyright (c) 2012, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,12 +10,16 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.core.tests.search;
 
+import static org.junit.Assert.*;
 import org.eclipse.wst.jsdt.core.search.IJavaScriptSearchConstants;
 import org.eclipse.wst.jsdt.core.search.SearchMatch;
 import org.eclipse.wst.jsdt.core.search.SearchPattern;
+import org.junit.Test;
 
+@SuppressWarnings("nls")
 public class TestMethodSearch extends AbstractSearchTest {
 
+	@Test
 	public void testDeclarationSearch01() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			getName(), 
@@ -30,6 +34,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 	
+	@Test
 	public void testDeclarationSearch02() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"searchVar." + getName(), 
@@ -44,6 +49,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 	
+	@Test
 	public void testDeclarationSearch03() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"SearchConstructor." + getName(),
@@ -56,6 +62,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 	
+	@Test
 	public void testDeclarationSearch04() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"*." + getName(), 
@@ -70,6 +77,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 	
+	@Test
 	public void testDeclarationSearch05() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"testdec*", 
@@ -84,6 +92,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 2, results.length);
 	}
 	
+	@Test
 	public void testDeclarationSearch06() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"SearchConstructor.*",
@@ -96,6 +105,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 2, results.length);
 	}
 	
+	@Test
 	public void testReferencesSearch01() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			getName() + "xyz", 
@@ -112,6 +122,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 	
+	@Test
 	public void testReferencesSearch02() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"testref*", 
@@ -128,6 +139,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 2, results.length);
 	}
 	
+	@Test
 	public void testReferencesSearch03() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"TESTREF*", 
@@ -144,6 +156,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 0, results.length);
 	}
 	
+	@Test
 	public void testOccurrencesSearch01() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			getName(), 
@@ -158,6 +171,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 2, results.length);
 	}
 	
+	@Test
 	public void testOccurrencesSearch02() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"testocc*", 

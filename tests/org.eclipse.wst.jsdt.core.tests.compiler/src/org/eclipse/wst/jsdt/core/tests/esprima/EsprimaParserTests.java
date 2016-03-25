@@ -1238,7 +1238,7 @@ public class EsprimaParserTests {
 		JavaScriptUnit unit = parse("import {foo} from 'lib';");
 		assertFalse(unit.imports().isEmpty());
 		ImportDeclaration importDeclaration = (ImportDeclaration) unit.imports().get(0);
-		assertEquals("'lib'", importDeclaration.getSource().getLiteralValue());
+		assertEquals("lib", importDeclaration.getSource().getLiteralValue());
 		assertFalse(importDeclaration.specifiers().isEmpty());
 		ModuleSpecifier specifier = (ModuleSpecifier) importDeclaration.specifiers().get(0);
 		assertEquals("foo", specifier.getLocal().getIdentifier());
@@ -1252,7 +1252,7 @@ public class EsprimaParserTests {
 		JavaScriptUnit unit = parse("import {foo as baz} from 'lib';");
 		assertFalse(unit.imports().isEmpty());
 		ImportDeclaration importDeclaration = (ImportDeclaration) unit.imports().get(0);
-		assertEquals("'lib'", importDeclaration.getSource().getLiteralValue());
+		assertEquals("lib", importDeclaration.getSource().getLiteralValue());
 		assertFalse(importDeclaration.specifiers().isEmpty());
 		ModuleSpecifier specifier = (ModuleSpecifier) importDeclaration.specifiers().get(0);
 		assertEquals("baz", specifier.getLocal().getIdentifier());
@@ -1266,7 +1266,7 @@ public class EsprimaParserTests {
 		JavaScriptUnit unit = parse("import foo from 'lib';");
 		assertFalse(unit.imports().isEmpty());
 		ImportDeclaration importDeclaration = (ImportDeclaration) unit.imports().get(0);
-		assertEquals("'lib'", importDeclaration.getSource().getLiteralValue());
+		assertEquals("lib", importDeclaration.getSource().getLiteralValue());
 		assertFalse(importDeclaration.specifiers().isEmpty());
 		ModuleSpecifier specifier = (ModuleSpecifier) importDeclaration.specifiers().get(0);
 		assertEquals("foo", specifier.getLocal().getIdentifier());
@@ -1279,7 +1279,7 @@ public class EsprimaParserTests {
 		JavaScriptUnit unit = parse("import * as foo from 'lib';");
 		assertFalse(unit.imports().isEmpty());
 		ImportDeclaration importDeclaration = (ImportDeclaration) unit.imports().get(0);
-		assertEquals("'lib'", importDeclaration.getSource().getLiteralValue());
+		assertEquals("lib", importDeclaration.getSource().getLiteralValue());
 		assertFalse(importDeclaration.specifiers().isEmpty());
 		ModuleSpecifier specifier = (ModuleSpecifier) importDeclaration.specifiers().get(0);
 		assertEquals("foo", specifier.getLocal().getIdentifier());
@@ -1302,7 +1302,7 @@ public class EsprimaParserTests {
 		JavaScriptUnit unit = parse("export {foo} from 'mod';");
 		assertFalse(unit.exports().isEmpty());
 		ExportDeclaration export = (ExportDeclaration) unit.exports().get(0);
-		assertEquals("'mod'",export.getSource().getLiteralValue());
+		assertEquals("mod",export.getSource().getLiteralValue());
 		assertEquals(1, export.specifiers().size());
 		ModuleSpecifier specifier = (ModuleSpecifier) export.specifiers().get(0);
 		assertEquals("foo",specifier.getLocal().getIdentifier());

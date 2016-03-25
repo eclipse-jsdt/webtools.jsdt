@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2009 IBM Corporation and others.
+ * Copyright (c) 2005, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,7 +13,9 @@ package org.eclipse.wst.jsdt.core.tests.compiler.regression;
 import java.util.Map;
 
 import org.eclipse.wst.jsdt.internal.compiler.impl.CompilerOptions;
+import org.junit.Ignore;
 
+@SuppressWarnings("nls")
 public class AssignmentTest extends AbstractRegressionTest {
 
 	public AssignmentTest(String name) {
@@ -28,6 +30,7 @@ public class AssignmentTest extends AbstractRegressionTest {
 				CompilerOptions.ERROR);
 		return options;
 	}
+
 
 	public void test002() {
 		this

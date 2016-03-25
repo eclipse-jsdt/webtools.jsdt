@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2012 IBM Corporation and others.
+ * Copyright (c) 2011, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,12 +10,13 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.core.tests.search;
 
+import static org.junit.Assert.*;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.TestCase;
+
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -37,8 +38,14 @@ import org.eclipse.wst.jsdt.core.search.SearchPattern;
 import org.eclipse.wst.jsdt.core.search.SearchRequestor;
 import org.eclipse.wst.jsdt.internal.core.JavaModelManager;
 import org.eclipse.wst.jsdt.internal.core.JavaProject;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 
-public class AbstractSearchTest extends TestCase {
+
+public class AbstractSearchTest {
+	@Rule
+	  public TestName name = new TestName();
+	
 	private String fRootProjectName;
 
 	protected String getRootProjectName() {
@@ -206,5 +213,9 @@ public class AbstractSearchTest extends TestCase {
 			b.append(value);
 		}
 		assertEquals("Unexpected search results", expected, b.toString());
+	}
+	
+	protected String getName(){
+		return name.getMethodName();
 	}
 }

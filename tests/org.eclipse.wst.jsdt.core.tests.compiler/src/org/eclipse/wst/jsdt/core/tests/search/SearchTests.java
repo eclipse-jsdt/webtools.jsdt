@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
+ * Copyright (c) 2011,2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.core.tests.search;
 
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -21,7 +22,7 @@ public class SearchTests extends TestSuite {
 	 * <p>Default constructor</p>
 	 */
 	public SearchTests() {
-		this("JavaScript Search Tests");
+		this("JavaScript Search Tests"); //$NON-NLS-1$
 	}
 
 	/**
@@ -34,16 +35,16 @@ public class SearchTests extends TestSuite {
 	}
 	
 	public static Test suite() {
-		TestSuite all = new TestSuite("JavaScript Search Tests");
+		TestSuite all = new TestSuite("JavaScript Search Tests"); //$NON-NLS-1$
 		
 		all.addTestSuite(TestMethodPattern.class);
-		all.addTestSuite(TestConstructorSearch.class);
-		all.addTestSuite(TestTypeDeclarationPattern.class);
-		all.addTestSuite(TestMethodSearch.class);
-		all.addTestSuite(TestFunctionSearch.class);
-		all.addTestSuite(TestFieldSearch.class);
-		all.addTestSuite(TestVarSearch.class);
-		all.addTestSuite(TestGetAllSubtypeNames.class);
+		all.addTest(new JUnit4TestAdapter(TestConstructorSearch.class));
+		all.addTest(new JUnit4TestAdapter(TestTypeDeclarationPattern.class));
+		all.addTest(new JUnit4TestAdapter(TestMethodSearch.class));
+		all.addTest(new JUnit4TestAdapter(TestFunctionSearch.class));
+		all.addTest(new JUnit4TestAdapter(TestFieldSearch.class));
+		all.addTest(new JUnit4TestAdapter(TestVarSearch.class));
+		all.addTest(new JUnit4TestAdapter(TestGetAllSubtypeNames.class));
 		return all;
 	}
 }

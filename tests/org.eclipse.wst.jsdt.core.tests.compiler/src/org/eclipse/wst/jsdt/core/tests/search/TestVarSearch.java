@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 IBM Corporation and others.
+ * Copyright (c) 2012, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,12 +10,17 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.core.tests.search;
 
+import static org.junit.Assert.*;
+
 import org.eclipse.wst.jsdt.core.search.IJavaScriptSearchConstants;
 import org.eclipse.wst.jsdt.core.search.SearchMatch;
 import org.eclipse.wst.jsdt.core.search.SearchPattern;
+import org.junit.Test;
 
+@SuppressWarnings("nls")
 public class TestVarSearch extends AbstractSearchTest {
 
+	@Test
 	public void testVarDeclarationSearch01() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			getName(), 
@@ -29,6 +34,7 @@ public class TestVarSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 	
+	@Test
 	public void testVarDeclarationSearch02() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			getName().toUpperCase(), 
@@ -43,6 +49,7 @@ public class TestVarSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 
+	@Test
 	public void testVarDeclarationSearch03() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"testVar*", 
@@ -57,6 +64,7 @@ public class TestVarSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 2, results.length);
 	}
 	
+	@Test
 	public void testVarReferenceSearch01() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			getName(), 
@@ -70,6 +78,7 @@ public class TestVarSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 0, results.length);
 	}
 	
+	@Test
 	public void testVarReferenceSearch02() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			getName(), 
@@ -84,6 +93,7 @@ public class TestVarSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 	
+	@Test
 	public void testVarReferenceSearch03() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"testvar*", 
@@ -99,6 +109,7 @@ public class TestVarSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 2, results.length);
 	}
 
+	@Test
 	public void testVarOccurrencesSearch03() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"testvar*", 
