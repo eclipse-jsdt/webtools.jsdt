@@ -131,6 +131,7 @@ public class EsprimaParser {
 		try{
 			ScriptObjectMirror jsObject = internalParse(content);
 			translate(jsObject,result);
+			buildLineEndTable(result, content);
 			if(errorReporting && tolerant){
 				reportErrors(jsObject, result);
 			}
@@ -147,7 +148,6 @@ public class EsprimaParser {
 		}
 		return result;
 	}
-
 
 	/**
 	 * Sets the tolerant parsing option to false.
@@ -198,12 +198,12 @@ public class EsprimaParser {
 	}
 
 	private ScriptObjectMirror internalParse(String content) {
-		final ScriptObjectMirror esprima = (ScriptObjectMirror) this.bindings.get("esprima");
+		final ScriptObjectMirror esprima = (ScriptObjectMirror) this.bindings.get("esprima"); //$NON-NLS-1$
 		if (esprima == null) {
 			throw new RuntimeException("Esprima parser was not loaded correctly"); //$NON-NLS-1$
 		}
 		HashMap<String, Boolean> options = getOptions();
-		final ScriptObjectMirror tree = (ScriptObjectMirror) esprima.callMember("parse", content, options);
+		final ScriptObjectMirror tree = (ScriptObjectMirror) esprima.callMember("parse", content, options); //$NON-NLS-1$
 		return tree;
 	}
 
@@ -223,7 +223,7 @@ public class EsprimaParser {
 	 * @param result
 	 */
 	private void reportErrors(final ScriptObjectMirror jsObject, final JavaScriptUnit result) {
-		ScriptObjectMirror errors = (ScriptObjectMirror) jsObject.getMember("errors");
+		ScriptObjectMirror errors = (ScriptObjectMirror) jsObject.getMember("errors"); //$NON-NLS-1$
 		DefaultProblem[] problems = new DefaultProblem[errors.size()];
 		for(int i = 0; i < errors.size(); i++){
 			ScriptObjectMirror obj = (ScriptObjectMirror) errors.getSlot(i);
@@ -233,9 +233,9 @@ public class EsprimaParser {
 	}
 
 	private DefaultProblem createProblem(final ScriptObjectMirror error){
-		String description = (String) error.getMember("description");
-		Number index = (Number) error.getMember("index");
-		Number line = (Number) error.getMember("lineNumber");
+		String description = (String) error.getMember("description"); //$NON-NLS-1$
+		Number index = (Number) error.getMember("index"); //$NON-NLS-1$
+		Number line = (Number) error.getMember("lineNumber"); //$NON-NLS-1$
 
 		char[] fileName = null;
 		if(unit != null){
@@ -260,7 +260,7 @@ public class EsprimaParser {
 	 * @param result
 	 */
 	private void buildComments(ScriptObjectMirror jsObject, JavaScriptUnit result, AST ast) {
-		ScriptObjectMirror comments = (ScriptObjectMirror) jsObject.getMember("comments");
+		ScriptObjectMirror comments = (ScriptObjectMirror) jsObject.getMember("comments"); //$NON-NLS-1$
 
 		int commentSize = comments.size();
 		Comment[] resultComments = new Comment[commentSize];
@@ -278,22 +278,48 @@ public class EsprimaParser {
 	 * @return
 	 */
 	private Comment createComment(ScriptObjectMirror obj, AST ast) {
-		String type = (String) obj.getMember("type");
-		String value = (String) obj.getMember("value");
+		String type = (String) obj.getMember("type"); //$NON-NLS-1$
+		String value = (String) obj.getMember("value"); //$NON-NLS-1$
 		Comment comment = null;
-		if("Line".equals(type)){
+		if ("Line".equals(type)) { //$NON-NLS-1$
 			comment = ast.newLineComment();
-		}else if(value.startsWith("**")){
+		}
+		else if (value.startsWith("**")) { //$NON-NLS-1$
 			comment = ast.newJSdoc();
 		}else{
 			comment = ast.newBlockComment();
 		}
-		ScriptObjectMirror range = (ScriptObjectMirror)obj.getMember("range");
+		ScriptObjectMirror range = (ScriptObjectMirror) obj.getMember("range"); //$NON-NLS-1$
 		Number x = (Number) range.getSlot(0);
 		Number y = (Number) range.getSlot(1);
 		comment.setSourceRange(x.intValue(), y.intValue()-x.intValue());
 		return comment;
 	}
 
+	/**
+	 * Calculates line ends for the given source and sets this table for given
+	 * JavaScriptUnit.
+	 *
+	 * @param jsunit
+	 *            unit to assign calculated LineEndTable
+	 * @param content
+	 *            content to calculate line ends from
+	 */
+	private void buildLineEndTable(JavaScriptUnit jsunit, String content) {
+		int[] lineEnds = new int[250];
+		int linePtr = 0;
+
+		for (int i = 0, e = content.length(); i <= e; i++) {
+			if (i == e || content.charAt(i) == '\n') {
+				int length = lineEnds.length;
+				if (linePtr >= length) {
+					System.arraycopy(lineEnds, 0, lineEnds = new int[length + 250], 0, length);
+				}
+				lineEnds[linePtr++] = i;
+			}
+		}
+		System.arraycopy(lineEnds, 0, lineEnds = new int[linePtr], 0, linePtr);
+		jsunit.setLineEndTable(lineEnds);
+	}
 
 }

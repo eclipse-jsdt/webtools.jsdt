@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -46,10 +46,10 @@ import org.eclipse.wst.jsdt.internal.compiler.util.Util;
  *        { ImportDeclaration }
  *        { TypeDeclaration | EnumDeclaration | AnnotationTypeDeclaration | <b>;</b> }
  * </pre>
- * 
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ *
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public class JavaScriptUnit extends ASTNode {
@@ -67,15 +67,15 @@ public class JavaScriptUnit extends ASTNode {
 	/**
 	 * The "imports" structural property of this node type.
 	 *
-	 *  
+	 *
 	 */
 	public static final ChildListPropertyDescriptor IMPORTS_PROPERTY =
 		new ChildListPropertyDescriptor(JavaScriptUnit.class, "imports", ImportDeclaration.class, NO_CYCLE_RISK); //$NON-NLS-1$
-	
+
 	/**
 	 * The "exports" structural property of this node type.
 	 *
-	 *  
+	 *
 	 */
 	public static final ChildListPropertyDescriptor EXPORTS_PROPERTY =
 				new ChildListPropertyDescriptor(JavaScriptUnit.class, "exports", ExportDeclaration.class, NO_CYCLE_RISK); //$NON-NLS-1$
@@ -83,7 +83,7 @@ public class JavaScriptUnit extends ASTNode {
 	/**
 	 * The "package" structural property of this node type.
 	 *
-	 *  
+	 *
 	 */
 	public static final ChildPropertyDescriptor PACKAGE_PROPERTY =
 		new ChildPropertyDescriptor(JavaScriptUnit.class, "package", PackageDeclaration.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
@@ -92,14 +92,14 @@ public class JavaScriptUnit extends ASTNode {
 	 * A list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor}),
 	 * or null if uninitialized.
-	 *  
+	 *
 	 */
 	private static final List PROPERTY_DESCRIPTORS;
 
 	/**
 	 * The "types" structural property of this node type.
 	 *
-	 *  
+	 *
 	 */
 	public static final ChildListPropertyDescriptor TYPES_PROPERTY =
 		new ChildListPropertyDescriptor(JavaScriptUnit.class, "types", AbstractTypeDeclaration.class, CYCLE_RISK); //$NON-NLS-1$
@@ -127,7 +127,7 @@ public class JavaScriptUnit extends ASTNode {
 
 	 * @return a list of property descriptors (element type:
 	 * {@link StructuralPropertyDescriptor})
-	 *  
+	 *
 	 */
 	public static List propertyDescriptors(int apiLevel) {
 		return PROPERTY_DESCRIPTORS;
@@ -136,7 +136,7 @@ public class JavaScriptUnit extends ASTNode {
 	/**
 	 * The comment mapper, or <code>null</code> if none;
 	 * initially <code>null</code>.
-	 *  
+	 *
 	 */
 	private DefaultCommentMapper commentMapper = null;
 
@@ -152,7 +152,7 @@ public class JavaScriptUnit extends ASTNode {
 	 */
 	private ASTNode.NodeList imports =
 		new ASTNode.NodeList(IMPORTS_PROPERTY);
-	
+
 	/**
 	 * The list of import declarations in textual order order;
 	 * initially none (elementType: <code>ExportDeclaration</code>).
@@ -178,7 +178,7 @@ public class JavaScriptUnit extends ASTNode {
 	/**
 	 * The comment list (element type: <code>Comment</code>,
 	 * or <code>null</code> if none; initially <code>null</code>.
-	 *  
+	 *
 	 */
 	private List optionalCommentList = null;
 
@@ -186,7 +186,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * The comment table, or <code>null</code> if none; initially
 	 * <code>null</code>. This array is the storage underlying
 	 * the <code>optionalCommentList</code> ArrayList.
-	 *  
+	 *
 	 */
 	Comment[] optionalCommentTable = null;
 
@@ -274,7 +274,7 @@ public class JavaScriptUnit extends ASTNode {
 	 *    source file or <code>-2</code> if column number information is unknown for this
 	 *    javaScript unit
 	 * @see ASTParser
-	 *  
+	 *
 	 */
 	public int getColumnNumber(final int position) {
 		if (this.lineEndTable == null) return -2;
@@ -400,7 +400,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * or if the key does not correspond to a node in this javaScript unit
 	 * or if bindings were not requested when this AST was built
 	 * @see IBinding#getKey()
-	 *  
+	 *
 	 */
 	public ASTNode findDeclaringNode(String key) {
 		return this.ast.getBindingResolver().findDeclaringNode(key);
@@ -452,7 +452,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * start position, or <code>null</code> if comment information
 	 * for this javaScript unit is not available
 	 * @see ASTParser
-	 *  
+	 *
 	 */
 	public List getCommentList() {
 		return this.optionalCommentList;
@@ -462,7 +462,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * Returns the internal comment mapper.
 	 *
 	 * @return the comment mapper, or <code>null</code> if none.
-	 *  
+	 *
 	 */
 	DefaultCommentMapper getCommentMapper() {
 		return this.commentMapper;
@@ -478,7 +478,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @return a (possibly 0) length, or <code>0</code>
 	 *    if no source position information is recorded for this node
 	 * @see #getExtendedStartPosition(ASTNode)
-	 *  
+	 *
 	 */
 	public int getExtendedLength(ASTNode node) {
 		if (node == null) {
@@ -502,7 +502,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @return the 0-based character index, or <code>-1</code>
 	 *    if no source position information is recorded for this node
 	 * @see #getExtendedLength(ASTNode)
-	 *  
+	 *
 	 */
 	public int getExtendedStartPosition(ASTNode node) {
 		if (node == null) {
@@ -521,7 +521,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * this javaScript unit was created from, or <code>null</code> if it was not created from a JavaScript element.
 	 *
 	 * @return the JavaScript element this javaScript unit was created from, or <code>null</code> if none
-	 *  
+	 *
 	 * @see #getTypeRoot()
 	 */
 	public IJavaScriptElement getJavaElement() {
@@ -595,7 +595,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @return the 0-based character position in the source string;
 	 * <code>-2</code> if line/column number information is not known
 	 * for this javaScript unit or <code>-1</code> the inputs are not valid
-	 *  
+	 *
 	 */
 	 public int getPosition(int line, int column) {
 		if (this.lineEndTable == null) return -2;
@@ -638,7 +638,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @return the list of detailed problem objects, possibly empty
 	 * @see #getMessages()
 	 * @see ASTParser
-	 *  
+	 *
 	 */
 	public IProblem[] getProblems() {
 		return this.problems;
@@ -649,7 +649,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * this javaScript unit was created from, or <code>null</code> if it was not created from a JavaScript type root.
 	 *
 	 * @return the JavaScript type root this javaScript unit was created from, or <code>null</code> if none
-	 *  
+	 *
 	 */
 	public ITypeRoot getTypeRoot() {
 		return this.typeRoot;
@@ -683,7 +683,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @param node the node
 	 * @return 0-based index of first leading comment or -1 if node has no associated
 	 * 	comment before its start position.
-	 *  
+	 *
 	 */
 	public int firstLeadingCommentIndex(ASTNode node) {
 		if (node == null) {
@@ -702,7 +702,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @param node the node
 	 * @return 0-based index of last trailing comment or -1 if node has no
 	 * 	associated comment after its end position.
-	 *  
+	 *
 	 */
 	public int lastTrailingCommentIndex(ASTNode node) {
 		if (node == null) {
@@ -719,7 +719,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * scanner.
 	 *
 	 * @param scanner the scanner
-	 *  
+	 *
 	 */
 	void initCommentMapper(Scanner scanner) {
 		this.commentMapper = new DefaultCommentMapper(this.optionalCommentTable);
@@ -761,7 +761,7 @@ public class JavaScriptUnit extends ASTNode {
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
-	 *  
+	 *
 	 */
 	final List internalStructuralPropertiesForType(int apiLevel) {
 		return propertyDescriptors(apiLevel);
@@ -786,7 +786,7 @@ public class JavaScriptUnit extends ASTNode {
 	 *    source file or <code>-2</code> if line number information is not known for this
 	 *    javaScript unit
 	 * @see ASTParser
-	 *  
+	 *
 	 */
 	public int getLineNumber(int position) {
 		if (this.lineEndTable == null) return -2;
@@ -876,7 +876,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @exception IllegalArgumentException if this javaScript unit is
 	 * marked as unmodifiable, or if this javaScript unit has already
 	 * been tampered with, or recording has already been enabled
-	 *  
+	 *
 	 */
 	public void recordModifications() {
 		getAST().recordModifications(this);
@@ -916,7 +916,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * @exception IllegalStateException if <code>recordModifications</code>
 	 * was not called to enable recording
 	 * @see #recordModifications()
-	 *  
+	 *
 	 */
 	public TextEdit rewrite(IDocument document, Map options) {
 		return getAST().rewrite(document, options);
@@ -933,7 +933,7 @@ public class JavaScriptUnit extends ASTNode {
 	 * not in increasing order of source position
 	 * @see #getCommentList()
 	 * @see ASTParser
-	 *  
+	 *
 	 */
 	public void setCommentTable(Comment[] commentTable) {
 		// double check table to ensure that all comments have
@@ -973,16 +973,18 @@ public class JavaScriptUnit extends ASTNode {
 	}
 
 	/**
-	 * Sets the line end table for this javaScript unit.
-	 * If <code>lineEndTable[i] == p</code> then line number <code>i+1</code>
-	 * ends at character position <code>p</code>. Except for the last line, the
-	 * positions are that of (the last character of) the line delimiter.
-	 * For example, the source string <code>A\nB\nC</code> has
-	 * line end table {1, 3, 4}.
+	 * Sets the line end table for this javaScript unit. If
+	 * <code>lineEndTable[i] == p</code> then line number <code>i+1</code>
+	 * ends at character position <code>p</code>. Except for the last line,
+	 * the positions are that of (the last character of) the line delimiter.
+	 * For example, the source string <code>A\nB\nC</code> has line end table
+	 * {1, 3, 4}.
 	 *
-	 * @param lineEndTable the line end table
+	 * @param lineEndTable
+	 *            the line end table
+	 * @since 2.0
 	 */
-	void setLineEndTable(int[] lineEndTable) {
+	public void setLineEndTable(int[] lineEndTable) {
 		if (lineEndTable == null) {
 			throw new NullPointerException();
 		}
