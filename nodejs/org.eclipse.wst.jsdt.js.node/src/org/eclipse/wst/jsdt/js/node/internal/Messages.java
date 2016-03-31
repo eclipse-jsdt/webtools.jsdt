@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corporation. 
+ * Copyright (c) 2016 IBM Corporation.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,9 +15,9 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author "Adalberto Lopez Venegas (adalbert)"
  */
-public class Messages extends NLS {	
+public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getName().toString().toLowerCase();
-	
+
 	//Launch node application configuration
 	public static String LAUNCH_CONFIGURATION_ARGUMENTS_TAB;
     public static String LAUNCH_CONFIGURATION_MAIN_TAB;
@@ -25,12 +25,20 @@ public class Messages extends NLS {
     public static String LAUNCH_CONFIGURATION_ARGUMENTS_TAB_APP_ARGUMENTS_TEXT;
     public static String LAUNCH_CONFIGURATION_ARGUMENTS_TAB_VARIABLES_TEXT;
     public static String LAUNCH_CONFIGURATION_MAIN_TAB_MAIN_FILE_TEXT;
+	public static String LAUNCH_CONFIGURATION_MAIN_TAB_CONNECTION_TEXT;
+	public static String LAUNCH_CONFIGURATION_MAIN_TAB_HOST_TEXT;
+	public static String LAUNCH_CONFIGURATION_MAIN_TAB_PORT_TEXT;
+	public static String LAUNCH_CONFIGURATION_MAIN_TAB_DEBUGGER_NETWORK_CONSOLE_TEXT;
+	public static String LAUNCH_CONFIGURATION_MAIN_TAB_BREAK_TEXT;
     public static String LAUNCH_CONFIGURATION_MAIN_TAB_WORKSPACE_BUTTON;
     public static String LAUNCH_CONFIGURATION_MAIN_TAB_SELECT_MAIN_FILE_TITLE;
     public static String LAUNCH_CONFIGURATION_MAIN_TAB_SELECT_MAIN_FILE_DESCRIPTION;
     public static String LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_MAIN_FILE_DOES_NOT_EXIST;
     public static String LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_SPECIFY_MAIN_FILE;
- 
+	public static String LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_SPECIFY_HOST;
+	public static String LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_INVALID_PORT;
+	public static String LAUNCH_CONFIGURATION_DELEGATE_CHROMIUM_DEBUGGER_DELAY_TASK;
+
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}

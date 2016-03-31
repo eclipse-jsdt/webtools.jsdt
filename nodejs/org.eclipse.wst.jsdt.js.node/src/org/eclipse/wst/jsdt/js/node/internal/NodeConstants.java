@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corporation. 
+ * Copyright (c) 2016 IBM Corporation.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,6 +22,10 @@ public class NodeConstants {
     public static final String ATTR_NODE_ARGUMENTS = "attr_node_arguments";
     public static final String ATTR_APP_ARGUMENTS = "attr_app_arguments";
     public static final String ATTR_APP_PROJECT = "attr_app_project";
+	public static final String ATTR_HOST_FIELD = "attr_host_field";
+	public static final String ATTR_PORT_FIELD = "attr_port_field";
+	public static final String ATTR_ADD_NETWORK_CONSOLE_FIELD = "attr_add_network_console_field";
+	public static final String ATTR_BREAK_FIELD = "attr_break_field";
     public static final String PROCESS_MESSAGE = "Node.js process";
     public static final String PACKAGE_JSON = "package.json";
     public static final String DEFAULT_HOST = "localhost";
