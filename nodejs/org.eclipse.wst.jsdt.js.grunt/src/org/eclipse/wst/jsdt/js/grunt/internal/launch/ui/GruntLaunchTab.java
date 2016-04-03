@@ -28,7 +28,7 @@ import org.eclipse.wst.jsdt.js.grunt.GruntPlugin;
 import org.eclipse.wst.jsdt.js.grunt.internal.GruntConstants;
 import org.eclipse.wst.jsdt.js.grunt.internal.Messages;
 import org.eclipse.wst.jsdt.js.grunt.internal.ui.ImageResource;
-import org.eclipse.wst.jsdt.js.grunt.internal.util.GruntVisitor;
+import org.eclipse.wst.jsdt.js.grunt.util.GruntVisitor;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"

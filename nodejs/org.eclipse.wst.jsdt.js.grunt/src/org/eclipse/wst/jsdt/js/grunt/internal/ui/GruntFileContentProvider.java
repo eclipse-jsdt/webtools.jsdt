@@ -25,7 +25,7 @@ import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 import org.eclipse.wst.jsdt.js.common.build.system.util.ASTUtil;
 import org.eclipse.wst.jsdt.js.grunt.GruntPlugin;
-import org.eclipse.wst.jsdt.js.grunt.internal.util.GruntVisitor;
+import org.eclipse.wst.jsdt.js.grunt.util.GruntVisitor;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"

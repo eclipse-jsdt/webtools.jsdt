@@ -25,7 +25,7 @@ import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 import org.eclipse.wst.jsdt.js.common.build.system.util.ASTUtil;
 import org.eclipse.wst.jsdt.js.gulp.GulpPlugin;
-import org.eclipse.wst.jsdt.js.gulp.internal.util.GulpVisitor;
+import org.eclipse.wst.jsdt.js.gulp.util.GulpVisitor;
 
 public class GulpFileContentProvider implements ITreeContentProvider, IResourceChangeListener {
 	

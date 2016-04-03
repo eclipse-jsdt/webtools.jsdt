@@ -28,7 +28,7 @@ import org.eclipse.wst.jsdt.js.gulp.GulpPlugin;
 import org.eclipse.wst.jsdt.js.gulp.internal.GulpConstants;
 import org.eclipse.wst.jsdt.js.gulp.internal.Messages;
 import org.eclipse.wst.jsdt.js.gulp.internal.ui.ImageResource;
-import org.eclipse.wst.jsdt.js.gulp.internal.util.GulpVisitor;
+import org.eclipse.wst.jsdt.js.gulp.util.GulpVisitor;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
