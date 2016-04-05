@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright (c) 2009 The Chromium Authors. All rights reserved.
+  Copyright (c) 2009, 2016 The Chromium Authors. All rights reserved.
   This program and the accompanying materials are made available
   under the terms of the Eclipse Public License v1.0 which accompanies
   this distribution, and is available at
@@ -496,4 +496,33 @@
       </action>
     </actionSet>
   </extension>
+  
+  <extension 
+        point="org.eclipse.ui.navigator.navigatorContent">
+	    <commonFilter
+	        description="%ChromiumVirtualFileSystem.description"
+	        id="org.eclipse.wst.jsdt.chromium.hideVirtualFileSystem"
+	        name="%ChromiumVirtualFileSystem.name"
+	        activeByDefault="true">
+	        <filterExpression>
+	            <and>
+	                <adapt type="org.eclipse.core.resources.IProject">
+	                    <test property="org.eclipse.core.resources.projectNature" 
+	                    	value="org.eclipse.wst.jsdt.chromium.debug.core.jsnature"/>
+	                </adapt>
+	            </and>
+	        </filterExpression>
+	    </commonFilter>
+  </extension>
+  
+  <extension 
+        point="org.eclipse.ui.navigator.viewer">
+	    <viewerContentBinding
+	          viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+	          <includes>
+	            <contentExtension pattern="org.eclipse.wst.jsdt.chromium.hideVirtualFileSystem"/> 
+	          </includes>
+	    </viewerContentBinding>
+  </extension>
+  
 </plugin>
