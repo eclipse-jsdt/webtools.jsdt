@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corporation. 
+ * Copyright (c) 2016 IBM Corporation.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -38,7 +38,7 @@ import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
 
 /**
  * Launch configuration shortcut for node application
- * 
+ *
  * @author "Adalberto Lopez Venegas (adalbert)"
  */
 public class NodeLaunch implements ILaunchShortcut{
@@ -50,7 +50,7 @@ public class NodeLaunch implements ILaunchShortcut{
 				launchFile((IFile) objSelected, mode);
 			} else  if (objSelected instanceof IContainer) {
                 launchContainer((IContainer) objSelected, mode);
-            } 
+            }
 		} catch (CoreException e) {
 			NodePlugin.logError(e.getLocalizedMessage());
 		}
@@ -62,7 +62,7 @@ public class NodeLaunch implements ILaunchShortcut{
 			IEditorInput editorInput = editor.getEditorInput();
 			if (editorInput instanceof IFileEditorInput) {
 				IFile file = ((IFileEditorInput) editorInput).getFile();
-				launchFile((IFile) file, mode);
+				launchFile(file, mode);
 			}
 		} catch (CoreException e) {
 			NodePlugin.logError(e.getLocalizedMessage());
@@ -76,13 +76,13 @@ public class NodeLaunch implements ILaunchShortcut{
 	    ILaunchConfiguration configuration = createLaunchConfiguration(type, path, container);
 	    launchHelper(configuration, mode);
 	}
-	
+
 	protected void launchHelper(ILaunchConfiguration configuration, String mode){
 	    String mainScript = null;
 		try {
 			mainScript = configuration.getAttribute(NodeConstants.ATTR_APP_PATH, NodeConstants.EMPTY);
 		    if (mainScript != null && mainScript.equals(NodeConstants.EMPTY)) {
-		        Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();	        
+		        Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 		        String groupId = DebugUITools.getLaunchGroup(configuration, mode).getIdentifier();
 		        DebugUITools.openLaunchConfigurationDialogOnGroup(shell,new StructuredSelection(configuration), groupId);
 		    }
@@ -93,7 +93,7 @@ public class NodeLaunch implements ILaunchShortcut{
 			NodePlugin.logError(e.getLocalizedMessage());
 		}
 	}
-	
+
 	private void launchFile(IFile file, String mode) throws CoreException {
 		String path = ResourcesPlugin.getWorkspace().getRoot().findMember(file.getFullPath().toString()).getLocation()
 				.toOSString();
@@ -122,24 +122,26 @@ public class NodeLaunch implements ILaunchShortcut{
     	else if (file.getType() == IResource.FILE){
     		configFile = (IFile) file;
     	}
-		
+
 		ILaunchConfiguration config = LaunchConfigurationUtil.getExistingLaunchConfiguration(configFile,
 				type, NodeConstants.ATTR_APP_PATH);
 		if (config != null) {
 			return config;
 		}
-		
+
 		String configName = NodeConstants.EMPTY;
 		if(configFile!=null) {
 			configName = configFile.getFullPath().toString();
 			if (configName.startsWith("/")) {
 				configName = configName.substring(1, configName.length());
 			}
-			configName = configName.replaceAll("/", "_");
 		} else {
     		configName = file.getProject().getName();
     	}
-		
+
+		// Make sure the configuration name is unique
+		configName = DebugPlugin.getDefault().getLaunchManager().generateLaunchConfigurationName(configName);
+
 		IContainer container = null;
 		ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(container, configName);
 		workingCopy.setAttribute(NodeConstants.ATTR_APP_PATH, path);
