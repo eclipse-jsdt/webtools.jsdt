@@ -274,6 +274,15 @@
 			<partition type="__dftl_partition_content_type"/>
 		</javaCompletionProposalComputer>
 	</extension>
+	<!-- identifier completions -->
+	<extension
+		point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
+		id="IdentifierCompletionProposalComputer">
+		<javaCompletionProposalComputer
+			class="org.eclipse.wst.jsdt.internal.ui.text.java.IdentifierCompletionProposalComputer"
+			categoryId="org.eclipse.wst.jsdt.ui.defaultProposalCategory">
+		</javaCompletionProposalComputer>
+	</extension>
 
 	<!-- the parameterized content assist action and keybindings for our contributed computers -->
 	<extension

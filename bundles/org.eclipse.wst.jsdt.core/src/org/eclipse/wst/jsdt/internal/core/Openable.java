@@ -34,7 +34,6 @@ import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.WorkingCopyOwner;
 import org.eclipse.wst.jsdt.core.dom.AST;
 import org.eclipse.wst.jsdt.internal.codeassist.CompletionEngine;
-import org.eclipse.wst.jsdt.internal.codeassist.DOMCompletionEngine;
 import org.eclipse.wst.jsdt.internal.codeassist.SelectionEngine;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
 
@@ -97,7 +96,9 @@ public boolean canBufferBeRemovedFromCache(IBuffer buffer) {
  * Close the buffer associated with this element, if any.
  */
 protected void closeBuffer() {
-	if (!hasBuffer()) return; // nothing to do
+	if (!hasBuffer()) {
+		return; // nothing to do
+	}
 	IBuffer buffer = getBufferManager().getBuffer(this);
 	if (buffer != null) {
 		buffer.close();
@@ -124,11 +125,9 @@ protected void codeComplete(org.eclipse.wst.jsdt.internal.compiler.env.ICompilat
 	if (buffer == null) {
 		return;
 	}
-	if (position < -1 || position > buffer.getLength()) {
+	if ((position < -1) || (position > buffer.getLength())) {
 		throw new JavaScriptModelException(new JavaModelStatus(IJavaScriptModelStatusConstants.INDEX_OUT_OF_BOUNDS));
 	}
-	JavaProject project = (JavaProject) getJavaScriptProject();
-//	SearchableEnvironment environment = newSearchableNameEnvironment(owner);
 
 	ASTHolderCUInfo info = new ASTHolderCUInfo();
 	info.astLevel = AST.JLS3;
@@ -136,26 +135,8 @@ protected void codeComplete(org.eclipse.wst.jsdt.internal.compiler.env.ICompilat
 	info.reconcileFlags = 0;
 	info.problems = null;
 	openWhenClosed(info, new NullProgressMonitor());
-	org.eclipse.wst.jsdt.core.dom.JavaScriptUnit result = info.ast;
-	
-	
-	DOMCompletionEngine domEngine = new DOMCompletionEngine(requestor, project);
-	domEngine.complete(result, position,0);
-
-	
-	// set unit to skip
-//	environment.unitToSkip = unitToSkip;
-
-	// code complete
-//	CompletionEngine engine = new CompletionEngine(environment, requestor, project.getOptions(true), project);
-//	engine.complete(cu, position, 0);
-	
 	if(performanceStats != null) {
 		performanceStats.endRun();
-	}
-	if (NameLookup.VERBOSE) {
-//		System.out.println(Thread.currentThread() + " TIME SPENT in NameLoopkup#seekTypesInSourcePackage: " + environment.nameLookup.timeSpentInSeekTypesInSourcePackage + "ms");  //$NON-NLS-1$ //$NON-NLS-2$
-//		System.out.println(Thread.currentThread() + " TIME SPENT in NameLoopkup#seekTypesInBinaryPackage: " + environment.nameLookup.timeSpentInSeekTypesInBinaryPackage + "ms");  //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }
 protected IJavaScriptElement[] codeSelect(org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit cu, int offset, int length, WorkingCopyOwner owner) throws JavaScriptModelException {
@@ -175,13 +156,13 @@ protected IJavaScriptElement[] codeSelect(org.eclipse.wst.jsdt.internal.compiler
 		return requestor.getElements();
 	}
 	int end= buffer.getLength();
-	if (offset < 0 || length < 0 || offset + length > end ) {
+	if ((offset < 0) || (length < 0) || ((offset + length) > end) ) {
 		throw new JavaScriptModelException(new JavaModelStatus(IJavaScriptModelStatusConstants.INDEX_OUT_OF_BOUNDS));
 	}
 
 	// fix for 1FVXGDK
 	SelectionEngine engine = new SelectionEngine(environment, requestor, project.getOptions(true));
-	engine.select(cu, offset, offset + length - 1);
+	engine.select(cu, offset, (offset + length) - 1);
 
 	if(performanceStats != null) {
 		performanceStats.endRun();
@@ -203,11 +184,14 @@ protected Object createElementInfo() {
  */
 public boolean exists() {
 	JavaModelManager manager = JavaModelManager.getJavaModelManager();
-	if (manager.getInfo(this) != null) return true;
-	if (!parentExists()) return false;
+	if (manager.getInfo(this) != null) {
+		return true;
+	}
+	if (!parentExists()) {
+		return false;
+	}
 	PackageFragmentRoot root = getPackageFragmentRoot();
-	if (root != null
-			&& (root == this || !root.isArchive())) {
+	if ((root != null) && ((root == this) || !root.isArchive())) {
 		return resourceExists();
 	}
 	return super.exists();
@@ -245,8 +229,9 @@ protected void generateInfos(Object info, HashMap newElements, IProgressMonitor 
 
 	// open the parent if necessary
 	openParent(info, newElements, monitor);
-	if (monitor != null && monitor.isCanceled())
+	if ((monitor != null) && monitor.isCanceled()) {
 		throw new OperationCanceledException();
+	}
 
 	 // puts the info before building the structure so that questions to the handle behave as if the element existed
 	 // (case of compilation units becoming working copies)
@@ -336,7 +321,7 @@ public IResource getUnderlyingResource() throws JavaScriptModelException {
 		return null;
 	}
 	int type = parentResource.getType();
-	if (type == IResource.FOLDER || type == IResource.PROJECT) {
+	if ((type == IResource.FOLDER) || (type == IResource.PROJECT)) {
 		IContainer folder = (IContainer) parentResource;
 		IResource resource = folder.findMember(getElementName());
 		if (resource == null) {
@@ -365,16 +350,16 @@ public boolean hasUnsavedChanges() throws JavaScriptModelException{
 		return false;
 	}
 	IBuffer buf = this.getBuffer();
-	if (buf != null && buf.hasUnsavedChanges()) {
+	if ((buf != null) && buf.hasUnsavedChanges()) {
 		return true;
 	}
 	// for package fragments, package fragment roots, and projects must check open buffers
 	// to see if they have an child with unsaved changes
 	int elementType = getElementType();
-	if (elementType == PACKAGE_FRAGMENT ||
-		elementType == PACKAGE_FRAGMENT_ROOT ||
-		elementType == JAVASCRIPT_PROJECT ||
-		elementType == JAVASCRIPT_MODEL) { // fix for 1FWNMHH
+	if ((elementType == PACKAGE_FRAGMENT) ||
+		(elementType == PACKAGE_FRAGMENT_ROOT) ||
+		(elementType == JAVASCRIPT_PROJECT) ||
+		(elementType == JAVASCRIPT_MODEL)) { // fix for 1FWNMHH
 		Enumeration openBuffers= getBufferManager().getOpenBuffers();
 		while (openBuffers.hasMoreElements()) {
 			IBuffer buffer= (IBuffer)openBuffers.nextElement();
@@ -448,7 +433,7 @@ protected IBuffer openBuffer(IProgressMonitor pm, Object info) throws JavaScript
 protected void openParent(Object childInfo, HashMap newElements, IProgressMonitor pm) throws JavaScriptModelException {
 
 	Openable openableParent = (Openable)getOpenableParent();
-	if (openableParent != null && !openableParent.isOpen()){
+	if ((openableParent != null) && !openableParent.isOpen()){
 		openableParent.generateInfos(openableParent.createElementInfo(), newElements, pm);
 	}
 }
@@ -460,7 +445,9 @@ protected void openParent(Object childInfo, HashMap newElements, IProgressMonito
 protected boolean parentExists(){
 
 	IJavaScriptElement parentElement = getParent();
-	if (parentElement == null) return true;
+	if (parentElement == null) {
+		return true;
+	}
 	return parentElement.exists();
 }
 
@@ -469,7 +456,9 @@ protected boolean parentExists(){
  */
 protected boolean resourceExists() {
 	IWorkspace workspace = ResourcesPlugin.getWorkspace();
-	if (workspace == null) return false; // workaround for http://bugs.eclipse.org/bugs/show_bug.cgi?id=34069
+	if (workspace == null) {
+		return false; // workaround for http://bugs.eclipse.org/bugs/show_bug.cgi?id=34069
+	}
 	return
 		JavaModel.getTarget(
 			workspace.getRoot(),

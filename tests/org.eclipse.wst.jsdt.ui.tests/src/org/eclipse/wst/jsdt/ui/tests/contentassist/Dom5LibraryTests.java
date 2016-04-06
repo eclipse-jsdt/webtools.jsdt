@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 IBM Corporation and others.
+ * Copyright (c) 2013, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,98 +7,47 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Red Hat, Inc. - refactoring
  *******************************************************************************/
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
-import junit.extensions.TestSetup;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
-public class Dom5LibraryTests extends TestCase {
-	/**
-	 * <p>
-	 * This tests name
-	 * </p>
-	 */
-	private static final String TEST_NAME = "Test HTML5 APIs";
-
-	/**
-	 * <p>
-	 * Test project setup for this test.
-	 * </p>
-	 */
+@SuppressWarnings("nls")
+public class Dom5LibraryTests {
 	private static TestProjectSetup fTestProjectSetup;
-	
-	/**
-	 * <p>
-	 * Default constructor
-	 * <p>
-	 * <p>
-	 * Use {@link #suite()}
-	 * </p>
-	 * 
-	 * @see #suite()
-	 */
-	public Dom5LibraryTests() {
-		super(TEST_NAME);
+
+	@BeforeClass
+	public static void setup() throws Exception {
+		fTestProjectSetup = new TestProjectSetup("ContentAssist", "root", false);
+		fTestProjectSetup.setUp();
 	}
 
-	/**
-	 * <p>
-	 * Constructor that takes a test name.
-	 * </p>
-	 * <p>
-	 * Use {@link #suite()}
-	 * </p>
-	 * 
-	 * @param name
-	 *            The name this test run should have.
-	 * 
-	 * @see #suite()
-	 */
-	public Dom5LibraryTests(String name) {
-		super(name);
-	}
-
-	/**
-	 * <p>
-	 * Use this method to add these tests to a larger test suite so set up and tear down can be
-	 * performed
-	 * </p>
-	 * 
-	 * @return a {@link TestSetup} that will run all of the tests in this class
-	 *         with set up and tear down.
-	 */
-
-	public static Test suite() {
-		TestSuite ts = new TestSuite(Dom5LibraryTests.class, TEST_NAME);
-		
-		fTestProjectSetup = new TestProjectSetup(ts, "ContentAssist", "root", false);
-		
-		return fTestProjectSetup;
-	}
-
+	@Ignore @Test
 	public void testNavigatorDotG() throws Exception {
 		String[][] expectedProposals = new String[][] { {"geolocation : Geolocation - Navigator"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 0, 11, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testGeolocation() throws Exception {
 		String[][] expectedProposals = new String[][] { {"clearWatch(Number watchId) - Geolocation",
 				"getCurrentPosition(Function successCallback, Function errorCallback, PositionOptions options) - Geolocation",
 				"watchPosition(Function successCallback, Function errorCallback, PositionOptions options) : Number - Geolocation"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 2, 22, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testPosition() throws Exception {
 		String[][] expectedProposals = new String[][] { {"coords : Coordinates - Position",
 				"timestamp : Number - Position"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 9, 8, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testCoordinates() throws Exception {
 		String[][] expectedProposals = new String[][] { {"accuracy : Number - Coordinates",
 				"altitude : Number - Coordinates",
@@ -109,7 +58,8 @@ public class Dom5LibraryTests extends TestCase {
 				"speed : Number - Coordinates"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 10, 15, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testPositionError() throws Exception {
 		String[][] expectedProposals = new String[][] { {"code : Number - PositionError",
 			"message : String - PositionError",
@@ -118,14 +68,16 @@ public class Dom5LibraryTests extends TestCase {
 			"TIMEOUT : Number - PositionError"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 18, 10, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testPositionOptions() throws Exception {
 		String[][] expectedProposals = new String[][] { {"enableHighAccuracy : Boolean - PositionOptions",
 			"maximumAge : Number - PositionOptions",
 			"timeout : Number - PositionOptions"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 26, 12, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testHistory() throws Exception {
 		String[][] expectedProposals = new String[][] { {"back() - History",
 			"forward() - History",
@@ -135,7 +87,8 @@ public class Dom5LibraryTests extends TestCase {
 			"state : Object - History"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 29, 8, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testSessionStorage() throws Exception {
 		String[][] expectedProposals = new String[][] { {"clear() - Storage",
 			"getItem(String key) : String - Storage",
@@ -146,7 +99,8 @@ public class Dom5LibraryTests extends TestCase {
 			"prototype - Storage"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 31, 15, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testLocalStorage() throws Exception {
 		String[][] expectedProposals = new String[][] { {"clear() - Storage",
 			"getItem(String key) : String - Storage",
@@ -157,7 +111,8 @@ public class Dom5LibraryTests extends TestCase {
 			"prototype - Storage"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 33, 13, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testWebSocket() throws Exception {
 		String[][] expectedProposals = new String[][] { {"close(Number code, String reason) - WebSocket",
 			"send(Object data) - WebSocket",
@@ -173,25 +128,29 @@ public class Dom5LibraryTests extends TestCase {
 			"url : String - WebSocket"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 36, 7, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testDocumentQuerySelector() throws Exception {
 		String[][] expectedProposals = new String[][] { {"querySelector(String selectors) : Element - Document",
 			"querySelectorAll(String selectors) : NodeList - Document"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 38, 10, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testDocumentFragmentQuerySelector() throws Exception {
 		String[][] expectedProposals = new String[][] { {"querySelector(String selectors) : Element - DocumentFragment",
 			"querySelectorAll(String selectors) : NodeList - DocumentFragment"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 40, 35, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testElementQuerySelector() throws Exception {
 		String[][] expectedProposals = new String[][] { {"querySelector(String selectors) : Element - Element",
 			"querySelectorAll(String selectors) : NodeList - Element"} };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 42, 36, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testAudio() throws Exception {
 		String[][] expectedProposals = new String[][] { { "canPlayType(String type) : String - HTMLMediaElement",
 				"load() - HTMLMediaElement", "pause() - HTMLMediaElement", "play() - HTMLMediaElement",
@@ -214,7 +173,8 @@ public class Dom5LibraryTests extends TestCase {
 				"startOffsetTime : Date - HTMLMediaElement", "volume : Number - HTMLMediaElement" } };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 45, 6, expectedProposals);
 	}
-	
+
+	@Ignore @Test
 	public void testVideo() throws Exception {
 		String[][] expectedProposals = new String[][] { { "canPlayType(String type) : String - HTMLMediaElement",
 				"load() - HTMLMediaElement", "pause() - HTMLMediaElement", "play() - HTMLMediaElement",
@@ -240,7 +200,5 @@ public class Dom5LibraryTests extends TestCase {
 				"width : Number - HTMLVideoElement" } };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestDom5Library_0.js", 52, 12, expectedProposals);
 	}
-	
-	
 
 }

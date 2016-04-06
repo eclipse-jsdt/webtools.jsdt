@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 IBM Corporation and others.
+ * Copyright (c) 2011, 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,11 +14,10 @@ package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 @SuppressWarnings("nls")
-public class OtherContentAssistTests {
+public class ObjectDeclaraionTest {
 	private static TestProjectSetup fTestProjectSetup;
 
 	@BeforeClass
@@ -27,10 +26,23 @@ public class OtherContentAssistTests {
 		fTestProjectSetup.setUp();
 	}
 
-	@Ignore @Test
-	public void testFindFunctionOnType_OtherFile_ExpressionStarted_0() throws Exception {
-		String[][] expectedProposals = new String[][] { { "myFunc1(Number param1) : Number - Crazy",
-				"foo : String - Crazy" } };
-		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "test10_1.js", 1, 4, expectedProposals);
+	@Test
+	public void testObjectFields_ExpressionStarted_SameFile() throws Exception {
+		String[][] expectedProposals = new String[][] { {
+			"field1",
+			"field2",
+			"field3",
+			"funcField1(param1)",
+			"funcField2(param2)"
+		} };
+		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestObjectLiteralDeclaration_0.js", 14, 5, expectedProposals, false, false);
+	}
+
+	@Test
+	public void testVarNestedInObjectLiteralField_ExpressionStarted_SameFile() throws Exception {
+		String[][] expectedProposals = new String[][] { {
+			"objNestedVar"
+		} };
+		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestObjectLiteralDeclaration_0.js", 9, 25, expectedProposals, false, false);
 	}
 }

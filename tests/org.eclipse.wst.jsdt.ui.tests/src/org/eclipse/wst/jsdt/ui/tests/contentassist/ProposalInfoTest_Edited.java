@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2012 IBM Corporation and others.
+ * Copyright (c) 2011, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,90 +7,34 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Red Hat, Inc. - refactoring
  *******************************************************************************/
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
-import junit.extensions.TestSetup;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
-public class ProposalInfoTest_Edited extends TestCase {
-	/**
-	 * <p>
-	 * This tests name
-	 * </p>
-	 */
-	private static final String TEST_NAME = "Test Edited JavaScript Content Assist Proposal Info";
-
-	/**
-	 * <p>
-	 * Test project setup for this test.
-	 * </p>
-	 */
+@SuppressWarnings("nls")
+public class ProposalInfoTest_Edited {
 	private static TestProjectSetup fTestProjectSetup;
-	
-	/**
-	 * <p>
-	 * Default constructor
-	 * <p>
-	 * <p>
-	 * Use {@link #suite()}
-	 * </p>
-	 * 
-	 * @see #suite()
-	 */
-	public ProposalInfoTest_Edited() {
-		super(TEST_NAME);
+
+	@Ignore @BeforeClass
+	public static void setup() throws Exception {
+		fTestProjectSetup = new TestProjectSetup("ContentAssist", "root", false);
+		fTestProjectSetup.setUp();
+		editFile_TestProposalInfo_0();
 	}
 
-	/**
-	 * <p>
-	 * Constructor that takes a test name.
-	 * </p>
-	 * <p>
-	 * Use {@link #suite()}
-	 * </p>
-	 * 
-	 * @param name
-	 *            The name this test run should have.
-	 * 
-	 * @see #suite()
-	 */
-	public ProposalInfoTest_Edited(String name) {
-		super(name);
-	}
-
-	/**
-	 * <p>
-	 * Use this method to add these tests to a larger test suite so set up and tear down can be
-	 * performed
-	 * </p>
-	 * 
-	 * @return a {@link TestSetup} that will run all of the tests in this class
-	 *         with set up and tear down.
-	 */
-	public static Test suite() {
-		TestSuite ts = new TestSuite(ProposalInfoTest_Edited.class, TEST_NAME);
-		
-		fTestProjectSetup = new TestProjectSetup(ts, "ContentAssist", "root", false) {
-
-			public void additionalSetUp() throws Exception {
-				editFile_TestProposalInfo_0();
-			}
-		};
-		
-		return fTestProjectSetup;
-	}
-
+	@Ignore @Test
 	public void testProposalInfo_OtherFile_AfterEdit_Expression_NotStarted() throws Exception {
 		String[][] expectedProposals = new String[][] { { "HelloWorld() - Global", "HelloAmerica(State, City) - Global" } };
 		String[][] expectedInfo = new String[][] { { "Hello Earth", "NC" } };
 		ContentAssistTestUtilities.runProposalInfoTest(fTestProjectSetup, "TestProposalInfo_1.js", 0, 0, expectedProposals, expectedInfo);
 	}
 
+	@Ignore @Test
 	public void testProposalInfo_OtherFile_AfterEdit_ExpressionStarted_1() throws Exception {
 		String[][] expectedProposals = new String[][] { { "HelloWorld() - Global",
 				"HelloAmerica(State, City)  - Global" } };
@@ -98,24 +42,28 @@ public class ProposalInfoTest_Edited extends TestCase {
 		ContentAssistTestUtilities.runProposalInfoTest(fTestProjectSetup, "TestProposalInfo_1.js", 2, 3, expectedProposals, expectedInfo);
 	}
 
+	@Ignore @Test
 	public void _testProposalInfo_OtherFile_AfterEdit_ExpressionStarted_2() throws Exception {
 		String[][] expectedProposals = new String[][] { { "nodeOne : String - Global" } };
 		String[][] expectedInfo = new String[][] { { "nodeOne = Edit" } };
 		ContentAssistTestUtilities.runProposalInfoTest(fTestProjectSetup, "TestProposalInfo_1.js", 4, 3, expectedProposals, expectedInfo);
 	}
 
+	@Ignore @Test
 	public void testProposalInfo_ThisFile_AfterEdit_NotStarted() throws Exception {
 		String[][] expectedProposals = new String[][] { { "HelloWorld() - Global", "HelloAmerica(State, City) - Global" } };
 		String[][] expectedInfo = new String[][] { { "Hello Earth", "NC" } };
 		ContentAssistTestUtilities.runProposalInfoTest(fTestProjectSetup, "TestProposalInfo_0.js", 0, 0, expectedProposals, expectedInfo);
 	}
 
+	@Ignore @Test
 	public void testProposalInfo_ThisFile_AfterEdit_ExpressionStarted_1() throws Exception {
 		String[][] expectedProposals = new String[][] { { "HelloWorld() - Global", "HelloAmerica(State, City) - Global" } };
 		String[][] expectedInfo = new String[][] { { "Hello Earth", "NC" } };
 		ContentAssistTestUtilities.runProposalInfoTest(fTestProjectSetup, "TestProposalInfo_0.js", 15, 3, expectedProposals, expectedInfo);
 	}
 
+	@Ignore @Test
 	public void _testProposalInfo_ThisFile_AfterEdit_ExpressionStarted_2() throws Exception {
 		String[][] expectedProposals = new String[][] { { "nodeOne : String - Global" } };
 		String[][] expectedInfo = new String[][] { { "nodeOne = Edit" } };
@@ -129,7 +77,7 @@ public class ProposalInfoTest_Edited extends TestCase {
 	 * State -> NC
 	 * City -> Wake
 	 * nodeOne = test -> nodeOne = Edit
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private static void editFile_TestProposalInfo_0() throws Exception {

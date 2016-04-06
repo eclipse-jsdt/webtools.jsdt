@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2015 IBM Corporation and others.
+ * Copyright (c) 2011, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Red Hat, Inc. - refactoring
  *******************************************************************************/
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
@@ -16,8 +17,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
-
-import junit.framework.Assert;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
@@ -32,12 +31,13 @@ import org.eclipse.wst.jsdt.internal.ui.text.html.HTML2TextReader;
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
 import org.eclipse.wst.jsdt.ui.text.IJavaScriptPartitions;
 import org.eclipse.wst.jsdt.ui.text.JavaScriptSourceViewerConfiguration;
+import org.junit.Assert;
 
 /**
  * <p>
  * Helpful utilities for running content assist tests.
  * </p>
- * 
+ *
  * @see org.ecliplse.wst.jsdt.ui.tests.contentassist.ContentAssistUtilities
  * @see org.eclipse.wst.jsdt.web.ui.tests.contentassist.ContentAssistUtilities
  */
@@ -48,7 +48,7 @@ public class ContentAssistTestUtilities {
 	 * proposal count at the given line number and line character offset and then compare the number
 	 * of proposals for each invocation (pages) to the expected number of proposals.
 	 * </p>
-	 * 
+	 *
 	 * @param testProject
 	 * @param filePath
 	 * @param lineNum - subtract 1 from what the Eclipse Text Editor shows for line number
@@ -68,7 +68,7 @@ public class ContentAssistTestUtilities {
 	 * proposal count at the given line number and line character offset and then compare the number
 	 * of proposals for each invocation (pages) to the expected number of proposals.
 	 * </p>
-	 * 
+	 *
 	 * @param testProject
 	 * @param filePath
 	 * @param lineNum
@@ -90,14 +90,14 @@ public class ContentAssistTestUtilities {
 				expectedProposals.length);
 		verifyExpectedProposal(pages, expectedProposals, negativeTest, exactMatch, false);
 	}
-	
+
 	/**
 	 * <p>
 	 * Run a proposal test by opening the given file and invoking content assist for each expected
 	 * proposal count at the given line number and line character offset and then compare the number
 	 * of proposals for each invocation (pages) to the expected number of proposals.
 	 * </p>
-	 * 
+	 *
 	 * @param testProject
 	 * @param filePath
 	 * @param lineNum
@@ -113,7 +113,7 @@ public class ContentAssistTestUtilities {
 	 * @param inOrder
 	 *            <code>true</code> if <code>expectedProposals</code> should be found in the order
 	 *            they are given, <code>false</code> if order does not matter
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public static void runProposalTest(TestProjectSetup testProject, String filePath, int lineNum, int lineRelativeCharOffset,
@@ -130,7 +130,7 @@ public class ContentAssistTestUtilities {
 	 * expected proposal count at the given line number and line character offset and then compare
 	 * the proposal Info for each invocation (pages) with its expected Proposal Info .
 	 * </p>
-	 * 
+	 *
 	 * @param testProject
 	 * @param filePath
 	 * @param lineNum
@@ -151,7 +151,7 @@ public class ContentAssistTestUtilities {
 	 * Runs a test for finding whether duplicate proposals are generated when content assist is
 	 * invoked.
 	 * </p>
-	 * 
+	 *
 	 * @param testProject
 	 * @param filePath
 	 * @param lineNum
@@ -168,7 +168,7 @@ public class ContentAssistTestUtilities {
 	 * <p>
 	 * Returns the content assist proposals when invoked at the offset provided.
 	 * </p>
-	 * 
+	 *
 	 * @param fileNum
 	 * @param lineNum
 	 * @param lineRelativeCharOffset
@@ -251,15 +251,15 @@ public class ContentAssistTestUtilities {
 				String expectedProposal = expectedProposals[page][expected];
 				boolean found = false;
 				int suggestion = 0;
-				for( ; suggestion < pages[page].length && !found; ++suggestion) {
+				for( ; (suggestion < pages[page].length) && !found; ++suggestion) {
 					String displayString = pages[page][suggestion].getDisplayString();
 					found = exactMatch ?
 							displayString.equals(expectedProposal) : displayString.indexOf(expectedProposal) != -1;
 				}
-				
+
 				/* error if checking for in order and this expected proposal was
 				 * found at an index lower then the last found proposal */
-				if(inOrder && found && suggestion < lastFoundIndex) {
+				if(inOrder && found && (suggestion < lastFoundIndex)) {
 					error.append("\nProposal was found out of order: " + expectedProposal + " found before " + lastFoundProposal);
 				}
 
@@ -268,27 +268,29 @@ public class ContentAssistTestUtilities {
 				} else if(!found && !negativeTest) {
 					error.append("\n Expected proposal was not found on page " + page + ": '" + expectedProposal + "'");
 				}
-				
+
 				if(found) {
 					lastFoundProposal = expectedProposal;
 					lastFoundIndex = suggestion;
 				}
 			}
 		}
-
+		if (negativeTest) {
+			System.out.println(error.length());
+		}
 		// if errors report them
 		if(error.length() > 0) {
 			StringBuffer expected = new StringBuffer();
-			for(int i = 0; i < expectedProposals.length; i++) {
-				for(int j = 0; j < expectedProposals[i].length; j++) {
-					expected.append(expectedProposals[i][j]);
+			for (String[] expectedProposal : expectedProposals) {
+				for (String element : expectedProposal) {
+					expected.append(element);
 					expected.append('\n');
 				}
 			}
 			StringBuffer actual = new StringBuffer();
-			for(int i = 0; i < pages.length; i++) {
-				for(int j = 0; j < pages[i].length; j++) {
-					actual.append(pages[i][j].getDisplayString());
+			for (ICompletionProposal[] page : pages) {
+				for (ICompletionProposal element : page) {
+					actual.append(element.getDisplayString());
 					actual.append('\n');
 				}
 			}
@@ -297,11 +299,11 @@ public class ContentAssistTestUtilities {
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * Compares the expected proposal Info with the one generated from the JavaDoc
 	 * </p>
-	 * 
+	 *
 	 * @param pages
 	 * @param expectedProposalInfo
 	 */
@@ -315,12 +317,12 @@ public class ContentAssistTestUtilities {
 				String expectedProposal = expectedProposals[page][expected];
 				String expectedProposalInfo = expectedProposalsInfo[page][expected];
 				boolean found = false;
-				for(int suggestion = 0; suggestion < pages[page].length && !found; ++suggestion) {
+				for(int suggestion = 0; (suggestion < pages[page].length) && !found; ++suggestion) {
 					found = pages[page][suggestion].getDisplayString().equals(expectedProposal);
 					if(found) {
 						proposalInfo = pages[page][suggestion].getAdditionalProposalInfo();
 
-						if(proposalInfo == null || proposalInfo.indexOf(expectedProposalInfo) < 0) {
+						if((proposalInfo == null) || (proposalInfo.indexOf(expectedProposalInfo) < 0)) {
 							error.append("\n" + "Required proposal info for " + expectedProposal + " does not exist.");
 						}
 						break;
@@ -334,17 +336,17 @@ public class ContentAssistTestUtilities {
 		// if errors report them
 		if(error.length() > 0) {
 			StringBuffer expected = new StringBuffer();
-			for(int i = 0; i < expectedProposalsInfo.length; i++) {
-				for(int j = 0; j < expectedProposalsInfo[i].length; j++) {
-					expected.append(expectedProposalsInfo[i][j]);
+			for (String[] element : expectedProposalsInfo) {
+				for (String element2 : element) {
+					expected.append(element2);
 					expected.append('\n');
 				}
 			}
 			StringBuffer actual = new StringBuffer();
-			for(int i = 0; i < pages.length; i++) {
-				for(int j = 0; j < pages[i].length; j++) {
+			for (ICompletionProposal[] page : pages) {
+				for (ICompletionProposal element : page) {
 					try {
-						String rawAdditionalProposalInfo = pages[i][j].getAdditionalProposalInfo();
+						String rawAdditionalProposalInfo = element.getAdditionalProposalInfo();
 						if (rawAdditionalProposalInfo != null) {
 							actual.append(new HTML2TextReader(new StringReader(rawAdditionalProposalInfo), null).getString().trim());
 						}
@@ -362,7 +364,7 @@ public class ContentAssistTestUtilities {
 	 * <p>
 	 * Checks for Duplicates and reports an error if found.
 	 * </p>
-	 * 
+	 *
 	 * @param pages
 	 * @param numOfPages
 	 */
@@ -384,25 +386,26 @@ public class ContentAssistTestUtilities {
 
 		set.clear();
 	}
-	
+
 	/**
 	 * Get a proposal and test by inserting computed proposal into the Editor.
 	 */
 	public static void runProposalandInertTest(TestProjectSetup testProject, String filePath, int lineNum, int lineRelativeCharOffset, String expectedResult) throws Exception{
-		
+
+			System.out.println("TEST PROJECT _ > " + testProject);
 			IFile file = testProject.getFile(filePath);
 			JavaEditor editor  = testProject.getEditor(file);
 			IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 			int offset = doc.getLineOffset(lineNum) + lineRelativeCharOffset;
 
 			ICompletionProposal[][] pages = getProposals(editor, offset, 1);
-		
+
 			verifyInsertProposalToEditor(editor, offset, pages, expectedResult);
 	}
-	
+
 	/**
 	 * Verify insert proposal to Editor between parenthesis.
-	 * 
+	 *
 	 * @param editor JavaEditor of Content Assist invoked
 	 * @param offset Location of Content Assist invoked.
 	 * @param pages computed CompletionProposals
@@ -414,21 +417,21 @@ public class ContentAssistTestUtilities {
 		Field fContentAssistant = SourceViewer.class.getDeclaredField("fContentAssistant");
 		fContentAssistant.setAccessible(true);
 		ContentAssistant contentassistant = (ContentAssistant)fContentAssistant.get(viewer);
-		
+
 		Field fProposalPopup = ContentAssistant.class.getDeclaredField("fProposalPopup");
 		fProposalPopup.setAccessible(true);
 		Object objPopup = fProposalPopup.get(contentassistant);
-		
+
 		Class proposalPopupClass = Class.forName("org.eclipse.jface.text.contentassist.CompletionProposalPopup");
 		Method privateInsertProposalMethod = proposalPopupClass.getDeclaredMethod("insertProposal", new Class[]{ICompletionProposal.class,char.class,int.class,int.class});
 		privateInsertProposalMethod.setAccessible(true);
-		
+
 		// Set selected range to properly compute ReplacementLength in AbstractJavaCompletionProposal.
 		viewer.setSelectedRange(offset, 0);
-		
+
 		// Invoke insertProposal of CompletionProposalPopup
 		privateInsertProposalMethod.invoke(objPopup, new Object[]{pages[0][0], Character.valueOf((char) 0), Integer.valueOf(524288), Integer.valueOf(offset)});
-		
+
 		// Get result of inserted proposal in the Editor
 		String strAfterInsert = viewer.getDocument().get();
 
@@ -436,5 +439,5 @@ public class ContentAssistTestUtilities {
 			Assert.fail("\n<ExpectedResult>\n" + expectedResult + "\n<The result after inserting to Editor>\n" + strAfterInsert);
 		}
 	}
-	
+
 }

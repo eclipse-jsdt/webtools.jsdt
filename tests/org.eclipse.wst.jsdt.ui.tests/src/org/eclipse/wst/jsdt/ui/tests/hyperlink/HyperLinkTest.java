@@ -1,91 +1,37 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2012 IBM Corporation and others.
+ * Copyright (c) 2011, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *     Red Hat, Inc. - refactoring
  *******************************************************************************/
 package org.eclipse.wst.jsdt.ui.tests.hyperlink;
 
 import java.util.ArrayList;
 
-import junit.extensions.TestSetup;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
-public class HyperLinkTest extends TestCase {
-	/**
-	 * <p>
-	 * This tests name
-	 * </p>
-	 */
-	private static final String TEST_NAME = "Test Other JavaScript Content Assist";
 
-	/**
-	 * <p>
-	 * Test project setup for this test.
-	 * </p>
-	 */
+@SuppressWarnings("nls")
+public class HyperLinkTest {
 	private static TestProjectSetup fTestProjectSetup;
-	
-	/**
-	 * <p>
-	 * Default constructor
-	 * <p>
-	 * <p>
-	 * Use {@link #suite()}
-	 * </p>
-	 * 
-	 * @see #suite()
-	 */
-	public HyperLinkTest() {
-		super(TEST_NAME);
+
+	@BeforeClass
+	public static void setup() throws Exception {
+		fTestProjectSetup = new TestProjectSetup("ContentAssist", "root", false);
+		fTestProjectSetup.setUp();
 	}
 
-	/**
-	 * <p>
-	 * Constructor that takes a test name.
-	 * </p>
-	 * <p>
-	 * Use {@link #suite()}
-	 * </p>
-	 * 
-	 * @param name
-	 *            The name this test run should have.
-	 * 
-	 * @see #suite()
-	 */
-	public HyperLinkTest(String name) {
-		super(name);
-	}
-
-	/**
-	 * <p>
-	 * Use this method to add these tests to a larger test suite so set up and tear down can be
-	 * performed
-	 * </p>
-	 * 
-	 * @return a {@link TestSetup} that will run all of the tests in this class
-	 *         with set up and tear down.
-	 */
-	public static Test suite() {
-		TestSuite ts = new TestSuite(HyperLinkTest.class, TEST_NAME);
-
-		fTestProjectSetup = new TestProjectSetup(ts, "ContentAssist", "root", false);
-		
-		return fTestProjectSetup;
-	}
-
+	@Ignore @Test
 	public void testHyperlink_0() throws Exception {
-
-		ArrayList expectedFiles = new ArrayList();
+		ArrayList<String> expectedFiles = new ArrayList<String>();
 		expectedFiles.add("HyperLink_0.js");
 		HyperLinkTestUtilities.checkHyperlink(fTestProjectSetup, 1, 15, "HyperLink_1.js", expectedFiles);
 	}
