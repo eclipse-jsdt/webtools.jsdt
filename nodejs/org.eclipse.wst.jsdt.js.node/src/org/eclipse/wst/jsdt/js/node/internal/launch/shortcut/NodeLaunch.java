@@ -12,6 +12,7 @@ package org.eclipse.wst.jsdt.js.node.internal.launch.shortcut;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -117,6 +118,13 @@ public class NodeLaunch implements ILaunchShortcut{
 			}
 			if(configFile != null) {
 				path = ResourcesPlugin.getWorkspace().getRoot().findMember(configFile.getFullPath()).getLocation().toOSString();
+			} else {
+				IProject project = file.getProject();
+				// need to reuse the launch for the project if it has been already generated
+				ILaunchConfiguration launch = LaunchConfigurationUtil.getLaunchByName(project.getName(), type);
+				if (launch != null) {
+					return launch;
+				}
 			}
 		}
     	else if (file.getType() == IResource.FILE){

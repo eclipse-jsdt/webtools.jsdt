@@ -85,6 +85,26 @@ public class LaunchConfigurationUtil {
 		return null;
 	}
 	
+	/**
+	 * Get an existing Node.js launch configuration of a given name if exists.
+	 * 
+	 * @return the existing Node.js launch configuration of the given name, null otherwise.
+	 */
+	public static ILaunchConfiguration getLaunchByName(String name, ILaunchConfigurationType type) {
+		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+		try {
+			ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations(type);
+			for (ILaunchConfiguration config : configurations) {
+				if (config.getName().equals(name)) {
+					return config;
+				}
+			}
+		} catch (CoreException e) {
+			return null;
+		}
+		return null;
+	}
+	
 	private static IPath getIPathFromLaunchConfig(ILaunchConfiguration config, String attributeName) {
 		IPath configPath = null;
 		try {
