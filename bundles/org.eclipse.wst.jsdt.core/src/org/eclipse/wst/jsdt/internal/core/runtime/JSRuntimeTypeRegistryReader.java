@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeType;
 import org.eclipse.wst.jsdt.internal.core.Logger;
+import org.eclipse.wst.jsdt.internal.core.util.Util;
 
 /**
  * Reads the <code>org.eclipse.wst.jsdt.core.JSRuntimeType</code>
@@ -33,7 +34,7 @@ public class JSRuntimeTypeRegistryReader {
 	private final static String EXTENSION_NAME = "org.eclipse.wst.jsdt.core.JSRuntimeType"; //$NON-NLS-1$
 	private final static String RUNTIME_TYPE = "runtimeType"; //$NON-NLS-1$
 	private final static String RUNTIME_TYPE_ID_ATTR = "id"; //$NON-NLS-1$
-	private final static String RUNTIME_TYPE_NAME = "name"; //$NON-NLS-1$
+	private final static String RUNTIME_TYPE_CLASS_ATTR = "class"; //$NON-NLS-1$
 	
 	private static Map <String, IJSRuntimeType> runtimeTypesMap = null;
 	
@@ -52,7 +53,6 @@ public class JSRuntimeTypeRegistryReader {
 					if (typeConfigElements.getAttribute(RUNTIME_TYPE_ID_ATTR) != null) {
 						// Id is required, while name is just optional
 						String id = typeConfigElements.getAttribute(RUNTIME_TYPE_ID_ATTR);
-						String name = typeConfigElements.getAttribute(RUNTIME_TYPE_NAME);
 						
 						// There is a possibility that the runtime type is actually duplicated
 						// and might be overriden by this implementation, but since currently
@@ -62,7 +62,14 @@ public class JSRuntimeTypeRegistryReader {
 						if (runtimeTypesMap.containsKey(id)) {
 							Logger.log(Logger.WARNING, "Duplicated runtime type with id = " + id); //$NON-NLS-1$	
 						}
-						runtimeTypesMap.put(id, new JSRuntimeType(id, name));
+						
+						try {
+							IJSRuntimeType runtimeType = 
+										(IJSRuntimeType) typeConfigElements.createExecutableExtension(RUNTIME_TYPE_CLASS_ATTR);
+							runtimeTypesMap.put(id, runtimeType);
+						} catch (Exception e) {
+							Util.log(e, "Error instantiating class " + typeConfigElements.getAttribute(RUNTIME_TYPE_CLASS_ATTR)); //$NON-NLS-1$
+						}
 					}
 				} else {
 					Logger.log(Logger.WARNING, "Unexpected tag " + typeConfigElements.getName() +  //$NON-NLS-1$

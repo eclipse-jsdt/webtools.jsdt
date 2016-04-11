@@ -25,6 +25,16 @@ public class RuntimeMessages extends NLS {
 	public static String JSRunnerConfiguration_NullFile_Error;
 	public static String JSRunnerConfiguration_NullRuntimeArgs_Error;
 	public static String JSRunnerConfiguration_NullProgramArgs_Error;
+	
+	public static String JSRuntimeDefinitionsContainer_WrongXMLFormat_Error;
+	
+	public static String AbstractJSRuntimeInstall_MissingId_Error;
+	public static String AbstractJSRuntimeInstall_MissingType_Error;
+	public static String AbstractJSRuntimeInstall_MissingName_Error;
+	
+	public static String AbstractJSRuntimeType_DuplicateRuntimeInstall_Error;
+	public static String AbstractJSRuntimeType_NullPath_Error;
+	public static String AbstractJSRuntimeType_UnexistingInstallLocation_Error;
 
 	static {
 		// load message values from bundle file

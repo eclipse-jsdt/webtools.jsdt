@@ -67,11 +67,11 @@
         point="org.eclipse.wst.jsdt.core.JSRuntimeType">
      <runtimeType
            id="js.runtime.test.type"
-           name="jsruntimetesttype">
+           class="org.eclipse.wst.jsdt.core.tests.internal.runtime.TestRuntimeType1">
      </runtimeType>
      <runtimeType
            id="js.runtime.test.type.2"
-           name="jsruntimetesttype2">
+           class="org.eclipse.wst.jsdt.core.tests.internal.runtime.TestRuntimeType2">
      </runtimeType>
   </extension>
   <extension

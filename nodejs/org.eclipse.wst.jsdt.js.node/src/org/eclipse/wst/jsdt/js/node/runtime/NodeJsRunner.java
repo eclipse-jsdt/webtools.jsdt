@@ -19,17 +19,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.wst.jsdt.core.runtime.IBaseJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRunner;
+import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.JSRunnerConfiguration;
 
 /**
  * @author "Adalberto Lopez Venegas (adalbert)"
  */
 public class NodeJsRunner implements IJSRunner {
-	private IBaseJSRuntimeInstall jsRuntimeInstall;
+	private IJSRuntimeInstall jsRuntimeInstall;
 	
-	public NodeJsRunner(IBaseJSRuntimeInstall jsRuntimeInstall) {
+	public NodeJsRunner(IJSRuntimeInstall jsRuntimeInstall) {
 		this.jsRuntimeInstall = jsRuntimeInstall;
 	}
 
@@ -75,7 +75,7 @@ public class NodeJsRunner implements IJSRunner {
 		return null;
 	}
 	
-	protected String[] combineRuntimeArgs(JSRunnerConfiguration configuration, IBaseJSRuntimeInstall jsRuntimeInstall2) {
+	protected String[] combineRuntimeArgs(JSRunnerConfiguration configuration, IJSRuntimeInstall jsRuntimeInstall2) {
 		String[] launchVMArgs= configuration.getJSRuntimeArguments();
 		String[] vmVMArgs = jsRuntimeInstall2.getJSRuntimeArguments();
 		if (vmVMArgs == null || vmVMArgs.length == 0) {

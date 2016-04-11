@@ -12,20 +12,20 @@ package org.eclipse.wst.jsdt.js.node.runtime;
 
 import java.io.File;
 
-import org.eclipse.wst.jsdt.core.runtime.IBaseJSRuntimeInstall;
+import org.eclipse.wst.jsdt.core.runtime.AbstractJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRunner;
+import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeType;
 
 /**
  * @author "Adalberto Lopez Venegas (adalbert)"
  */
-public class NodeJsInstall implements IBaseJSRuntimeInstall{
+public class NodeJsInstall extends AbstractJSRuntimeInstall{
+
+	public NodeJsInstall(IJSRuntimeType runtimeType, String id) {
+		super(runtimeType, id);
+	}
 
 	private IJSRunner runner;
-
-	@Override
-	public String getId() {
-		return "nodejsGlobal";
-	}
 
 	@Override
 	public IJSRunner getJSRunner(String mode) {
@@ -36,33 +36,10 @@ public class NodeJsInstall implements IBaseJSRuntimeInstall{
 	}
 
 	@Override
-	public String getName() {
-		return null;
-	}
-
-	@Override
-	public void setName(String name) {
-		
-	}
-
-	@Override
 	public File getInstallLocation() {
-		return new File ("node");
+		if (fInstallLocation == null) {
+			return new File ("node");
+		}
+		return super.getInstallLocation();
 	}
-
-	@Override
-	public void setInstallLocation(File installLocation) {
-		
-	}
-
-	@Override
-	public String[] getJSRuntimeArguments() {
-		return null;
-	}
-
-	@Override
-	public void setJSRuntimeArguments(String runtimeArgs) {
-		
-	}
-
 }

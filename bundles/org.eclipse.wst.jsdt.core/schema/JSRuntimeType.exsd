@@ -58,13 +58,13 @@ Giving a valid runtime type using this extension point will enable the org.eclip
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="name" type="string">
+         <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The class that implements this JavaScript Runtime type.  The class must extend AbstractJSRuntimeType.
                </documentation>
                <appInfo>
-                  <meta.attribute translatable="true"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.wst.jsdt.core.runtime.AbstractJSRuntimeType:"/>
                </appInfo>
             </annotation>
          </attribute>

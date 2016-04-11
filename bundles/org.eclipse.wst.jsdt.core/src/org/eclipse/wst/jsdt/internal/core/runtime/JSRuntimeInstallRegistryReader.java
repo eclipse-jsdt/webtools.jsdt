@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.wst.jsdt.core.runtime.IBaseJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstallProvider;
 import org.eclipse.wst.jsdt.internal.core.Logger;
@@ -26,7 +25,7 @@ import org.eclipse.wst.jsdt.internal.core.util.Util;
 
 /**
  * Reads the <code>org.eclipse.wst.jsdt.core.JSRuntimeInstallProvider</code>
- * contributors, and get all <code>IBaseJSRuntimeInstall</code> out of them.
+ * contributors, and get all <code>IJSRuntimeInstall</code> out of them.
  *
  */
 public class JSRuntimeInstallRegistryReader {
@@ -74,13 +73,7 @@ public class JSRuntimeInstallRegistryReader {
 						}
 						
 						if (provider != null) {
-							// Provider will return a list of IBaseJSRuntimeInstall, but it is our 
-							// responsibility to build valid managed runtime install from there.
-							Collection <IBaseJSRuntimeInstall> contributions = 
-										provider.getJSRuntimeInstallContributions ();
-							for (IBaseJSRuntimeInstall contribution : contributions) {
-								runtimeInstalls.add(new JSRuntimeInstall(contribution, runtimeTypeId));
-							}
+							runtimeInstalls.addAll(provider.getJSRuntimeInstallContributions (JSRuntimeTypeRegistryReader.getJSRuntimeType(runtimeTypeId)));
 						}
 					}
 				} else {

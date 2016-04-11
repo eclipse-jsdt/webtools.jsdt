@@ -26,9 +26,14 @@ public interface IJSRuntimeInstallProvider {
 	 * Return a collection of runtime install contributions for
 	 * the runtime type provided by this contributor.
 	 * 
+	 * NOTE: All runtime installs MUST be created using a call to
+	 * the received runtimeType#createRuntimeInstall(String)
+	 * and never instantiating a runtime type itself.
+	 * @param runtimeType 
+	 * 
 	 * @return a collection of {@link IBaseJSRuntimeInstall} which represent
-	 * valid installations of runtimes.
+	 * valid runtime installations of the given runtime type.
 	 */
-	Collection<IBaseJSRuntimeInstall> getJSRuntimeInstallContributions();
+	Collection<IJSRuntimeInstall> getJSRuntimeInstallContributions(IJSRuntimeType runtimeType);
 
 }

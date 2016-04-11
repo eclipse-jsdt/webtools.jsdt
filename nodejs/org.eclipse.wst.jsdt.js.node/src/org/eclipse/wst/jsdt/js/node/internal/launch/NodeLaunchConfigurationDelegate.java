@@ -27,12 +27,13 @@ import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.wst.jsdt.core.runtime.IBaseJSRuntimeInstall;
+import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRunner;
 import org.eclipse.wst.jsdt.core.runtime.JSRunnerConfiguration;
 import org.eclipse.wst.jsdt.core.runtime.JSRuntimeManager;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
 import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
+import org.eclipse.wst.jsdt.js.node.runtime.NodeJsRuntimeType;
 import org.eclipse.wst.jsdt.launching.ExecutionArguments;
 
 /**
@@ -151,7 +152,7 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
     }
 
 	public IJSRunner getJSRunner(ILaunchConfiguration configuration, String mode) throws CoreException {
-		IBaseJSRuntimeInstall runtimeInstall = verifyJSRuntimeInstall(configuration);
+		IJSRuntimeInstall runtimeInstall = verifyJSRuntimeInstall(configuration);
 		IJSRunner runner = runtimeInstall.getJSRunner(mode);
 		if (runner == null) {
 			return null;
@@ -159,13 +160,13 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		return runner;
 	}
 
-	public IBaseJSRuntimeInstall verifyJSRuntimeInstall(ILaunchConfiguration configuration) throws CoreException {
+	public IJSRuntimeInstall verifyJSRuntimeInstall(ILaunchConfiguration configuration) throws CoreException {
 		return getJSRuntimeInstall(configuration);
 	}
 
-	public IBaseJSRuntimeInstall getJSRuntimeInstall(ILaunchConfiguration configuration) throws CoreException {
-		String jsRuntimeInstallId = "nodejsGlobal"; //$NON-NLS-1$
-		return JSRuntimeManager.getDefault().getJSRuntimeInstall(jsRuntimeInstallId);
+	public IJSRuntimeInstall getJSRuntimeInstall(ILaunchConfiguration configuration) throws CoreException {
+		// As for now, always run using the default runtime install for Node.js 
+		return JSRuntimeManager.getDefaultRuntimeInstall(NodeJsRuntimeType.NODE_JS_RUNTIME_TYPE_ID);
 	}
 
 	public File verifyWorkingDirectory(ILaunchConfiguration configuration)

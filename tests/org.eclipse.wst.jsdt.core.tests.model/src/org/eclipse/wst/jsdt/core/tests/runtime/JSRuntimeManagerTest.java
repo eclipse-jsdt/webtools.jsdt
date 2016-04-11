@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.wst.jsdt.core.runtime.IBaseJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.JSRuntimeManager;
-import org.eclipse.wst.jsdt.core.tests.internal.runtime.AbstractTestJSRuntimeInstall;
+import org.eclipse.wst.jsdt.core.runtime.JSRuntimeWorkingCopy;
 import org.eclipse.wst.jsdt.core.tests.internal.runtime.TestJSRuntimeProvider1;
+import org.eclipse.wst.jsdt.core.tests.internal.runtime.TestRuntimeType1;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -38,16 +38,12 @@ public class JSRuntimeManagerTest {
 	
 	@Before
 	public void clearManager () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		manager.reset();
+		JSRuntimeManager.reset();
 	}
 	
-	private IBaseJSRuntimeInstall createFakeRuntime () {
-		IBaseJSRuntimeInstall runtimeInstall = new AbstractTestJSRuntimeInstall() {			
-			public String getId() {
-				return FAKE_RUNTIME_ID;
-			}
-		};
+	private IJSRuntimeInstall createFakeRuntime () {
+		TestRuntimeType1 rt1 = new TestRuntimeType1();
+		JSRuntimeWorkingCopy runtimeInstall = new JSRuntimeWorkingCopy(rt1, FAKE_RUNTIME_ID);
 		runtimeInstall.setName(FAKE_RUNTIME_NAME);
 		runtimeInstall.setInstallLocation(new File (FAKE_RUNTIME_LOCATION));
 		runtimeInstall.setJSRuntimeArguments(FAKE_RUNTIME_ARGS);
@@ -60,27 +56,25 @@ public class JSRuntimeManagerTest {
 		// Initial test, confirm the readings give you the default 
 		// content which should be provided by the test ext-point
 		
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		IJSRuntimeInstall jsri1 = manager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
+		IJSRuntimeInstall jsri1 = JSRuntimeManager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
 		Assert.assertNotNull(jsri1);
 		Assert.assertEquals(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1, jsri1.getId());
 		
-		IJSRuntimeInstall jsri2 = manager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_2);
+		IJSRuntimeInstall jsri2 = JSRuntimeManager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_2);
 		Assert.assertNotNull(jsri2);
 		Assert.assertEquals(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_2, jsri2.getId());
 		
-		IJSRuntimeInstall[] storedRuntimes = manager.getJSRuntimeInstallsByType(RUNTIME_TEST_TYPE_ID);
+		IJSRuntimeInstall[] storedRuntimes = JSRuntimeManager.getJSRuntimeInstallsByType(RUNTIME_TEST_TYPE_ID);
 		Assert.assertArrayEquals(new IJSRuntimeInstall[]{ jsri1, jsri2 }, storedRuntimes);
 	}
 	
 	@Test
-	public void test_02_managerValidAdd () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();	
-		IBaseJSRuntimeInstall runtimeInstall = createFakeRuntime ();
+	public void test_02_managerValidAdd () {	
+		IJSRuntimeInstall runtimeInstall = createFakeRuntime ();
 		
-		manager.addJSRuntimeInstall(runtimeInstall, RUNTIME_TEST_TYPE_ID);
+		JSRuntimeManager.addJSRuntimeInstall(runtimeInstall);
 		
-		IJSRuntimeInstall storedRuntime = manager.getJSRuntimeInstall(FAKE_RUNTIME_ID);
+		IJSRuntimeInstall storedRuntime = JSRuntimeManager.getJSRuntimeInstall(FAKE_RUNTIME_ID);
 		Assert.assertNotNull("Manager must return a valid runtime for this ID.", runtimeInstall); //$NON-NLS-1$
 		
 		Assert.assertEquals(FAKE_RUNTIME_ID, storedRuntime.getId());
@@ -91,57 +85,46 @@ public class JSRuntimeManagerTest {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void test_03_managerInvalidAdd_UnregisteredRuntimeType () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();	
-		IBaseJSRuntimeInstall runtimeInstall = createFakeRuntime ();
-		manager.addJSRuntimeInstall(runtimeInstall, UNREGISTERED_RUNTIME_TYPE);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void test_04_managerInvalidAdd_DuplicateRuntime () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		IBaseJSRuntimeInstall runtimeInstall = createFakeRuntime ();
+	public void test_03_managerInvalidAdd_DuplicateRuntime () {
+		IJSRuntimeInstall runtimeInstall = createFakeRuntime ();
 		// First addition should work flawlessly while second must fail
-		manager.addJSRuntimeInstall(runtimeInstall, RUNTIME_TEST_TYPE_ID);
-		manager.addJSRuntimeInstall(runtimeInstall, RUNTIME_TEST_TYPE_ID);
+		JSRuntimeManager.addJSRuntimeInstall(runtimeInstall);
+		JSRuntimeManager.addJSRuntimeInstall(runtimeInstall);
 	}
 	
 	@Test
-	public void test_05_managerClear () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		
-		IJSRuntimeInstall runtimeInstall = manager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
+	public void test_04_managerClear () {
+		IJSRuntimeInstall runtimeInstall = JSRuntimeManager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
 		Assert.assertNotNull("Runtime install must be present in JSRuntimeManager.", runtimeInstall); //$NON-NLS-1$
 		
-		runtimeInstall = manager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_2);
+		runtimeInstall = JSRuntimeManager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_2);
 		Assert.assertNotNull("Runtime install must be present in JSRuntimeManager.", runtimeInstall); //$NON-NLS-1$
 		
-		manager.clear();
+		JSRuntimeManager.clear();
 		
-		runtimeInstall = manager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
+		runtimeInstall = JSRuntimeManager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
 		Assert.assertNull("Manager must have no runtime ids.", runtimeInstall); //$NON-NLS-1$
 		
-		runtimeInstall = manager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_2);
+		runtimeInstall = JSRuntimeManager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_2);
 		Assert.assertNull("Manager must have no runtime ids.", runtimeInstall); //$NON-NLS-1$
 	}
 	
 	@Test
-	public void test_06_managerUpdate () {
+	public void test_05_managerUpdate () {
 		String updatedPrefix = "UPDATED"; //$NON-NLS-1$
 		String updatedArgs = updatedPrefix + "arg1 " + updatedPrefix + "arg 2"; //$NON-NLS-1$ //$NON-NLS-2$
 		
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		IBaseJSRuntimeInstall install = createFakeRuntime ();
-		manager.addJSRuntimeInstall(install, RUNTIME_TEST_TYPE_ID);
+		IJSRuntimeInstall install = createFakeRuntime ();
+		JSRuntimeManager.addJSRuntimeInstall(install);
 		
 		install.setName(updatedPrefix + FAKE_RUNTIME_NAME);
 		install.setInstallLocation(new File (updatedPrefix + FAKE_RUNTIME_LOCATION));
 		install.setJSRuntimeArguments(updatedArgs);
 		
 		// So far so good, now try to update the manager
-		manager.updateJSRuntimeInstall(install);
+		JSRuntimeManager.updateJSRuntimeInstall(install);
 		
-		IJSRuntimeInstall updatedRuntime = manager.getJSRuntimeInstall(FAKE_RUNTIME_ID);
+		IJSRuntimeInstall updatedRuntime = JSRuntimeManager.getJSRuntimeInstall(FAKE_RUNTIME_ID);
 		
 		Assert.assertEquals(FAKE_RUNTIME_ID, updatedRuntime.getId());
 		Assert.assertEquals(updatedPrefix + FAKE_RUNTIME_NAME, updatedRuntime.getName());
@@ -152,41 +135,36 @@ public class JSRuntimeManagerTest {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void test_07_managerInvalidUpdate () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		IBaseJSRuntimeInstall install = createFakeRuntime ();
+	public void test_06_managerInvalidUpdate () {
+		IJSRuntimeInstall install = createFakeRuntime ();
 	
 		// Updating a runtime install that was not previously added
 		// must throw an exception.
-		manager.updateJSRuntimeInstall(install);
+		JSRuntimeManager.updateJSRuntimeInstall(install);
 	}
 	
 	@Test
-	public void test_08_managerRemove () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		IJSRuntimeInstall runtimeInstall = manager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
+	public void test_07_managerRemove () {
+		IJSRuntimeInstall runtimeInstall = JSRuntimeManager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
 		Assert.assertNotNull("JS Runtime Install missing.", runtimeInstall); //$NON-NLS-1$
 		
-		manager.removeJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
+		JSRuntimeManager.removeJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
 		
-		runtimeInstall = manager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
+		runtimeInstall = JSRuntimeManager.getJSRuntimeInstall(TestJSRuntimeProvider1.FAKE_RUNTIME_ID_1);
 		Assert.assertNull("JS Runtime unsuccessfully removed.", runtimeInstall); //$NON-NLS-1$
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void test_09_managerInvalidRemove () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		
-		manager.removeJSRuntimeInstall(FAKE_RUNTIME_ID);
+	public void test_08_managerInvalidRemove () {
+		JSRuntimeManager.removeJSRuntimeInstall(FAKE_RUNTIME_ID);
 	}
 	
 	@Test
-	public void test_10_obtainRuntimeInstallsByType () {
-		JSRuntimeManager manager = JSRuntimeManager.getDefault();
-		IBaseJSRuntimeInstall install = createFakeRuntime ();
-		manager.addJSRuntimeInstall(install, RUNTIME_TEST_TYPE_ID);
+	public void test_09_obtainRuntimeInstallsByType () {
+		IJSRuntimeInstall install = createFakeRuntime ();
+		JSRuntimeManager.addJSRuntimeInstall(install);
 		
-		IJSRuntimeInstall[] installs = manager.getJSRuntimeInstallsByType(RUNTIME_TEST_TYPE_ID);
+		IJSRuntimeInstall[] installs = JSRuntimeManager.getJSRuntimeInstallsByType(RUNTIME_TEST_TYPE_ID);
 		
 		Assert.assertEquals("Manager has more installs than expected.", 3, installs.length); //$NON-NLS-1$
 		
@@ -203,7 +181,7 @@ public class JSRuntimeManagerTest {
 		Assert.assertTrue(expectedIds.containsAll(storedIds));
 		Assert.assertTrue(storedIds.containsAll(expectedIds));
 		
-		installs = manager.getJSRuntimeInstallsByType(UNREGISTERED_RUNTIME_TYPE);
+		installs = JSRuntimeManager.getJSRuntimeInstallsByType(UNREGISTERED_RUNTIME_TYPE);
 		Assert.assertEquals("No installs must be found for unknown runtime type.", 0, installs.length); //$NON-NLS-1$
 	}
 }

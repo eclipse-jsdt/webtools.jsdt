@@ -75,7 +75,7 @@
         point="org.eclipse.wst.jsdt.core.JSRuntimeType">
      <runtimeType
            id="org.eclipse.wst.jsdt.js.node.runtimeType"
-           name="Node.js Runtime">
+           class="org.eclipse.wst.jsdt.js.node.runtime.NodeJsRuntimeType">
      </runtimeType>
   </extension>
   <extension

@@ -1279,6 +1279,13 @@
             <keywordReference id="org.eclipse.wst.jsdt.ui.compliance"/>
       </page>
       <page
+            name="%runtimesPrefName"
+            category="org.eclipse.wst.jsdt.ui.preferences.JavaBasePreferencePage"
+            class="org.eclipse.wst.jsdt.internal.ui.preferences.JSRuntimesPreferencePage"
+            id="org.eclipse.wst.jsdt.ui.preferences.JSRuntimesPreferencePage">
+            <keywordReference id="org.eclipse.wst.jsdt.ui.runtimes"/>
+      </page>
+      <page
             name="%problemSeveritiesPrefName"
             category="org.eclipse.wst.jsdt.ui.preferences.CompliancePreferencePage"
             class="org.eclipse.wst.jsdt.internal.ui.preferences.ProblemSeveritiesPreferencePage"
