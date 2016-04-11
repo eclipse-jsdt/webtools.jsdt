@@ -646,7 +646,26 @@ public class ASTParser {
 		   	  throw new IllegalStateException("source not specified"); //$NON-NLS-1$
 		   }
 			if(this.typeRoot instanceof IJavaScriptUnit ){
-				result = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit)this.typeRoot).parse();
+				JavaScriptUnit unit = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit)this.typeRoot).parse();
+				unit.setTypeRoot(typeRoot);
+				result = unit;
+				unit.ast.setOriginalModificationCount(unit.ast.modificationCount());
+				final Scanner scanner = new Scanner(
+						true /*comment*/,
+						false /*whitespace*/,
+						false /*nls*/,
+						AST.JLS3 /*sourceLevel*/,
+						null /*taskTags*/,
+						null/*taskPriorities*/,
+						true/*taskCaseSensitive*/);
+				
+				try {
+					scanner.setSource(typeRoot.getSource().toCharArray());
+				}
+				catch (JavaScriptModelException e) {
+				}
+				unit.initCommentMapper(scanner);
+				
 			}else{
 				result = internalCreateAST(monitor);
 			}
@@ -809,6 +828,14 @@ public class ASTParser {
 					NodeSearcher searcher = null;
 					org.eclipse.wst.jsdt.internal.compiler.env.ICompilationUnit sourceUnit = null;
 					WorkingCopyOwner wcOwner = this.workingCopyOwner;
+					final Scanner scanner = new Scanner(
+								true /*comment*/,
+								false /*whitespace*/,
+								false /*nls*/,
+								AST.JLS3 /*sourceLevel*/,
+								null /*taskTags*/,
+								null/*taskPriorities*/,
+								true/*taskCaseSensitive*/);
 					if (this.typeRoot instanceof IJavaScriptUnit) {
 							/*
 							 * this.compilationUnitSource is an instance of org.eclipse.wst.jsdt.internal.core.CompilationUnit that implements
@@ -823,6 +850,14 @@ public class ASTParser {
 //							sourceUnit = new BasicCompilationUnit(sourceUnit.getContents(), sourceUnit.getPackageName(), new String(sourceUnit.getFileName()), this.project);
 							JavaScriptUnit result = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit) this.typeRoot).parse();
 							result.setTypeRoot(this.typeRoot);
+							result.ast.setOriginalModificationCount(result.ast.modificationCount());
+							try {
+								scanner.setSource(this.typeRoot.getSource().toCharArray());
+							}
+							catch (JavaScriptModelException e) {
+							}
+							result.initCommentMapper(scanner);
+							
 							return result;
 //							wcOwner = ((IJavaScriptUnit) this.typeRoot).getOwner();
 					} else if (this.typeRoot instanceof IClassFile) {
@@ -857,9 +892,12 @@ public class ASTParser {
 					} else {
 						throw new IllegalStateException();
 					}
-					JavaScriptUnit result = EsprimaParser.newParser().setSource(String.valueOf(sourceUnit.getContents())).parse();
-					result.setTypeRoot(this.typeRoot);
-					return result;
+					JavaScriptUnit $ = EsprimaParser.newParser().setSource(String.valueOf(sourceUnit.getContents())).parse();
+					$.setTypeRoot(this.typeRoot);
+					$.ast.setOriginalModificationCount($.ast.modificationCount());
+					scanner.setSource(sourceUnit.getContents());
+					$.initCommentMapper(scanner);
+					return $;
 				} finally {
 					if (compilationUnitDeclaration != null && this.resolveBindings) {
 						compilationUnitDeclaration.cleanUp();

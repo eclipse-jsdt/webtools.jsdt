@@ -1,1 +1,1 @@
-function  main(args) { int x= 3;}
+function  main(args) { var x= 3;}

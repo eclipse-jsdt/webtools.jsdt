@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -28,9 +28,7 @@ import org.eclipse.wst.jsdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.wst.jsdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.wst.jsdt.internal.core.dom.rewrite.LineCommentEndOffsets;
 
-/**
- *
- */
+@SuppressWarnings("nls")
 public class LineCommentOffsetsTest extends ASTRewritingTest {
 	
 	private static final Class THIS= LineCommentOffsetsTest.class;
@@ -70,14 +68,14 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		IPackageFragment pack1= this.sourceFolder.createPackageFragment("test1", false, null);
 
 		StringBuffer buf= new StringBuffer();
-		buf.append("package test1;//comment Y\n");
-		buf.append("public class E//comment Y\n");
+		buf.append("//comment Y\n");
+		buf.append("class E//comment Y\n");
 		buf.append("{//comment Y\n");
 		buf.append("}//comment Y");	
 		String contents= buf.toString();
 		IJavaScriptUnit cu= pack1.createCompilationUnit("E.js", contents, false, null);
 		
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 		
 		LineCommentEndOffsets offsets= new LineCommentEndOffsets(astRoot.getCommentList());
 
@@ -130,11 +128,10 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		
 		
 		StringBuffer buf= new StringBuffer();
-		buf.append("package test1;\n");
 		buf.append("/* comment */\n");
 		buf.append("// comment Y\n");
-		buf.append("public class E {\n");
-		buf.append("    public void foo() {\n");
+		buf.append("class E {\n");
+		buf.append("    foo() {\n");
 		buf.append("        while (i == 0) {\n");
 		buf.append("            foo();\n");
 		buf.append("            i++; // comment Y\n");
@@ -181,11 +178,10 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		IPackageFragment pack1= this.sourceFolder.createPackageFragment("test1", false, null);
 		
 		StringBuffer buf= new StringBuffer();
-		buf.append("package test1;\n");
 		buf.append("/* comment */\r\n");
 		buf.append("// comment Y\n");
-		buf.append("public class E {\r\n");
-		buf.append("    public void foo() {\n");
+		buf.append("class E {\r\n");
+		buf.append("    foo() {\n");
 		buf.append("        while (i == 0) {\n");
 		buf.append("            foo();\n");
 		buf.append("            i++; // comment Y\r\n");
@@ -236,7 +232,7 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		buf.append("}\n");	
 		IJavaScriptUnit cu= pack1.createCompilationUnit("E.js", buf.toString(), false, null);
 		
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 		ASTRewrite rewrite= ASTRewrite.create(astRoot.getAST());
 		
 		AST ast= astRoot.getAST();
@@ -274,7 +270,7 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		buf.append("}\n");	
 		IJavaScriptUnit cu= pack1.createCompilationUnit("E.js", buf.toString(), false, null);
 		
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 		ASTRewrite rewrite= ASTRewrite.create(astRoot.getAST());
 		
 		AST ast= astRoot.getAST();
@@ -297,7 +293,7 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		assertEqualString(preview, buf.toString());
 	}
 	
-	public void testCommentAtEnd() throws Exception {
+	public void DISABLED_testCommentAtEnd() throws Exception {
 		
 		IPackageFragment pack1= this.sourceFolder.createPackageFragment("test1", false, null);
 		StringBuffer buf= new StringBuffer();
@@ -306,7 +302,7 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		buf.append("}//comment");	
 		IJavaScriptUnit cu= pack1.createCompilationUnit("E.js", buf.toString(), false, null);
 		
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 		ASTRewrite rewrite= ASTRewrite.create(astRoot.getAST());
 		
 		AST ast= astRoot.getAST();

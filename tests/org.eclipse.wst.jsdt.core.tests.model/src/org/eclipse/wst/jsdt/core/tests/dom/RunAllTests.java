@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,7 @@ import java.lang.reflect.*;
 
 import org.eclipse.wst.jsdt.core.tests.junit.extension.TestCase;
 
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -23,11 +24,7 @@ public RunAllTests(String name) {
 }
 public static Class[] getAllTestClasses() {
 	return new Class[] {
-		org.eclipse.wst.jsdt.core.tests.dom.RunConverterTests.class,
-		org.eclipse.wst.jsdt.core.tests.dom.ASTTest.class,
-		org.eclipse.wst.jsdt.core.tests.dom.ASTVisitorTest.class,
-		org.eclipse.wst.jsdt.core.tests.dom.ASTMatcherTest.class,
-		org.eclipse.wst.jsdt.core.tests.dom.ASTParserTest.class,
+		RunConverterTests.class,
 		org.eclipse.wst.jsdt.core.tests.rewrite.describing.ASTRewritingTest.class,
 		org.eclipse.wst.jsdt.core.tests.rewrite.modifying.ASTRewritingModifyingTest.class,
 		org.eclipse.wst.jsdt.core.tests.dom.ASTPositionsTest.class,
@@ -60,6 +57,10 @@ public static Test suite() {
 			e.printStackTrace();
 		}
 	}
+	ts.addTest(new JUnit4TestAdapter(org.eclipse.wst.jsdt.core.tests.dom.ASTParserTest.class));
+	ts.addTest(new JUnit4TestAdapter(org.eclipse.wst.jsdt.core.tests.dom.ASTTest.class));
+	ts.addTest(new JUnit4TestAdapter(org.eclipse.wst.jsdt.core.tests.dom.ASTVisitorTest.class));
+	ts.addTest(new JUnit4TestAdapter(org.eclipse.wst.jsdt.core.tests.dom.ASTMatcherTest.class));
 	return ts;
 }
 }

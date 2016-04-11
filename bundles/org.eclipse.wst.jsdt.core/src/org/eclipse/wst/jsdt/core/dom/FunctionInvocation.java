@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -241,11 +241,9 @@ public class FunctionInvocation extends Expression {
 		if (visitChildren) {
 			// visit children in normal left to right reading order
 			acceptChild(visitor, getExpression());
-			if (this.ast.apiLevel >= AST.JLS3) {
-				acceptChildren(visitor, this.typeArguments);
-			}
 			if (getName()!=null)
 				acceptChild(visitor, getName());
+			acceptChildren(visitor, this.typeArguments);
 			acceptChildren(visitor, this.arguments);
 		}
 		visitor.endVisit(this);

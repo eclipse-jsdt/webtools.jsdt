@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2009 IBM Corporation and others.
+ * Copyright (c) 2004, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,68 +11,38 @@
 
 package org.eclipse.wst.jsdt.core.tests.dom;
 
-import java.lang.reflect.Method;
+import static org.junit.Assert.*;
 import java.util.HashMap;
-
-import junit.framework.Test;
-
 import org.eclipse.wst.jsdt.core.IClassFile;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.dom.AST;
 import org.eclipse.wst.jsdt.core.dom.ASTParser;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class ASTParserTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.TestCase { 
+public class ASTParserTest { 
 
-	/** @deprecated using deprecated code */
-	public static Test suite() {
-		// TODO (frederic) use buildList + setAstLevel(init) instead...
-		junit.framework.TestSuite suite = new junit.framework.TestSuite(ASTParserTest.class.getName());
-		
-		Class c = ASTParserTest.class;
-		Method[] methods = c.getMethods();
-		for (int i = 0, max = methods.length; i < max; i++) {
-			if (methods[i].getName().startsWith("test")) { //$NON-NLS-1$
-				suite.addTest(new ASTParserTest(methods[i].getName(), AST.JLS2));
-				//suite.addTest(new ASTParserTest(methods[i].getName(), AST.JLS3));
-			}
-		}
-		return suite;
-	}	
-	
 	AST ast;
 	ASTParser parser;
 	int API_LEVEL;
 
-	public ASTParserTest(String name, int apiLevel) {
-		super(name);
-		this.API_LEVEL = apiLevel;
+	public ASTParserTest() {
+		this.API_LEVEL = AST.JLS3;
 	}
 	
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setUp() throws Exception {
 		ast = AST.newAST(this.API_LEVEL);
 		parser = ASTParser.newParser(this.API_LEVEL);
 	}
 	
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		ast = null;
-		super.tearDown();
 	}
 	
-	/** @deprecated using deprecated code */
-	public String getName() {
-		String name = super.getName();
-		switch (this.API_LEVEL) {
-			case AST.JLS2:
-				name = "JLS2 - " + name;
-				break;
-			case AST.JLS3:
-				name = "JLS3 - " + name; 
-				break;
-		}
-		return name;
-	}
-	
+	@Test
 	public void testKConstants() {
 		assertTrue(ASTParser.K_EXPRESSION == 1);
 		assertTrue(ASTParser.K_STATEMENTS == 2);
@@ -80,6 +50,7 @@ public class ASTParserTest extends org.eclipse.wst.jsdt.core.tests.junit.extensi
 		assertTrue(ASTParser.K_COMPILATION_UNIT == 8);
 	}
 
+	@Test
 	public void testSetting() {
 		// for now, just slam some values in
 	    parser.setKind(ASTParser.K_COMPILATION_UNIT);

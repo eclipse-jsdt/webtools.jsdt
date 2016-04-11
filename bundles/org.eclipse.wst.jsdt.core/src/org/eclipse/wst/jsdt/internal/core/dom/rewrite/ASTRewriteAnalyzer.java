@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -839,11 +839,12 @@ public final class ASTRewriteAnalyzer extends ASTVisitor {
 			return startPos;
 		}
 		int pos= doVisit((ASTNode) node);
-		try {
-			return getScanner().getTokenEndOffset(ITerminalSymbols.TokenNameDOT, pos);
-		} catch (CoreException e) {
-			handleException(e);
-		}
+// Commented out: Esprima creates a FieldAccess as expression and dot is already part of the node.
+//	try {
+//			return getScanner().getTokenEndOffset(ITerminalSymbols.TokenNameDOT, pos);
+//		} catch (CoreException e) {
+//			handleException(e);
+//		}
 		return pos;
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -44,6 +44,7 @@ import org.eclipse.wst.jsdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.wst.jsdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.wst.jsdt.core.dom.rewrite.ListRewrite;
 
+@SuppressWarnings("nls")
 public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 	
 	private static final Class THIS= ASTRewritingMethodDeclTest.class;
@@ -406,7 +407,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		buf.append("}\n");	
 		IJavaScriptUnit cu= pack1.createCompilationUnit("E.js", buf.toString(), false, null);	
 		
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 		ASTRewrite rewrite= ASTRewrite.create(astRoot.getAST());
 		AST ast= astRoot.getAST();
 		TypeDeclaration type= findTypeDeclaration(astRoot, "E");
@@ -520,7 +521,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		buf.append("}\n");	
 		IJavaScriptUnit cu= pack1.createCompilationUnit("E.js", buf.toString(), false, null);	
 		
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 		ASTRewrite rewrite= ASTRewrite.create(astRoot.getAST());
 		TypeDeclaration type= findTypeDeclaration(astRoot, "E");
 		List list= type.bodyDeclarations();
@@ -1403,7 +1404,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		buf.append("}\n");	
 		IJavaScriptUnit cu= pack1.createCompilationUnit("E.js", buf.toString(), false, null);	
 		
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 		ASTRewrite rewrite= ASTRewrite.create(astRoot.getAST());
 		AST ast= astRoot.getAST();
 		TypeDeclaration type= findTypeDeclaration(astRoot, "E");
@@ -2095,7 +2096,7 @@ public class ASTRewritingMethodDeclTest extends ASTRewritingTest {
 		buf.append("}\n");
 		IJavaScriptUnit cu= pack1.createCompilationUnit("DD.js", buf.toString(), false, null);
 
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 		AST ast= astRoot.getAST();
 		ASTRewrite rewrite= ASTRewrite.create(astRoot.getAST());
 		TypeDeclaration type= findTypeDeclaration(astRoot, "DD");

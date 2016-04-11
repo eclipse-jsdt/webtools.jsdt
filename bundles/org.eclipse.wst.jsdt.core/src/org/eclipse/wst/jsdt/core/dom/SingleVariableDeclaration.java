@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -62,7 +62,8 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 				new ChildPropertyDescriptor(SingleVariableDeclaration.class, "name", SimpleName.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
 	/**
 	 * The "name" structural property of this node type.
-	 *  
+	 * 
+	 *  @since 2.0
 	 */
 	public static final ChildPropertyDescriptor  PATTERN_PROPERTY = 
 				new ChildPropertyDescriptor(SingleVariableDeclaration.class, "pattern", Name.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
@@ -317,6 +318,14 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 				return getInitializer();
 			} else {
 				setInitializer((Expression) child);
+				return null;
+			}
+		}
+		if(property == PATTERN_PROPERTY ){
+			if(get){
+				return this.getPattern();
+			}else{
+				setPattern((Name)child);
 				return null;
 			}
 		}

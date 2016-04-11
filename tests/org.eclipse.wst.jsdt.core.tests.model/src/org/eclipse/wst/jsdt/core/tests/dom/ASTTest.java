@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,11 @@
 
 package org.eclipse.wst.jsdt.core.tests.dom;
 
-import java.lang.reflect.Method;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,8 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import junit.framework.Test;
 
 import org.eclipse.wst.jsdt.core.dom.AST;
 import org.eclipse.wst.jsdt.core.dom.ASTMatcher;
@@ -102,10 +104,14 @@ import org.eclipse.wst.jsdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.WhileStatement;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 // testing
 
-public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.TestCase { 
+public class ASTTest {
 	
 	class CheckPositionsMatcher extends ASTMatcher {
 		
@@ -697,59 +703,30 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		}
 	}
 	
-	/** @deprecated using deprecated code */
-	public static Test suite() {
-		// TODO (frederic) use buildList + setAstLevel(init) instead...
-		junit.framework.TestSuite suite = new junit.framework.TestSuite(ASTTest.class.getName());
-		
-		Class c = ASTTest.class;
-		Method[] methods = c.getMethods();
-		for (int i = 0, max = methods.length; i < max; i++) {
-			if (methods[i].getName().startsWith("test")) { //$NON-NLS-1$
-				suite.addTest(new ASTTest(methods[i].getName(), AST.JLS2));
-				//suite.addTest(new ASTTest(methods[i].getName(), AST.JLS3));
-			}
-		}
-		return suite;
-	}	
 	
 	AST ast;
 	int API_LEVEL;
 	
 	
-	public ASTTest(String name, int apiLevel) {
-		super(name);
-		this.API_LEVEL = apiLevel;
+	public ASTTest() {
+		this.API_LEVEL = AST.JLS3;
 	}
 	
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setUp() throws Exception {
 		ast = AST.newAST(this.API_LEVEL);
 	}
 	
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		ast = null;
-		super.tearDown();
-	}
-	
-	/** @deprecated using deprecated code */
-	public String getName() {
-		String name = super.getName();
-		switch (this.API_LEVEL) {
-			case AST.JLS2:
-				name = "JLS2 - " + name;
-				break;
-			case AST.JLS3:
-				name = "JLS3 - " + name; 
-				break;
-		}
-		return name;
 	}
 	
 	/**
 	 * Snippets that show how to...
 	 * @deprecated using deprecated code
 	 */
+	@Test
 	public void testExampleSnippets() {
 		{
 			AST localAst = AST.newAST(ast.apiLevel());
@@ -1147,8 +1124,10 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	void genericPropertyListTest(ASTNode node, List children, Property prop) {
 		
 		// wipe the slate clean
-		children.clear();
-		assertTrue(children.size() == 0);
+		if(children != null){
+			children.clear();
+			assertTrue(children.size() == 0);
+		}
 		
 		// add a child
 		ASTNode x1 = prop.sample(node.getAST(), false);
@@ -1244,6 +1223,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}
 
 	/** @deprecated using deprecated code */
+	@Test
 	public void testAST() {
 		
 		assertTrue(AST.JLS2 == 2);
@@ -1300,6 +1280,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(ast.modificationCount() > previousCount);
 	}	
 	
+	@Test
 	public void testWellKnownBindings() {
 
 		// well known bindings
@@ -1345,6 +1326,8 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		}
 	}
 	
+	@Test
+	@Ignore("ignored until a correct validation is implemented for SimpleName")
 	public void testSimpleName() {
 		long previousCount = ast.modificationCount();
 		SimpleName x = ast.newSimpleName("foo"); //$NON-NLS-1$
@@ -1453,6 +1436,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 
 	}		
 
+	@Test
 	public void testQualifiedName() {
 		long previousCount = ast.modificationCount();
 		final QualifiedName x = ast.newQualifiedName(
@@ -1519,6 +1503,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 
 	}		
 
+	@Test
 	public void testNameFactories() {
 		long previousCount = ast.modificationCount();
 		Name x = ast.newName("foo"); //$NON-NLS-1$
@@ -1570,6 +1555,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		}
 	}		
 	
+	@Test
 	public void testNullLiteral() {
 		long previousCount = ast.modificationCount();
 		NullLiteral x = ast.newNullLiteral();
@@ -1584,6 +1570,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 
 	}		
 
+	@Test
 	public void testBooleanLiteral() {
 		long previousCount = ast.modificationCount();
 		BooleanLiteral x = ast.newBooleanLiteral(true);
@@ -1608,6 +1595,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(x.booleanValue() == true);
 	}		
 	
+	@Test
 	public void testStringLiteral() {
 		long previousCount = ast.modificationCount();
 		// check 0-arg factory first
@@ -1664,6 +1652,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		}
 	}		
 
+	@Test
 	public void testStringLiteralUnicode() {
 		AST localAst = AST.newAST(ast.apiLevel());
 		StringLiteral literal = localAst.newStringLiteral();
@@ -1707,6 +1696,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(literal.getEscapedValue().equals("\"\\\\u0001\"")); //$NON-NLS-1$
 	}		
 	
+	@Test
 	public void testCharacterLiteral() {
 		long previousCount = ast.modificationCount();
 		CharacterLiteral x = ast.newCharacterLiteral();
@@ -1786,6 +1776,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(x.charValue() == '\\');		
 	}		
 
+	@Test
 	public void testNumberLiteral() {
 		long previousCount = ast.modificationCount();
 		NumberLiteral x = ast.newNumberLiteral("1234"); //$NON-NLS-1$
@@ -1837,6 +1828,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 
 	}		
 
+	@Test
 	public void testSimpleType() {
 		long previousCount = ast.modificationCount();
 		final SimpleType x = ast.newSimpleType(ast.newSimpleName("String")); //$NON-NLS-1$
@@ -1871,6 +1863,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}		
 	
+	@Test
 	public void testPrimitiveType() {
 		long previousCount = ast.modificationCount();
 		PrimitiveType x = ast.newPrimitiveType(PrimitiveType.INT);
@@ -1942,6 +1935,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(PrimitiveType.toCode("not-a-type") == null); //$NON-NLS-1$
 	}		
 	
+	@Test
 	public void testArrayType() {
 		SimpleName x1 = ast.newSimpleName("String"); //$NON-NLS-1$
 		SimpleType x2 = ast.newSimpleType(x1);
@@ -1997,6 +1991,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}		
 	
 	/** @deprecated using deprecated code */
+	@Test
 	public void testQualifiedType() {
 		if (ast.apiLevel() == AST.JLS2) {
 			// node type introduced in 3.0 API
@@ -2073,6 +2068,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}				
 
+	@Test
 	public void testPackageDeclaration() {
 		long previousCount = ast.modificationCount();
 		final PackageDeclaration x = ast.newPackageDeclaration();
@@ -2080,10 +2076,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		previousCount = ast.modificationCount();
 		assertTrue(x.getAST() == ast);
 		assertTrue(x.getParent() == null);
-		if (ast.apiLevel() >= AST.JLS3) {
-			assertTrue(x.getJavadoc() == null);
-			assertTrue(x.annotations().isEmpty());
-		}
+		assertTrue(x.getJavadoc() == null);
 		assertTrue(x.getName().getParent() == x);
 		assertTrue(x.getNodeType() == ASTNode.PACKAGE_DECLARATION);
 		assertTrue(x.structuralPropertiesForType() == PackageDeclaration.propertyDescriptors(ast.apiLevel()));
@@ -2127,6 +2120,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}		
 	
+	@Test
 	public void testImportDeclaration() {
 		long previousCount = ast.modificationCount();
 		final ImportDeclaration x = ast.newImportDeclaration();
@@ -2176,6 +2170,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		}
 	}
 	
+	@Test
 	public void testCompilationUnit() {
 		long previousCount = ast.modificationCount();
 		final JavaScriptUnit x = ast.newJavaScriptUnit();
@@ -2241,6 +2236,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 
 	}		
 	
+	@Test
 	public void testCompilationUnitLineNumberTable() {
 //		TO RUN THIS TEST YOU MUST TEMPORARILY MAKE PUBLIC
 //		THE METHOD JavaScriptUnit.setLineEndTable
@@ -2299,6 +2295,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}		
 	
 	/** @deprecated using deprecated code */
+	@Test
 	public void testTypeDeclaration() {
 		long previousCount = ast.modificationCount();
 		final TypeDeclaration x = ast.newTypeDeclaration();
@@ -2393,20 +2390,6 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 			});
 		}
 		
-		if (ast.apiLevel() >= AST.JLS3) {
-			genericPropertyListTest(x, null,
-			  new Property("SuperInterfaceTypes", true, Type.class) { //$NON-NLS-1$
-				public ASTNode sample(AST targetAst, boolean parented) {
-					SimpleType result = targetAst.newSimpleType(targetAst.newSimpleName("foo")); //$NON-NLS-1$
-					if (parented) {
-						targetAst.newArrayType(result);
-					}
-					return result;
-				}
-			});
-		}
-		
-
 		genericPropertyListTest(x, x.bodyDeclarations(),
 		  new Property("BodyDeclarations", true, BodyDeclaration.class) { //$NON-NLS-1$
 			public ASTNode sample(AST targetAst, boolean parented) {
@@ -2475,6 +2458,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}	
 	
 	/** @deprecated using deprecated code */
+	@Test
 	public void testSingleVariableDeclaration() {
 		long previousCount = ast.modificationCount();
 		final SingleVariableDeclaration x = ast.newSingleVariableDeclaration();
@@ -2596,6 +2580,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 	
+	@Test
 	public void testVariableDeclarationFragment() {
 		long previousCount = ast.modificationCount();
 		final VariableDeclarationFragment x = ast.newVariableDeclarationFragment();
@@ -2676,6 +2661,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}
 	
 	/** @deprecated using deprecated code */
+	@Test
 	public void testMethodDeclaration() {
 		long previousCount = ast.modificationCount();
 		final FunctionDeclaration x = ast.newFunctionDeclaration();
@@ -2683,17 +2669,12 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		previousCount = ast.modificationCount();
 		assertTrue(x.getAST() == ast);
 		assertTrue(x.getParent() == null);
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(x.getModifiers() == Modifier.NONE);
-			assertTrue(x.getReturnType().getParent() == x);
-			assertTrue(x.getReturnType().isPrimitiveType());
-			assertTrue(((PrimitiveType) x.getReturnType()).getPrimitiveTypeCode() == PrimitiveType.VOID);
-		} else {
-			assertTrue(x.modifiers().size() == 0);
-			assertTrue(x.getReturnType2().getParent() == x);
-			assertTrue(x.getReturnType2().isPrimitiveType());
-			assertTrue(((PrimitiveType) x.getReturnType2()).getPrimitiveTypeCode() == PrimitiveType.VOID);
-		}
+		
+		assertTrue(x.modifiers().size() == 0);
+		assertTrue(x.getReturnType2().getParent() == x);
+		assertTrue(x.getReturnType2().isPrimitiveType());
+		assertTrue(((PrimitiveType) x.getReturnType2()).getPrimitiveTypeCode() == PrimitiveType.ANY_CODE);
+		
 		assertTrue(x.isConstructor() == false);
 		//assertTrue(x.getName().getParent() == x);
 		//assertTrue(x.getName().isDeclaration() == true);
@@ -2883,6 +2864,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}	
 	
 	/** @deprecated using deprecated code */
+	@Test
 	public void testInitializer() {
 		long previousCount = ast.modificationCount();
 		final Initializer x = ast.newInitializer();
@@ -2953,6 +2935,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	 * @deprecated (not really - its just that Javadoc.get/setComment
 	 * are deprecated, and this suppresses the extra warnings)
 	 */
+	@Test
 	public void testJavadoc() {
 		long previousCount = ast.modificationCount();
 		final JSdoc x = ast.newJSdoc();
@@ -3053,6 +3036,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}		
 
+	@Test
 	public void testBlockComment() {
 		long previousCount = ast.modificationCount();
 		final BlockComment x = ast.newBlockComment();
@@ -3073,6 +3057,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		tAlternateRoot(x);
 	}		
 
+	@Test
 	public void testLineComment() {
 		long previousCount = ast.modificationCount();
 		final LineComment x = ast.newLineComment();
@@ -3093,6 +3078,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		tAlternateRoot(x);
 	}		
 
+	@Test
 	public void testTagElement() {
 		long previousCount = ast.modificationCount();
 		final TagElement x = ast.newTagElement();
@@ -3202,6 +3188,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}		
 
+	@Test
 	public void testTextElement() {
 		long previousCount = ast.modificationCount();
 		final TextElement x = ast.newTextElement();
@@ -3247,6 +3234,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(ast.modificationCount() == previousCount);
 	}		
 
+	@Test
 	public void testMemberRef() {
 		long previousCount = ast.modificationCount();
 		final MemberRef x = ast.newMemberRef();
@@ -3297,6 +3285,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}		
 	
+	@Test
 	public void testMethodRef() {
 		long previousCount = ast.modificationCount();
 		final FunctionRef x = ast.newFunctionRef();
@@ -3360,6 +3349,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}		
 	
+	@Test
 	public void testMethodRefParameter() {
 		long previousCount = ast.modificationCount();
 		final FunctionRefParameter x = ast.newFunctionRefParameter();
@@ -3424,6 +3414,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}		
 	
+	@Test
 	public void testBlock() {
 		long previousCount = ast.modificationCount();
 		final Block x = ast.newBlock();
@@ -3463,6 +3454,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}	
 	
+	@Test
 	public void testMethodInvocation() {
 		long previousCount = ast.modificationCount();
 		final FunctionInvocation x = ast.newFunctionInvocation();
@@ -3559,6 +3551,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}	
 	
+	@Test
 	public void testExpressionStatement() {
 		long previousCount = ast.modificationCount();
 		SimpleName x1 = ast.newSimpleName("foo"); //$NON-NLS-1$
@@ -3612,6 +3605,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}	
 	
 	/** @deprecated using deprecated code */
+	@Test
 	public void testVariableDeclarationStatement() {
 		VariableDeclarationFragment x1 = ast.newVariableDeclarationFragment();
 		long previousCount = ast.modificationCount();
@@ -3699,6 +3693,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}	
 	
 	/** @deprecated using deprecated code */
+	@Test
 	public void testTypeDeclarationStatement() {
 		AbstractTypeDeclaration x1 = ast.newTypeDeclaration();
 		long previousCount = ast.modificationCount();
@@ -3793,6 +3788,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}
 		
 	/** @deprecated using deprecated code */
+	@Test
 	public void testVariableDeclarationExpression() {
 		VariableDeclarationFragment x1 = ast.newVariableDeclarationFragment();
 		long previousCount = ast.modificationCount();
@@ -3880,6 +3876,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}	
 	
 	/** @deprecated using deprecated code */
+	@Test
 	public void testFieldDeclaration() {
 		VariableDeclarationFragment x1 = ast.newVariableDeclarationFragment();
 		long previousCount = ast.modificationCount();
@@ -3966,6 +3963,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	
 	}
 	
+	@Test
 	public void testAssignment() {
 		long previousCount = ast.modificationCount();
 		final Assignment x = ast.newAssignment();
@@ -4103,6 +4101,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testBreakStatement() {
 		long previousCount = ast.modificationCount();
 		final BreakStatement x = ast.newBreakStatement();
@@ -4140,6 +4139,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testContinueStatement() {
 		long previousCount = ast.modificationCount();
 		final ContinueStatement x = ast.newContinueStatement();
@@ -4177,6 +4177,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testIfStatement() {
 		long previousCount = ast.modificationCount();
 		final IfStatement x = ast.newIfStatement();
@@ -4288,6 +4289,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testWhileStatement() {
 		long previousCount = ast.modificationCount();
 		final WhileStatement x = ast.newWhileStatement();
@@ -4371,6 +4373,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testDoStatement() {
 		long previousCount = ast.modificationCount();
 		final DoStatement x = ast.newDoStatement();
@@ -4454,6 +4457,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testTryStatement() {
 		long previousCount = ast.modificationCount();
 		final TryStatement x = ast.newTryStatement();
@@ -4553,6 +4557,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}	
 
+	@Test
 	public void testCatchClause() {
 		long previousCount = ast.modificationCount();
 		final CatchClause x = ast.newCatchClause();
@@ -4639,6 +4644,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testEmptyStatement() {
 		long previousCount = ast.modificationCount();
 		final EmptyStatement x = ast.newEmptyStatement();
@@ -4849,6 +4855,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(ast.modificationCount() == previousCount);
 	}
 	
+	@Test
 	public void testReturnStatement() {
 		long previousCount = ast.modificationCount();
 		final ReturnStatement x = ast.newReturnStatement();
@@ -4901,6 +4908,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testThrowStatement() {
 		long previousCount = ast.modificationCount();
 		final ThrowStatement x = ast.newThrowStatement();
@@ -4954,6 +4962,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testSwitchStatement() {
 		long previousCount = ast.modificationCount();
 		final SwitchStatement x = ast.newSwitchStatement();
@@ -5030,6 +5039,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testSwitchCase() {
 		long previousCount = ast.modificationCount();
 		final SwitchCase x = ast.newSwitchCase();
@@ -5085,6 +5095,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testLabeledStatement() {
 		long previousCount = ast.modificationCount();
 		final LabeledStatement x = ast.newLabeledStatement();
@@ -5177,6 +5188,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		target.accept(new PositionAssigner());
 	}
 	
+	@Test
 	public void testClone() {
 		ASTNode x = SampleASTs.oneOfEach(ast);
 		assignSourceRanges(x);
@@ -5194,6 +5206,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(z.subtreeMatch(new CheckPositionsMatcher(), x));
 	}
 
+	@Test
 	public void testNullResolve() {
 		ASTNode x = SampleASTs.oneOfEach(ast);
 		
@@ -5288,6 +5301,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testForStatement() {
 		long previousCount = ast.modificationCount();
 		final ForStatement x = ast.newForStatement();
@@ -5427,6 +5441,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	/**
 	 * @deprecated (Uses getLeadingComment() which is deprecated)
 	 */
+	@Test
 	public void testEnhancedForStatement() {
 		if (ast.apiLevel() == AST.JLS2) {
 			// node type introduced in 3.0 API
@@ -5510,6 +5525,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
  		});
 	}
 
+	@Test
 	public void testConstructorInvocation() {
 		long previousCount = ast.modificationCount();
 		final ConstructorInvocation x = ast.newConstructorInvocation();
@@ -5568,6 +5584,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testSuperConstructorInvocation() {
 		long previousCount = ast.modificationCount();
 		final SuperConstructorInvocation x = ast.newSuperConstructorInvocation();
@@ -5659,6 +5676,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testThisExpression() {
 		long previousCount = ast.modificationCount();
 		final ThisExpression x = ast.newThisExpression();
@@ -5692,6 +5710,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testFieldAccess() {
 		long previousCount = ast.modificationCount();
 		final FieldAccess x = ast.newFieldAccess();
@@ -5750,6 +5769,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}
 
 
+	@Test
 	public void testSuperFieldAccess() {
 		long previousCount = ast.modificationCount();
 		final SuperFieldAccess x = ast.newSuperFieldAccess();
@@ -5800,6 +5820,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testSuperMethodInvocation() {
 		long previousCount = ast.modificationCount();
 		final SuperMethodInvocation x = ast.newSuperMethodInvocation();
@@ -5888,6 +5909,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testTypeLiteral() {
 		long previousCount = ast.modificationCount();
 		final TypeLiteral x = ast.newTypeLiteral();
@@ -5920,6 +5942,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testPrefixExpression() {
 		long previousCount = ast.modificationCount();
 		final PrefixExpression x = ast.newPrefixExpression();
@@ -6008,6 +6031,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testPostfixExpression() {
 		long previousCount = ast.modificationCount();
 		final PostfixExpression x = ast.newPostfixExpression();
@@ -6088,6 +6112,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testInfixExpression() {
 		long previousCount = ast.modificationCount();
 		final InfixExpression x = ast.newInfixExpression();
@@ -6250,6 +6275,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testInstanceofExpression() {
 		long previousCount = ast.modificationCount();
 		final InstanceofExpression x = ast.newInstanceofExpression();
@@ -6316,6 +6342,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testConditionalExpression() {
 		long previousCount = ast.modificationCount();
 		final ConditionalExpression x = ast.newConditionalExpression();
@@ -6408,6 +6435,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testArrayAccess() {
 		long previousCount = ast.modificationCount();
 		final ArrayAccess x = ast.newArrayAccess();
@@ -6474,6 +6502,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testArrayInitializer() {
 		long previousCount = ast.modificationCount();
 		final ArrayInitializer x = ast.newArrayInitializer();
@@ -6511,24 +6540,21 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	}
 
 	/** @deprecated using deprecated code */
+	@Test
 	public void testClassInstanceCreation() {
 		long previousCount = ast.modificationCount();
 		final ClassInstanceCreation x = ast.newClassInstanceCreation();
 		assertTrue(ast.modificationCount() > previousCount);
 		previousCount = ast.modificationCount();
-		assertTrue(x.getAST() == ast);
-		assertTrue(x.getParent() == null);
-		assertTrue(x.getExpression() == null);
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(x.getName().getParent() == x);
-		} else {
-			assertTrue(x.typeArguments().isEmpty());
-			assertTrue(x.getType().getParent() == x);
-		}
+		assertSame(ast, x.getAST());
+		assertNull(x.getParent());
+		assertNull(x.getExpression());
+		assertNull(x.getType());
+		assertTrue(x.typeArguments().isEmpty());
 		assertTrue(x.arguments().isEmpty());
-		assertTrue(x.getAnonymousClassDeclaration() == null);
-		assertTrue(x.getNodeType() == ASTNode.CLASS_INSTANCE_CREATION);
-		assertTrue(x.structuralPropertiesForType() == 
+		assertNull(x.getAnonymousClassDeclaration() );
+		assertEquals(ASTNode.CLASS_INSTANCE_CREATION,x.getNodeType());
+		assertSame(x.structuralPropertiesForType(), 
 			ClassInstanceCreation.propertyDescriptors(ast.apiLevel()));
 		// make sure that reading did not change modification count
 		assertTrue(ast.modificationCount() == previousCount);
@@ -6660,6 +6686,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 
 	}
 
+	@Test
 	public void testAnonymousClassDeclaration() {
 		long previousCount = ast.modificationCount();
 		final AnonymousClassDeclaration x = ast.newAnonymousClassDeclaration();
@@ -6707,6 +6734,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		assertTrue(t1.isPackageMemberTypeDeclaration() == false);
 	}
 
+	@Test
 	public void testArrayCreation() {
 		long previousCount = ast.modificationCount();
 		final ArrayCreation x = ast.newArrayCreation();
@@ -6788,6 +6816,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		});
 	}
 
+	@Test
 	public void testParenthesizedExpression() {
 		long previousCount = ast.modificationCount();
 		final ParenthesizedExpression x = ast.newParenthesizedExpression();
@@ -6830,6 +6859,7 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 	
 
 	/** @deprecated using deprecated code */
+	@Test
 	public void testModifiers() {
 		
 		// check all modifiers match their JVM spec values
@@ -7024,12 +7054,14 @@ public class ASTTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.Tes
 		}
 	}
 		
+	@Test
 	public void testSubtreeBytes() {
 		ASTNode x = SampleASTs.oneOfEach(ast);
 		final int subtreeBytes = x.subtreeBytes();
 		assertTrue(subtreeBytes > 0);
 	}
 	
+	@Test
 	public void testNodeTypeConstants() {
 		// it would be a breaking API change to change the numeric values of
 		// public static final ints

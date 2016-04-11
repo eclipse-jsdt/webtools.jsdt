@@ -3,6 +3,5 @@
 			return 2;
 		} catch(e) {
 		}
-	}
 
 }

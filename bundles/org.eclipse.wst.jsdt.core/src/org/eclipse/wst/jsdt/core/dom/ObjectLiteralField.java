@@ -147,6 +147,20 @@ public class ObjectLiteralField extends Expression {
 		// allow default implementation to flag the error
 		return super.internalGetSetChildProperty(property, get, child);
 	}
+	
+	@Override
+	final Object internalGetSetObjectProperty(SimplePropertyDescriptor property, boolean get, Object value) {
+		if(property == KIND_PROPERTY){
+			if(get){
+				return getKind();
+			}else{
+				setKind((FieldKind) value);
+				return null;
+			}
+		}
+		return super.internalGetSetObjectProperty(property,get,value);
+	}
+	
 
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.

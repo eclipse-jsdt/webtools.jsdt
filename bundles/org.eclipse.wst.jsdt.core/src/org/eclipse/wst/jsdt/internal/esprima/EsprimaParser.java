@@ -24,7 +24,9 @@ import javax.script.ScriptException;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.dom.AST;
+import org.eclipse.wst.jsdt.core.dom.ASTNode;
 import org.eclipse.wst.jsdt.core.dom.Comment;
+import org.eclipse.wst.jsdt.core.dom.JSdoc;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.internal.compiler.problem.DefaultProblem;
 import org.eclipse.wst.jsdt.internal.compiler.problem.ProblemSeverities;
@@ -88,9 +90,8 @@ public class EsprimaParser {
 				Compilable compilable = (Compilable) engine;
 				try {
 					InputStream in = EsprimaParser.class.getResourceAsStream("esprima.js"); //$NON-NLS-1$
-					if (in == null) {
+					if (in == null)
 						throw new RuntimeException("Failed to load esprima.js file"); //$NON-NLS-1$
-					}
 					compiledEsprima = compilable.compile(new InputStreamReader(in));
 				}
 				catch (ScriptException e) {
@@ -117,36 +118,33 @@ public class EsprimaParser {
 
 	public JavaScriptUnit parse() {
 		String content = rawContent;
-		if(unit != null ){
+		if(unit != null )
 			try {
 				content = unit.getSource();
 			}
 			catch (JavaScriptModelException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
 		AST ast = AST.newAST(AST.JLS3);
-		JavaScriptUnit result = ast.newJavaScriptUnit();
+		ast.setDefaultNodeFlag(ASTNode.ORIGINAL);
+		JavaScriptUnit $ = ast.newJavaScriptUnit();
 		try{
 			ScriptObjectMirror jsObject = internalParse(content);
-			translate(jsObject,result);
-			buildLineEndTable(result, content);
-			if(errorReporting && tolerant){
-				reportErrors(jsObject, result);
-			}
-			if(includeJsdocs){
-				buildComments(jsObject,result, ast);
-			}
+			translate(jsObject,$);
+			buildLineEndTable($, content);
+			if(errorReporting && tolerant)
+				reportErrors(jsObject, $);
+			if(includeJsdocs)
+				buildComments(jsObject, $, ast);
+			ast.setDefaultNodeFlag(0);
 		}catch(ECMAException e)
 		{
-			if(!(e.getEcmaError() instanceof ScriptObjectMirror)){
+			if(!(e.getEcmaError() instanceof ScriptObjectMirror))
 				e.printStackTrace();
-			}
-			ScriptObjectMirror ecmaError = (ScriptObjectMirror)e.getEcmaError();
-			result.setProblems(new DefaultProblem[]{createProblem(ecmaError)});
+			$.setProblems(new DefaultProblem[]{createProblem(((ScriptObjectMirror) e.getEcmaError()))});
+			$.setFlags(ASTNode.MALFORMED);
 		}
-		return result;
+		return $;
 	}
 
 	/**
@@ -187,32 +185,27 @@ public class EsprimaParser {
 		return this;
 	}
 
-
 	/**
 	 * @param jsObject
 	 * @return
 	 */
 	private JavaScriptUnit translate(final ScriptObjectMirror jsObject, final JavaScriptUnit jsunit) {
-		DOMASTConverter visitor = new DOMASTConverter(jsunit);
-		return visitor.convert(jsObject);
+		return (new DOMASTConverter(jsunit)).convert(jsObject);
 	}
 
 	private ScriptObjectMirror internalParse(String content) {
 		final ScriptObjectMirror esprima = (ScriptObjectMirror) this.bindings.get("esprima"); //$NON-NLS-1$
-		if (esprima == null) {
+		if (esprima == null)
 			throw new RuntimeException("Esprima parser was not loaded correctly"); //$NON-NLS-1$
-		}
-		HashMap<String, Boolean> options = getOptions();
-		final ScriptObjectMirror tree = (ScriptObjectMirror) esprima.callMember("parse", content, options); //$NON-NLS-1$
-		return tree;
+		return (ScriptObjectMirror) esprima.callMember("parse", content, getOptions()); //$NON-NLS-1$
 	}
 
 	private HashMap<String, Boolean> getOptions() {
-		HashMap<String , Boolean> options = new HashMap<String, Boolean>();
-		options.put(ESPRIMA_OPT_RANGE, range);
-		options.put(ESPRIMA_OPT_TOLERANT, tolerant);
-		options.put(ESPRIMA_OPT_ATTACH_COMMENT, includeJsdocs);
-		return options;
+		HashMap<String , Boolean> $ = new HashMap<String, Boolean>();
+		$.put(ESPRIMA_OPT_RANGE, range);
+		$.put(ESPRIMA_OPT_TOLERANT, tolerant);
+		$.put(ESPRIMA_OPT_ATTACH_COMMENT, includeJsdocs);
+		return $;
 	}
 
 	/**
@@ -224,11 +217,11 @@ public class EsprimaParser {
 	 */
 	private void reportErrors(final ScriptObjectMirror jsObject, final JavaScriptUnit result) {
 		ScriptObjectMirror errors = (ScriptObjectMirror) jsObject.getMember("errors"); //$NON-NLS-1$
+		if(errors == null || errors.size() < 1) return;
 		DefaultProblem[] problems = new DefaultProblem[errors.size()];
-		for(int i = 0; i < errors.size(); i++){
-			ScriptObjectMirror obj = (ScriptObjectMirror) errors.getSlot(i);
-			problems[i]=createProblem(obj);
-		}
+		for(int i = 0; i < errors.size(); ++i)
+			problems[i] = createProblem(((ScriptObjectMirror) errors.getSlot(i)));
+		result.setFlags(ASTNode.MALFORMED);
 		result.setProblems(problems);
 	}
 
@@ -260,14 +253,14 @@ public class EsprimaParser {
 	 * @param jsObject
 	 * @param result
 	 */
-	private void buildComments(ScriptObjectMirror jsObject, JavaScriptUnit result, AST ast) {
+	private void buildComments(ScriptObjectMirror jsObject, JavaScriptUnit result, AST t) {
 		ScriptObjectMirror comments = (ScriptObjectMirror) jsObject.getMember("comments"); //$NON-NLS-1$
 
 		int commentSize = comments.size();
 		Comment[] resultComments = new Comment[commentSize];
-		for(int i = 0; i< commentSize; i++){
+		for(int i = 0; i< commentSize; ++i){
 			ScriptObjectMirror obj = (ScriptObjectMirror) comments.getSlot(i);
-			Comment newComment = createComment(obj, ast);
+			Comment newComment = createComment(obj, t);
 			newComment.setAlternateRoot(result);
 			resultComments[i] = newComment;
 		}
@@ -275,26 +268,19 @@ public class EsprimaParser {
 	}
 
 	/**
-	 * @param obj
+	 * @param m
 	 * @return
 	 */
-	private Comment createComment(ScriptObjectMirror obj, AST ast) {
-		String type = (String) obj.getMember("type"); //$NON-NLS-1$
-		String value = (String) obj.getMember("value"); //$NON-NLS-1$
-		Comment comment = null;
-		if ("Line".equals(type)) { //$NON-NLS-1$
-			comment = ast.newLineComment();
-		}
-		else if (value.startsWith("**")) { //$NON-NLS-1$
-			comment = ast.newJSdoc();
-		}else{
-			comment = ast.newBlockComment();
-		}
-		ScriptObjectMirror range = (ScriptObjectMirror) obj.getMember("range"); //$NON-NLS-1$
-		Number x = (Number) range.getSlot(0);
-		Number y = (Number) range.getSlot(1);
-		comment.setSourceRange(x.intValue(), y.intValue()-x.intValue());
-		return comment;
+	static Comment createComment(ScriptObjectMirror m, AST t) {
+		String type = (String) m.getMember("type"); //$NON-NLS-1$
+		String value = (String) m.getMember("value"); //$NON-NLS-1$
+		Comment $ = "Line".equals(type) ? t.newLineComment() : !value.startsWith("*") ? t.newBlockComment() : t.newJSdoc();  //$NON-NLS-1$//$NON-NLS-2$
+		if($.isDocComment()) ((JSdoc)$).setComment("/*"+value+"*/");  //$NON-NLS-1$//$NON-NLS-2$
+		ScriptObjectMirror r = (ScriptObjectMirror) m.getMember("range"); //$NON-NLS-1$
+		Number x = (Number) r.getSlot(0);
+		Number y = (Number) r.getSlot(1);
+		$.setSourceRange(x.intValue(), y.intValue()-x.intValue());
+		return $;
 	}
 
 	/**
@@ -309,16 +295,14 @@ public class EsprimaParser {
 	private void buildLineEndTable(JavaScriptUnit jsunit, String content) {
 		int[] lineEnds = new int[250];
 		int linePtr = 0;
-
-		for (int i = 0, e = content.length(); i <= e; i++) {
-			if (i == e || content.charAt(i) == '\n') {
+		for (int i = 0, e = content.length(); i < e; ++i)
+			if ( content.charAt(i) == '\n' || content.charAt(i) == '\r') {
+				if(content.length() > i+1 && content.charAt(i) == '\r' && content.charAt(i+1) == '\n' ) ++i;//Skip to next character
 				int length = lineEnds.length;
-				if (linePtr >= length) {
+				if (linePtr >= length)
 					System.arraycopy(lineEnds, 0, lineEnds = new int[length + 250], 0, length);
-				}
 				lineEnds[linePtr++] = i;
 			}
-		}
 		System.arraycopy(lineEnds, 0, lineEnds = new int[linePtr], 0, linePtr);
 		jsunit.setLineEndTable(lineEnds);
 	}

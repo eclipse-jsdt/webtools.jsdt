@@ -278,8 +278,8 @@ public class ImportDeclaration extends ASTNode {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
 			acceptChild(visitor, getName());
-			acceptChild(visitor, getSource());
 			acceptChildren(visitor, this.specifiers);
+			acceptChild(visitor, getSource());
 		}
 		visitor.endVisit(this);
 	}
@@ -400,6 +400,16 @@ public class ImportDeclaration extends ASTNode {
 	 * @since 2.0
 	 */
 	public StringLiteral getSource() {
+		if (this.source == null) {
+			// lazy init must be thread-safe for readers
+			synchronized (this) {
+				if (this.source == null) {
+					preLazyInit();
+					this.source =this.ast.newStringLiteral();
+					postLazyInit(this.source, SOURCE_PROPERTY);
+				}
+			}
+		}
 		return source;
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -165,7 +165,9 @@ public abstract class ConverterTestSetup extends AbstractASTTests {
 		parser.setSource(unit);
 		parser.setResolveBindings(resolveBindings);
 		parser.setStatementsRecovery(statementsRecovery);
-		return parser.createAST(null);
+		JavaScriptUnit result = (JavaScriptUnit) parser.createAST(null);
+		assertTrue("Invalid JavaScript for "+unit, result.getProblems().length == 0);
+		return result;
 	}
 
 	class NullBindingVerifier extends ASTVisitor {
@@ -487,7 +489,7 @@ public abstract class ConverterTestSetup extends AbstractASTTests {
 	}
 
 	protected ASTNode getASTNode(org.eclipse.wst.jsdt.core.dom.JavaScriptUnit unit, int typeIndex, int bodyIndex) {
-		return (ASTNode) unit.statements().get(bodyIndex);
+		return unit.statements().get(bodyIndex);
 	}
 
 	protected ASTNode getASTNode(org.eclipse.wst.jsdt.core.dom.JavaScriptUnit unit, int typeIndex) {

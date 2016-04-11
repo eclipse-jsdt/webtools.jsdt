@@ -168,8 +168,8 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 		info.setHandle(handle);
 		info.setSourceRangeStart(node.getStartPosition());
 		info.setNameSourceStart(node.getStartPosition());
-		info.setNameSourceEnd(node.getStartPosition() + node.getLength());
-		info.setSourceRangeEnd(node.getStartPosition() + node.getLength());
+		info.setNameSourceEnd(node.getStartPosition() + node.getLength()-1);
+		info.setSourceRangeEnd(node.getStartPosition() + node.getLength()-1);
 //		JavaModelManager manager = JavaModelManager.getJavaModelManager();
 		info.setSuperclassName("".toCharArray());	 //$NON-NLS-1$
 		
@@ -195,9 +195,9 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 		
 		SourceFieldElementInfo info = new SourceFieldElementInfo();
 		info.setNameSourceStart(node.getFieldName().getStartPosition());
-		info.setNameSourceEnd(node.getFieldName().getStartPosition() + node.getFieldName().getLength());
+		info.setNameSourceEnd(node.getFieldName().getStartPosition() + node.getFieldName().getLength()-1);
 		info.setSourceRangeStart(node.getStartPosition());
-		info.setSourceRangeEnd(node.getStartPosition() + node.getLength());
+		info.setSourceRangeEnd(node.getStartPosition() + node.getLength()-1);
 		addToChildren(parentInfo, handle);
 		this.newElements.put(handle, info);
 		this.infoStack.push(info);
@@ -237,13 +237,13 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 			info = new SourceMethodInfo();
 		if(methodName != null ){
 			info.setNameSourceStart(methodName.getStartPosition());
-			info.setNameSourceEnd(methodName.getStartPosition() + methodName.getLength());
+			info.setNameSourceEnd(methodName.getStartPosition() + methodName.getLength() -1);
 		}else{
 			info.setNameSourceStart(node.getStartPosition());
-			info.setNameSourceEnd(node.getStartPosition() + node.getLength());
+			info.setNameSourceEnd(node.getStartPosition() + node.getLength()-1);
 		}
 		info.setSourceRangeStart(node.getStartPosition());
-		info.setSourceRangeEnd(node.getStartPosition() + node.getLength());
+		info.setSourceRangeEnd(node.getStartPosition() + node.getLength()-1);
 		JavaModelManager manager = JavaModelManager.getJavaModelManager();
 		List<?> parameters = node.parameters();
 		char[][] parameterNames = new char[parameters.size()][];
@@ -318,9 +318,9 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 
 		ImportDeclarationElementInfo info = new ImportDeclarationElementInfo();
 		info.setNameSourceStart(localName.getStartPosition());
-		info.setNameSourceEnd(localName.getStartPosition() + localName.getLength());
+		info.setNameSourceEnd(localName.getStartPosition() + localName.getLength() -1);
 		info.setSourceRangeStart(parent.getStartPosition());
-		info.setSourceRangeEnd(parent.getStartPosition() + parent.getLength());
+		info.setSourceRangeEnd(parent.getStartPosition() + parent.getLength()-1);
 
 		addToChildren(this.importContainerInfo, handle);
 		this.newElements.put(handle, info);
@@ -351,9 +351,9 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 
 			ImportDeclarationElementInfo info = new ImportDeclarationElementInfo();
 			info.setNameSourceStart(node.getStartPosition());
-			info.setNameSourceEnd(node.getStartPosition() + node.getLength());
+			info.setNameSourceEnd(node.getStartPosition() + node.getLength()-1);
 			info.setSourceRangeStart(node.getStartPosition());
-			info.setSourceRangeEnd(node.getStartPosition() + node.getLength());
+			info.setSourceRangeEnd(node.getStartPosition() + node.getLength()-1);
 
 			addToChildren(this.importContainerInfo, handle);
 			this.newElements.put(handle, info);
@@ -377,7 +377,7 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 		
 		SourceFieldElementInfo info = new SourceFieldElementInfo();
 		info.setNameSourceStart(node.getName().getStartPosition());
-		info.setNameSourceEnd(node.getName().getStartPosition() + node.getName().getLength());
+		info.setNameSourceEnd(node.getName().getStartPosition() + node.getName().getLength()-1);
 		info.setSourceRangeStart(node.getStartPosition());
 		
 		if(node.getParent().getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT &&
@@ -423,7 +423,7 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 	
 	public void endVisit(VariableDeclarationFragment node){
 		SourceFieldElementInfo info = (SourceFieldElementInfo) this.infoStack.pop();
-		info.setSourceRangeEnd(node.getStartPosition() + node.getLength());
+		info.setSourceRangeEnd(node.getStartPosition() + node.getLength()-1);
 		setChildren(info);
 		
 		this.handleStack.pop();
@@ -457,9 +457,9 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 					new SourceTypeElementInfo( parentHandle instanceof ClassFile , false);
 		info.setHandle(handle);
 		info.setSourceRangeStart(node.getStartPosition());
-		info.setSourceRangeEnd(node.getStartPosition() + node.getLength());
+		info.setSourceRangeEnd(node.getStartPosition() + node.getLength()-1);
 		info.setNameSourceStart(node.getName().getStartPosition());
-		info.setNameSourceEnd(node.getName().getStartPosition() + node.getName().getLength());
+		info.setNameSourceEnd(node.getName().getStartPosition() + node.getName().getLength()-1);
 		JavaModelManager manager = JavaModelManager.getJavaModelManager();
 		
 		char[] superclass = null;

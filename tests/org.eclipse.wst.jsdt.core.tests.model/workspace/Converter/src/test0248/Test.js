@@ -1,3 +1,3 @@
  
-	function  m(  i);
+	function  m(  i){};
  

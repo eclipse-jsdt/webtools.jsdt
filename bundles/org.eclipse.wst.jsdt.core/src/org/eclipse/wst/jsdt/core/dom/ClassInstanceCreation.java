@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -87,7 +87,7 @@ public class ClassInstanceCreation extends Expression {
 	 * The "type" structural property of this node type (added in JLS3 API).
 	 */
 	public static final ChildPropertyDescriptor TYPE_PROPERTY =
-		new ChildPropertyDescriptor(ClassInstanceCreation.class, "type", Type.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+		new ChildPropertyDescriptor(ClassInstanceCreation.class, "type", Type.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "arguments" structural property of this node type.
@@ -458,21 +458,8 @@ public class ClassInstanceCreation extends Expression {
 	 * expression (added in JLS3 API).
 	 *
 	 * @return the type node
-	 * @exception UnsupportedOperationException if this operation is used in
-	 * a JLS2 AST
 	 */
 	public Type getType() {
-	    unsupportedIn2();
-//		if (this.type == null) {
-//			// lazy init must be thread-safe for readers
-//			synchronized (this) {
-//				if (this.type == null) {
-//					preLazyInit();
-//					this.type = new SimpleType(this.ast);
-//					postLazyInit(this.type, TYPE_PROPERTY);
-//				}
-//			}
-//		}
 		return this.type;
 	}
 
@@ -486,11 +473,8 @@ public class ClassInstanceCreation extends Expression {
 	 * <li>the node belongs to a different AST</li>
 	 * <li>the node already has a parent</li>`
 	 * </ul>
-	 * @exception UnsupportedOperationException if this operation is used in
-	 * a JLS2 AST
 	 */
 	public void setType(Type type) {
-	    unsupportedIn2();
 		if (type == null) {
 			throw new IllegalArgumentException();
 		}

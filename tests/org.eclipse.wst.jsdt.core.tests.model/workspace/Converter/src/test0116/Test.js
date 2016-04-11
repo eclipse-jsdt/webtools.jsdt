@@ -1,3 +1,3 @@
 	function foo(e) {
-		throw e   \u003B
+		throw e,   \u0061
 	}

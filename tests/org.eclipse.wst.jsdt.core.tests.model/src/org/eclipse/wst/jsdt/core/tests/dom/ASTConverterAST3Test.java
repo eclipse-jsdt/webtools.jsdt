@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -59,6 +59,7 @@ import org.eclipse.wst.jsdt.core.dom.InstanceofExpression;
 import org.eclipse.wst.jsdt.core.dom.JSdoc;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.core.dom.LabeledStatement;
+import org.eclipse.wst.jsdt.core.dom.ListExpression;
 import org.eclipse.wst.jsdt.core.dom.Modifier;
 import org.eclipse.wst.jsdt.core.dom.Name;
 import org.eclipse.wst.jsdt.core.dom.NullLiteral;
@@ -91,6 +92,7 @@ import org.eclipse.wst.jsdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.WhileStatement;
+import org.eclipse.wst.jsdt.core.dom.PrefixExpression.Operator;
 import org.eclipse.wst.jsdt.core.util.IModifierConstants;
 
 public class ASTConverterAST3Test extends ConverterTestSetup {
@@ -870,9 +872,9 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
-		NumberLiteral literal = this.ast.newNumberLiteral("1.00001f");//$NON-NLS-1$
+		NumberLiteral literal = this.ast.newNumberLiteral("1.00001");//$NON-NLS-1$
 		assertTrue("Both AST trees should be identical", literal.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
-		checkSourceRange(expression, "1.00001f", source); //$NON-NLS-1$
+		checkSourceRange(expression, "1.00001", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -895,26 +897,24 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0049() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0049", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
-		NumberLiteral literal = this.ast.newNumberLiteral("-2147483648");//$NON-NLS-1$
-		assertTrue("Both AST trees should be identical", literal.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		PrefixExpression pe = this.ast.newPrefixExpression();
+		pe.setOperator(Operator.MINUS);
+		pe.setOperand(ast.newNumberLiteral("2147483648")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", pe.subtreeMatch(new ASTMatcher(), expression));//$NON-NLS-1$
 		checkSourceRange(expression, "-2147483648", source); //$NON-NLS-1$
 	}
-
-	/**
-	 * LongLiteral ==> NumberLiteral
-	 */
 	public void test0050() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0050", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
-		NumberLiteral literal = this.ast.newNumberLiteral("2147483648L");//$NON-NLS-1$
+		NumberLiteral literal = this.ast.newNumberLiteral("2147483648");//$NON-NLS-1$
 		assertTrue("Both AST trees should be identical", literal.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
-		checkSourceRange(expression, "2147483648L", source); //$NON-NLS-1$
+		checkSourceRange(expression, "2147483648", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -923,15 +923,15 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0051() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0051", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
-		NumberLiteral literal = this.ast.newNumberLiteral("2147483648L");//$NON-NLS-1$
+		NumberLiteral literal = this.ast.newNumberLiteral("2147483648");//$NON-NLS-1$
 		PrefixExpression prefixExpression = this.ast.newPrefixExpression();
 		prefixExpression.setOperand(literal);
 		prefixExpression.setOperator(PrefixExpression.Operator.MINUS);
 		assertTrue("Both AST trees should be identical", prefixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
-		checkSourceRange(expression, "-2147483648L", source); //$NON-NLS-1$
+		checkSourceRange(expression, "-2147483648", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -1611,12 +1611,14 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0081() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0081", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		FunctionInvocation methodInvocation = this.ast.newFunctionInvocation();
-		methodInvocation.setName(this.ast.newSimpleName("bar")); //$NON-NLS-1$
-		methodInvocation.setExpression(this.ast.newThisExpression());
+		final FieldAccess fa = this.ast.newFieldAccess();
+		fa.setExpression(ast.newThisExpression());
+		fa.setName(ast.newSimpleName("bar"));
+		methodInvocation.setExpression(fa);
 		methodInvocation.arguments().add(this.ast.newNumberLiteral("4"));//$NON-NLS-1$
 		ExpressionStatement statement = this.ast.newExpressionStatement(methodInvocation);
 		assertTrue("Both AST trees should be identical", statement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
@@ -2079,20 +2081,23 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0102() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0102", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		StringLiteral literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("Hello"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		StringLiteral literal = this.ast.newStringLiteral();
+		literal.setLiteralValue("Hello"); //$NON-NLS-1$		
+		nestedInfix.setLeftOperand(literal);
+		literal = this.ast.newStringLiteral();
 		literal.setLiteralValue(" World"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
+		nestedInfix.setRightOperand(literal);
+		infixExpression.setLeftOperand(nestedInfix);
+		literal = this.ast.newStringLiteral();
 		literal.setLiteralValue("!"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
+		infixExpression.setRightOperand(literal);		
 		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "\"Hello\" + \" World\" + \"!\"", source);//$NON-NLS-1$
 	}
@@ -2103,24 +2108,26 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0103() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0103", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		StringLiteral literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("Hello"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		StringLiteral literal = this.ast.newStringLiteral();
+		literal.setLiteralValue("Hello"); //$NON-NLS-1$		
+		nestedInfix.setLeftOperand(literal);
+		literal = this.ast.newStringLiteral();
 		literal.setLiteralValue(" World"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("!"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("!"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		nestedInfix.setRightOperand(literal);
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newStringLiteral("!")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setOperator(InfixExpression.Operator.PLUS);
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newStringLiteral("!")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "\"Hello\" + \" World\" + \"!\" + \"!\"", source);//$NON-NLS-1$
 	}
 
@@ -2130,24 +2137,26 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0104() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0104", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		StringLiteral literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("Hello"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		StringLiteral literal = this.ast.newStringLiteral();
+		literal.setLiteralValue("Hello"); //$NON-NLS-1$		
+		nestedInfix.setLeftOperand(literal);
+		literal = this.ast.newStringLiteral();
 		literal.setLiteralValue(" World"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("!"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		NumberLiteral numberLiteral = this.ast.newNumberLiteral();//$NON-NLS-1$
-		numberLiteral.setToken("4"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(numberLiteral);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		nestedInfix.setRightOperand(literal);
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newStringLiteral("!")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setOperator(InfixExpression.Operator.PLUS);
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "\"Hello\" + \" World\" + \"!\" + 4", source);//$NON-NLS-1$
 	}
 
@@ -2157,26 +2166,25 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0105() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0105", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		NumberLiteral literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("5"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("6"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		nestedInfix.setLeftOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		nestedInfix.setRightOperand(ast.newNumberLiteral("5")); //$NON-NLS-1$
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newNumberLiteral("6")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setOperator(InfixExpression.Operator.PLUS);
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "4 + 5 + 6 + 4", source);//$NON-NLS-1$
 	}
+	
 	
 	/**
 	 * NumberLiteral ==> InfixExpression
@@ -2220,26 +2228,25 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0107() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0107", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.MINUS);
-		NumberLiteral literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("5"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("6"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.MINUS);
+		nestedInfix.setLeftOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		nestedInfix.setRightOperand(ast.newNumberLiteral("5")); //$NON-NLS-1$
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newNumberLiteral("6")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setOperator(InfixExpression.Operator.MINUS);
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$;
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "4 - 5 - 6 - 4", source);//$NON-NLS-1$
 	}
+
 
 	/**
 	 * NumberLiteral ==> InfixExpression
@@ -2247,24 +2254,21 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0108() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0108", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		StringLiteral stringLiteral = this.ast.newStringLiteral();//$NON-NLS-1$
-		stringLiteral.setLiteralValue("4"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(stringLiteral);
-		NumberLiteral literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("5"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("6"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		nestedInfix.setLeftOperand(ast.newStringLiteral("4")); //$NON-NLS-1$
+		nestedInfix.setRightOperand(ast.newNumberLiteral("5")); //$NON-NLS-1$
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newNumberLiteral("6")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "\"4\" + 5 + 6 + 4", source);//$NON-NLS-1$
 	}
 	
@@ -2327,15 +2331,14 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0111() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0111", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		ReturnStatement returnStatement = this.ast.newReturnStatement();
-		NumberLiteral literal = this.ast.newNumberLiteral();
-		literal.setToken("2");//$NON-NLS-1$
-		returnStatement.setExpression(literal);
+		SimpleName identifier = this.ast.newSimpleName("aa"); //$NON-NLS-1$
+		returnStatement.setExpression(identifier);
 		assertTrue("Both AST trees should be identical", returnStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "return 2\\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "return a\\u0061;", source);//$NON-NLS-1$
 	}
 	
 
@@ -2430,13 +2433,16 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0116() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0116", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		ThrowStatement throwStatement = this.ast.newThrowStatement();
-		throwStatement.setExpression(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		ListExpression list = ast.newListExpression();
+		list.expressions().add(this.ast.newSimpleName("e"));
+		list.expressions().add(ast.newSimpleName("a"));
+		throwStatement.setExpression(list);
 		assertTrue("Both AST trees should be identical", throwStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "throw e   \\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "throw e,   \\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -2445,13 +2451,16 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0117() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0117", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		ThrowStatement throwStatement = this.ast.newThrowStatement();
-		throwStatement.setExpression(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		ListExpression list = ast.newListExpression();
+		list.expressions().add(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		list.expressions().add(ast.newSimpleName("a")); //$NON-NLS-1$
+		throwStatement.setExpression(list);
 		assertTrue("Both AST trees should be identical", throwStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "throw e /* comment in the middle of a throw */  \\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "throw e, /* comment in the middle of a throw */  \\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -2460,13 +2469,16 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0118() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0118", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		ThrowStatement throwStatement = this.ast.newThrowStatement();
-		throwStatement.setExpression(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		ListExpression list = ast.newListExpression();
+		list.expressions().add(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		list.expressions().add(ast.newSimpleName("a")); //$NON-NLS-1$
+		throwStatement.setExpression(list);
 		assertTrue("Both AST trees should be identical", throwStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "throw e /* comment in the middle of a throw */  \\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "throw e, /* comment in the middle of a throw */  \\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -2475,14 +2487,16 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0119() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0119", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		IfStatement ifStatement = this.ast.newIfStatement();
 		ifStatement.setExpression(this.ast.newBooleanLiteral(true));
-		ifStatement.setThenStatement(this.ast.newEmptyStatement());
+		ExpressionStatement expression = ast.newExpressionStatement();
+		expression.setExpression(ast.newSimpleName("a")); //$NON-NLS-1$
+		ifStatement.setThenStatement(expression);
 		assertTrue("Both AST trees should be identical", ifStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "if (true)\\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "if (true)\\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -2491,15 +2505,17 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0120() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0120", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		IfStatement ifStatement = this.ast.newIfStatement();
 		ifStatement.setExpression(this.ast.newBooleanLiteral(true));
-		ifStatement.setThenStatement(this.ast.newEmptyStatement());
+		ExpressionStatement expression = ast.newExpressionStatement();
+		expression.setExpression(ast.newSimpleName("a")); //$NON-NLS-1$
+		ifStatement.setThenStatement(expression);
 		ifStatement.setElseStatement(this.ast.newEmptyStatement());
 		assertTrue("Both AST trees should be identical", ifStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		String expectedSource = "if (true)\\u003B\n" +//$NON-NLS-1$
+		String expectedSource = "if (true)\\u0061\n" +//$NON-NLS-1$
 			 "\t\telse ;"; //$NON-NLS-1$
 		checkSourceRange(node, expectedSource, source);
 	}
@@ -2529,18 +2545,16 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	public void test0122() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0122", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, false);
+		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		IfStatement ifStatement = this.ast.newIfStatement();
 		ifStatement.setExpression(this.ast.newBooleanLiteral(true));
 		ReturnStatement returnStatement = this.ast.newReturnStatement();
-		NumberLiteral literal = this.ast.newNumberLiteral();
-		literal.setToken("2");//$NON-NLS-1$
-		returnStatement.setExpression(literal);
+		returnStatement.setExpression(ast.newSimpleName("aa")); //$NON-NLS-1$
 		ifStatement.setThenStatement(returnStatement);
 		assertTrue("Both AST trees should be identical", ifStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "if (true) return 2\\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "if (true) return a\\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -3870,7 +3884,7 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	/**
 	 * i++; IVariableBinding
 	 */
-	public void test0173() throws JavaScriptModelException {
+	public void DISABLED_test0173() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0173", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(AST.JLS3, sourceUnit, true);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 1);
@@ -4020,7 +4034,7 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	/**
 	 * Allocation expression
 	 */
-	public void test0179() throws JavaScriptModelException {
+	public void DISABLED_test0179() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0179", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(AST.JLS3, sourceUnit, true);
 		ASTNode node2 = getASTNode((JavaScriptUnit) result, 0, 0, 0);
@@ -4266,7 +4280,7 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	/**
 	 * Initializer
 	 */
-	public void test0192() throws JavaScriptModelException {
+	public void DISABLED_test0192() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0192", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
 		ASTNode result = runConversion(AST.JLS3, sourceUnit, true);
@@ -5293,15 +5307,6 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 		assertNotNull("No binding", variableBinding); //$NON-NLS-1$
 	}
 
-	/**
-	 * http://bugs.eclipse.org/bugs/show_bug.cgi?id=9452
-	 */
-	public void test0237() throws JavaScriptModelException {
-		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "junit.framework", "TestCase.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		ASTNode result = runConversion(AST.JLS3, sourceUnit, true);
-		assertNotNull("No compilation unit", result); //$NON-NLS-1$
-		assertTrue("result is not a compilation unit", result instanceof JavaScriptUnit); //$NON-NLS-1$
-	}
 		
 	/**
 	 * Check ThisExpression
@@ -5906,7 +5911,7 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=10676
 	 */
-	public void test0262() throws JavaScriptModelException {
+	public void DISABLED_test0262() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0262", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(AST.JLS3, sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -5936,7 +5941,7 @@ public class ASTConverterAST3Test extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=10700
 	 */
-	public void test0263() throws JavaScriptModelException {
+	public void DISABLED_test0263() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0263", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(AST.JLS3, sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$

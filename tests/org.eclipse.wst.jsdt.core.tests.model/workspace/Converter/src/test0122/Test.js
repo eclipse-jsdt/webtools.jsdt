@@ -1,4 +1,4 @@
 	function foo(e) {
-		if (true) return 2\u003B
+		if (true) return a\u0061
 	}
 

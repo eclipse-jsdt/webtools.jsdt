@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -98,7 +98,7 @@ public abstract class ASTRewritingModifyingTest extends AbstractJavaModelTests {
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		ASTParser c = ASTParser.newParser(AST_INTERNAL_JLS2);
+		ASTParser c = ASTParser.newParser(AST.JLS3);
 		c.setSource(source);
 		ASTNode result = c.createAST(null);
 		return (JavaScriptUnit) result;

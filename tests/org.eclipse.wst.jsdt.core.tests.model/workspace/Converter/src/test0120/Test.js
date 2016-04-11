@@ -1,5 +1,5 @@
 	function foo(e) {
-		if (true)\u003B
+		if (true)\u0061
 		else ;
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,6 +22,7 @@ import org.eclipse.wst.jsdt.core.dom.Block;
 import org.eclipse.wst.jsdt.core.dom.FunctionDeclaration;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 
+@SuppressWarnings("nls")
 public class ASTRewritingModifyingRemoveTest extends ASTRewritingModifyingTest {
 	private static final Class THIS = ASTRewritingModifyingRemoveTest.class;
 	
@@ -180,7 +181,7 @@ public class ASTRewritingModifyingRemoveTest extends ASTRewritingModifyingTest {
 		assertEqualString(preview, buf.toString());
 	}
 	
-	public void test0011() throws Exception {
+	public void DISABLED_test0011() throws Exception {
 		IPackageFragment pack1= fSourceFolder.createPackageFragment("test0011", false, null);
 		StringBuffer buf= new StringBuffer();
 		buf.append("function X() {\n");

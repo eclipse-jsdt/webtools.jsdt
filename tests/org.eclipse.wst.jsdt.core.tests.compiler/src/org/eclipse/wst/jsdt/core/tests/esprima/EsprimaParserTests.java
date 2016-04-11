@@ -92,6 +92,7 @@ import org.eclipse.wst.jsdt.core.dom.WhileStatement;
 import org.eclipse.wst.jsdt.core.dom.WithStatement;
 import org.eclipse.wst.jsdt.core.dom.YieldExpression;
 import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -485,8 +486,7 @@ public class EsprimaParserTests {
 	public void testYieldExpression(){
 		JavaScriptUnit unit = parse("function* foo(){yield index++;}");
 		assertNotNull(unit);
-		FunctionDeclarationStatement fstatement = (FunctionDeclarationStatement)unit.statements().get(0);
-		FunctionDeclaration func = fstatement.getDeclaration();
+		FunctionDeclaration func = (FunctionDeclaration) unit.statements().get(0);
 		ExpressionStatement stmt = (ExpressionStatement) func.getBody().statements().get(0);
 		assertEquals(ASTNode.YIELD_EXPRESSION,stmt.getExpression().getNodeType());
 		YieldExpression yieldE = (YieldExpression) stmt.getExpression();
@@ -1011,9 +1011,8 @@ public class EsprimaParserTests {
 		assertNotNull(unit);
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
-			if(astNode.getNodeType() == ASTNode.FUNCTION_DECLARATION_STATEMENT){
-				FunctionDeclarationStatement fds = (FunctionDeclarationStatement)astNode;
-				FunctionDeclaration fd = fds.getDeclaration();
+			if(astNode.getNodeType() == ASTNode.FUNCTION_DECLARATION){
+				FunctionDeclaration fd = (FunctionDeclaration) astNode;
 				assertFalse(fd.parameters().isEmpty());
 				assertEquals(2, fd.parameters().size());
 				SingleVariableDeclaration vd = (SingleVariableDeclaration) fd.parameters().get(1);
@@ -1058,9 +1057,8 @@ public class EsprimaParserTests {
 		assertNotNull(unit);
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
-			if(astNode.getNodeType() == ASTNode.FUNCTION_DECLARATION_STATEMENT){
-				FunctionDeclarationStatement fds = (FunctionDeclarationStatement)astNode;
-				FunctionDeclaration fd =fds.getDeclaration();
+			if(astNode.getNodeType() == ASTNode.FUNCTION_DECLARATION){
+				FunctionDeclaration fd = (FunctionDeclaration) astNode;
 				assertEquals(1, fd.parameters().size());
 				SingleVariableDeclaration svd = (SingleVariableDeclaration) fd.parameters().get(0);
 				ArrayName an = (ArrayName) svd.getPattern();
@@ -1080,9 +1078,8 @@ public class EsprimaParserTests {
 		assertNotNull(unit);
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
-			if(astNode.getNodeType() == ASTNode.FUNCTION_DECLARATION_STATEMENT){
-				FunctionDeclarationStatement fds = (FunctionDeclarationStatement)astNode;
-				FunctionDeclaration fd =fds.getDeclaration();
+			if(astNode.getNodeType() == ASTNode.FUNCTION_DECLARATION){
+				FunctionDeclaration fd = (FunctionDeclaration) astNode;
 				assertEquals(1, fd.parameters().size());
 				SingleVariableDeclaration svd = (SingleVariableDeclaration) fd.parameters().get(0);
 				ObjectName on = (ObjectName) svd.getPattern();
@@ -1173,8 +1170,7 @@ public class EsprimaParserTests {
 		JavaScriptUnit unit = parse("function f(){new.target;}");
 		assertNotNull(unit);
 		List<ASTNode> statements = unit.statements();
-		FunctionDeclarationStatement fds = (FunctionDeclarationStatement)unit.statements().get(0);
-		FunctionDeclaration fd = (FunctionDeclaration)fds.getDeclaration();
+		FunctionDeclaration fd = (FunctionDeclaration)unit.statements().get(0);
 		ExpressionStatement es = (ExpressionStatement)fd.getBody().statements().get(0);
 		assertEquals(ASTNode.META_PROPERTY, es.getExpression().getNodeType());
 		MetaProperty mp = (MetaProperty)es.getExpression();
@@ -1188,8 +1184,7 @@ public class EsprimaParserTests {
 		JavaScriptUnit unit = parse("function fName(){return;}");
 		assertNotNull(unit);
 		List<ASTNode> statements = unit.statements();
-		FunctionDeclarationStatement fds =  (FunctionDeclarationStatement)statements.get(0);
-		FunctionDeclaration fd = fds.getDeclaration();
+		FunctionDeclaration fd = (FunctionDeclaration) statements.get(0);
 		assertNotNull(fd.getMethodName());
 		assertEquals(fd.getName(), fd.getMethodName());
 		assertEquals("fName", ((SimpleName)fd.getMethodName()).getIdentifier());
@@ -1203,6 +1198,7 @@ public class EsprimaParserTests {
 	}
 
 	@Test
+	@Ignore
 	public void testAbortingError_2(){
 		JavaScriptUnit unit = parse("}");
 		assertNotNull(unit);
@@ -1344,6 +1340,7 @@ public class EsprimaParserTests {
 		assertEquals("agen", func.getMethodName().toString());
 		assertTrue(func.isGenerator());
 	}
+	
 	@Test
 	public void testComments(){
 		JavaScriptUnit unit = parse("/**\n"
@@ -1358,6 +1355,29 @@ public class EsprimaParserTests {
 		assertNotNull(commentList);
 		assertEquals(3,commentList.size());
 	}
+	
+	@Test
+	public void testCommentAttachment(){
+		JavaScriptUnit unit = parse( "/** JavaDoc Comment*/\n" +
+									 "function foo(i) {}");
+		List commentList = unit.getCommentList();
+		assertNotNull(commentList);
+		assertEquals(1,commentList.size());		
+		FunctionDeclaration fd = (FunctionDeclaration) unit.statements().get(0);
+		assertNotNull("JSDoc is NOT attached to function ", fd.getJavadoc());
+	}
+	
+	@Test
+	public void testCommentAttachment_2(){
+			JavaScriptUnit unit = parse( "/** JavaDoc Comment*/\n" +
+										 "var i;");
+			List commentList = unit.getCommentList();
+			assertNotNull(commentList);
+			assertEquals(1,commentList.size());		
+			VariableDeclarationStatement vd = (VariableDeclarationStatement) unit.statements().get(0);
+			assertNotNull("JSDoc is NOT attached to variable", vd.getJavadoc());
+		}
+	
 
 	@Test
 	public void testClassExpression(){

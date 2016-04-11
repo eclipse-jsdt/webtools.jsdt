@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -111,14 +111,6 @@ public class PackageDeclaration extends ASTNode {
 	JSdoc optionalDocComment = null;
 
 	/**
-	 * The annotations (element type: <code>Annotation</code>).
-	 * Null in JLS2. Added in JLS3; defaults to an empty list
-	 * (see constructor).
-	 *  
-	 */
-	private ASTNode.NodeList annotations = null;
-
-	/**
 	 * The package name; lazily initialized; defaults to a unspecified,
 	 * legal JavaScript package identifier.
 	 */
@@ -194,7 +186,6 @@ public class PackageDeclaration extends ASTNode {
 		result.setSourceRange(this.getStartPosition(), this.getLength());
 		if (this.ast.apiLevel >= AST.JLS3) {
 			result.setJavadoc((JSdoc) ASTNode.copySubtree(target, getJavadoc()));
-			result.annotations().addAll(ASTNode.copySubtrees(target, annotations()));
 		}
 		result.setName((Name) getName().clone(target));
 		return result;
@@ -216,29 +207,10 @@ public class PackageDeclaration extends ASTNode {
 		if (visitChildren) {
 			if (this.ast.apiLevel >= AST.JLS3) {
 				acceptChild(visitor, getJavadoc());
-				acceptChildren(visitor, this.annotations);
 			}
 			acceptChild(visitor, getName());
 		}
 		visitor.endVisit(this);
-	}
-
-	/**
-	 * Returns the live ordered list of annotations of this
-	 * package declaration (added in JLS3 API).
-	 *
-	 * @return the live list of annotations
-	 *    (element type: <code>Annotation</code>)
-	 * @exception UnsupportedOperationException if this operation is used in
-	 * a JLS2 AST
-	 *  
-	 */
-	public List annotations() {
-		// more efficient than just calling unsupportedIn2() to check
-		if (this.annotations == null) {
-			unsupportedIn2();
-		}
-		return this.annotations;
 	}
 
 	/**
@@ -250,10 +222,6 @@ public class PackageDeclaration extends ASTNode {
 	 *  
 	 */
 	public JSdoc getJavadoc() {
-		// more efficient than just calling unsupportedIn2() to check
-		if (this.annotations == null) {
-			unsupportedIn2();
-		}
 		return this.optionalDocComment;
 	}
 
@@ -267,10 +235,6 @@ public class PackageDeclaration extends ASTNode {
 	 *  
 	 */
 	public void setJavadoc(JSdoc docComment) {
-		// more efficient than just calling unsupportedIn2() to check
-		if (this.annotations == null) {
-			unsupportedIn2();
-		}
 		ASTNode oldChild = this.optionalDocComment;
 		preReplaceChild(oldChild, docComment, JAVADOC_PROPERTY);
 		this.optionalDocComment = docComment;
@@ -345,7 +309,6 @@ public class PackageDeclaration extends ASTNode {
 		return
 			memSize()
 			+ (this.optionalDocComment == null ? 0 : getJavadoc().treeSize())
-			+ (this.annotations == null ? 0 : this.annotations.listSize())
 			+ (this.packageName == null ? 0 : getName().treeSize());
 	}
 }

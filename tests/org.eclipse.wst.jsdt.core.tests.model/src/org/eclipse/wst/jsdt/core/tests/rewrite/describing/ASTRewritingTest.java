@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,6 +23,7 @@ import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.IPackageFragmentRoot;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.dom.AST;
+import org.eclipse.wst.jsdt.core.dom.ASTNode;
 import org.eclipse.wst.jsdt.core.dom.ASTParser;
 import org.eclipse.wst.jsdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.wst.jsdt.core.dom.BodyDeclaration;
@@ -39,8 +40,7 @@ import org.eclipse.wst.jsdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.wst.jsdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.wst.jsdt.core.tests.model.AbstractJavaModelTests;
 
-/**
-  */
+@SuppressWarnings("nls")
 public class ASTRewritingTest extends AbstractJavaModelTests {
 	/** @deprecated using deprecated code */
 	private static final int AST_INTERNAL_JLS2 = AST.JLS2;
@@ -99,17 +99,11 @@ public class ASTRewritingTest extends AbstractJavaModelTests {
 	}
 		
 	protected JavaScriptUnit createAST(IJavaScriptUnit cu) {
-		ASTParser parser= ASTParser.newParser(AST_INTERNAL_JLS2);
-		parser.setSource(cu);
-		parser.setResolveBindings(false);
-		return (JavaScriptUnit) parser.createAST(null);
-	}
-	
-	protected JavaScriptUnit createAST3(IJavaScriptUnit cu) {
 		ASTParser parser= ASTParser.newParser(AST.JLS3);
 		parser.setSource(cu);
 		parser.setResolveBindings(false);
-		return (JavaScriptUnit) parser.createAST(null);
+		JavaScriptUnit $ = (JavaScriptUnit) parser.createAST(null);
+		return $;
 	}
 	
 	protected String evaluateRewrite(IJavaScriptUnit cu, ASTRewrite rewrite) throws Exception {
@@ -152,10 +146,10 @@ public class ASTRewritingTest extends AbstractJavaModelTests {
 	public static FunctionDeclaration findMethodDeclaration(JavaScriptUnit astRoot, String simpleTypeName) {
 		List statements= astRoot.statements();
 		for (int i= 0; i < statements.size(); i++) {
-			Object obj=statements.get(i);
-			if (obj instanceof FunctionDeclaration) {
-							FunctionDeclaration elem= (FunctionDeclaration)obj; 
-							if (simpleTypeName.equals(elem.getName().getIdentifier())) {
+			ASTNode obj=(ASTNode) statements.get(i);
+			if (obj.getNodeType() == ASTNode.FUNCTION_DECLARATION) {
+							FunctionDeclaration elem= (FunctionDeclaration)obj;
+							if (simpleTypeName.equals(elem.getMethodName().toString())) {
 								return elem;
 							}
 			}

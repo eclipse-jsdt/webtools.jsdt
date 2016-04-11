@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -181,7 +181,7 @@ public class JSdoc extends Comment {
 	ASTNode clone0(AST target) {
 		JSdoc result = new JSdoc(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
-		if (this.ast.apiLevel == AST.JLS2_INTERNAL) {
+		if (this.comment != MINIMAL_DOC_COMMENT) {
 			result.setComment(getComment());
 		}
 		result.tags().addAll(ASTNode.copySubtrees(target, tags()));
@@ -220,7 +220,7 @@ public class JSdoc extends Comment {
 	 * See {@link #tags() tags}.
 	 */
 	public String getComment() {
-	    supportedOnlyIn2();
+//	    supportedOnlyIn2();
 		return this.comment;
 	}
 
@@ -238,7 +238,7 @@ public class JSdoc extends Comment {
 	 * See {@link #tags() tags}.
 	 */
 	public void setComment(String docComment) {
-	    supportedOnlyIn2();
+//	    supportedOnlyIn2();
 		if (docComment == null) {
 			throw new IllegalArgumentException();
 		}

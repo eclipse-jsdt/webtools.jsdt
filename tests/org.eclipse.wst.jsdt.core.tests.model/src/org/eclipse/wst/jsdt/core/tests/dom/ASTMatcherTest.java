@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,9 +11,9 @@
 
 package org.eclipse.wst.jsdt.core.tests.dom;
 
-import java.lang.reflect.Method;
 
-import junit.framework.Test;
+import static org.junit.Assert.*;
+
 
 import org.eclipse.wst.jsdt.core.dom.AST;
 import org.eclipse.wst.jsdt.core.dom.ASTMatcher;
@@ -91,26 +91,15 @@ import org.eclipse.wst.jsdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.WhileStatement;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test suite for <code>ASTMatcher</code> and <code>ASTNode.subtreeMatch</code>.
  */
-public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.TestCase { 
+public class ASTMatcherTest { 
 
-	/** @deprecated using deprecated code */
-	public static Test suite() {
-		// TODO (frederic) use buildList + setAstLevel(init) instead...
-		junit.framework.TestSuite suite = new junit.framework.TestSuite(ASTMatcherTest.class.getName());
-		
-		Class c = ASTMatcherTest.class;
-		Method[] methods = c.getMethods();
-		for (int i = 0, max = methods.length; i < max; i++) {
-			if (methods[i].getName().startsWith("test")) { //$NON-NLS-1$
-				suite.addTest(new ASTMatcherTest(methods[i].getName(), AST.JLS3));
-			}
-		}
-		return suite;
-	}	
 	
 	AST ast;
 	SimpleName N1;
@@ -159,9 +148,8 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	
 	int API_LEVEL;
 
-	public ASTMatcherTest(String name, int apiLevel) {
-		super(name);
-		this.API_LEVEL = apiLevel;
+	public ASTMatcherTest() {
+		this.API_LEVEL = AST.JLS3;
 	}
 		
 	/**
@@ -169,8 +157,8 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	 * that come from testing Javadoc.getComment())
 	 *
 	 */
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setUp() throws Exception {
 		
 		ast = AST.newAST(this.API_LEVEL);
 		N1 = ast.newSimpleName("N"); //$NON-NLS-1$
@@ -264,25 +252,11 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 
 	}
 	
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		ast = null;
-		super.tearDown();
 	}
 	
-	/** @deprecated using deprecated code */
-	public String getName() {
-		String name = super.getName();
-		switch (this.API_LEVEL) {
-			case AST.JLS2:
-				name = "JLS2 - " + name;
-				break;
-			case AST.JLS3:
-				name = "JLS3 - " + name; 
-				break;
-		}
-		return name;
-	}
-		
 	/**
 	 * An ASTMatcher that simply records the arguments it is passed,
 	 * immediately returns a pre-ordained answer, and counts how many
@@ -627,11 +601,13 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	}
 
 	// NAMES
+	@Test
 	public void testSimpleName() {
 		Name x1 = ast.newName(new String[]{"Z"}); //$NON-NLS-1$
 		basicMatch(x1);
 	}
 
+	@Test
 	public void testQualifiedName() {
 		Name x1 = ast.newName(new String[]{"X", "Y"}); //$NON-NLS-1$ //$NON-NLS-2$
 		basicMatch(x1);
@@ -639,16 +615,19 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 
 	
 	// TYPES
+	@Test
 	public void testPrimitiveType() {
 		Type x1 = ast.newPrimitiveType(PrimitiveType.CHAR);
 		basicMatch(x1);
 	}
 
+	@Test
 	public void testSimpleType() {
 		Type x1 = ast.newSimpleType(N1);
 		basicMatch(x1);
 	}
 
+	@Test
 	public void testArrayType() {
 		Type x0 = ast.newPrimitiveType(PrimitiveType.CHAR);
 		Type x1 = ast.newArrayType(x0);
@@ -656,6 +635,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	}
 
 	/** @deprecated using deprecated code */
+	@Test
 	public void testQualifiedType() {
 		if (ast.apiLevel() == AST.JLS2) {
 			return;
@@ -666,18 +646,21 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 
 	// EXPRESSIONS and STATEMENTS
 
+	@Test
 	public void testAnonymousClassDeclaration() {
 		AnonymousClassDeclaration x1 = ast.newAnonymousClassDeclaration();
 		x1.bodyDeclarations().add(FD1);
 		x1.bodyDeclarations().add(FD2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testArrayAccess() {
 		ArrayAccess x1 = ast.newArrayAccess();
 		x1.setArray(E1);
 		x1.setIndex(E2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testArrayCreation() {
 		ArrayCreation x1 = ast.newArrayCreation();
 		x1.setType(ast.newArrayType(T1));
@@ -686,18 +669,21 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setInitializer(ast.newArrayInitializer());
 		basicMatch(x1);
 	}
+	@Test
 	public void testArrayInitializer() {
 		ArrayInitializer x1 = ast.newArrayInitializer();
 		x1.expressions().add(E1);
 		x1.expressions().add(E2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testAssignment() {
 		Assignment x1 = ast.newAssignment();
 		x1.setLeftHandSide(E1);
 		x1.setRightHandSide(E2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testBlock() {
 		Block x1 = ast.newBlock();
 		x1.statements().add(S1);
@@ -705,32 +691,38 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		basicMatch(x1);
 	}
 	
+	@Test
 	public void testBlockComment() {
 		BlockComment x1 = ast.newBlockComment();
 		basicMatch(x1);
 	}
 
+	@Test
 	public void testBooleanLiteral() {
 		BooleanLiteral x1 = ast.newBooleanLiteral(true);
 		basicMatch(x1);
 	}
+	@Test
 	public void testBreakStatement() {
 		BreakStatement x1 = ast.newBreakStatement();
 		x1.setLabel(N1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testCatchClause() {
 		CatchClause x1 = ast.newCatchClause();
 		x1.setException(V1);
 		x1.setBody(B1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testCharacterLiteral() {
 		CharacterLiteral x1 = ast.newCharacterLiteral();
 		x1.setCharValue('q');
 		basicMatch(x1);
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testClassInstanceCreation() {
 		ClassInstanceCreation x1 = ast.newClassInstanceCreation();
 		x1.setExpression(E1);
@@ -742,6 +734,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setAnonymousClassDeclaration(ACD1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testConditionalExpression() {
 		ConditionalExpression x1 = ast.newConditionalExpression();
 		x1.setExpression(E1);
@@ -749,6 +742,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setElseExpression(N1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testConstructorInvocation() {
 		ConstructorInvocation x1 = ast.newConstructorInvocation();
 		
@@ -756,22 +750,26 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.arguments().add(E2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testContinueStatement() {
 		ContinueStatement x1 = ast.newContinueStatement();
 		x1.setLabel(N1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testDoStatement() {
 		DoStatement x1 = ast.newDoStatement();
 		x1.setExpression(E1);
 		x1.setBody(S1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testEmptyStatement() {
 		EmptyStatement x1 = ast.newEmptyStatement();
 		basicMatch(x1);
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testEnhancedForStatement() {
 		if (ast.apiLevel() == AST.JLS2) {
 			return;
@@ -782,16 +780,19 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setBody(S1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testExpressionStatement() {
 		ExpressionStatement x1 = ast.newExpressionStatement(E1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testFieldAccess() {
 		FieldAccess x1 = ast.newFieldAccess();
 		x1.setExpression(E1);
 		x1.setName(N1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testFieldDeclaration() {
 		FieldDeclaration x1 = ast.newFieldDeclaration(W1);
 		x1.setJavadoc(JD1);
@@ -803,6 +804,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.fragments().add(W2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testForStatement() {
 		ForStatement x1 = ast.newForStatement();
 		x1.initializers().add(E1);
@@ -813,6 +815,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setBody(S1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testIfStatement() {
 		IfStatement x1 = ast.newIfStatement();
 		x1.setExpression(E1);
@@ -820,11 +823,13 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setElseStatement(S2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testImportDeclaration() {
 		ImportDeclaration x1 = ast.newImportDeclaration();
 		x1.setName(N1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testInfixExpression() {
 		InfixExpression x1 = ast.newInfixExpression();
 		x1.setOperator(InfixExpression.Operator.PLUS);
@@ -834,6 +839,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.extendedOperands().add(N2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testInitializer() {
 		Initializer x1 = ast.newInitializer();
 		x1.setJavadoc(JD1);
@@ -849,6 +855,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	 * that come from testing Javadoc.getComment())
 	 *
 	 */
+	@Test
 	public void testJavadoc() {
 		JSdoc x1 = ast.newJSdoc();
 		if (ast.apiLevel() == AST.JLS2) {
@@ -859,6 +866,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		basicMatch(x1);
 	}
 
+	@Test
 	public void testLabeledStatement() {
 		LabeledStatement x1 = ast.newLabeledStatement();
 		x1.setLabel(N1);
@@ -866,11 +874,13 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		basicMatch(x1);
 	}
 
+	@Test
 	public void testLineComment() {
 		LineComment x1 = ast.newLineComment();
 		basicMatch(x1);
 	}
 
+	@Test
 	public void testMemberRef() {
 		MemberRef x1 = ast.newMemberRef();
 		x1.setQualifier(N1);
@@ -879,6 +889,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	}
 
 	/** @deprecated using deprecated code */
+	@Test
 	public void testMethodDeclaration() {
 		FunctionDeclaration x1 = ast.newFunctionDeclaration();
 		x1.setJavadoc(JD1);
@@ -897,6 +908,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setBody(B1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testMethodInvocation() {
 		FunctionInvocation x1 = ast.newFunctionInvocation();
 		x1.setExpression(N1);
@@ -907,6 +919,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		basicMatch(x1);
 	}
 	
+	@Test
 	public void testMethodRef() {
 		FunctionRef x1 = ast.newFunctionRef();
 		basicMatch(x1);
@@ -914,6 +927,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setName(N2);
 		x1.parameters().add(MPARM1);
 	}
+	@Test
 	public void testMethodRefParameter() {
 		FunctionRefParameter x1 = ast.newFunctionRefParameter();
 		x1.setType(T1);
@@ -921,35 +935,42 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		basicMatch(x1);
 	}
 	
+	@Test
 	public void testNullLiteral() {
 		NullLiteral x1 = ast.newNullLiteral();
 		basicMatch(x1);
 	}
+	@Test
 	public void testNumberLiteral() {
 		NumberLiteral x1 = ast.newNumberLiteral("1.0"); //$NON-NLS-1$
 		basicMatch(x1);
 	}
+	@Test
 	public void testParenthesizedExpression() {
 		ParenthesizedExpression x1 = ast.newParenthesizedExpression();
 		basicMatch(x1);
 	}
+	@Test
 	public void testPostfixExpression() {
 		PostfixExpression x1 = ast.newPostfixExpression();
 		x1.setOperand(E1);
 		x1.setOperator(PostfixExpression.Operator.INCREMENT);
 		basicMatch(x1);
 	}
+	@Test
 	public void testPrefixExpression() {
 		PrefixExpression x1 = ast.newPrefixExpression();
 		x1.setOperand(E1);
 		x1.setOperator(PrefixExpression.Operator.INCREMENT);
 		basicMatch(x1);
 	}
+	@Test
 	public void testReturnStatement() {
 		ReturnStatement x1 = ast.newReturnStatement();
 		x1.setExpression(E1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testSingleVariableDeclaration() {
 		SingleVariableDeclaration x1 = ast.newSingleVariableDeclaration();
 		if (ast.apiLevel() >= AST.JLS3) {
@@ -961,11 +982,13 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.setInitializer(E1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testStringLiteral() {
 		StringLiteral x1 = ast.newStringLiteral();
 		x1.setLiteralValue("H"); //$NON-NLS-1$
 		basicMatch(x1);
 	}
+	@Test
 	public void testSuperConstructorInvocation() {
 		SuperConstructorInvocation x1 = ast.newSuperConstructorInvocation();
 		x1.setExpression(N1);
@@ -974,12 +997,14 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.arguments().add(E2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testSuperFieldAccess() {
 		SuperFieldAccess x1 = ast.newSuperFieldAccess();
 		x1.setQualifier(N1);
 		x1.setName(N2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testSuperMethodInvocation() {
 		SuperMethodInvocation x1 = ast.newSuperMethodInvocation();
 		x1.setQualifier(N1);
@@ -989,11 +1014,13 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.arguments().add(E2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testSwitchCase() {
 		SwitchCase x1 = ast.newSwitchCase();
 		x1.setExpression(E1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testSwitchStatement() {
 		SwitchStatement x1 = ast.newSwitchStatement();
 		x1.setExpression(E1);
@@ -1002,6 +1029,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		basicMatch(x1);
 	}
 	
+	@Test
 	public void testTagElement() {
 		TagElement x1 = ast.newTagElement();
 		x1.setTagName("@foo"); //$NON-NLS-1$
@@ -1011,22 +1039,26 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.fragments().add(MTHREF1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testTextElement() {
 		TextElement x1 = ast.newTextElement();
 		x1.setText("foo"); //$NON-NLS-1$
 		basicMatch(x1);
 	}
 
+	@Test
 	public void testThisExpression() {
 		ThisExpression x1 = ast.newThisExpression();
 		x1.setQualifier(N1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testThrowStatement() {
 		ThrowStatement x1 = ast.newThrowStatement();
 		x1.setExpression(E1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testTryStatement() {
 		TryStatement x1 = ast.newTryStatement();
 		x1.setBody(B1);
@@ -1042,6 +1074,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		basicMatch(x1);
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testTypeDeclaration() {
 		TypeDeclaration x1 = ast.newTypeDeclaration();
 		x1.setJavadoc(JD1);
@@ -1056,21 +1089,25 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.bodyDeclarations().add(FD2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testTypeDeclarationStatement() {
 		TypeDeclarationStatement x1 = ast.newTypeDeclarationStatement(TD1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testTypeLiteral() {
 		TypeLiteral x1 = ast.newTypeLiteral();
 		x1.setType(T1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testVariableDeclarationFragment() {
 		VariableDeclarationFragment x1 = ast.newVariableDeclarationFragment();
 		x1.setName(N1);
 		x1.setInitializer(E1);
 		basicMatch(x1);
 	}
+	@Test
 	public void testVariableDeclarationExpression() {
 		VariableDeclarationExpression x1 = ast.newVariableDeclarationExpression(W1);
 		if (ast.apiLevel() >= AST.JLS3) {
@@ -1081,6 +1118,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.fragments().add(W2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testVariableDeclarationStatement() {
 		VariableDeclarationStatement x1 = ast.newVariableDeclarationStatement(W1);
 		if (ast.apiLevel() >= AST.JLS3) {
@@ -1091,6 +1129,7 @@ public class ASTMatcherTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		x1.fragments().add(W2);
 		basicMatch(x1);
 	}
+	@Test
 	public void testWhileStatement() {
 		WhileStatement x1 = ast.newWhileStatement();
 		x1.setExpression(E1);

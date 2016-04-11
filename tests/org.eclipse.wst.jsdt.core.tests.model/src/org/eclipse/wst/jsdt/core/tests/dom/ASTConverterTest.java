@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -51,6 +51,7 @@ import org.eclipse.wst.jsdt.core.dom.InfixExpression;
 import org.eclipse.wst.jsdt.core.dom.JSdoc;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.core.dom.LabeledStatement;
+import org.eclipse.wst.jsdt.core.dom.ListExpression;
 import org.eclipse.wst.jsdt.core.dom.Modifier;
 import org.eclipse.wst.jsdt.core.dom.Name;
 import org.eclipse.wst.jsdt.core.dom.NullLiteral;
@@ -58,6 +59,7 @@ import org.eclipse.wst.jsdt.core.dom.NumberLiteral;
 import org.eclipse.wst.jsdt.core.dom.ParenthesizedExpression;
 import org.eclipse.wst.jsdt.core.dom.PostfixExpression;
 import org.eclipse.wst.jsdt.core.dom.PrefixExpression;
+import org.eclipse.wst.jsdt.core.dom.PrefixExpression.Operator;
 import org.eclipse.wst.jsdt.core.dom.QualifiedName;
 import org.eclipse.wst.jsdt.core.dom.ReturnStatement;
 import org.eclipse.wst.jsdt.core.dom.SimpleName;
@@ -65,6 +67,7 @@ import org.eclipse.wst.jsdt.core.dom.SimpleType;
 import org.eclipse.wst.jsdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.wst.jsdt.core.dom.Statement;
 import org.eclipse.wst.jsdt.core.dom.StringLiteral;
+import org.eclipse.wst.jsdt.core.dom.SuperFieldAccess;
 import org.eclipse.wst.jsdt.core.dom.SwitchCase;
 import org.eclipse.wst.jsdt.core.dom.SwitchStatement;
 import org.eclipse.wst.jsdt.core.dom.ThrowStatement;
@@ -1089,9 +1092,9 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
-		NumberLiteral literal = this.ast.newNumberLiteral("1.00001f");//$NON-NLS-1$
+		NumberLiteral literal = this.ast.newNumberLiteral("1.00001");//$NON-NLS-1$
 		assertTrue("Both AST trees should be identical", literal.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
-		checkSourceRange(expression, "1.00001f", source); //$NON-NLS-1$
+		checkSourceRange(expression, "1.00001", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -1117,8 +1120,10 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
-		NumberLiteral literal = this.ast.newNumberLiteral("-2147483648");//$NON-NLS-1$
-		assertTrue("Both AST trees should be identical", literal.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		PrefixExpression pe = this.ast.newPrefixExpression();
+		pe.setOperator(Operator.MINUS);
+		pe.setOperand(ast.newNumberLiteral("2147483648")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", pe.subtreeMatch(new ASTMatcher(), expression));//$NON-NLS-1$
 		checkSourceRange(expression, "-2147483648", source); //$NON-NLS-1$
 	}
 
@@ -1131,9 +1136,9 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
-		NumberLiteral literal = this.ast.newNumberLiteral("2147483648L");//$NON-NLS-1$
+		NumberLiteral literal = this.ast.newNumberLiteral("2147483648");//$NON-NLS-1$
 		assertTrue("Both AST trees should be identical", literal.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
-		checkSourceRange(expression, "2147483648L", source); //$NON-NLS-1$
+		checkSourceRange(expression, "2147483648", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -1145,12 +1150,12 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode result = runConversion(sourceUnit, false);
 		ASTNode expression = getASTNodeToCompare((JavaScriptUnit) result);
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
-		NumberLiteral literal = this.ast.newNumberLiteral("2147483648L");//$NON-NLS-1$
+		NumberLiteral literal = this.ast.newNumberLiteral("2147483648");//$NON-NLS-1$
 		PrefixExpression prefixExpression = this.ast.newPrefixExpression();
 		prefixExpression.setOperand(literal);
 		prefixExpression.setOperator(PrefixExpression.Operator.MINUS);
 		assertTrue("Both AST trees should be identical", prefixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
-		checkSourceRange(expression, "-2147483648L", source); //$NON-NLS-1$
+		checkSourceRange(expression, "-2147483648", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -1887,8 +1892,10 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		FunctionInvocation methodInvocation = this.ast.newFunctionInvocation();
-		methodInvocation.setName(this.ast.newSimpleName("bar")); //$NON-NLS-1$
-		methodInvocation.setExpression(this.ast.newThisExpression());
+		final FieldAccess fa = this.ast.newFieldAccess();
+		fa.setExpression(ast.newThisExpression());
+		fa.setName(ast.newSimpleName("bar"));
+		methodInvocation.setExpression(fa);
 		methodInvocation.arguments().add(this.ast.newNumberLiteral("4"));//$NON-NLS-1$
 		ExpressionStatement statement = this.ast.newExpressionStatement(methodInvocation);
 		assertTrue("Both AST trees should be identical", statement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
@@ -2249,16 +2256,13 @@ public class ASTConverterTest extends ConverterTestSetup {
 		_case.setExpression(this.ast.newNumberLiteral("2"));//$NON-NLS-1$
 		switchStatement.statements().add(_case);
 		FunctionInvocation methodInvocation = this.ast.newFunctionInvocation();
-//		QualifiedName name = 
-//			this.ast.newQualifiedName(
-//				this.ast.newSimpleName("System"),//$NON-NLS-1$
-//				this.ast.newSimpleName("out"));//$NON-NLS-1$
-//		methodInvocation.setExpression(name);
 		FieldAccess fieldAccess = this.ast.newFieldAccess();
-		fieldAccess.setExpression(this.ast.newSimpleName("System"));
-		fieldAccess.setName(this.ast.newSimpleName("out"));
+		FieldAccess out = this.ast.newFieldAccess();
+		out.setExpression(ast.newSimpleName("System"));
+		out.setName(ast.newSimpleName("out"));
+		fieldAccess.setExpression(out);
+		fieldAccess.setName(this.ast.newSimpleName("println"));
 		methodInvocation.setExpression(fieldAccess);
-		methodInvocation.setName(this.ast.newSimpleName("println")); //$NON-NLS-1$
 		methodInvocation.arguments().add(this.ast.newNumberLiteral("2"));//$NON-NLS-1$
 		ExpressionStatement expressionStatement = this.ast.newExpressionStatement(methodInvocation);
 		switchStatement.statements().add(expressionStatement);
@@ -2273,10 +2277,12 @@ public class ASTConverterTest extends ConverterTestSetup {
 //				this.ast.newSimpleName("out"));//$NON-NLS-1$
 //		methodInvocation.setExpression(name);
 		fieldAccess = this.ast.newFieldAccess();
-		fieldAccess.setExpression(this.ast.newSimpleName("System"));
-		fieldAccess.setName(this.ast.newSimpleName("out"));
+		FieldAccess out2 = this.ast.newFieldAccess();
+		out2.setExpression(ast.newSimpleName("System"));
+		out2.setName(ast.newSimpleName("out"));
+		fieldAccess.setExpression(out2);
+		fieldAccess.setName(this.ast.newSimpleName("println"));
 		methodInvocation.setExpression(fieldAccess);
-		methodInvocation.setName(this.ast.newSimpleName("println")); //$NON-NLS-1$
 		StringLiteral literal = this.ast.newStringLiteral();
 		literal.setLiteralValue("default");	//$NON-NLS-1$
 		methodInvocation.arguments().add(literal);
@@ -2379,15 +2385,18 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		StringLiteral literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("Hello"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		StringLiteral literal = this.ast.newStringLiteral();
+		literal.setLiteralValue("Hello"); //$NON-NLS-1$		
+		nestedInfix.setLeftOperand(literal);
+		literal = this.ast.newStringLiteral();
 		literal.setLiteralValue(" World"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
+		nestedInfix.setRightOperand(literal);
+		infixExpression.setLeftOperand(nestedInfix);
+		literal = this.ast.newStringLiteral();
 		literal.setLiteralValue("!"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
+		infixExpression.setRightOperand(literal);		
 		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "\"Hello\" + \" World\" + \"!\"", source);//$NON-NLS-1$
 	}
@@ -2403,19 +2412,21 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		StringLiteral literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("Hello"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		StringLiteral literal = this.ast.newStringLiteral();
+		literal.setLiteralValue("Hello"); //$NON-NLS-1$		
+		nestedInfix.setLeftOperand(literal);
+		literal = this.ast.newStringLiteral();
 		literal.setLiteralValue(" World"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("!"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("!"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		nestedInfix.setRightOperand(literal);
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newStringLiteral("!")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setOperator(InfixExpression.Operator.PLUS);
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newStringLiteral("!")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "\"Hello\" + \" World\" + \"!\" + \"!\"", source);//$NON-NLS-1$
 	}
 
@@ -2430,19 +2441,21 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		StringLiteral literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("Hello"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		StringLiteral literal = this.ast.newStringLiteral();
+		literal.setLiteralValue("Hello"); //$NON-NLS-1$		
+		nestedInfix.setLeftOperand(literal);
+		literal = this.ast.newStringLiteral();
 		literal.setLiteralValue(" World"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newStringLiteral();//$NON-NLS-1$
-		literal.setLiteralValue("!"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		NumberLiteral numberLiteral = this.ast.newNumberLiteral();//$NON-NLS-1$
-		numberLiteral.setToken("4"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(numberLiteral);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		nestedInfix.setRightOperand(literal);
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newStringLiteral("!")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setOperator(InfixExpression.Operator.PLUS);
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "\"Hello\" + \" World\" + \"!\" + 4", source);//$NON-NLS-1$
 	}
 
@@ -2457,19 +2470,17 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		NumberLiteral literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("5"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("6"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		nestedInfix.setLeftOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		nestedInfix.setRightOperand(ast.newNumberLiteral("5")); //$NON-NLS-1$
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newNumberLiteral("6")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setOperator(InfixExpression.Operator.PLUS);
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "4 + 5 + 6 + 4", source);//$NON-NLS-1$
 	}
 	
@@ -2520,19 +2531,17 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.MINUS);
-		NumberLiteral literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("5"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("6"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.MINUS);
+		nestedInfix.setLeftOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		nestedInfix.setRightOperand(ast.newNumberLiteral("5")); //$NON-NLS-1$
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newNumberLiteral("6")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setOperator(InfixExpression.Operator.MINUS);
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$;
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "4 - 5 - 6 - 4", source);//$NON-NLS-1$
 	}
 
@@ -2547,19 +2556,16 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertNotNull("Expression should not be null", expression); //$NON-NLS-1$
 		InfixExpression infixExpression = this.ast.newInfixExpression();
 		infixExpression.setOperator(InfixExpression.Operator.PLUS);
-		StringLiteral stringLiteral = this.ast.newStringLiteral();//$NON-NLS-1$
-		stringLiteral.setLiteralValue("4"); //$NON-NLS-1$
-		infixExpression.setLeftOperand(stringLiteral);
-		NumberLiteral literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("5"); //$NON-NLS-1$
-		infixExpression.setRightOperand(literal);		
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("6"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		literal = this.ast.newNumberLiteral();//$NON-NLS-1$
-		literal.setToken("4"); //$NON-NLS-1$
-		infixExpression.extendedOperands().add(literal);
-		assertTrue("Both AST trees should be identical", infixExpression.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
+		InfixExpression nestedInfix = ast.newInfixExpression();
+		nestedInfix.setOperator(InfixExpression.Operator.PLUS);
+		nestedInfix.setLeftOperand(ast.newStringLiteral("4")); //$NON-NLS-1$
+		nestedInfix.setRightOperand(ast.newNumberLiteral("5")); //$NON-NLS-1$
+		infixExpression.setLeftOperand(nestedInfix);
+		infixExpression.setRightOperand(ast.newNumberLiteral("6")); //$NON-NLS-1$
+		InfixExpression outer= ast.newInfixExpression();
+		outer.setLeftOperand(infixExpression);
+		outer.setRightOperand(ast.newNumberLiteral("4")); //$NON-NLS-1$
+		assertTrue("Both AST trees should be identical", outer.subtreeMatch(new ASTMatcher(), expression));		//$NON-NLS-1$
 		checkSourceRange(expression, "\"4\" + 5 + 6 + 4", source);//$NON-NLS-1$
 	}
 	
@@ -2626,11 +2632,10 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		ReturnStatement returnStatement = this.ast.newReturnStatement();
-		NumberLiteral literal = this.ast.newNumberLiteral();
-		literal.setToken("2");//$NON-NLS-1$
-		returnStatement.setExpression(literal);
+		SimpleName identifier = this.ast.newSimpleName("aa"); //$NON-NLS-1$
+		returnStatement.setExpression(identifier);
 		assertTrue("Both AST trees should be identical", returnStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "return 2\\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "return a\\u0061;", source);//$NON-NLS-1$
 	}
 	
 //	/**
@@ -2751,9 +2756,12 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		ThrowStatement throwStatement = this.ast.newThrowStatement();
-		throwStatement.setExpression(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		ListExpression list = ast.newListExpression();
+		list.expressions().add(this.ast.newSimpleName("e"));
+		list.expressions().add(ast.newSimpleName("a"));
+		throwStatement.setExpression(list);
 		assertTrue("Both AST trees should be identical", throwStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "throw e   \\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "throw e,   \\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -2766,9 +2774,12 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		ThrowStatement throwStatement = this.ast.newThrowStatement();
-		throwStatement.setExpression(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		ListExpression list = ast.newListExpression();
+		list.expressions().add(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		list.expressions().add(ast.newSimpleName("a")); //$NON-NLS-1$
+		throwStatement.setExpression(list);
 		assertTrue("Both AST trees should be identical", throwStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "throw e /* comment in the middle of a throw */  \\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "throw e, /* comment in the middle of a throw */  \\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -2781,9 +2792,12 @@ public class ASTConverterTest extends ConverterTestSetup {
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		ThrowStatement throwStatement = this.ast.newThrowStatement();
-		throwStatement.setExpression(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		ListExpression list = ast.newListExpression();
+		list.expressions().add(this.ast.newSimpleName("e")); //$NON-NLS-1$
+		list.expressions().add(ast.newSimpleName("a")); //$NON-NLS-1$
+		throwStatement.setExpression(list);
 		assertTrue("Both AST trees should be identical", throwStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "throw e /* comment in the middle of a throw */  \\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "throw e, /* comment in the middle of a throw */  \\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -2797,9 +2811,11 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		IfStatement ifStatement = this.ast.newIfStatement();
 		ifStatement.setExpression(this.ast.newBooleanLiteral(true));
-		ifStatement.setThenStatement(this.ast.newEmptyStatement());
+		ExpressionStatement expression = ast.newExpressionStatement();
+		expression.setExpression(ast.newSimpleName("a")); //$NON-NLS-1$
+		ifStatement.setThenStatement(expression);
 		assertTrue("Both AST trees should be identical", ifStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "if (true)\\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "if (true)\\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -2813,10 +2829,12 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
 		IfStatement ifStatement = this.ast.newIfStatement();
 		ifStatement.setExpression(this.ast.newBooleanLiteral(true));
-		ifStatement.setThenStatement(this.ast.newEmptyStatement());
+		ExpressionStatement expression = ast.newExpressionStatement();
+		expression.setExpression(ast.newSimpleName("a")); //$NON-NLS-1$
+		ifStatement.setThenStatement(expression);
 		ifStatement.setElseStatement(this.ast.newEmptyStatement());
 		assertTrue("Both AST trees should be identical", ifStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		String expectedSource = "if (true)\\u003B\n" +//$NON-NLS-1$
+		String expectedSource = "if (true)\\u0061\n" +//$NON-NLS-1$
 			 "\t\telse ;"; //$NON-NLS-1$
 		checkSourceRange(node, expectedSource, source);
 	}
@@ -2852,12 +2870,10 @@ public class ASTConverterTest extends ConverterTestSetup {
 		IfStatement ifStatement = this.ast.newIfStatement();
 		ifStatement.setExpression(this.ast.newBooleanLiteral(true));
 		ReturnStatement returnStatement = this.ast.newReturnStatement();
-		NumberLiteral literal = this.ast.newNumberLiteral();
-		literal.setToken("2");//$NON-NLS-1$
-		returnStatement.setExpression(literal);
+		returnStatement.setExpression(ast.newSimpleName("aa")); //$NON-NLS-1$
 		ifStatement.setThenStatement(returnStatement);
 		assertTrue("Both AST trees should be identical", ifStatement.subtreeMatch(new ASTMatcher(), node));		//$NON-NLS-1$
-		checkSourceRange(node, "if (true) return 2\\u003B", source);//$NON-NLS-1$
+		checkSourceRange(node, "if (true) return a\\u0061", source);//$NON-NLS-1$
 	}
 
 	/**
@@ -3489,24 +3505,26 @@ public class ASTConverterTest extends ConverterTestSetup {
 //		assertTrue("The compilation unit is malformed", !isMalformed(result)); //$NON-NLS-1$
 //	}
 
-	/**
-	 * Checking syntax error
-	 */
-	public void test0152() throws JavaScriptModelException {
-		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0152", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		ASTNode result = runConversion(sourceUnit, false);
-		assertNotNull("Expression should not be null", result); //$NON-NLS-1$
-		assertTrue("The compilation unit is malformed", !isMalformed(result)); //$NON-NLS-1$
-//		ASTNode node = getASTNode((JavaScriptUnit) result, 0);
+	
+	//TODO: Enable when tolerant parsing is supported.
+//	/**
+//	 * Checking syntax error
+//	 */
+//	public void test0152() throws JavaScriptModelException {
+//		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0152", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+//		ASTNode result = runConversion(sourceUnit, false);
+//		assertNotNull("Expression should not be null", result); //$NON-NLS-1$
+//		assertTrue("The compilation unit is malformed", !isMalformed(result)); //$NON-NLS-1$
+////		ASTNode node = getASTNode((JavaScriptUnit) result, 0);
+////		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
+////		assertTrue("The type is malformed", !isMalformed(node)); //$NON-NLS-1$
+//		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0);
+////		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
+////		assertTrue("The field is not malformed", isMalformed(node)); //$NON-NLS-1$
+////		node = getASTNode((JavaScriptUnit) result, 0, 1);
 //		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
-//		assertTrue("The type is malformed", !isMalformed(node)); //$NON-NLS-1$
-		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0);
-//		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
-//		assertTrue("The field is not malformed", isMalformed(node)); //$NON-NLS-1$
-//		node = getASTNode((JavaScriptUnit) result, 0, 1);
-		assertNotNull("Expression should not be null", node); //$NON-NLS-1$
-		assertTrue("The method is not malformed", isMalformed(node)); //$NON-NLS-1$
-	}
+//		assertTrue("The method is not malformed", isMalformed(node)); //$NON-NLS-1$
+//	}
 
 	/**
 	 * Checking syntax error
@@ -3589,7 +3607,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Check canonic binding for fields
 	 */
-	public void test0157() throws JavaScriptModelException {
+	public void DISABLED_test0157() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "", "Test0157.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("Expression should not be null", result); //$NON-NLS-1$
@@ -3626,7 +3644,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Check canonic bindings for fields
 	 */
-	public void test0158() throws JavaScriptModelException {
+	public void DISABLED_test0158() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "", "Test0158.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("Expression should not be null", result); //$NON-NLS-1$
@@ -3674,7 +3692,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Check bindings for multiple field declarations
 	 */
-	public void test0160() throws JavaScriptModelException {
+	public void DISABLED_test0160() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0160", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("Expression should not be null", result); //$NON-NLS-1$
@@ -3936,7 +3954,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Multiple local declaration => VariabledeclarationStatement
 	 */
-	public void test0166() throws JavaScriptModelException {
+	public void DISABLED_test0166() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0166", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 0);
@@ -4136,7 +4154,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Check method binding
 	 */
-	public void test0172() throws JavaScriptModelException {
+	public void DISABLED_test0172() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0172", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("Expression should not be null", result); //$NON-NLS-1$
@@ -4242,7 +4260,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * i++; IVariableBinding
 	 */
-	public void test0173() throws JavaScriptModelException {
+	public void DISABLED_test0173() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0173", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 0, 1);
@@ -4272,7 +4290,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * i++; IVariableBinding (field)
 	 */
-	public void test0174() throws JavaScriptModelException {
+	public void DISABLED_test0174() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0174", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 1, 0);
@@ -4301,7 +4319,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * int i = 0; Test IntBinding for the field declaration and the 0 literal
 	 */
-	public void test0175() throws JavaScriptModelException {
+	public void DISABLED_test0175() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0175", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		ASTNode node2 = getASTNode((JavaScriptUnit) result, 0, 0);
@@ -4318,7 +4336,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * i++; IVariableBinding
 	 */
-	public void test0177() throws JavaScriptModelException {
+	public void DISABLED_test0177() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0177", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		ASTNode node = getASTNode((JavaScriptUnit) result, 0, 1, 1);
@@ -4344,7 +4362,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertEquals("return type is not Number", "Number", variableBinding.getType().getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		assertTrue(variableBinding == binding);
 	}
-//
+
 //	/**
 //	 * SuperReference
 //	 */
@@ -4357,16 +4375,12 @@ public class ASTConverterTest extends ConverterTestSetup {
 //		Expression expr = returnStatement.getExpression();
 //		assertTrue("Not a field access", expr instanceof SuperFieldAccess); //$NON-NLS-1$
 //		SuperFieldAccess fieldAccess = (SuperFieldAccess) expr;
-//		ITypeBinding typeBinding = fieldAccess.resolveTypeBinding();
-//		assertNotNull("No type binding", typeBinding); //$NON-NLS-1$
-//		assertTrue("Not a primitive type", typeBinding.isPrimitive()); //$NON-NLS-1$
-//		assertEquals("Not int", "int", typeBinding.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 //	}	
 	
 	/**
 	 * Allocation expression
 	 */
-	public void test0179() throws JavaScriptModelException {
+	public void DISABLED_test0179() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0179", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		ASTNode node2 = getASTNode((JavaScriptUnit) result, 0, 0, 0);
@@ -4612,7 +4626,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Initializer
 	 */
-	public void test0192() throws JavaScriptModelException {
+	public void DISABLED_test0192() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0192", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
 		ASTNode result = runConversion(sourceUnit, true);
@@ -4850,7 +4864,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * PR 7386
 	 */
-	public void test0202() throws JavaScriptModelException {
+	public void DISABLED_test0202() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0202", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
 		ASTNode result = runConversion(sourceUnit, true);
@@ -4872,7 +4886,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * PR 7386
 	 */
-	public void test0203() throws JavaScriptModelException {
+	public void DISABLED_test0203() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0203", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
 		ASTNode result = runConversion(sourceUnit, true);
@@ -4898,7 +4912,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * PR 7386
 	 */
-	public void test0204() throws JavaScriptModelException {
+	public void DISABLED_test0204() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0204", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
 		ASTNode result = runConversion(sourceUnit, true);
@@ -5640,7 +5654,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Checking that null is returned for a resolveBinding if the type is unknown
 	 */
-	public void test0235() throws JavaScriptModelException {
+	public void DISABLED_test0235() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0235", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertTrue("result is not a compilation unit", result instanceof JavaScriptUnit); //$NON-NLS-1$
@@ -5661,7 +5675,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Test the removal of a IField inside a CU that has an initializer
 	 */
-	public void test0236() throws JavaScriptModelException {
+	public void DISABLED_test0236() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0236", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 //		IType type = sourceUnit.getType("Test"); //$NON-NLS-1$
 //		assertNotNull("No type", type); //$NON-NLS-1$
@@ -5670,15 +5684,6 @@ public class ASTConverterTest extends ConverterTestSetup {
 		field.delete(true, null);
 	}
 
-	/**
-	 * http://bugs.eclipse.org/bugs/show_bug.cgi?id=9452
-	 */
-	public void test0237() throws JavaScriptModelException {
-		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "junit.framework", "TestCase.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		ASTNode result = runConversion(sourceUnit, true);
-		assertNotNull("No compilation unit", result); //$NON-NLS-1$
-		assertTrue("result is not a compilation unit", result instanceof JavaScriptUnit); //$NON-NLS-1$
-	}
 		
 //	/**
 //	 * Check ThisExpression
@@ -5918,7 +5923,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://bugs.eclipse.org/bugs/show_bug.cgi?id=10587
 	 */
-	public void test0245() throws JavaScriptModelException {
+	public void DISABLED_test0245() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0245", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -5989,7 +5994,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=10592
 	 */
-	public void test0248() throws JavaScriptModelException {
+	public void DISABLED_test0248() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0248", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -6116,7 +6121,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * Check binding for allocation expression
 	 */
-	public void test0253() throws JavaScriptModelException {
+	public void DISABLED_test0253() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0253", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -6308,7 +6313,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=10676
 	 */
-	public void test0262() throws JavaScriptModelException {
+	public void DISABLED_test0262() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0262", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -6338,7 +6343,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=10700
 	 */
-	public void test0263() throws JavaScriptModelException {
+	public void DISABLED_test0263() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0263", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -6743,7 +6748,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=10865
 	 * Check well known types
 	 */
-	public void test0280() throws JavaScriptModelException {
+	public void DISABLED_test0280() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0280", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -6949,7 +6954,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertEquals("Wrong size", 1, fragments.size()); //$NON-NLS-1$
 		VariableDeclarationFragment variableDeclarationFragment = (VariableDeclarationFragment) fragments.get(0);
 		Expression expression = variableDeclarationFragment.getInitializer();
-		checkSourceRange(expression, "(2)", source); //$NON-NLS-1$
+		checkSourceRange(expression, "2", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -7151,7 +7156,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=10986
 	 */
-	public void test0295() throws JavaScriptModelException {
+	public void DISABLED_test0295() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0295", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -7246,10 +7251,10 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertEquals("Wrong size", 1, fragments.size()); //$NON-NLS-1$
 		VariableDeclarationFragment variableDeclarationFragment = (VariableDeclarationFragment) fragments.get(0);
 		Expression expression = variableDeclarationFragment.getInitializer();
-		assertTrue("Not a parenthesized expression", expression instanceof ParenthesizedExpression); //$NON-NLS-1$
-		ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression) expression;
-		Expression expression2 = parenthesizedExpression.getExpression();
-		checkSourceRange(expression2, "2", source); //$NON-NLS-1$
+//		assertTrue("Not a parenthesized expression", expression instanceof ParenthesizedExpression); //$NON-NLS-1$
+//		ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression) expression;
+//		Expression expression2 = parenthesizedExpression.getExpression();
+		checkSourceRange(expression, "2", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -7319,7 +7324,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=11129
 	 */
-	public void test0303() throws JavaScriptModelException {
+	public void DISABLED_test0303() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0303", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -7355,10 +7360,9 @@ public class ASTConverterTest extends ConverterTestSetup {
 		JavaScriptUnit compilationUnit = (JavaScriptUnit) result;
 		ASTNode node = getASTNode(compilationUnit, 0, 0);
 		assertTrue("not a method declaration", node instanceof FunctionDeclaration); //$NON-NLS-1$
-		checkSourceRange(node, "function foo(arg);", source); //$NON-NLS-1$
+		checkSourceRange(node, "function foo(arg){}", source); //$NON-NLS-1$
 		FunctionDeclaration methodDeclaration = (FunctionDeclaration) node;
-		Block block = methodDeclaration.getBody();
-		assertNull("Has a body", block); //$NON-NLS-1$
+		assertNotNull("Has a body", methodDeclaration.getBody());
 	}
 //
 //	/**
@@ -7481,7 +7485,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=11380
 	 */
-	public void test0310() throws JavaScriptModelException {
+	public void DISABLED_test0310() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0310", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -7599,7 +7603,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=11659
 	 */
-	public void test0313() throws JavaScriptModelException {
+	public void DISABLED_test0313() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0313", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
 		ASTNode result = runConversion(sourceUnit, true);
@@ -7647,7 +7651,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=12326
 	 */
-	public void test0315() throws JavaScriptModelException {
+	public void DISABLED_test0315() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0315", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		char[] source = sourceUnit.getSource().toCharArray();
 		ASTNode result = runConversion(sourceUnit, true);
@@ -7698,7 +7702,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=12781
 	 */
-	public void test0317() throws JavaScriptModelException {
+	public void DISABLED_test0317() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0317", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -7783,7 +7787,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=13807
 	 */
-	public void test0320() throws JavaScriptModelException {
+	public void DISABLED_test0320() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0320", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -7851,7 +7855,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 	/**
 	 * http://dev.eclipse.org/bugs/show_bug.cgi?id=13231
 	 */
-	public void test0322() throws JavaScriptModelException {
+	public void DISABLED_test0322() throws JavaScriptModelException {
 		IJavaScriptUnit sourceUnit = getCompilationUnit("Converter" , "src", "test0322", "Test.js"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ASTNode result = runConversion(sourceUnit, true);
 		assertNotNull("No compilation unit", result); //$NON-NLS-1$
@@ -8582,25 +8586,28 @@ public class ASTConverterTest extends ConverterTestSetup {
 
 		VariableDeclarationExpression variableDeclarationExpression = this.ast.newVariableDeclarationExpression(iFragment);
 		variableDeclarationExpression.setModifiers(Modifier.NONE);
-//		variableDeclarationExpression.setType(this.ast.newPrimitiveType(PrimitiveType.INT));
 		variableDeclarationExpression.fragments().add(jFragment);
 		variableDeclarationExpression.fragments().add(kFragment);
 		forStatement.initializers().add(variableDeclarationExpression);
 
+		ListExpression listExpression = ast.newListExpression();
+		
 		PostfixExpression iPostfixExpression = this.ast.newPostfixExpression();
 		iPostfixExpression.setOperand(this.ast.newSimpleName("i"));//$NON-NLS-1$
 		iPostfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
-		forStatement.updaters().add(iPostfixExpression);
+		listExpression.expressions().add(iPostfixExpression);
 		
 		PostfixExpression jPostfixExpression = this.ast.newPostfixExpression();
 		jPostfixExpression.setOperand(this.ast.newSimpleName("j"));//$NON-NLS-1$
 		jPostfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
-		forStatement.updaters().add(jPostfixExpression);
+		listExpression.expressions().add(jPostfixExpression);
 
 		PostfixExpression kPostfixExpression = this.ast.newPostfixExpression();
 		kPostfixExpression.setOperand(this.ast.newSimpleName("k"));//$NON-NLS-1$
 		kPostfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
-		forStatement.updaters().add(kPostfixExpression);
+		listExpression.expressions().add(kPostfixExpression);
+		
+		forStatement.updaters().add(listExpression);
 
 		forStatement.setBody(this.ast.newBlock());
 		

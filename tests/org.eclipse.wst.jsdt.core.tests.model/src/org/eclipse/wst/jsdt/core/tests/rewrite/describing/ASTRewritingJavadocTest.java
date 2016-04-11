@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,7 +21,7 @@ import org.eclipse.wst.jsdt.core.IPackageFragment;
 import org.eclipse.wst.jsdt.core.dom.*;
 import org.eclipse.wst.jsdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.wst.jsdt.core.dom.rewrite.ListRewrite;
-
+@SuppressWarnings("nls")
 public class ASTRewritingJavadocTest extends ASTRewritingTest {
 	
 	private static final Class THIS= ASTRewritingJavadocTest.class;
@@ -721,7 +721,7 @@ public class ASTRewritingJavadocTest extends ASTRewritingTest {
 		buf.append("package test1;\n");
 		IJavaScriptUnit cu= pack1.createCompilationUnit("package-info.js", buf.toString(), false, null);			
 
-		JavaScriptUnit astRoot= createAST3(cu);
+		JavaScriptUnit astRoot= createAST(cu);
 
 		ASTRewrite rewrite= ASTRewrite.create(astRoot.getAST());
 	

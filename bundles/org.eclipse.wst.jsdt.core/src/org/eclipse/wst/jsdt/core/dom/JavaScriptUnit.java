@@ -739,6 +739,9 @@ public class JavaScriptUnit extends ASTNode {
 		if (property == STATEMENTS_PROPERTY) {
 			return statements();
 		}
+		if (property == EXPORTS_PROPERTY){
+			return exports();
+		}
 		// allow default implementation to flag the error
 		return super.internalGetChildListProperty(property);
 	}

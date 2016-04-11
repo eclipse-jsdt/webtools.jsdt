@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -490,7 +490,8 @@ public void testRenameMethod() throws JavaScriptModelException {
  * Ensures that a type can be moved to another working copy.
  * (regression test for bug 7881 IType.move() clobbers editing buffer of destination element)
  */
-public void testMoveTypeToAnotherWorkingCopy() throws CoreException {
+//Disabled because ASTParser (with esprima) does not support snippet parsing
+public void DISABLED_testMoveTypeToAnotherWorkingCopy() throws CoreException {
 	this.createFile(
 		"P/src/B.js",
 		"function B() {\n" +

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,10 +11,7 @@
 
 package org.eclipse.wst.jsdt.core.tests.dom;
 
-import java.lang.reflect.Method;
-
-import junit.framework.Test;
-
+import static org.junit.Assert.*;
 import org.eclipse.wst.jsdt.core.dom.AST;
 import org.eclipse.wst.jsdt.core.dom.ASTNode;
 import org.eclipse.wst.jsdt.core.dom.ASTVisitor;
@@ -91,24 +88,12 @@ import org.eclipse.wst.jsdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.wst.jsdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.WhileStatement;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extension.TestCase { 
+public class ASTVisitorTest { 
 
-	/** @deprecated using deprecated code */
-	public static Test suite() {
-		// TODO (frederic) use buildList + setAstLevel(init) instead...
-		junit.framework.TestSuite suite = new junit.framework.TestSuite(ASTVisitorTest.class.getName());
-		
-		Class c = ASTVisitorTest.class;
-		Method[] methods = c.getMethods();
-		for (int i = 0, max = methods.length; i < max; i++) {
-			if (methods[i].getName().startsWith("test")) { //$NON-NLS-1$
-				suite.addTest(new ASTVisitorTest(methods[i].getName(), AST.JLS2));
-				//suite.addTest(new ASTVisitorTest(methods[i].getName(), AST.JLS3));
-			}
-		}
-		return suite;
-	}	
 	
 	AST ast;
 	SimpleName N1;
@@ -191,9 +176,8 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	
 	int API_LEVEL;
 
-	public ASTVisitorTest(String name, int apiLevel) {
-		super(name);
-		this.API_LEVEL = apiLevel;
+	public ASTVisitorTest() {
+		this.API_LEVEL = AST.JLS3;
 	}
 	
 	/**
@@ -201,9 +185,8 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	 * that come from testing Javadoc.getComment())
 	 *
 	 */
-	protected void setUp() throws Exception {
-		super.setUp();
-		
+	@Before
+	public void setUp() throws Exception {
 		ast = AST.newAST(this.API_LEVEL);
 		N1 = ast.newSimpleName("N"); //$NON-NLS-1$
 		N1S = "[(nSNNnS)]"; //$NON-NLS-1$
@@ -260,10 +243,10 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		PD1S = "[(PD[(nSppnS)]PD)]"; //$NON-NLS-1$
 		ID1 = ast.newImportDeclaration();
 		ID1.setName(ast.newSimpleName("i")); //$NON-NLS-1$
-		ID1S = "[(ID[(nSiinS)]ID)]"; //$NON-NLS-1$
+		ID1S = "[(ID[(nSiinS)][(eSLeSL)]ID)]"; //$NON-NLS-1$
 		ID2 = ast.newImportDeclaration();
 		ID2.setName(ast.newSimpleName("j")); //$NON-NLS-1$
-		ID2S = "[(ID[(nSjjnS)]ID)]"; //$NON-NLS-1$
+		ID2S = "[(ID[(nSjjnS)][(eSLeSL)]ID)]"; //$NON-NLS-1$
 		TD1 = ast.newTypeDeclaration();
 		TD1.setName(ast.newSimpleName("c")); //$NON-NLS-1$
 		TD1S = "[(TD[(nSccnS)]TD)]"; //$NON-NLS-1$
@@ -320,23 +303,9 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 
 	}
 	
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		ast = null;
-		super.tearDown();
-	}
-	
-	/** @deprecated using deprecated code */
-	public String getName() {
-		String name = super.getName();
-		switch (this.API_LEVEL) {
-			case AST.JLS2:
-				name = "JLS2 - " + name;
-				break;
-			case AST.JLS3:
-				name = "JLS3 - " + name; 
-				break;
-		}
-		return name;
 	}
 	
 	class TestVisitor extends ASTVisitor {
@@ -972,6 +941,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 
 	}	
 	// NAMES
+	@Test
 	public void testSimpleName() {
 		Name x1 = ast.newName(new String[]{"Z"}); //$NON-NLS-1$
 		TestVisitor v1 = new TestVisitor();
@@ -981,6 +951,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue("[(nSZZnS)]".equals(result)); //$NON-NLS-1$
 	}
 
+	@Test
 	public void testQualifiedName() {
 		Name x1 = ast.newName(new String[]{"X", "Y"}); //$NON-NLS-1$ //$NON-NLS-2$
 		TestVisitor v1 = new TestVisitor();
@@ -992,6 +963,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 
 	
 	// TYPES
+	@Test
 	public void testPrimitiveType() {
 		Type x1 = ast.newPrimitiveType(PrimitiveType.CHAR);
 		TestVisitor v1 = new TestVisitor();
@@ -1001,6 +973,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue("[(tPcharchartP)]".equals(result)); //$NON-NLS-1$
 	}
 
+	@Test
 	public void testSimpleType() {
 		Type x1 = ast.newSimpleType(ast.newName(new String[]{"Z"})); //$NON-NLS-1$
 		TestVisitor v1 = new TestVisitor();
@@ -1010,6 +983,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue("[(tS[(nSZZnS)]tS)]".equals(result)); //$NON-NLS-1$
 	}
 
+	@Test
 	public void testArrayType() {
 		Type x0 = ast.newPrimitiveType(PrimitiveType.CHAR);
 		Type x1 = ast.newArrayType(x0);
@@ -1021,6 +995,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	}
 
 	/** @deprecated using deprecated code */
+	@Test
 	public void testQualifiedType() {
 		if (ast.apiLevel() == AST.JLS2) {
 			return;
@@ -1035,6 +1010,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	
 	// EXPRESSIONS and STATEMENTS
 
+	@Test
 	public void testArrayAccess() {
 		ArrayAccess x1 = ast.newArrayAccess();
 		x1.setArray(E1);
@@ -1046,6 +1022,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(eAA"+E1S+E2S+"eAA)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
+	@Test
 	public void testArrayCreation() {
 		ArrayCreation x1 = ast.newArrayCreation();
 		x1.setType(ast.newArrayType(T1));
@@ -1058,6 +1035,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(eAC"+"[(tA"+T1S+"tA)]"+E1S+E2S+"[(eAIeAI)]eAC)]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
+	@Test
 	public void testArrayInitializer() {
 		ArrayInitializer x1 = ast.newArrayInitializer();
 		x1.expressions().add(E1);
@@ -1068,6 +1046,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(eAI"+E1S+E2S+"eAI)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testAssignment() {
 		Assignment x1 = ast.newAssignment();
 		x1.setLeftHandSide(E1);
@@ -1078,6 +1057,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(="+E1S+E2S+"=)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testBlock() {
 		Block x1 = ast.newBlock();
 		x1.statements().add(S1);
@@ -1096,6 +1076,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(sBsB)]")); //$NON-NLS-1$
 	}
 
+	@Test
 	public void testBlockComment() {
 		BlockComment x1 = ast.newBlockComment();
 		TestVisitor v1 = new TestVisitor();
@@ -1105,6 +1086,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue("[(/**/)]".equals(result)); //$NON-NLS-1$
 	}
 
+	@Test
 	public void testBooleanLiteral() {
 		BooleanLiteral x1 = ast.newBooleanLiteral(true);
 		TestVisitor v1 = new TestVisitor();
@@ -1113,6 +1095,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(eBLtruetrueeBL)]")); //$NON-NLS-1$
 	}
+	@Test
 	public void testBreakStatement() {
 		BreakStatement x1 = ast.newBreakStatement();
 		x1.setLabel(N1);
@@ -1122,6 +1105,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sBR"+N1S+"sBR)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testCatchClause() {
 		CatchClause x1 = ast.newCatchClause();
 		x1.setException(V1);
@@ -1132,6 +1116,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(cc"+V1S+B1S+"cc)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testCharacterLiteral() {
 		CharacterLiteral x1 = ast.newCharacterLiteral();
 		x1.setCharValue('q');
@@ -1142,6 +1127,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(eCL'q''q'eCL)]")); //$NON-NLS-1$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testClassInstanceCreation() {
 		ClassInstanceCreation x1 = ast.newClassInstanceCreation();
 		x1.setExpression(E1);
@@ -1155,12 +1141,9 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(result.equals("[(eCI"+E1S+N1S+ACD1S+"eCI)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			assertTrue(result.equals("[(eCI"+E1S+PT1S+T1S+ACD1S+"eCI)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		assertEquals("[(eCI"+E1S+T1S+ACD1S+"eCI)]",result); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testAnonymousClassDeclaration() {
 		AnonymousClassDeclaration x1 = ast.newAnonymousClassDeclaration();
 		x1.bodyDeclarations().add(FD1);
@@ -1171,6 +1154,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(ACD"+FD1S+FD2S+"ACD)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testCompilationUnit() {
 		JavaScriptUnit x1 = ast.newJavaScriptUnit();
 		x1.setPackage(PD1);
@@ -1182,7 +1166,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		assertTrue(result.equals("[(CU"+PD1S+ID1S+ID2S+TD1S+TD2S+"CU)]")); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals("[(CU"+PD1S+ID1S+ID2S+TD1S+TD2S+"CU)]",result); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// check that visiting children can be cut off
 		v1.setVisitingChildren(false);
@@ -1191,6 +1175,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		result = b.toString();
 		assertTrue(result.equals("[(CUCU)]")); //$NON-NLS-1$
 	}
+	@Test
 	public void testConditionalExpression() {
 		ConditionalExpression x1 = ast.newConditionalExpression();
 		x1.setExpression(E1);
@@ -1203,6 +1188,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(eCO"+E1S+E2S+N1S+"eCO)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testConstructorInvocation() {
 		ConstructorInvocation x1 = ast.newConstructorInvocation();
 		x1.arguments().add(E1);
@@ -1211,12 +1197,9 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(result.equals("[(sCI"+E1S+E2S+"sCI)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			assertTrue(result.equals("[(sCI"+PT1S+E1S+E2S+"sCI)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		assertEquals("[(sCI"+E1S+E2S+"sCI)]",result); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testContinueStatement() {
 		ContinueStatement x1 = ast.newContinueStatement();
 		x1.setLabel(N1);
@@ -1226,6 +1209,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sCN"+N1S+"sCN)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testDoStatement() {
 		DoStatement x1 = ast.newDoStatement();
 		x1.setExpression(E1);
@@ -1236,6 +1220,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sDO"+S1S+E1S+"sDO)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testEmptyStatement() {
 		EmptyStatement x1 = ast.newEmptyStatement();
 		TestVisitor v1 = new TestVisitor();
@@ -1244,6 +1229,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sEMsEM)]")); //$NON-NLS-1$
 	}
+	@Test
 	public void testExpressionStatement() {
 		ExpressionStatement x1 = ast.newExpressionStatement(E1);
 		TestVisitor v1 = new TestVisitor();
@@ -1252,6 +1238,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sEX"+E1S+"sEX)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testFieldAccess() {
 		FieldAccess x1 = ast.newFieldAccess();
 		x1.setExpression(E1);
@@ -1263,6 +1250,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(eFA"+E1S+N1S+"eFA)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testFieldDeclaration() {
 		FieldDeclaration x1 = ast.newFieldDeclaration(W1);
 		x1.setJavadoc(JD1);
@@ -1282,6 +1270,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 			assertTrue(result.equals("[(FD"+JD1S+MOD1S+MOD2S+T1S+W1S+W2S+"FD)]")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
+	@Test
 	public void testForStatement() {
 		ForStatement x1 = ast.newForStatement();
 		x1.initializers().add(E1);
@@ -1297,6 +1286,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(sFR"+E1S+E2S+N1S+N2S+N3S+S1S+"sFR)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testEnhancedForStatement() {
 		if (ast.apiLevel() == AST.JLS2) {
 			return;
@@ -1311,6 +1301,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sEFR"+V1S+E1S+S1S+"sEFR)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testIfStatement() {
 		IfStatement x1 = ast.newIfStatement();
 		x1.setExpression(E1);
@@ -1322,6 +1313,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sIF"+E1S+S1S+S2S+"sIF)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testImportDeclaration() {
 		ImportDeclaration x1 = ast.newImportDeclaration();
 		x1.setName(N1);
@@ -1329,8 +1321,9 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		assertTrue(result.equals("[(ID"+N1S+"ID)]")); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals("[(ID"+N1S+"[(eSLeSL)]"+"ID)]", result); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testInfixExpression() {
 		InfixExpression x1 = ast.newInfixExpression();
 		x1.setOperator(InfixExpression.Operator.PLUS);
@@ -1344,6 +1337,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(eIN+"+E1S+E2S+N1S+N2S+"+eIN)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testInstanceofExpression() {
 		InstanceofExpression x1 = ast.newInstanceofExpression();
 		x1.setLeftOperand(E1);
@@ -1355,6 +1349,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(eIO"+E1S+T1S+"eIO)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testInitializer() {
 		Initializer x1 = ast.newInitializer();
 		x1.setJavadoc(JD1);
@@ -1379,6 +1374,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	 * that come from testing Javadoc.getComment())
 	 *
 	 */
+	@Test
 	public void testJavadoc() {
 		JSdoc x1 = ast.newJSdoc();
 		x1.tags().add(TAG1);
@@ -1411,6 +1407,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		}
 	}
 
+	@Test
 	public void testLabeledStatement() {
 		LabeledStatement x1 = ast.newLabeledStatement();
 		x1.setLabel(N1);
@@ -1422,6 +1419,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(sLA"+N1S+S1S+"sLA)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@Test
 	public void testLineComment() {
 		LineComment x1 = ast.newLineComment();
 		TestVisitor v1 = new TestVisitor();
@@ -1431,6 +1429,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue("[(////)]".equals(result)); //$NON-NLS-1$
 	}
 
+	@Test
 	public void testMemberRef() {
 		MemberRef x1 = ast.newMemberRef();
 		x1.setQualifier(N1);
@@ -1443,6 +1442,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	}
 
 	/** @deprecated using deprecated code */
+	@Test
 	public void testMethodDeclaration() {
 		FunctionDeclaration x1 = ast.newFunctionDeclaration();
 		x1.setJavadoc(JD1);
@@ -1463,13 +1463,10 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(result.equals("[(MD"+JD1S+T1S+N1S+V1S+V2S+N2S+N3S+B1S+"MD)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			assertTrue(result.equals("[(MD"+JD1S+MOD1S+MOD2S+TP1S+T1S+N1S+V1S+V2S+N2S+N3S+B1S+"MD)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		assertEquals("[(MD"+JD1S+MOD1S+MOD2S+T1S+N1S+V1S+V2S+N2S+N3S+B1S+"MD)]",result); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testMethodInvocation() {
 		FunctionInvocation x1 = ast.newFunctionInvocation();
 		x1.setExpression(N1);
@@ -1480,13 +1477,10 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(result.equals("[(eMI"+N1S+N2S+E1S+E2S+"eMI)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			assertTrue(result.equals("[(eMI"+N1S+PT1S+N2S+E1S+E2S+"eMI)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		assertEquals("[(eMI"+N1S+N2S+E1S+E2S+"eMI)]",result); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@Test
 	public void testMethodRef() {
 		FunctionRef x1 = ast.newFunctionRef();
 		x1.setQualifier(N1);
@@ -1499,6 +1493,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(MTHREF"+N1S+N2S+MPARM1S+"MTHREF)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@Test
 	public void testMethodRefParameter() {
 		FunctionRefParameter x1 = ast.newFunctionRefParameter();
 		x1.setType(T1);
@@ -1511,6 +1506,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 	}
 
 	/** @deprecated using deprecated code */
+	@Test
 	public void testModifier() {
 		if (ast.apiLevel() == AST.JLS2) {
 			return;
@@ -1523,6 +1519,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(MODprivateprivateMOD)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@Test
 	public void testNullLiteral() {
 		NullLiteral x1 = ast.newNullLiteral();
 		TestVisitor v1 = new TestVisitor();
@@ -1531,6 +1528,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(eNLeNL)]")); //$NON-NLS-1$
 	}
+	@Test
 	public void testNumberLiteral() {
 		NumberLiteral x1 = ast.newNumberLiteral("1.0"); //$NON-NLS-1$
 		TestVisitor v1 = new TestVisitor();
@@ -1539,6 +1537,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(eNU1.01.0eNU)]")); //$NON-NLS-1$
 	}
+	@Test
 	public void testParenthesizedExpression() {
 		ParenthesizedExpression x1 = ast.newParenthesizedExpression();
 		x1.setExpression(E1);
@@ -1548,6 +1547,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(ePA"+E1S+"ePA)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testPostfixExpression() {
 		PostfixExpression x1 = ast.newPostfixExpression();
 		x1.setOperand(E1);
@@ -1558,6 +1558,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(ePO++"+E1S+"++ePO)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testPrefixExpression() {
 		PrefixExpression x1 = ast.newPrefixExpression();
 		x1.setOperand(E1);
@@ -1568,6 +1569,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(ePR++"+E1S+"++ePR)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testReturnStatement() {
 		ReturnStatement x1 = ast.newReturnStatement();
 		x1.setExpression(E1);
@@ -1577,6 +1579,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sRT"+E1S+"sRT)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testStringLiteral() {
 		StringLiteral x1 = ast.newStringLiteral();
 		x1.setLiteralValue("H"); //$NON-NLS-1$
@@ -1587,6 +1590,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(eSLHHeSL)]")); //$NON-NLS-1$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testSuperConstructorInvocation() {
 		SuperConstructorInvocation x1 = ast.newSuperConstructorInvocation();
 		x1.setExpression(N1);
@@ -1596,12 +1600,9 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(result.equals("[(sSC"+N1S+E1S+E2S+"sSC)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			assertTrue(result.equals("[(sSC"+N1S+PT1S+E1S+E2S+"sSC)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		assertEquals("[(sSC"+N1S+E1S+E2S+"sSC)]",result); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testSuperFieldAccess() {
 		SuperFieldAccess x1 = ast.newSuperFieldAccess();
 		x1.setQualifier(N1);
@@ -1613,6 +1614,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(eSF"+N1S+N2S+"eSF)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testSuperMethodInvocation() {
 		SuperMethodInvocation x1 = ast.newSuperMethodInvocation();
 		x1.setQualifier(N1);
@@ -1623,12 +1625,9 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(result.equals("[(eSM"+N1S+N2S+E1S+E2S+"eSM)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			assertTrue(result.equals("[(eSM"+N1S+PT1S+N2S+E1S+E2S+"eSM)]")); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		assertEquals("[(eSM"+N1S+N2S+E1S+E2S+"eSM)]",result); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testSwitchCase() {
 		SwitchCase x1 = ast.newSwitchCase();
 		x1.setExpression(E1);
@@ -1638,6 +1637,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sSC"+E1S+"sSC)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testSwitchStatement() {
 		SwitchStatement x1 = ast.newSwitchStatement();
 		x1.setExpression(E1);
@@ -1650,6 +1650,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(sSW"+E1S+S1S+S2S+"sSW)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@Test
 	public void testTagElement() {
 		TagElement x1 = ast.newTagElement();
 		x1.setTagName("x"); //$NON-NLS-1$
@@ -1661,6 +1662,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(("[(TGx"+TAG1S+"xTG)]").equals(result)); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@Test
 	public void testTextElement() {
 		TextElement x1 = ast.newTextElement();
 		x1.setText("x"); //$NON-NLS-1$
@@ -1671,6 +1673,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue("[(TXxxTX)]".equals(result)); //$NON-NLS-1$
 	}
 
+	@Test
 	public void testThisExpression() {
 		ThisExpression x1 = ast.newThisExpression();
 		x1.setQualifier(N1);
@@ -1680,6 +1683,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(eTH"+N1S+"eTH)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testThrowStatement() {
 		ThrowStatement x1 = ast.newThrowStatement();
 		x1.setExpression(E1);
@@ -1689,6 +1693,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sTR"+E1S+"sTR)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testTryStatement() {
 		TryStatement x1 = ast.newTryStatement();
 		x1.setBody(B1);
@@ -1708,28 +1713,22 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(sTY"+B1S+"[(cc"+V1S+"[(sBsB)]"+"cc)]"+"[(cc"+V2S+"[(sBsB)]"+"cc)]"+"[(sBsB)]"+"sTY)]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testTypeDeclaration() {
 		TypeDeclaration x1 = ast.newTypeDeclaration();
 		x1.setJavadoc(JD1);
 		x1.setName(N1);
-		if (ast.apiLevel() == AST.JLS2) {
-			x1.setSuperclass(N2);
-		} else {
-			x1.modifiers().add(MOD1);
-			x1.modifiers().add(MOD2);
-		}
+		x1.modifiers().add(MOD1);
+		x1.modifiers().add(MOD2);
 		x1.bodyDeclarations().add(FD1);
 		x1.bodyDeclarations().add(FD2);
 		TestVisitor v1 = new TestVisitor();
 		b.setLength(0);
 		x1.accept(v1);
 		String result = b.toString();
-		if (ast.apiLevel() == AST.JLS2) {
-			assertTrue(result.equals("[(TD"+JD1S+N1S+N2S+FD1S+FD2S+"TD)]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		} else {
-			assertTrue(result.equals("[(TD"+JD1S+MOD1S+MOD2S+N1S+TP1S+PT1S+T1S+T2S+FD1S+FD2S+"TD)]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
+		assertEquals("[(TD"+JD1S+MOD1S+MOD2S+N1S+FD1S+FD2S+"TD)]", result); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testTypeDeclarationStatement() {
 		TypeDeclarationStatement x1 = ast.newTypeDeclarationStatement(TD1);
 		TestVisitor v1 = new TestVisitor();
@@ -1738,6 +1737,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[(sTD"+TD1S+"sTD)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testTypeLiteral() {
 		TypeLiteral x1 = ast.newTypeLiteral();
 		x1.setType(T1);
@@ -1748,6 +1748,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(eTL"+T1S+"eTL)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testSingleVariableDeclaration() {
 		SingleVariableDeclaration x1 = ast.newSingleVariableDeclaration();
 		if (ast.apiLevel() >= AST.JLS3) {
@@ -1767,6 +1768,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 			assertTrue(result.equals("[(VD"+MOD1S+MOD2S+T1S+N1S+E1S+"VD)]")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
+	@Test
 	public void testVariableDeclarationFragment() {
 		VariableDeclarationFragment x1 = ast.newVariableDeclarationFragment();
 		x1.setName(N1);
@@ -1778,6 +1780,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(VS"+N1S+E1S+"VS)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testVariableDeclarationExpression() {
 		VariableDeclarationExpression x1 = ast.newVariableDeclarationExpression(W1);
 		if (ast.apiLevel() >= AST.JLS3) {
@@ -1797,6 +1800,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		}
 	}
 	/** @deprecated using deprecated code */
+	@Test
 	public void testVariableDeclarationStatement() {
 		VariableDeclarationStatement x1 = ast.newVariableDeclarationStatement(W1);
 		if (ast.apiLevel() >= AST.JLS3) {
@@ -1815,6 +1819,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 			assertTrue(result.equals("[(sVD"+MOD1S+MOD2S+T1S+W1S+W2S+"sVD)]")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
+	@Test
 	public void testWhileStatement() {
 		WhileStatement x1 = ast.newWhileStatement();
 		x1.setExpression(E1);
@@ -1826,6 +1831,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		assertTrue(result.equals("[(sWH"+E1S+S1S+"sWH)]")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
+	@Test
 	public void testPrePost() {
 		SimpleName n1 = ast.newSimpleName("a"); //$NON-NLS-1$
 		SimpleName n2 = ast.newSimpleName("b"); //$NON-NLS-1$
@@ -1861,6 +1867,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		String result = b.toString();
 		assertTrue(result.equals("[q(nQ" + "[a(nSaanS)a]" + "[b(nSbbnS)b]" + "nQ)q]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}	
+	@Test
 	public void testTraverseAndModify() {
 		final TypeDeclaration typeDeclaration = ast.newTypeDeclaration();
 		typeDeclaration.setName(N1);
@@ -1886,9 +1893,10 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		};
 		b.setLength(0);
 		typeDeclaration.accept(v1);
-		assertEquals("wrong output", "[(TD[(nSNNnS)][(MD[(tPvoidvoidtP)][(nSM1M1nS)]MD)][(MD[(tPvoidvoidtP)][(nSM2M2nS)]MD)][(MD[(tPvoidvoidtP)][(nSM3M3nS)]MD)]TD)]", b.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals("wrong output", "[(TD[(nSNNnS)][(MD[(tPanyanytP)][(nSM1M1nS)]MD)][(MD[(tPanyanytP)][(nSM2M2nS)]MD)][(MD[(tPanyanytP)][(nSM3M3nS)]MD)]TD)]", b.toString()); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@Test
 	public void testTraverseAndModify_2() {
 		final TypeDeclaration typeDeclaration = ast.newTypeDeclaration();
 		typeDeclaration.setName(N1);
@@ -1914,8 +1922,9 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		};
 		b.setLength(0);
 		typeDeclaration.accept(v1);
-		assertEquals("wrong output", "[(TD[(nSNNnS)][(MD[(tPvoidvoidtP)][(nSM1M1nS)]MD)][(MD[(tPvoidvoidtP)][(nSM2M2nS)]MD)][(MD[(tPvoidvoidtP)][(nSM3M3nS)]MD)][(MD[(tPvoidvoidtP)][(nSM4M4nS)]MD)]TD)]", b.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals("wrong output", "[(TD[(nSNNnS)][(MD[(tPanyanytP)][(nSM1M1nS)]MD)][(MD[(tPanyanytP)][(nSM2M2nS)]MD)][(MD[(tPanyanytP)][(nSM3M3nS)]MD)][(MD[(tPanyanytP)][(nSM4M4nS)]MD)]TD)]", b.toString()); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testTraverseAndModify_3() {
 		final InfixExpression infixExpression = ast.newInfixExpression();
 		infixExpression.setLeftOperand(ast.newSimpleName("i")); //$NON-NLS-1$
@@ -1932,6 +1941,7 @@ public class ASTVisitorTest extends org.eclipse.wst.jsdt.core.tests.junit.extens
 		infixExpression.accept(v1);
 		assertEquals("wrong output", "[(eIN+[(nSiinS)][(eNU2222eNU)]+eIN)]", b.toString()); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	@Test
 	public void testTraverseAndModify_4() {
 		final InfixExpression infixExpression = ast.newInfixExpression();
 		infixExpression.setLeftOperand(ast.newSimpleName("i")); //$NON-NLS-1$
