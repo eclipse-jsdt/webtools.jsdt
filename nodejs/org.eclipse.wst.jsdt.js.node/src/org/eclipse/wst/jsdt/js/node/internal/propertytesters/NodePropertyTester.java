@@ -27,7 +27,6 @@ public class NodePropertyTester extends PropertyTester {
 
 	// File extensions
 	private static final String JS_EXT = "js"; //$NON-NLS-1$
-	private static final String JSON_EXT = "json"; //$NON-NLS-1$
 
 	// Invalid parent folders for js files
 	private static final String NODE_MODULES_FOLDER = "node_modules"; //$NON-NLS-1$
@@ -58,27 +57,18 @@ public class NodePropertyTester extends PropertyTester {
 	}
 
 	public static boolean isValidFile(IFile file) {
-		// File must be package.json or a js file
+		// File must be a js file
 		String fileExtension = file.getFileExtension();
-		if (fileExtension.equals(JSON_EXT) && !file.getName().equalsIgnoreCase(NodeConstants.PACKAGE_JSON)) {
-			return false;
-		} else if (!fileExtension.equals(JSON_EXT) && !fileExtension.equals(JS_EXT)) {
+		if (!fileExtension.equals(JS_EXT)) {
 			return false;
 		}
 
 		// File must exists and be accessible
 		if (file.exists() && file.isAccessible()) {
-			String projectName = file.getProject().getName();
-			String parentName = file.getParent().getName();
 			String filePath = file.getFullPath().toOSString();
 
-			if (file.getName().equals(NodeConstants.PACKAGE_JSON)) {
-				// package.json file must be in project root
-				if (projectName.equals(parentName)) {
-					return true;
-				}
-			} // Js file cannot be inside node_modules or bower_components
-			else if (filePath != null
+			// Js file cannot be inside node_modules or bower_components
+			if (filePath != null
 					&& !filePath.contains(NODE_MODULES_FOLDER) && !filePath.contains(BOWER_COMPONENTS_FOLDER)) {
 				return true;
 			}
