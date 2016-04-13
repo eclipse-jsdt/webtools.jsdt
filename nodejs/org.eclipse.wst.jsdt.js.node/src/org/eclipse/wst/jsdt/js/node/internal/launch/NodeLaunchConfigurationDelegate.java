@@ -11,7 +11,6 @@
 package org.eclipse.wst.jsdt.js.node.internal.launch;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.CoreException;
@@ -27,12 +26,11 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.wst.jsdt.chromium.debug.core.model.LaunchParams;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.jsdt.core.runtime.IBaseJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRunner;
 import org.eclipse.wst.jsdt.core.runtime.JSRunnerConfiguration;
 import org.eclipse.wst.jsdt.core.runtime.JSRuntimeManager;
-import org.eclipse.wst.jsdt.js.node.internal.Messages;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
 import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
 import org.eclipse.wst.jsdt.launching.ExecutionArguments;
@@ -54,7 +52,7 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
      */
 
     @Override
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
+	public void launch(ILaunchConfiguration configuration, final String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
         if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
@@ -112,29 +110,33 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 
 			// Launch the configuration - 1 unit of work
 			runner.run(runConfig, launch, monitor);
-
+			
+			// Launch Chromium V8 
 			if(mode.equals(ILaunchManager.DEBUG_MODE)){
 			    ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 			    ILaunchConfigurationType type = launchManager.getLaunchConfigurationType(NodeConstants.CHROMIUM_LAUNCH_CONFIGURATION_TYPE_ID);
 				IContainer container = null;
-				ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(container, configuration.getName());
+				final ILaunchConfigurationWorkingCopy chromiumLaunch = type.newInstance(container, configuration.getName());
 
-				workingCopy.setAttribute(LaunchParams.CHROMIUM_DEBUG_HOST,
+				chromiumLaunch.setAttribute(NodeConstants.CHROMIUM_DEBUG_HOST,
 						configuration.getAttribute(NodeConstants.ATTR_HOST_FIELD, NodeConstants.DEFAULT_HOST));
-				workingCopy.setAttribute(LaunchParams.CHROMIUM_DEBUG_PORT, Integer.parseInt(configuration
+
+				chromiumLaunch.setAttribute(NodeConstants.CHROMIUM_DEBUG_PORT, Integer.parseInt(configuration
 						.getAttribute(NodeConstants.ATTR_PORT_FIELD, String.valueOf(NodeConstants.DEFAULT_PORT))));
-				workingCopy.setAttribute(LaunchParams.ADD_NETWORK_CONSOLE,
+
+				chromiumLaunch.setAttribute(NodeConstants.ADD_NETWORK_CONSOLE,
 						configuration.getAttribute(NodeConstants.ATTR_ADD_NETWORK_CONSOLE_FIELD, false));
-				ILaunchConfiguration chromiumConfiguration = workingCopy;
 
-				monitor.subTask(Messages.LAUNCH_CONFIGURATION_DELEGATE_CHROMIUM_DEBUGGER_DELAY_TASK);
+				chromiumLaunch.setAttribute(NodeConstants.SOURCE_LOOKUP_MODE, NodeConstants.AUTO_DETECT);
 
-				try {
-					TimeUnit.SECONDS.sleep(5);
-				} catch (InterruptedException e) {
-				}
+				Display.getDefault().asyncExec(new Runnable() {
 
-				DebugUITools.launch(chromiumConfiguration, mode);
+					@Override
+					public void run() {
+						DebugUITools.launch(chromiumLaunch, mode);
+					}
+				});
+
 			}
 
 			// check for cancellation

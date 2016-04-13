@@ -15,7 +15,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions,
  com.google.gson;bundle-version="[2.2.4,3.0.0)",
  org.eclipse.wst.jsdt.js.node.common,
- org.eclipse.wst.jsdt.chromium.debug.core,
  org.eclipse.debug.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
