@@ -39,7 +39,7 @@ import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
  * Example: Create basic AST from source string
  * <pre>
  * char[] source = ...;
- * ASTParser parser = ASTParser.newParser(AST.JLS3);  
+ * ASTParser parser = ASTParser.newParser(AST.JLS3);
  * parser.setSource(source);
  * JavaScriptUnit result = (JavaScriptUnit) parser.createAST(null);
  * </pre>
@@ -70,9 +70,9 @@ import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
  * </ul>
  * </p>
  *
- * Provisional API: This class/interface is part of an interim API that is still under development and expected to 
- * change significantly before reaching stability. It is being made available at this early stage to solicit feedback 
- * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken 
+ * Provisional API: This class/interface is part of an interim API that is still under development and expected to
+ * change significantly before reaching stability. It is being made available at this early stage to solicit feedback
+ * from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken
  * (repeatedly) as the API evolves.
  */
 public class ASTParser {
@@ -646,6 +646,8 @@ public class ASTParser {
 				JavaScriptUnit unit = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit)this.typeRoot).parse();
 				unit.setTypeRoot(typeRoot);
 				result = unit;
+				if(this.resolveBindings)
+					resolveBindings(unit);
 				unit.ast.setOriginalModificationCount(unit.ast.modificationCount());
 				final Scanner scanner = new Scanner(
 						true /*comment*/,
@@ -661,7 +663,6 @@ public class ASTParser {
 				}
 				catch (JavaScriptModelException e) {
 				}
-				unit.initCommentMapper(scanner);
 				
 			}else{
 				result = internalCreateAST(monitor);
@@ -845,17 +846,17 @@ public class ASTParser {
 							 * (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=75632)
 							 */
 //							sourceUnit = new BasicCompilationUnit(sourceUnit.getContents(), sourceUnit.getPackageName(), new String(sourceUnit.getFileName()), this.project);
-							JavaScriptUnit result = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit) this.typeRoot).parse();
-							result.setTypeRoot(this.typeRoot);
+						JavaScriptUnit result = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit) this.typeRoot).parse();
+						result.setTypeRoot(this.typeRoot);
 							result.ast.setOriginalModificationCount(result.ast.modificationCount());
 							try {
 								scanner.setSource(this.typeRoot.getSource().toCharArray());
 							}
 							catch (JavaScriptModelException e) {
 							}
-							result.initCommentMapper(scanner);
-							
-							return result;
+							if (needToResolveBindings) 
+								resolveBindings(result);
+						return result;
 //							wcOwner = ((IJavaScriptUnit) this.typeRoot).getOwner();
 					} else if (this.typeRoot instanceof IClassFile) {
 						try {
@@ -894,6 +895,8 @@ public class ASTParser {
 					$.ast.setOriginalModificationCount($.ast.modificationCount());
 					scanner.setSource(sourceUnit.getContents());
 					$.initCommentMapper(scanner);
+					if(needToResolveBindings)
+						resolveBindings($);
 					return $;
 				} finally {
 					if (compilationUnitDeclaration != null && this.resolveBindings) {
@@ -1072,4 +1075,21 @@ public class ASTParser {
 				}
 		}
 	}
+
+	private void resolveBindings(JavaScriptUnit jsunit) {
+		/*
+		 * FIXME This check is commented out because resolveBinding == false
+		 * at the moment. Serious work of refactoring and removing old
+		 * compiler related code is required to use resolveBinding properly.
+		 * Just turning it on will cause undesirable effects.
+		 */
+		// if (this.resolveBindings) {
+		BindingResolverDom resolver = new BindingResolverDom(jsunit);
+		resolver.resolve();
+		AST ast = jsunit.getAST();
+		ast.setBindingResolver(resolver);
+		ast.setFlag(AST.RESOLVED_BINDINGS);
+		// }
+	}
+
 }
