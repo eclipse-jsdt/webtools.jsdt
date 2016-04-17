@@ -37,10 +37,12 @@ public final class NodeConstants {
 	public static final String CHROMIUM_DEBUG_PORT = "debug_port"; //$NON-NLS-1$
 	public static final String ADD_NETWORK_CONSOLE = "add_network_console"; //$NON-NLS-1$
 	public static final String BREAKPOINT_SYNC_DIRECTION = "breakpoint_startup_sync_direction"; //$NON-NLS-1$
+	// By default Node.js debug launch should merge local and remote breakpoints
+	public static final String MERGE = "MERGE"; //$NON-NLS-1$
 	public static final String SOURCE_LOOKUP_MODE = "source_lookup_mode"; //$NON-NLS-1$
 	public static final String WIP_BACKEND_ID = "wip_backend_id"; //$NON-NLS-1$
-	// By default Node.js debug launch should use auto detection of workspace resources
-	public static final String AUTO_DETECT = "AUTO_DETECT"; //$NON-NLS-1$
+	// By default Node.js debug launch should use exact match detection of workspace resources
+	public static final String EXACT_MATCH = "EXACT_MATCH"; //$NON-NLS-1$
 
 	private NodeConstants() {
 	}

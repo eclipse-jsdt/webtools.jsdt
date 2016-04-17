@@ -1,4 +1,4 @@
-// Copyright (c) 2010 The Chromium Authors. All rights reserved.
+// Copyright (c) 2010, 2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
@@ -37,7 +37,10 @@ public class LaunchParams {
   public static final String SOURCE_LOOKUP_MODE = "source_lookup_mode"; //$NON-NLS-1$
 
   public static final String WIP_BACKEND_ID = "wip_backend_id"; //$NON-NLS-1$
-
+  
+  // project attribute from {@link NodeConstants} required for debugging via JSDT editor 
+  public static final String ATTR_APP_PROJECT = "attr_app_project";
+ 
   // PREDEFINED_SOURCE_WRAPPER_IDS see below.
 
   public enum LookupMode {

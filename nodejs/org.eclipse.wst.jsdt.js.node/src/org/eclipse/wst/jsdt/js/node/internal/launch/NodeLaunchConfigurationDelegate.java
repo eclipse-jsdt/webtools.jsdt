@@ -65,6 +65,7 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		}
 
 		try {
+			String project = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
 			String mainTypeName = configuration.getAttribute(NodeConstants.ATTR_APP_PATH, NodeConstants.EMPTY);
 			IJSRunner runner = getJSRunner(configuration, mode);
 
@@ -128,10 +129,14 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 				chromiumLaunch.setAttribute(NodeConstants.ADD_NETWORK_CONSOLE,
 						configuration.getAttribute(NodeConstants.ATTR_ADD_NETWORK_CONSOLE_FIELD, false));
 
-				chromiumLaunch.setAttribute(NodeConstants.SOURCE_LOOKUP_MODE, NodeConstants.AUTO_DETECT);
+				chromiumLaunch.setAttribute(NodeConstants.BREAKPOINT_SYNC_DIRECTION, NodeConstants.MERGE);
 
+				chromiumLaunch.setAttribute(NodeConstants.SOURCE_LOOKUP_MODE, NodeConstants.EXACT_MATCH);
+				
+				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT, project);
+				
+				
 				Display.getDefault().asyncExec(new Runnable() {
-
 					@Override
 					public void run() {
 						DebugUITools.launch(chromiumLaunch, mode);
