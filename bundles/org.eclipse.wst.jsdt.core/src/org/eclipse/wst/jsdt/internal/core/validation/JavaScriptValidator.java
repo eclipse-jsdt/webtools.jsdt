@@ -84,7 +84,7 @@ public class JavaScriptValidator extends AbstractValidator {
 		if (file.isDerived()) return null;
 
 		ClasspathMultiDirectory [] sourceLocations = ((NameEnvironment)nameEnvironment).getSourceLocations();
-		if (sourceLocations == null) // A project might not have source locations set
+		if (sourceLocations == null || sourceLocations.length == 0) // A project might not have source locations set
 			return null; 
 		
 		// assumes the file exists in at least one of the source folders & is not excluded
