@@ -27,7 +27,7 @@ public class ImageResource {
 	private static Map<String, ImageDescriptor> imageDescriptors;
 	private static URL ICON_BASE_URL;
 	
-	public static final String IMG_NODEJS = "transparent.gif"; //$NON-NLS-1$
+	public static final String IMG_NODEJS = "node_16.png"; //$NON-NLS-1$
 	public static final String IMG_ARGUMENTS = "variable_tab.gif"; //$NON-NLS-1$
 
 	static {
