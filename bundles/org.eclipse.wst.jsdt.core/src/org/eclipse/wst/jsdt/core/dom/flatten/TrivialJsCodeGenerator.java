@@ -11,6 +11,7 @@
 package org.eclipse.wst.jsdt.core.dom.flatten;
 
 import org.eclipse.wst.jsdt.core.dom.ASTNode;
+import org.eclipse.wst.jsdt.core.dom.flatten.JsCodeIRGenerator.JsCodeElement;
 
 /**
  * Internal ES code generator for presenting an AST in a quick and dirty
@@ -46,8 +47,14 @@ public class TrivialJsCodeGenerator {
 	 */
 	public static String generate(ASTNode node) {
 		StringBuilder sb = new StringBuilder();
-		new JsCodeIRGenerator(new JsCodeElementFactory()).generate(node)
-				.emit(new JsCodeStringBuilderOutputStream(sb));
+		
+		JsCodeElement element = new JsCodeIRGenerator(new JsCodeElementFactory()).generate(node);
+		if (element != null) {
+			new JsCodeIRGenerator(new JsCodeElementFactory()).generate(node)
+					.emit(new JsCodeStringBuilderOutputStream(sb));
+		} else {
+			sb.append("GEN-ERROR: Type: ").append(node.getNodeType()).append(" [").append(node.getStartPosition()).append(",").append(node.getLength()).append("]");
+		}
 		return sb.toString();
 	}
 

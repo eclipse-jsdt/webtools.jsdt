@@ -17,10 +17,9 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
-import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
+import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.WorkingCopyOwner;
 import org.eclipse.wst.jsdt.core.compiler.CategorizedProblem;
@@ -33,6 +32,7 @@ import org.eclipse.wst.jsdt.internal.compiler.IErrorHandlingPolicy;
 import org.eclipse.wst.jsdt.internal.compiler.IProblemFactory;
 import org.eclipse.wst.jsdt.internal.compiler.ast.AbstractMethodDeclaration;
 import org.eclipse.wst.jsdt.internal.compiler.ast.CompilationUnitDeclaration;
+import org.eclipse.wst.jsdt.internal.compiler.closure.ClosureCompiler;
 import org.eclipse.wst.jsdt.internal.compiler.env.AccessRestriction;
 import org.eclipse.wst.jsdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.wst.jsdt.internal.compiler.env.ISourceType;
@@ -57,7 +57,6 @@ import org.eclipse.wst.jsdt.internal.core.SourceTypeElementInfo;
 import org.eclipse.wst.jsdt.internal.core.util.BindingKeyResolver;
 import org.eclipse.wst.jsdt.internal.core.util.CommentRecorderParser;
 import org.eclipse.wst.jsdt.internal.core.util.DOMFinder;
-import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
 
 /**
  * 
@@ -374,8 +373,8 @@ class JavaScriptUnitResolver extends Compiler {
 
 				// convert AST
 //				JavaScriptUnit node = convert(compilationUnitDeclaration, parser.scanner.getSource(), apiLevel, options, false/*don't resolve binding*/, null/*no owner needed*/, null/*no binding table needed*/, flags /* flags */, monitor);
-				JavaScriptUnit node = EsprimaParser.newParser()
-							.setSourceType(compilationUnits[i].getJavaScriptProject().getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))
+				JavaScriptUnit node = ClosureCompiler.newInstance()
+//							.setSourceType(compilationUnits[i].getJavaScriptProject().getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))
 							.setSource(compilationUnits[i]).parse();
 				node.setTypeRoot(compilationUnits[i]);
 
@@ -727,7 +726,7 @@ class JavaScriptUnitResolver extends Compiler {
 						BindingResolver resolver = new DefaultBindingResolver(unit.scope, owner, this.bindingTables, (flags & IJavaScriptUnit.ENABLE_BINDINGS_RECOVERY) != 0);
 						ast.setBindingResolver(resolver);
 						converter.setAST(ast);
-						JavaScriptUnit compilationUnit = EsprimaParser.newParser().setSource(source).parse();
+						JavaScriptUnit compilationUnit = ClosureCompiler.newInstance().setSource(source).parse();
 						System.out.println("JSResolver parsed:" + source);
 						compilationUnit.setTypeRoot(source);
 						compilationUnit.setLineEndTable(compilationResult.getLineSeparatorPositions());

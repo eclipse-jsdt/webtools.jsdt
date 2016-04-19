@@ -30,7 +30,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
-import org.eclipse.wst.jsdt.core.compiler.CategorizedProblem;
+import org.eclipse.wst.jsdt.core.compiler.IProblem;
 import org.eclipse.wst.jsdt.core.dom.AST;
 import org.eclipse.wst.jsdt.core.dom.ASTParser;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
@@ -225,8 +225,7 @@ public class JSDTSourceValidator extends AbstractValidator implements IValidator
 		parser.setProject(JavaScriptCore.create(file.getProject()));
 		JavaScriptUnit unit = (JavaScriptUnit) parser.createAST(new NullProgressMonitor());
 		if(unit.getProblems().length > 0){
-			CategorizedProblem[] resourceProblems = (CategorizedProblem[]) unit.getProblems();
-			for (CategorizedProblem problem : resourceProblems) {
+			for (IProblem problem : unit.getProblems()) {
 
 				final String msg = problem.getMessage();
 				String[] arguments = problem.getArguments();

@@ -243,7 +243,7 @@ public class SingleVariableDeclaration extends VariableDeclaration {
 	 *  
 	 */
 	final ChildPropertyDescriptor internalNameProperty() {
-		return NAME_PROPERTY;
+		return PATTERN_PROPERTY;
 	}
 
 	/* (omit javadoc for this method)

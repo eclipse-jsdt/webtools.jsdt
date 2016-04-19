@@ -31,6 +31,7 @@ import org.eclipse.wst.jsdt.core.dom.FunctionInvocation;
 import org.eclipse.wst.jsdt.core.dom.InfixExpression;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.core.dom.NumberLiteral;
+import org.eclipse.wst.jsdt.core.dom.ParenthesizedExpression;
 import org.eclipse.wst.jsdt.core.dom.PostfixExpression;
 import org.eclipse.wst.jsdt.core.dom.PrefixExpression;
 import org.eclipse.wst.jsdt.core.dom.ReturnStatement;
@@ -896,10 +897,10 @@ public class ASTRewritingExpressionsTest extends ASTRewritingTest {
 			
 			InfixExpression multiplication= (InfixExpression) assignment.getRightHandSide();
 			
-			InfixExpression parenthesizedExpression= (InfixExpression) multiplication.getLeftOperand();
+			ParenthesizedExpression parenthesizedExpression= (ParenthesizedExpression) multiplication.getLeftOperand();
 						
 			SimpleName name= ast.newSimpleName("x");
-			rewrite.replace(multiplication.getLeftOperand(), name, null);
+			rewrite.replace(parenthesizedExpression.getExpression(), name, null);
 		}
 			
 		String preview= evaluateRewrite(cu, rewrite);

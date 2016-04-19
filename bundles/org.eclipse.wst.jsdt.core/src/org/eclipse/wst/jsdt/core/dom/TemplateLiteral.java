@@ -166,14 +166,11 @@ public class TemplateLiteral extends Expression {
 		return tag;
 	}
 	/**
-	 * Sets the given tag value as tad for this template literal
+	 * Sets the given tag value as tag for this template literal
 	 * 
 	 * @param tag
 	 */
 	public void setTag(Expression tag) {
-		if (tag == null) {
-			throw new IllegalArgumentException();
-		}
 		ASTNode oldChild = this.tag;
 		preReplaceChild(oldChild,tag, TAG_PROPERTY);
 		this.tag = tag;

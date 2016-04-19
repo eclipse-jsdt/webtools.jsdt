@@ -1660,7 +1660,7 @@ class ASTConverter {
 		forInStatement.setSourceRange(statement.sourceStart, statement.sourceEnd - statement.sourceStart + 1);
 
 		Statement iterationVariable = convert(statement.iterationVariable);
-		forInStatement.setIterationVariable(iterationVariable);
+		forInStatement.setIterationVariable(null);
 
 		Expression collection  = convert(statement.collection);
 		forInStatement.setCollection(collection);

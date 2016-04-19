@@ -2007,7 +2007,7 @@ public class ASTMatcher {
 			return false;
 		}
 		VariableDeclarationFragment o = (VariableDeclarationFragment) other;
-		return safeSubtreeMatch(node.getName(), o.getName())
+		return safeSubtreeMatch(node.getPattern(), o.getPattern())
 			&& node.getExtraDimensions() == o.getExtraDimensions()
 			&& safeSubtreeMatch(node.getInitializer(), o.getInitializer());
 	}

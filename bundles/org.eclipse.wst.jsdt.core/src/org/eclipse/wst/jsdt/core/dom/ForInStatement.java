@@ -51,7 +51,7 @@ public class ForInStatement extends Statement {
 	 *  
 	 */
 	public static final ChildPropertyDescriptor ITERATION_VARIABLE_PROPERTY =
-		new ChildPropertyDescriptor(ForInStatement.class, "iterationVariable", Statement.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
+		new ChildPropertyDescriptor(ForInStatement.class, "iterationVariable", Expression.class, MANDATORY, CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "expression" structural property of this node type.
@@ -99,7 +99,7 @@ public class ForInStatement extends Statement {
 		return PROPERTY_DESCRIPTORS;
 	}
 
-	private Statement iterationVariable  = null;
+	private Expression iterationVariable  = null;
 
 	private Expression collection = null;
 
@@ -137,7 +137,7 @@ public class ForInStatement extends Statement {
 			if (get) {
 				return getIterationVariable();
 			} else {
-				setIterationVariable((Statement) child);
+				setIterationVariable((Expression) child);
 				return null;
 			}
 		}
@@ -190,7 +190,7 @@ public class ForInStatement extends Statement {
 		result.setSourceRange(this.getStartPosition(), this.getLength());
 		result.copyLeadingComment(this);
 		result.setIterationVariable(
-				(Statement) ASTNode.copySubtree(target, getIterationVariable()));
+				(Expression) ASTNode.copySubtree(target, getIterationVariable()));
 		result.setCollection(
 				(Expression) ASTNode.copySubtree(target, getCollection()));
 		result.setBody(
@@ -232,7 +232,7 @@ public class ForInStatement extends Statement {
 		return this.collection;
 	}
 
-	public Statement getIterationVariable() {
+	public Expression getIterationVariable() {
 		return this.iterationVariable;
 	}
 
@@ -255,11 +255,11 @@ public class ForInStatement extends Statement {
 		postReplaceChild(oldChild, expression, COLLECTION_PROPERTY);
 	}
 
-	public void setIterationVariable(Statement statement) {
+	public void setIterationVariable(Expression expression) {
 		ASTNode oldChild = this.iterationVariable;
-		preReplaceChild(oldChild, statement, ITERATION_VARIABLE_PROPERTY);
-		this.iterationVariable = statement;
-		postReplaceChild(oldChild, statement, ITERATION_VARIABLE_PROPERTY);
+		preReplaceChild(oldChild, expression, ITERATION_VARIABLE_PROPERTY);
+		this.iterationVariable = expression;
+		postReplaceChild(oldChild, expression, ITERATION_VARIABLE_PROPERTY);
 	}
 
 

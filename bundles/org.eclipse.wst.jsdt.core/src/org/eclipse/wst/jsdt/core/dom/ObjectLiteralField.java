@@ -278,9 +278,6 @@ public class ObjectLiteralField extends Expression {
 	 * </ul>
 	 */
 	public void setInitializer(Expression expression) {
-		if (expression == null) {
-			throw new IllegalArgumentException();
-		}
 		ASTNode oldChild = this.initializer;
 		preReplaceChild(oldChild, expression, INITIALIZER_PROPERTY);
 		this.initializer = expression;

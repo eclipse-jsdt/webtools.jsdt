@@ -18,7 +18,7 @@ import java.util.Scanner;
 
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.core.dom.flatten.TrivialJsCodeGenerator;
-import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
+import org.eclipse.wst.jsdt.internal.compiler.closure.ClosureCompiler;
 import org.junit.Test;
 
 @SuppressWarnings("nls")
@@ -1391,7 +1391,7 @@ public class JsCodeGeneratorTest {
 	}
 
 	private JavaScriptUnit parse(String content) {
-		return EsprimaParser.newParser().setSource(content).parse();
+		return ClosureCompiler.newInstance().setSource(content).parse();
 	}
 
 	@SuppressWarnings("unused")

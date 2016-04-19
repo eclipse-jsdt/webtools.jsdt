@@ -1904,6 +1904,8 @@ public abstract class JavaEditor extends AbstractDecoratedTextEditor implements 
 					IJavaScriptElement je= ((ILocalVariable)reference).getParent();
 					if (je instanceof ISourceReference)
 						range= ((ISourceReference)je).getSourceRange();
+//				} else if (reference instanceof IMember) {
+//					range= ((IMember) reference).getNameRange();
 				} else
 					range= reference.getSourceRange();
 

@@ -41,6 +41,7 @@ import org.eclipse.wst.jsdt.core.dom.Modifier;
 import org.eclipse.wst.jsdt.core.dom.ModuleSpecifier;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteral;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteralField;
+import org.eclipse.wst.jsdt.core.dom.ParenthesizedExpression;
 import org.eclipse.wst.jsdt.core.dom.SimpleName;
 import org.eclipse.wst.jsdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.wst.jsdt.core.dom.TypeDeclaration;
@@ -156,7 +157,7 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 	}
 	
 	public boolean visit(FunctionExpression node){
-		node.getMethod().getBody().accept(this);
+		node.getMethod().accept(this);
 		return false;
 	}
 	
@@ -221,6 +222,9 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 		this.handleStack.pop();
 	}
 	
+	public boolean visit(ParenthesizedExpression node){
+		return true;
+	}
 	
 	public boolean visit(FunctionDeclaration node){
 		JavaElementInfo parentInfo = this.infoStack.peek();
@@ -278,6 +282,7 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 		this.newElements.put(handle, info);
 		this.infoStack.push(info);
 		this.handleStack.push(handle);
+		node.getBody().accept(this);
 		return false;
 	}
 	

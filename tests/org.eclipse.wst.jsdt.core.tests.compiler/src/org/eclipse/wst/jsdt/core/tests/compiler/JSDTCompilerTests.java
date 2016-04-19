@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
+import org.eclipse.wst.jsdt.core.tests.closure.ClosureCompilerTests;
 import org.eclipse.wst.jsdt.core.tests.compiler.parser.DualParseSyntaxErrorTest;
 import org.eclipse.wst.jsdt.core.tests.compiler.parser.FieldAccessCompletionTest;
 import org.eclipse.wst.jsdt.core.tests.compiler.parser.JavadocCompletionParserTest;
@@ -32,7 +33,6 @@ import org.eclipse.wst.jsdt.core.tests.compiler.regression.InternalScannerTest;
 import org.eclipse.wst.jsdt.core.tests.compiler.regression.ScannerTest;
 import org.eclipse.wst.jsdt.core.tests.compiler.regression.UtilTest;
 import org.eclipse.wst.jsdt.core.tests.compiler.util.ExclusionTests;
-import org.eclipse.wst.jsdt.core.tests.esprima.EsprimaParserTests;
 import org.eclipse.wst.jsdt.core.tests.interpret.BasicInterpretTest;
 import org.eclipse.wst.jsdt.core.tests.search.SearchTests;
 
@@ -98,7 +98,7 @@ public static Test suite() {
 	TestSuite all = new TestSuite("JSDT 'Compiler' Tests");
 	all.addTest(ExclusionTests.suite());
 	all.addTest(SearchTests.suite());
-	all.addTest(new JUnit4TestAdapter(EsprimaParserTests.class));
+	all.addTest(new JUnit4TestAdapter(ClosureCompilerTests.class));
 	//disabled until codeSelect is fixed
 //	all.addTest(new JUnit4TestAdapter( SelectionTest3.class));
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -277,9 +277,13 @@ public class ExtractTempRefactoring extends ScriptableRefactoring {
 			else if (parent instanceof ForInStatement) {
 				ForInStatement forInStmt= (ForInStatement) parent;
 				if (forInStmt.getIterationVariable().equals(current)  || forInStmt.getCollection() == current) {
-					if (forInStmt.getIterationVariable() instanceof VariableDeclarationStatement) {
+					if (forInStmt.getIterationVariable() instanceof VariableDeclarationExpression) {
 						List forInitializerVariables= new ArrayList(1);
-						forInitializerVariables.add(  ((VariableDeclarationStatement) forInStmt.getIterationVariable()).resolveBinding());
+						VariableDeclarationExpression vde = (VariableDeclarationExpression) forInStmt.getIterationVariable();
+						for(int i = 0; i < vde.fragments().size(); i++){
+							VariableDeclarationFragment fragment = (VariableDeclarationFragment) vde.fragments().get(i);
+							forInitializerVariables.add(  fragment.resolveBinding());
+						}
 						ForStatementChecker checker= new ForStatementChecker(forInitializerVariables);
 						expression.accept(checker);
 						if (checker.isReferringToForVariable())

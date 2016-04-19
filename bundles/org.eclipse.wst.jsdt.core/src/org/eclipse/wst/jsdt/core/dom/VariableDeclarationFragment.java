@@ -36,10 +36,20 @@ public class VariableDeclarationFragment extends VariableDeclaration {
 
 	/**
 	 * The "name" structural property of this node type.
-	 *  
+	 * @deprecated use #PATTERN_PROPERTY 
 	 */
 	public static final ChildPropertyDescriptor NAME_PROPERTY =
-		new ChildPropertyDescriptor(VariableDeclarationFragment.class, "name", SimpleName.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+		new ChildPropertyDescriptor(VariableDeclarationFragment.class, "name",SimpleName.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+	
+	
+	/**
+	 * The "name" structural property of this node type.
+	 * 
+	 *  @since 2.0
+	 */
+	public static final ChildPropertyDescriptor  PATTERN_PROPERTY = 
+				new ChildPropertyDescriptor(VariableDeclarationFragment.class, "pattern", Name.class, MANDATORY, NO_CYCLE_RISK); //$NON-NLS-1$
+
 
 	/**
 	 * The "extraDimensions" structural property of this node type.
@@ -67,6 +77,7 @@ public class VariableDeclarationFragment extends VariableDeclaration {
 		List propertyList = new ArrayList(4);
 		createPropertyList(VariableDeclarationFragment.class, propertyList);
 		addProperty(NAME_PROPERTY, propertyList);
+		addProperty(PATTERN_PROPERTY, propertyList);
 		addProperty(EXTRA_DIMENSIONS_PROPERTY, propertyList);
 		addProperty(INITIALIZER_PROPERTY, propertyList);
 		PROPERTY_DESCRIPTORS = reapPropertyList(propertyList);
@@ -91,6 +102,12 @@ public class VariableDeclarationFragment extends VariableDeclaration {
 	 * legal JavaScript identifier.
 	 */
 	private SimpleName variableName = null;
+	
+	/**
+	 * The variable pattern name lazily initialized; defaults to a unspecified,
+	 * legal JavaScript identifier.
+	 */
+	private Name pattern = null;
 
 	/**
 	 * The number of extra array dimensions that this variable has;
@@ -185,6 +202,14 @@ public class VariableDeclarationFragment extends VariableDeclaration {
 				return null;
 			}
 		}
+		if(property == PATTERN_PROPERTY ){
+			if(get){
+				return this.getPattern();
+			}else{
+				setPattern((Name)child);
+				return null;
+			}
+		}
 		// allow default implementation to flag the error
 		return super.internalGetSetChildProperty(property, get, child);
 	}
@@ -202,7 +227,7 @@ public class VariableDeclarationFragment extends VariableDeclaration {
 	ASTNode clone0(AST target) {
 		VariableDeclarationFragment result = new VariableDeclarationFragment(target);
 		result.setSourceRange(this.getStartPosition(), this.getLength());
-		result.setName((SimpleName) getName().clone(target));
+		result.setPattern((Name) getPattern().clone(target));
 		result.setExtraDimensions(getExtraDimensions());
 		result.setInitializer(
 			(Expression) ASTNode.copySubtree(target, getInitializer()));
@@ -224,7 +249,7 @@ public class VariableDeclarationFragment extends VariableDeclaration {
 		boolean visitChildren = visitor.visit(this);
 		if (visitChildren) {
 			// visit children in normal left to right reading order
-			acceptChild(visitor, getName());
+			acceptChild(visitor, getPattern());
 			acceptChild(visitor, getInitializer());
 		}
 		visitor.endVisit(this);
@@ -234,30 +259,17 @@ public class VariableDeclarationFragment extends VariableDeclaration {
 	 * Method declared on VariableDeclaration.
 	 */
 	public SimpleName getName() {
-		if (this.variableName == null) {
-			// lazy init must be thread-safe for readers
-			synchronized (this) {
-				if (this.variableName == null) {
-					preLazyInit();
-					this.variableName = new SimpleName(this.ast);
-					postLazyInit(this.variableName, NAME_PROPERTY);
-				}
-			}
+		if(this.getPattern().getNodeType() != SIMPLE_NAME){
+			return null;
 		}
-		return this.variableName;
+		return (SimpleName) this.getPattern();
 	}
 
 	/* (omit javadoc for this method)
 	 * Method declared on VariableDeclaration.
 	 */
 	public void setName(SimpleName variableName) {
-		if (variableName == null) {
-			throw new IllegalArgumentException();
-		}
-		ASTNode oldChild = this.variableName;
-		preReplaceChild(oldChild, variableName, NAME_PROPERTY);
-		this.variableName = variableName;
-		postReplaceChild(oldChild, variableName, NAME_PROPERTY);
+		setPattern(variableName);
 	}
 
 	/**
@@ -317,6 +329,44 @@ public class VariableDeclarationFragment extends VariableDeclaration {
 		postReplaceChild(oldChild, initializer, INITIALIZER_PROPERTY);
 	}
 
+	/**
+	 * Returns the variable pattern for this node.
+	 * @return
+	 */
+	public Name getPattern() {
+		if (this.pattern == null) {
+			// lazy init must be thread-safe for readers
+			synchronized (this) {
+				if (this.pattern == null) {
+					preLazyInit();
+					this.pattern = new SimpleName(this.ast);
+					postLazyInit(this.pattern, PATTERN_PROPERTY);
+				}
+			}
+		}
+		return pattern;
+	}
+	/**
+	 * Sets the pattern of the variable declared in this variable declaration
+	 * to the given pattern.
+	 *
+	 * @param pattern the new pattern
+	 * @exception IllegalArgumentException if:
+	 * <ul>
+	 * <li>the node belongs to a different AST</li>
+	 * <li>the node already has a parent</li>
+	 * </ul>
+	 */
+	public void setPattern(Name pattern) {
+		if (pattern == null) {
+			throw new IllegalArgumentException();
+		}
+		ASTNode oldChild = this.pattern;
+		preReplaceChild(oldChild, pattern, PATTERN_PROPERTY);
+		this.pattern = pattern;
+		postReplaceChild(oldChild, pattern, PATTERN_PROPERTY);
+	}
+	
 	/* (omit javadoc for this method)
 	 * Method declared on ASTNode.
 	 */

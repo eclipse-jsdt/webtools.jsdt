@@ -41,7 +41,7 @@ import jdk.nashorn.internal.runtime.ECMAException;
  * @author Gorkem Ercan
  * @since 2.0
  */
-public class EsprimaParser {
+class EsprimaParser {
 	/**
 	 * "attachComment" option for parser
 	 */

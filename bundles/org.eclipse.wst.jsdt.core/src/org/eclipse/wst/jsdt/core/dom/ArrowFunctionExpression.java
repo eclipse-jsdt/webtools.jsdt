@@ -222,9 +222,6 @@ public class ArrowFunctionExpression extends Expression {
 	 * </ul>
 	 */
 	public void setBody(Block body) {
-		if(body == null ){
-			throw new IllegalArgumentException();
-		}
 		ASTNode oldChild = this.body;
 		preReplaceChild(oldChild, body, BODY_PROPERTY);
 		this.body = body;
@@ -253,9 +250,6 @@ public class ArrowFunctionExpression extends Expression {
 	 * @param expression
 	 */
 	public void setExpression(Expression expression) {
-		if(expression == null){
-			throw new IllegalArgumentException();
-		}
 		ASTNode oldChild = this.expression;
 		preReplaceChild(oldChild, expression, EXPRESSION_PROPERTY);
 		this.expression = expression;

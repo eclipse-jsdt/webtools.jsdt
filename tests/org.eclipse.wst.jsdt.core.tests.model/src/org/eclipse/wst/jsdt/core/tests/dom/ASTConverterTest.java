@@ -6954,7 +6954,7 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertEquals("Wrong size", 1, fragments.size()); //$NON-NLS-1$
 		VariableDeclarationFragment variableDeclarationFragment = (VariableDeclarationFragment) fragments.get(0);
 		Expression expression = variableDeclarationFragment.getInitializer();
-		checkSourceRange(expression, "2", source); //$NON-NLS-1$
+		checkSourceRange(expression, "(2)", source); //$NON-NLS-1$
 	}
 
 	/**
@@ -7251,10 +7251,10 @@ public class ASTConverterTest extends ConverterTestSetup {
 		assertEquals("Wrong size", 1, fragments.size()); //$NON-NLS-1$
 		VariableDeclarationFragment variableDeclarationFragment = (VariableDeclarationFragment) fragments.get(0);
 		Expression expression = variableDeclarationFragment.getInitializer();
-//		assertTrue("Not a parenthesized expression", expression instanceof ParenthesizedExpression); //$NON-NLS-1$
-//		ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression) expression;
-//		Expression expression2 = parenthesizedExpression.getExpression();
-		checkSourceRange(expression, "2", source); //$NON-NLS-1$
+		assertTrue("Not a parenthesized expression", expression instanceof ParenthesizedExpression); //$NON-NLS-1$
+		ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression) expression;
+		Expression expression2 = parenthesizedExpression.getExpression();
+		checkSourceRange(expression2, "2", source); //$NON-NLS-1$
 	}
 
 	/**

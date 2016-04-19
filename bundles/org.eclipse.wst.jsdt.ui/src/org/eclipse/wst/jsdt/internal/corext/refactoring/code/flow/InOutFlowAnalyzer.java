@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -75,8 +75,8 @@ public class InOutFlowAnalyzer extends FlowAnalyzer {
 	}
 	public void endVisit(ForInStatement node) {
 		super.endVisit(node);
-		if (node.getIterationVariable() instanceof VariableDeclarationStatement)
-			clearAccessMode(accessFlowInfo(node), (VariableDeclarationStatement)node.getIterationVariable());
+		if (node.getIterationVariable() instanceof VariableDeclarationExpression)
+			clearAccessMode(accessFlowInfo(node), ((VariableDeclarationExpression)node.getIterationVariable()).fragments());
 	}
 	
 	public void endVisit(FunctionDeclaration node) {

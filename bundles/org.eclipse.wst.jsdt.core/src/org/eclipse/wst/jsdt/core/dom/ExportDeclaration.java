@@ -24,7 +24,7 @@ import java.util.List;
  * code that uses this API will almost certainly be broken (repeatedly) as the
  * API evolves
  *
- * @author gercan
+ * @author Gorkem Ercan
  * @since 2.0
  *
  */
@@ -48,7 +48,7 @@ public class ExportDeclaration extends ASTNode {
 	 * The "declaration" structural property of this node type.
 	 */
 	public static final ChildPropertyDescriptor DECLARATION_PROPERTY =
-		new ChildPropertyDescriptor(ExportDeclaration.class, "declaration", ProgramElement.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
+		new ChildPropertyDescriptor(ExportDeclaration.class, "declaration", ASTNode.class, OPTIONAL, NO_CYCLE_RISK); //$NON-NLS-1$
 
 	/**
 	 * The "isDefault" structural property of this node type.
@@ -99,7 +99,7 @@ public class ExportDeclaration extends ASTNode {
 
 	private NodeList specifiers = new NodeList(SPECIFIERS_PROPERTY);
 
-	private ProgramElement declaration;
+	private ASTNode declaration;
 
 	private boolean isDefault ;
 
@@ -167,7 +167,7 @@ public class ExportDeclaration extends ASTNode {
 			if (get) {
 				return getDeclaration();
 			} else {
-				setDeclaration( (ProgramElement) child);
+				setDeclaration( child);
 				return null;
 			}
 		}
@@ -237,14 +237,11 @@ public class ExportDeclaration extends ASTNode {
 		postReplaceChild(oldChild, source, SOURCE_PROPERTY);
 	}
 
-	public ProgramElement getDeclaration() {
+	public ASTNode getDeclaration() {
 		return declaration;
 	}
 
-	public void setDeclaration(ProgramElement declaration) {
-		if (declaration == null) {
-			throw new IllegalArgumentException();
-		}
+	public void setDeclaration(ASTNode declaration) {
 		ASTNode oldChild = this.declaration;
 		preReplaceChild(oldChild, declaration, DECLARATION_PROPERTY);
 		this.declaration = declaration;
@@ -262,7 +259,7 @@ public class ExportDeclaration extends ASTNode {
 		result.setDefault(isDefault());
 		result.setAll(isAll());
 		if(getDeclaration() != null){
-			result.setDeclaration((ProgramElement) getDeclaration().clone(target));
+			result.setDeclaration( getDeclaration().clone(target));
 		}
 		result.setSource((StringLiteral) getSource().clone(target));
 		result.specifiers.addAll(ASTNode.copySubtrees(target, specifiers()));

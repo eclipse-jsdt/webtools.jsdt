@@ -62,6 +62,7 @@ import org.eclipse.wst.jsdt.core.dom.NumberLiteral;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteral;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteralField;
 import org.eclipse.wst.jsdt.core.dom.ObjectName;
+import org.eclipse.wst.jsdt.core.dom.ParenthesizedExpression;
 import org.eclipse.wst.jsdt.core.dom.PostfixExpression;
 import org.eclipse.wst.jsdt.core.dom.PrefixExpression;
 import org.eclipse.wst.jsdt.core.dom.RegularExpressionLiteral;
@@ -263,9 +264,11 @@ public class JsCodeIRGenerator extends ASTVisitor {
 
 		// TODO (Eugene Melekhov) it's not very elegant, but I don't know
 		// other way to do it yet
-		int nt = node.getParent().getNodeType();
-		if (nt != ASTNode.FOR_IN_STATEMENT && nt != ASTNode.FOR_OF_STATEMENT) {
-			value = seqVa(value, semiOpt());
+		if (node.getParent() != null) {
+			int nt = node.getParent().getNodeType();
+			if (nt != ASTNode.FOR_IN_STATEMENT && nt != ASTNode.FOR_OF_STATEMENT) {
+				value = seqVa(value, semiOpt());
+			}
 		}
 		return false;
 	}
@@ -1040,6 +1043,9 @@ public class JsCodeIRGenerator extends ASTVisitor {
 		}
 		else if (e instanceof InfixExpression) {
 			return operatorPrecedence(((InfixExpression) e).getOperator().toString());
+		}
+		else if (e instanceof ParenthesizedExpression) {
+			return expressionPrecedence(((ParenthesizedExpression)e).getExpression());
 		}
 		else if (e instanceof PostfixExpression) {
 			return POSTFIX;

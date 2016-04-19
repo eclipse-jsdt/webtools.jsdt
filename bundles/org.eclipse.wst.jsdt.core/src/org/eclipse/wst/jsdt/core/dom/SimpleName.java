@@ -235,7 +235,8 @@ public class SimpleName extends Name {
 			return (d == SingleVariableDeclaration.PATTERN_PROPERTY);
 		}
 		if (parent instanceof VariableDeclarationFragment) {
-			return (d == VariableDeclarationFragment.NAME_PROPERTY);
+			return (d == VariableDeclarationFragment.NAME_PROPERTY ||
+						d == VariableDeclarationFragment.PATTERN_PROPERTY );
 		}
 		
 		return false;

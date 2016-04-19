@@ -8,7 +8,7 @@
  * 	Contributors:
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.wst.jsdt.core.tests.esprima;
+package org.eclipse.wst.jsdt.core.tests.closure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,7 +32,6 @@ import org.eclipse.wst.jsdt.core.dom.ArrayName;
 import org.eclipse.wst.jsdt.core.dom.ArrowFunctionExpression;
 import org.eclipse.wst.jsdt.core.dom.Assignment;
 import org.eclipse.wst.jsdt.core.dom.Assignment.Operator;
-import org.eclipse.wst.jsdt.core.dom.AssignmentName;
 import org.eclipse.wst.jsdt.core.dom.Block;
 import org.eclipse.wst.jsdt.core.dom.BreakStatement;
 import org.eclipse.wst.jsdt.core.dom.CatchClause;
@@ -50,7 +49,6 @@ import org.eclipse.wst.jsdt.core.dom.ForInStatement;
 import org.eclipse.wst.jsdt.core.dom.ForOfStatement;
 import org.eclipse.wst.jsdt.core.dom.ForStatement;
 import org.eclipse.wst.jsdt.core.dom.FunctionDeclaration;
-import org.eclipse.wst.jsdt.core.dom.FunctionDeclarationStatement;
 import org.eclipse.wst.jsdt.core.dom.FunctionExpression;
 import org.eclipse.wst.jsdt.core.dom.FunctionInvocation;
 import org.eclipse.wst.jsdt.core.dom.IfStatement;
@@ -59,12 +57,12 @@ import org.eclipse.wst.jsdt.core.dom.InfixExpression;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.core.dom.LabeledStatement;
 import org.eclipse.wst.jsdt.core.dom.ListExpression;
-import org.eclipse.wst.jsdt.core.dom.MetaProperty;
 import org.eclipse.wst.jsdt.core.dom.ModuleSpecifier;
 import org.eclipse.wst.jsdt.core.dom.NumberLiteral;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteral;
 import org.eclipse.wst.jsdt.core.dom.ObjectLiteralField;
 import org.eclipse.wst.jsdt.core.dom.ObjectName;
+import org.eclipse.wst.jsdt.core.dom.ParenthesizedExpression;
 import org.eclipse.wst.jsdt.core.dom.PostfixExpression;
 import org.eclipse.wst.jsdt.core.dom.PrefixExpression;
 import org.eclipse.wst.jsdt.core.dom.RegularExpressionLiteral;
@@ -73,7 +71,6 @@ import org.eclipse.wst.jsdt.core.dom.ReturnStatement;
 import org.eclipse.wst.jsdt.core.dom.SimpleName;
 import org.eclipse.wst.jsdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.wst.jsdt.core.dom.SpreadElement;
-import org.eclipse.wst.jsdt.core.dom.StringLiteral;
 import org.eclipse.wst.jsdt.core.dom.SwitchCase;
 import org.eclipse.wst.jsdt.core.dom.SwitchStatement;
 import org.eclipse.wst.jsdt.core.dom.TemplateElement;
@@ -91,18 +88,20 @@ import org.eclipse.wst.jsdt.core.dom.VariableKind;
 import org.eclipse.wst.jsdt.core.dom.WhileStatement;
 import org.eclipse.wst.jsdt.core.dom.WithStatement;
 import org.eclipse.wst.jsdt.core.dom.YieldExpression;
-import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
+import org.eclipse.wst.jsdt.internal.compiler.closure.ClosureCompiler;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+
+import com.google.javascript.jscomp.parsing.Config.LanguageMode;
+import com.google.javascript.jscomp.parsing.ParserRunner;
+import com.google.javascript.rhino.SimpleSourceFile;
 
 @SuppressWarnings("nls")
-public class EsprimaParserTests {
+public class ClosureCompilerTests {
 
 	@Test
 	public void createParserInstance(){
-		EsprimaParser parser = EsprimaParser.newParser();
+		ClosureCompiler parser = ClosureCompiler.newInstance();
 		assertNotNull(parser);
 	}
 
@@ -493,6 +492,24 @@ public class EsprimaParserTests {
 		assertFalse(yieldE.getDelegate());
 		assertNotNull(yieldE.getArgument());
 	}
+	
+	@Test
+	public void testFunctionCallTolerantParsing(){
+		JavaScriptUnit unit = parse("f(a function(){} c);");
+		assertNotNull(unit);
+	}
+	
+	@Test
+	public void testInvalidForIn(){
+		JavaScriptUnit unit = parse("for (var i, i2 in {});");
+		assertNotNull(unit);
+	}
+	
+	@Test
+	public void testComplexRestInArrowFailure(){
+		JavaScriptUnit unit = parse("(a,...[a]) => 0;");
+		assertNotNull(unit);
+	}
 
 	@Test
 	public void testEmptyStatement(){
@@ -808,8 +825,8 @@ public class EsprimaParserTests {
 			if(astNode.getNodeType() == ASTNode.FOR_IN_STATEMENT){
 				ForInStatement fs = (ForInStatement)astNode;
 				assertTrue(fs.getBody() instanceof Block);
-				assertTrue(fs.getIterationVariable() instanceof VariableDeclarationStatement );
-				VariableDeclarationStatement vde = (VariableDeclarationStatement) fs.getIterationVariable();
+				assertTrue(fs.getIterationVariable() instanceof VariableDeclarationExpression );
+				VariableDeclarationExpression vde = (VariableDeclarationExpression) fs.getIterationVariable();
 				assertEquals(VariableKind.LET, vde.getKind());
 				assertTrue(fs.getCollection()instanceof SimpleName);
 				SimpleName sn = (SimpleName)fs.getCollection();
@@ -828,7 +845,7 @@ public class EsprimaParserTests {
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.FOR_IN_STATEMENT){
 				ForInStatement fs = (ForInStatement)astNode;
-				assertTrue(fs.getIterationVariable() instanceof ExpressionStatement );
+				assertTrue(fs.getIterationVariable() instanceof Expression );
 				return;
 			}
 		}
@@ -844,8 +861,8 @@ public class EsprimaParserTests {
 			if(astNode.getNodeType() == ASTNode.FOR_OF_STATEMENT){
 				ForOfStatement fs = (ForOfStatement)astNode;
 				assertTrue(fs.getBody() instanceof Block);
-				assertTrue(fs.getIterationVariable() instanceof VariableDeclarationStatement );
-				VariableDeclarationStatement vde = (VariableDeclarationStatement) fs.getIterationVariable();
+				assertTrue(fs.getIterationVariable() instanceof VariableDeclarationExpression );
+				VariableDeclarationExpression vde = (VariableDeclarationExpression) fs.getIterationVariable();
 				assertEquals(VariableKind.LET, vde.getKind());
 				assertTrue(fs.getCollection()instanceof SimpleName);
 				SimpleName sn = (SimpleName)fs.getCollection();
@@ -883,8 +900,9 @@ public class EsprimaParserTests {
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.EXPRESSION_STATEMENT){
 				ExpressionStatement es = (ExpressionStatement)astNode;
-				assertTrue(es.getExpression() instanceof FunctionExpression);
-				FunctionExpression func = (FunctionExpression)es.getExpression();
+				assertTrue(es.getExpression() instanceof ParenthesizedExpression);
+				ParenthesizedExpression pe = (ParenthesizedExpression) es.getExpression();
+				FunctionExpression func = (FunctionExpression)pe.getExpression();
 				assertFalse(func.getMethod().parameters().isEmpty());
 				assertEquals(1, func.getMethod().parameters().size());
 
@@ -952,7 +970,7 @@ public class EsprimaParserTests {
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.TYPE_DECLARATION_STATEMENT){
-				TypeDeclarationStatement tds = (TypeDeclarationStatement)astNode;
+				TypeDeclarationStatement tds = (TypeDeclarationStatement) astNode;
 				TypeDeclaration td = (TypeDeclaration) tds.getDeclaration();
 				assertEquals("MyClass",td.getName().getIdentifier());
 				assertNotNull(td.getSuperclass());
@@ -975,13 +993,13 @@ public class EsprimaParserTests {
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.TYPE_DECLARATION_STATEMENT){
-				TypeDeclarationStatement tds = (TypeDeclarationStatement)astNode;
-				TypeDeclaration td = (TypeDeclaration) tds.getDeclaration();
-				assertEquals("MyClass",td.getName().getIdentifier());
-				assertNotNull(td.getSuperclass());
-				assertEquals("YourClass", td.getSuperclass().getFullyQualifiedName());
-				assertFalse(td.bodyDeclarations().isEmpty());
-				assertEquals(3,td.bodyDeclarations().size());
+				TypeDeclarationStatement td = (TypeDeclarationStatement) astNode;
+				final TypeDeclaration declaration = (TypeDeclaration) td.getDeclaration();
+				assertEquals("MyClass",declaration.getName().getIdentifier());
+				assertNotNull(declaration.getSuperclass());
+				assertEquals("YourClass", declaration.getSuperclass().getFullyQualifiedName());
+				assertFalse(declaration.bodyDeclarations().isEmpty());
+				assertEquals(3,declaration.bodyDeclarations().size());
 				return;
 			}
 		}
@@ -997,7 +1015,7 @@ public class EsprimaParserTests {
 		List<ASTNode> statements = unit.statements();
 		for (ASTNode astNode : statements) {
 			if(astNode.getNodeType() == ASTNode.TYPE_DECLARATION_STATEMENT){
-				TypeDeclarationStatement tds = (TypeDeclarationStatement)astNode;
+				TypeDeclarationStatement tds = (TypeDeclarationStatement) astNode;
 				TypeDeclaration td = (TypeDeclaration) tds.getDeclaration();
 				assertEquals("MyClass",td.getName().getIdentifier());
 				assertNotNull(td.getSuperclass());
@@ -1010,7 +1028,7 @@ public class EsprimaParserTests {
 							ASTNode n  = (ASTNode) fd.getBody().statements().get(i);
 							if(n.getNodeType() == ASTNode.EXPRESSION_STATEMENT ){
 								ExpressionStatement estmt = (ExpressionStatement)n;
-								if(estmt.getExpression().getNodeType() == ASTNode.SUPER_METHOD_INVOCATION){
+								if(estmt.getExpression().getNodeType() == ASTNode.FUNCTION_INVOCATION){
 									return;
 								}
 							}
@@ -1068,27 +1086,6 @@ public class EsprimaParserTests {
 		fail();
 	}
 
-	@Test
-	public void testAssignmentPattern(){
-		JavaScriptUnit unit = parse("function f([d = 0, ...e]){};");
-		assertNotNull(unit);
-		List<ASTNode> statements = unit.statements();
-		for (ASTNode astNode : statements) {
-			if(astNode.getNodeType() == ASTNode.FUNCTION_DECLARATION){
-				FunctionDeclaration fd = (FunctionDeclaration) astNode;
-				assertEquals(1, fd.parameters().size());
-				SingleVariableDeclaration svd = (SingleVariableDeclaration) fd.parameters().get(0);
-				ArrayName an = (ArrayName) svd.getPattern();
-				assertEquals(2, an.elements().size());
-				AssignmentName asn = (AssignmentName) an.elements().get(0);
-				assertEquals("d", ((SimpleName)asn.getLeft()).getIdentifier());
-				assertEquals("0", ((NumberLiteral) asn.getRight()).getToken());
-				assertEquals("d=0", asn.toString());
-				return;
-			}
-		}
-		fail();
-	}
 	@Test
 	public void testObjectPattern(){
 		JavaScriptUnit unit = parse("function f({ age, name }){};");
@@ -1182,19 +1179,6 @@ public class EsprimaParserTests {
 		assertEquals(ASTNode.FUNCTION_INVOCATION, sel.getArgument().getNodeType());
 	}
 
-	@Test
-	public void testMetaProperty(){
-		JavaScriptUnit unit = parse("function f(){new.target;}");
-		assertNotNull(unit);
-		List<ASTNode> statements = unit.statements();
-		FunctionDeclaration fd = (FunctionDeclaration)unit.statements().get(0);
-		ExpressionStatement es = (ExpressionStatement)fd.getBody().statements().get(0);
-		assertEquals(ASTNode.META_PROPERTY, es.getExpression().getNodeType());
-		MetaProperty mp = (MetaProperty)es.getExpression();
-		assertEquals("new", mp.getMeta());
-		assertEquals("target", mp.getPropertyName());
-		assertEquals("new.target", mp.toString());
-	}
 
 	@Test
 	public void testFunctionDeclaration(){
@@ -1224,7 +1208,7 @@ public class EsprimaParserTests {
 
 	@Test
 	public void testTolerantError(){
-		JavaScriptUnit unit = parse(" 234++\n   123++");
+		JavaScriptUnit unit = parse(" function(){ ");
 		assertNotNull(unit);
 		assertEquals(2, unit.getMessages().length);
 	}
@@ -1254,8 +1238,8 @@ public class EsprimaParserTests {
 		assertEquals("lib", importDeclaration.getSource().getLiteralValue());
 		assertFalse(importDeclaration.specifiers().isEmpty());
 		ModuleSpecifier specifier = (ModuleSpecifier) importDeclaration.specifiers().get(0);
-		assertEquals("foo", specifier.getLocal().getIdentifier());
 		assertEquals("foo", specifier.getDiscoverableName().getIdentifier());
+		assertNull(specifier.getLocal());
 		assertFalse(specifier.isDefault());
 		assertFalse(specifier.isNamespace());
 	}
@@ -1359,6 +1343,15 @@ public class EsprimaParserTests {
 	}
 	
 	@Test
+	public void testExport_7(){
+		JavaScriptUnit unit = parse("export default identifier");
+		assertFalse(unit.exports().isEmpty());
+		ExportDeclaration export = (ExportDeclaration) unit.exports().get(0);
+		assertNotNull(export.getDeclaration());
+		assertTrue(export.isDefault());
+	}
+	
+	@Test
 	public void testComments(){
 		JavaScriptUnit unit = parse("/**\n"
 					+ "*Life, Universe, and Everything\n"
@@ -1377,7 +1370,7 @@ public class EsprimaParserTests {
 	public void testCommentAttachment(){
 		JavaScriptUnit unit = parse( "/** JavaDoc Comment*/\n" +
 									 "function foo(i) {}");
-		List commentList = unit.getCommentList();
+		List<?> commentList = unit.getCommentList();
 		assertNotNull(commentList);
 		assertEquals(1,commentList.size());		
 		FunctionDeclaration fd = (FunctionDeclaration) unit.statements().get(0);
@@ -1402,7 +1395,8 @@ public class EsprimaParserTests {
 		assertFalse(unit.statements().isEmpty());
 		assertEquals(ASTNode.EXPRESSION_STATEMENT, unit.statements().get(0).getNodeType());
 		ExpressionStatement es= (ExpressionStatement)unit.statements().get(0);
-		TypeDeclarationExpression dex = (TypeDeclarationExpression) es.getExpression();
+		ParenthesizedExpression pe = (ParenthesizedExpression) es.getExpression();
+		TypeDeclarationExpression dex = (TypeDeclarationExpression) pe.getExpression();
 		TypeDeclaration td = (TypeDeclaration)dex.getDeclaration();
 		assertEquals("A", td.getName().getIdentifier());
 	}
@@ -1417,9 +1411,8 @@ public class EsprimaParserTests {
 		assertEquals(ASTNode.ARRAY_NAME, assignment.getLeftHandSide().getNodeType());
 		ArrayName arrayName = (ArrayName)assignment.getLeftHandSide();
 		assertFalse(arrayName.elements().isEmpty());
-		RestElementName rest = (RestElementName)arrayName.elements().get(0);
-		assertEquals(ASTNode.ARRAY_ACCESS, rest.getArgument().getNodeType());
-		ArrayAccess access = (ArrayAccess)rest.getArgument();
+		assertEquals(ASTNode.ARRAY_ACCESS, ((ASTNode)arrayName.elements().get(0)).getNodeType());
+		ArrayAccess access = (ArrayAccess)arrayName.elements().get(0);
 		assertEquals("a", ((SimpleName)access.getArray()).getIdentifier());
 		assertEquals("0", ((NumberLiteral)access.getIndex()).getToken());
 
@@ -1441,10 +1434,8 @@ public class EsprimaParserTests {
 		JavaScriptUnit unit = parse("for([a,b[a],{c,d=e,[f]:[g,h().a,(0).k,...i[0]]}] in 0);");
 		assertFalse(unit.statements().isEmpty());
 		ForInStatement forin = (ForInStatement) unit.statements().get(0);
-		assertEquals( ASTNode.EXPRESSION_STATEMENT, forin.getIterationVariable().getNodeType());
-		ExpressionStatement es = (ExpressionStatement) forin.getIterationVariable();
-		assertEquals(ASTNode.ARRAY_NAME, es.getExpression().getNodeType());
-		ArrayName name  = (ArrayName)es.getExpression();
+		assertEquals(ASTNode.ARRAY_NAME, forin.getIterationVariable().getNodeType());
+		ArrayName name  = (ArrayName)forin.getIterationVariable();
 		assertEquals(3, name.elements().size());
 	}
 
@@ -1474,33 +1465,125 @@ public class EsprimaParserTests {
 		IfStatement ifstmt = (IfStatement) unit.statements().get(0);
 		assertEquals(ASTNode.VARIABLE_DECLARATION_STATEMENT, ifstmt.getThenStatement().getNodeType());
 	}
+	
+	@Test
+	public void testObjectLiteralWithFunctionDeclarationField(){
+		JavaScriptUnit unit = parse("({ myFunction(){} });");
+		assertNotNull(unit);
+		List<ASTNode> statements = unit.statements();
+		for (ASTNode astNode : statements) {
+			if(astNode.getNodeType() == ASTNode.EXPRESSION_STATEMENT){
+				ExpressionStatement expression = (ExpressionStatement) astNode;
+				assertEquals(ASTNode.PARENTHESIZED_EXPRESSION, expression.getExpression().getNodeType());
+				ParenthesizedExpression parans = (ParenthesizedExpression) expression.getExpression();
+				assertEquals(ASTNode.OBJECT_LITERAL, parans.getExpression().getNodeType());
+				ObjectLiteral obj = (ObjectLiteral) parans.getExpression();
+				assertEquals(1, obj.fields().size());
+				ObjectLiteralField field = (ObjectLiteralField) obj.fields().get(0);
+				assertEquals(ASTNode.FUNCTION_EXPRESSION, field.getInitializer().getNodeType());
+				return;
+			}
+		}
+		fail();
+	}
+	
+	@Test
+	public void testInvalidObjectLiteral(){
+		JavaScriptUnit unit = parse("({get[a,b]:0})");
+		assertNotNull(unit);
+	}
+	
+	@Test
+	public void testChainFunctionCall(){
+		JavaScriptUnit unit = parse("browser \n"+
+									".init({browserName: 'chrome'}) \n" +
+									".get('http://angularjs.org/') \n" +
+									"// element method chaining \n" +
+									".elementById('the-basics') \n" +
+									".click()    // The 'click' call returns nothing, \n"+
+									".click()    // So we can call it many times without loosing the element scope \n"+
+									".click()    // ... \n"+
+									".text()     // The element scope is preserved and this 'text' call works. \n"+
+									".should.become('The Basics'); \n");
+		assertNotNull(unit);
+		ExpressionStatement expression = (ExpressionStatement) unit.statements().get(0);
+		assertSame(ASTNode.FUNCTION_INVOCATION, expression.getExpression().getNodeType());
+		FunctionInvocation fi = (FunctionInvocation)expression.getExpression();
+		assertNotNull(fi.getExpression());
+		assertSame(ASTNode.FIELD_ACCESS, fi.getExpression().getNodeType());
+		FieldAccess fa = (FieldAccess)fi.getExpression();
+		assertNotNull(fa.getName());
+		assertEquals("become",fa.getName().getIdentifier());
+	}
+	
+	@Test
+	public void testParserRunner(){
+		class TestErrorReporter implements com.google.javascript.rhino.ErrorReporter {
+
+			private void report(String message, String name, int line, int column) {
+				System.out.println(message + " at " + name + " line: " + line + ":" + column);  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+			}
+
+			/* (non-Javadoc)
+			 * @see com.google.javascript.rhino.ErrorReporter#warning(java.lang.String, java.lang.String, int, int)
+			 */
+			@Override
+			public void warning(String message, String sourceName, int line, int lineOffset) {
+				this.report("WARNING: " + message, sourceName, line , lineOffset);
+			}
+
+			/* (non-Javadoc)
+			 * @see com.google.javascript.rhino.ErrorReporter#error(java.lang.String, java.lang.String, int, int)
+			 */
+			@Override
+			public void error(String message, String sourceName, int line, int lineOffset) {
+				this.report("ERROR: " + message, sourceName, line , lineOffset);
+				
+			}
+		}
+		
+		InputStream in = this.getClass().getResourceAsStream("es5.js");
+		String content = readFile(in);
+		com.google.javascript.jscomp.parsing.Config config = ParserRunner.createConfig(true, LanguageMode.ECMASCRIPT6,null);
+		SimpleSourceFile sf = new SimpleSourceFile("es2015-script.js", false );
+		ParserRunner.parse(sf,content,config, new TestErrorReporter() );
+	}
+	
+	@Test
+	public void testTestBuilderJS(){
+		JavaScriptUnit unit = loadParseJs("TestBuilder.js");
+		assertNotNull(unit);
+	}
 
 	// #### Everything.js tests.
 
 	@Test
 	public void testEverythingJS_es5(){
-		testEverythingJs("es5.js");
+		loadParseJs("es5.js");
 	}
 
 	@Test
+	@Ignore
 	public void testEverythingJS_es2015_script(){
-		testEverythingJs("es2015-script.js");
+		loadParseJs("es2015-script.js");
 	}
 
 	@Test
+	@Ignore
 	public void testEverythingJS_es2015_module(){
-		testEverythingJs("es2015-module.js");
+		loadParseJs("es2015-module.js");
 	}
 
 	private JavaScriptUnit parse(String content){
-		return EsprimaParser.newParser().includeComments().setSource(content).parse();
+		return ClosureCompiler.newInstance().toggleComments(true).setSource(content).parse();
 	}
 
-	private void testEverythingJs(String file){
+	private JavaScriptUnit loadParseJs(String file){
 		InputStream in = this.getClass().getResourceAsStream(file);
-		JavaScriptUnit unit = EsprimaParser.newParser().setSource(readFile(in)).parse();
+		JavaScriptUnit unit = ClosureCompiler.newInstance().toggleComments(true).setSource(readFile(in)).parse();
 		assertNotNull(unit);
 		assertFalse(unit.statements().isEmpty());
+		return unit;
 	}
 
 	private String readFile(InputStream input){

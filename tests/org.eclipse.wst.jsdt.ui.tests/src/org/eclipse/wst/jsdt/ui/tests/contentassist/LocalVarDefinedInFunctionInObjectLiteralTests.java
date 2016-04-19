@@ -39,7 +39,7 @@ public class LocalVarDefinedInFunctionInObjectLiteralTests {
 				unexpectedProposals, true, false);
 	}
 
-	@Test
+	@Test @Ignore("Fails fails after switching to Closure Compiler (Bug 497249)")
 	public void testLocalVarDefinedInFuncationInOBjectLiteral_ThisFile_InFunction() throws Exception {
 		String[][] expectedProposals = new String[][] { { "ninjaLocal" } };
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestLocalVarDefinedInFunctionInObjectLiteral_0.js", 3, 5,

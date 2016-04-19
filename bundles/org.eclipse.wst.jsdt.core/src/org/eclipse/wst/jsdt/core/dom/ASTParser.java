@@ -24,6 +24,7 @@ import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.WorkingCopyOwner;
 import org.eclipse.wst.jsdt.core.compiler.CategorizedProblem;
 import org.eclipse.wst.jsdt.internal.compiler.ast.CompilationUnitDeclaration;
+import org.eclipse.wst.jsdt.internal.compiler.closure.ClosureCompiler;
 import org.eclipse.wst.jsdt.internal.compiler.parser.RecoveryScannerData;
 import org.eclipse.wst.jsdt.internal.compiler.parser.Scanner;
 import org.eclipse.wst.jsdt.internal.core.BasicCompilationUnit;
@@ -31,7 +32,6 @@ import org.eclipse.wst.jsdt.internal.core.DefaultWorkingCopyOwner;
 import org.eclipse.wst.jsdt.internal.core.PackageFragment;
 import org.eclipse.wst.jsdt.internal.core.util.RecordedParsingInformation;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
-import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
 
 /**
  * A JavaScript language parser for creating abstract syntax trees (ASTs).
@@ -644,9 +644,9 @@ public class ASTParser {
 		   }
 			if(this.typeRoot instanceof IJavaScriptUnit ){
 				String sourceType = project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true);			
-				JavaScriptUnit unit = EsprimaParser.newParser()
-							.includeComments()
-							.setSourceType(sourceType)
+				JavaScriptUnit unit = ClosureCompiler.newInstance()
+							.toggleComments(true)
+//							.setSourceType(sourceType)
 							.setSource((IJavaScriptUnit)this.typeRoot)
 							.parse();
 				unit.setTypeRoot(typeRoot);
@@ -667,11 +667,14 @@ public class ASTParser {
 					scanner.setSource(typeRoot.getSource().toCharArray());
 				}
 				catch (JavaScriptModelException e) {
+					e.printStackTrace();
 				}
 				
 			}else{
 				result = internalCreateAST(monitor);
 			}
+		} catch (Throwable e) {
+			e.printStackTrace();
 		} finally {
 	   	   // re-init defaults to allow reuse (and avoid leaking)
 	   	   initializeDefaults();
@@ -851,9 +854,9 @@ public class ASTParser {
 							 * (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=75632)
 							 */
 //							sourceUnit = new BasicCompilationUnit(sourceUnit.getContents(), sourceUnit.getPackageName(), new String(sourceUnit.getFileName()), this.project);
-						JavaScriptUnit result = EsprimaParser.newParser()
-									.includeComments()
-									.setSourceType(project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))
+						JavaScriptUnit result = ClosureCompiler.newInstance()
+									.toggleComments(true)
+//									.setSourceType(project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))
 									.setSource((IJavaScriptUnit) this.typeRoot)
 									.parse();
 						result.setTypeRoot(this.typeRoot);
@@ -900,8 +903,8 @@ public class ASTParser {
 						throw new IllegalStateException();
 					}
 					String sourceType = project != null ? project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true): null;		
-					JavaScriptUnit $ = EsprimaParser.newParser()
-								.setSourceType(sourceType)
+					JavaScriptUnit $ = ClosureCompiler.newInstance()
+//								.setSourceType(sourceType)
 								.setSource(String.valueOf(sourceUnit.getContents()))
 								.parse();
 					$.setTypeRoot(this.typeRoot);
@@ -997,9 +1000,9 @@ public class ASTParser {
 		this.sourceLength = this.rawSource.length;
 		char[] contentArray = new char[this.sourceLength];
 		System.arraycopy(this.rawSource,this.sourceOffset,contentArray,0,this.sourceLength );
-		JavaScriptUnit unit = EsprimaParser.newParser()
-					.includeComments()
-					.setSourceType(project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))	
+		JavaScriptUnit unit = ClosureCompiler.newInstance()
+					.toggleComments(true)
+//					.setSourceType(project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))	
 					.setSource(String.valueOf(contentArray))
 					.parse();
 		unit.ast.setOriginalModificationCount(unit.ast.modificationCount());

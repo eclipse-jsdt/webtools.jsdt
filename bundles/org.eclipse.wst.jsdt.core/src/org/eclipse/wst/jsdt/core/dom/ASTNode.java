@@ -1827,7 +1827,7 @@ public abstract class ASTNode {
 
 			// fix for inner function handling, Etienne Pfister
 			if(!(newChild instanceof org.eclipse.wst.jsdt.core.dom.FunctionDeclaration)) {
-				throw new ClassCastException();
+				throw new ClassCastException(childClass + " is not assignable to " + nodeType);
 			}
 		}
 		if ((newChild.typeAndFlags & PROTECT) != 0) {
