@@ -24,14 +24,11 @@ import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.WorkingCopyOwner;
 import org.eclipse.wst.jsdt.core.compiler.CategorizedProblem;
 import org.eclipse.wst.jsdt.internal.compiler.ast.CompilationUnitDeclaration;
-import org.eclipse.wst.jsdt.internal.compiler.ast.ConstructorDeclaration;
-import org.eclipse.wst.jsdt.internal.compiler.parser.RecoveryScanner;
 import org.eclipse.wst.jsdt.internal.compiler.parser.RecoveryScannerData;
 import org.eclipse.wst.jsdt.internal.compiler.parser.Scanner;
 import org.eclipse.wst.jsdt.internal.core.BasicCompilationUnit;
 import org.eclipse.wst.jsdt.internal.core.DefaultWorkingCopyOwner;
 import org.eclipse.wst.jsdt.internal.core.PackageFragment;
-import org.eclipse.wst.jsdt.internal.core.util.CodeSnippetParsingUtil;
 import org.eclipse.wst.jsdt.internal.core.util.RecordedParsingInformation;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
 import org.eclipse.wst.jsdt.internal.esprima.EsprimaParser;
@@ -980,110 +977,25 @@ public class ASTParser {
 	 * @see ASTNode#getLength()
 	 */
 	private ASTNode internalCreateASTForKind() {
-		final ASTConverter converter = new ASTConverter(this.compilerOptions, false, null);
-		converter.compilationUnitSource = this.rawSource;
-		converter.compilationUnitSourceLength = this.rawSource.length;
-		converter.scanner.setSource(this.rawSource);
-
-		AST ast = AST.newAST(this.apiLevel);
-		ast.setDefaultNodeFlag(ASTNode.ORIGINAL);
-		ast.setBindingResolver(new BindingResolver());
-		if (this.statementsRecovery) {
-			ast.setFlag(IJavaScriptUnit.ENABLE_STATEMENTS_RECOVERY);
-		}
-		converter.setAST(ast);
-		CodeSnippetParsingUtil codeSnippetParsingUtil = new CodeSnippetParsingUtil();
-		JavaScriptUnit compilationUnit = ast.newJavaScriptUnit();
-		if (this.sourceLength == -1) {
-			this.sourceLength = this.rawSource.length;
-		}
-		switch(this.astKind) {
-			case K_STATEMENTS :
-				ConstructorDeclaration constructorDeclaration = codeSnippetParsingUtil.parseStatements(this.rawSource, this.sourceOffset, this.sourceLength, this.compilerOptions, true, this.statementsRecovery);
-				RecoveryScannerData data = constructorDeclaration.compilationResult.recoveryScannerData;
-				if(data != null) {
-					Scanner scanner = converter.scanner;
-					converter.scanner = new RecoveryScanner(scanner, data.removeUnused());
-					converter.docParser.scanner = converter.scanner;
-					converter.scanner.setSource(scanner.source);
-				}
-				RecordedParsingInformation recordedParsingInformation = codeSnippetParsingUtil.recordedParsingInformation;
-				int[][] comments = recordedParsingInformation.commentPositions;
-				if (comments != null) {
-					converter.buildCommentsTable(compilationUnit, comments);
-				}
-				compilationUnit.setLineEndTable(recordedParsingInformation.lineEnds);
-					Block block = ast.newBlock();
-					block.setSourceRange(this.sourceOffset, this.sourceOffset + this.sourceLength);
-					org.eclipse.wst.jsdt.internal.compiler.ast.Statement[] statements = constructorDeclaration.statements;
-					if (statements != null) {
-						int statementsLength = statements.length;
-						for (int i = 0; i < statementsLength; i++) {
-							if (statements[i] instanceof org.eclipse.wst.jsdt.internal.compiler.ast.LocalDeclaration) {
-								converter.checkAndAddMultipleLocalDeclaration(statements, i, block.statements());
-							} else {
-								Statement statement = converter.convert(statements[i]);
-								if (statement != null) {
-									block.statements().add(statement);
-								}
-							}
-						}
-					}
-					rootNodeToCompilationUnit(ast, compilationUnit, block, recordedParsingInformation, data);
-					ast.setDefaultNodeFlag(0);
-					ast.setOriginalModificationCount(ast.modificationCount());
-					return block;
-			case K_EXPRESSION :
-				org.eclipse.wst.jsdt.internal.compiler.ast.Expression expression = codeSnippetParsingUtil.parseExpression(this.rawSource, this.sourceOffset, this.sourceLength, this.compilerOptions, true);
-				recordedParsingInformation = codeSnippetParsingUtil.recordedParsingInformation;
-				comments = recordedParsingInformation.commentPositions;
-				if (comments != null) {
-					converter.buildCommentsTable(compilationUnit, comments);
-				}
-				compilationUnit.setLineEndTable(recordedParsingInformation.lineEnds);
-				if (expression != null) {
-					Expression expression2 = converter.convert(expression);
-					rootNodeToCompilationUnit(expression2.getAST(), compilationUnit, expression2, codeSnippetParsingUtil.recordedParsingInformation, null);
-					ast.setDefaultNodeFlag(0);
-					ast.setOriginalModificationCount(ast.modificationCount());
-					return expression2;
-				} else {
-					CategorizedProblem[] problems = recordedParsingInformation.problems;
-					if (problems != null) {
-						compilationUnit.setProblems(problems);
-					}
-					ast.setDefaultNodeFlag(0);
-					ast.setOriginalModificationCount(ast.modificationCount());
-					return compilationUnit;
-				}
-			case K_CLASS_BODY_DECLARATIONS :
-				final org.eclipse.wst.jsdt.internal.compiler.ast.ASTNode[] nodes = codeSnippetParsingUtil.parseClassBodyDeclarations(this.rawSource, this.sourceOffset, this.sourceLength, this.compilerOptions, true);
-				recordedParsingInformation = codeSnippetParsingUtil.recordedParsingInformation;
-				comments = recordedParsingInformation.commentPositions;
-				if (comments != null) {
-					converter.buildCommentsTable(compilationUnit, comments);
-				}
-				compilationUnit.setLineEndTable(recordedParsingInformation.lineEnds);
-				if (nodes != null) {
-//					TypeDeclaration typeDeclaration = converter.convert(nodes);
-//					typeDeclaration.setSourceRange(this.sourceOffset, this.sourceOffset + this.sourceLength);
-//					rootNodeToCompilationUnit(typeDeclaration.getAST(), compilationUnit, typeDeclaration, codeSnippetParsingUtil.recordedParsingInformation, null);
-					JavaScriptUnit compUnit=converter.convert(nodes, compilationUnit);
-					rootNodeToCompilationUnit(compUnit.getAST(), compilationUnit, compUnit, codeSnippetParsingUtil.recordedParsingInformation, null);
-					ast.setDefaultNodeFlag(0);
-					ast.setOriginalModificationCount(ast.modificationCount());
-					return compilationUnit;
-				} else {
-					CategorizedProblem[] problems = recordedParsingInformation.problems;
-					if (problems != null) {
-						compilationUnit.setProblems(problems);
-					}
-					ast.setDefaultNodeFlag(0);
-					ast.setOriginalModificationCount(ast.modificationCount());
-					return compilationUnit;
-				}
-		}
-		throw new IllegalStateException();
+		if (this.sourceLength == -1) 
+		this.sourceLength = this.rawSource.length;
+		char[] contentArray = new char[this.sourceLength];
+		System.arraycopy(this.rawSource,this.sourceOffset,contentArray,0,this.sourceLength );
+		JavaScriptUnit unit = EsprimaParser.newParser().includeComments().setSource(String.valueOf(contentArray)).parse();
+		unit.ast.setOriginalModificationCount(unit.ast.modificationCount());
+		final Scanner scanner = new Scanner(
+				true /*comment*/,
+				false /*whitespace*/,
+				false /*nls*/,
+				AST.JLS3 /*sourceLevel*/,
+				null /*taskTags*/,
+				null/*taskPriorities*/,
+				true/*taskCaseSensitive*/);
+		
+		scanner.setSource(this.rawSource);
+		unit.initCommentMapper(scanner);
+		//TODO: Refine the returned tree to match the requested Kind.
+		return unit;
 	}
 
 	private void propagateErrors(ASTNode astNode, CategorizedProblem[] problems, RecoveryScannerData data) {
