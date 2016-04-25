@@ -13,6 +13,7 @@ package org.eclipse.wst.jsdt.js.node.internal.propertytesters;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
 
 /**
@@ -22,8 +23,7 @@ import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
  */
 public class NodePropertyTester extends PropertyTester {
 	// Properties
-	private static final String HAS_PACKAGE_JSON = "hasPackageJson"; //$NON-NLS-1$
-	private static final String IS_VALID_FILE = "isValidFile"; //$NON-NLS-1$
+	private static final String IS_NODE_INIT = "isNodeInit";
 
 	// File extensions
 	private static final String JS_EXT = "js"; //$NON-NLS-1$
@@ -34,21 +34,18 @@ public class NodePropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (HAS_PACKAGE_JSON.equals(property)) {
-			return hasPackageJson((IProject) receiver);
-		}
-		else if (IS_VALID_FILE.equals(property)) {
-			return isValidFile((IFile) receiver);
+		if (IS_NODE_INIT.equals(property) && receiver instanceof IResource) {
+			IResource resource = (IResource) receiver;
+			if (resource instanceof IProject) {
+				return hasPackageJson((IProject) receiver);
+			} else if (resource instanceof IFile) {
+				return isValidFile((IFile) receiver);
+			}
 		}
 		return false;
 	}
 
-	/**
-	 *
-	 * @param project
-	 * @return
-	 */
-	public static boolean hasPackageJson(IProject project){
+	private boolean hasPackageJson(IProject project){
 		IFile packageJsonFile = project.getFile(NodeConstants.PACKAGE_JSON);
 		if (packageJsonFile != null && packageJsonFile.isAccessible()) {
 			return true;
@@ -56,7 +53,7 @@ public class NodePropertyTester extends PropertyTester {
 		return false;
 	}
 
-	public static boolean isValidFile(IFile file) {
+	private boolean isValidFile(IFile file) {
 		// File must be a js file
 		String fileExtension = file.getFileExtension();
 		if (!fileExtension.equals(JS_EXT)) {
@@ -75,6 +72,5 @@ public class NodePropertyTester extends PropertyTester {
 		}
 		return false;
 	}
-
 }
 

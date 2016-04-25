@@ -6,7 +6,7 @@
       		id="org.eclipse.wst.jsdt.js.node.propertyTester"
       		type="org.eclipse.core.resources.IResource"
       		namespace="org.eclipse.wst.jsdt.js.node"
-      		properties="hasPackageJson,isValidFile"
+      		properties="isNodeInit"
       		class="org.eclipse.wst.jsdt.js.node.internal.propertytesters.NodePropertyTester">
     	</propertyTester>
    </extension>
@@ -28,16 +28,10 @@
                           value= "1" >   
                     </count>   
                     <iterate>
-                       <or>
-                       	   <and>
-	                          <instanceof value="org.eclipse.core.resources.IFile"/>
-	                          <test property="org.eclipse.wst.jsdt.js.node.isValidFile" value="true" forcePluginActivation="true"/>
-	                       </and>                           
-	                       <and>
-	                          <instanceof value="org.eclipse.core.resources.IProject"/>
-	                          <test property="org.eclipse.wst.jsdt.js.node.hasPackageJson" value="true" forcePluginActivation="true"/>
-	                       </and>
-	                   </or>
+                        <adapt  type="org.eclipse.core.resources.IResource">
+	                        <test property="org.eclipse.wst.jsdt.js.node.isNodeInit" 
+	                           	forcePluginActivation="true"/>
+                        </adapt>
                     </iterate>   
                  </with>   
               </enablement>   
