@@ -1,4 +1,4 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
+// Copyright (c) 2009 -2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
@@ -13,31 +13,39 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
-import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePosition;
-import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePositionMap;
-import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePositionMap.TranslateDirection;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.model.IDropToFrame;
+import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.wst.jsdt.chromium.CallFrame;
+import org.eclipse.wst.jsdt.chromium.JsEvaluateContext;
+import org.eclipse.wst.jsdt.chromium.JsEvaluateContext.ResultOrException;
 import org.eclipse.wst.jsdt.chromium.JsScope;
 import org.eclipse.wst.jsdt.chromium.JsScope.Declarative;
 import org.eclipse.wst.jsdt.chromium.JsScope.ObjectBased;
+import org.eclipse.wst.jsdt.chromium.JsValue;
+import org.eclipse.wst.jsdt.chromium.JsValue.Type;
 import org.eclipse.wst.jsdt.chromium.JsVariable;
 import org.eclipse.wst.jsdt.chromium.RestartFrameExtension;
 import org.eclipse.wst.jsdt.chromium.Script;
 import org.eclipse.wst.jsdt.chromium.SyncCallback;
 import org.eclipse.wst.jsdt.chromium.TextStreamPosition;
+import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
+import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePosition;
+import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePositionMap;
+import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePositionMap.TranslateDirection;
 import org.eclipse.wst.jsdt.chromium.util.GenericCallback;
 import org.eclipse.wst.jsdt.chromium.util.JavaScriptExpressionBuilder;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.model.IDropToFrame;
-import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.wst.jsdt.debug.core.model.IJavaScriptStackFrame;
+import org.eclipse.wst.jsdt.debug.core.model.IJavaScriptValue;
 
 /**
  * An IStackFrame implementation over a JsStackFrame instance.
  */
-public class StackFrame extends StackFrameBase implements IDropToFrame {
+public class StackFrame extends StackFrameBase implements IDropToFrame, IJavaScriptStackFrame {
 
   private final CallFrame stackFrame;
 
@@ -190,7 +198,7 @@ public class StackFrame extends StackFrameBase implements IDropToFrame {
 
       @Override
       public void failure(Exception exception) {
-        ChromiumDebugPlugin.log(new Exception("Failed to 'drop to frame' action", exception));
+        ChromiumDebugPlugin.log(new Exception("Failed to 'drop to frame' action", exception)); //$NON-NLS-1$
       }
     };
 
@@ -318,4 +326,125 @@ public class StackFrame extends StackFrameBase implements IDropToFrame {
       this.token = token;
     }
   }
+
+	@Override
+	public IJavaScriptValue evaluate(String expression) {
+		final JsValue[] result = new JsValue[1];
+		getEvaluateContext().getJsEvaluateContext().evaluateSync(expression, Collections.<String, JsValue>emptyMap(),
+				new JsEvaluateContext.EvaluateCallback() {
+					@Override
+					public void success(ResultOrException valueOrException) {
+						result[0] = valueOrException.accept(new ResultOrException.Visitor<JsValue>() {
+			                  @Override public JsValue visitResult(JsValue value) {
+			                    return value;
+			                  }
+			                  @Override public JsValue visitException(JsValue exception) {
+			                    return null;
+			                  }
+			                });
+						
+					}
+					
+					@Override
+					public void failure(Exception cause) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+		if(result[0] != null){
+			return new IJavaScriptValue() {
+				
+				@Override
+				public <T> T getAdapter(Class<T> adapter) {
+					return null;
+				}
+				
+				@Override
+				public String getModelIdentifier() {
+					return ChromiumDebugPlugin.PLUGIN_ID;
+				}
+				
+				@Override
+				public ILaunch getLaunch() {
+					return getConnectedData().getDebugTarget().getLaunch();
+				}
+				
+				@Override
+				public IDebugTarget getDebugTarget() {
+					return getConnectedData().getDebugTarget();
+				}
+				
+				@Override
+				public boolean isAllocated() throws DebugException {
+					return true;
+				}
+				
+				@Override
+				public boolean hasVariables() throws DebugException {
+					return false;
+				}
+				
+				@Override
+				public IVariable[] getVariables() throws DebugException {
+					return null;
+				}
+				
+				@Override
+				public String getValueString() throws DebugException {
+					return result[0].getValueString();
+				}
+				
+				@Override
+				public String getReferenceTypeName() throws DebugException {
+					return result[0].getType().toString();
+				}
+				
+				@Override
+				public boolean isNull() {
+					return result[0].getType() == Type.TYPE_NULL;
+				}
+				
+				@Override
+				public String getDetailString() {
+					return result[0].getValueString();
+				}
+			};
+		}
+		return null;
+	}
+
+	@Override
+	public String getSourceName() {
+		if (this.stackFrame.getScript() == null)
+			return null;
+		return this.stackFrame.getScript().getName();
+	}
+
+	@Override
+	public String getSourcePath() {
+		if (this.stackFrame.getScript() == null)
+			return null;
+		return this.stackFrame.getScript().getName();
+	}
+
+	@Override
+	public String getSource() {
+		if (this.stackFrame.getScript() == null)
+			return null;
+		return this.stackFrame.getScript().getSource();
+	}
+
+	@Override
+	public IVariable getThisObject() {
+		//No special treatment to this seems to be necessary as this is part of the 
+		//variable list already.
+		return null;
+	}
+	
+	@Override
+	public Object getAdapter(Class adapter) {
+		if(adapter == IJavaScriptStackFrame.class)
+			return this;
+		return super.getAdapter(adapter);
+	}
 }

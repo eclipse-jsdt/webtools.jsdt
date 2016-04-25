@@ -1,4 +1,4 @@
-// Copyright (c) 2011 The Chromium Authors. All rights reserved.
+// Copyright (c) 2011-2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
@@ -6,8 +6,6 @@
 
 package org.eclipse.wst.jsdt.chromium.debug.core.model;
 
-import org.eclipse.wst.jsdt.chromium.debug.core.util.ChromiumDebugPluginUtil;
-import org.eclipse.wst.jsdt.chromium.DebugContext;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;

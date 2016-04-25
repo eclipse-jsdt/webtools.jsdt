@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2010 - 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -164,6 +164,7 @@ public class ExpressionInformationControlCreator implements IInformationControlC
 			 */
 			public void paneChanged(String newPaneID) {
 				if (newPaneID.equals(DefaultDetailPane.ID)){
+					fDetailPane.getCurrentControl().setForeground(getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 					fDetailPane.getCurrentControl().setBackground(getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 				}
 			}
@@ -339,6 +340,7 @@ public class ExpressionInformationControlCreator implements IInformationControlC
 				}
 			});        
 	        
+	        setForegroundColor(getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 	        setBackgroundColor(getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 		}
 		
@@ -381,6 +383,15 @@ public class ExpressionInformationControlCreator implements IInformationControlC
 	    	}
 	    }
 	    		
+	    /* (non-Javadoc)
+	     * @see org.eclipse.jface.text.AbstractInformationControl#setForegroundColor(org.eclipse.swt.graphics.Color)
+	     */
+	    public void setForegroundColor(Color foreground) {
+	    	super.setForegroundColor(foreground);
+	    	fDetailPaneComposite.setForeground(foreground);
+	    	fTree.setForeground(foreground);
+	    }
+	    
 		/* (non-Javadoc)
 		 * @see org.eclipse.jface.text.AbstractInformationControl#setBackgroundColor(org.eclipse.swt.graphics.Color)
 		 */
@@ -439,3 +450,4 @@ public class ExpressionInformationControlCreator implements IInformationControlC
 
 
 }
+

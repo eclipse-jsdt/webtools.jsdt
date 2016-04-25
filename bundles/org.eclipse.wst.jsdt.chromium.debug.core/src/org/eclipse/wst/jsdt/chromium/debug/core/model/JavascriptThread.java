@@ -1,4 +1,4 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
+// Copyright (c) 2009 - 2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
+import org.eclipse.wst.jsdt.debug.core.model.IJavaScriptValue;
 import org.eclipse.wst.jsdt.chromium.Breakpoint;
 import org.eclipse.wst.jsdt.chromium.CallFrame;
 import org.eclipse.wst.jsdt.chromium.DebugContext;
@@ -170,6 +171,7 @@ public class JavascriptThread extends DebugElementImpl.WithConnected
     boolean isRegularFrame() {
       return false;
     }
+
   }
 
   public boolean hasStackFrames() throws DebugException {
