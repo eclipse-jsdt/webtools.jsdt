@@ -182,11 +182,11 @@ return ${name};</template>
 
 <template name="spread" description="%Templates.spread" id="org.eclipse.wst.jsdt.ui.templates.spread" context="javaScript" enabled="true" autoinsert="false">...${line_selection}${cursor}</template>
 
-<template name="setinterval" description="%Templates.setinterval" id="org.eclipse.wst.jsdt.ui.templates.setinterval" context="javaScript" enabled="true" autoinsert="false">setInterval((${cursor}) => {
+<template name="setinterval" description="%Templates.setinterval" id="org.eclipse.wst.jsdt.ui.templates.setinterval" context="javaScript" enabled="true" autoinsert="false">setInterval(() => {
 	${line_selection}${cursor}
 }, ${milliseconds});</template>
 
-<template name="settimeout" description="%Templates.settimeout" id="org.eclipse.wst.jsdt.ui.templates.settimeout" context="javaScript" enabled="true" autoinsert="false">setTimeout((${cursor}) => {
+<template name="settimeout" description="%Templates.settimeout" id="org.eclipse.wst.jsdt.ui.templates.settimeout" context="javaScript" enabled="true" autoinsert="false">setTimeout(() => {
 	${line_selection}${cursor}
 }, ${milliseconds});</template>
 
