@@ -189,12 +189,7 @@ public class JSRuntimesDefinitionsContainer {
 		String installPath = "";                          //$NON-NLS-1$
 		File installLocation = runtimeInstall.getInstallLocation();
 		if (installLocation != null) {
-			if (installLocation.exists()) {
-				installPath = installLocation.getAbsolutePath();
-			} else {
-				// Store it as-is (usually for system-global command)
-				installPath = installLocation.getPath();
-			}
+			installPath = installLocation.getAbsolutePath();
 		}
 		element.setAttribute("path", installPath);       //$NON-NLS-1$
 		

@@ -297,10 +297,7 @@ public class JSRuntimesPreferencePage extends PreferencePage implements IWorkben
 					}
 					
 					IJSRuntimeInstall defaultInstall = defaultInstallByType.get(runtimeTypeId);
-					if (defaultInstall instanceof JSRuntimeWorkingCopy) {
-						defaultInstall = ((JSRuntimeWorkingCopy) defaultInstall).convertToRealRuntime();
-					}
-					JSRuntimeManager.setDefaultRuntimeInstall(runtimeTypeId, defaultInstall);
+					JSRuntimeManager.setDefaultRuntimeInstall(runtimeTypeId, defaultInstall.getId());
 				}
 				
 				// Reset timestamps

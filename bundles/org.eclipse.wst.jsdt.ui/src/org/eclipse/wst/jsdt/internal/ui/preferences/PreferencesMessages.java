@@ -821,5 +821,5 @@ public final class PreferencesMessages extends NLS {
 	public static String StandardRuntimeInstallPage_RuntimeUnexistingLocation_Error;
 	public static String StandardRuntimeInstallPage_RuntimeDefinition_Title;
 	public static String StandardRuntimeInstallPage_RuntimeAttributes_Message;
-	public static String GlobalCommand_SystemPath_Label;
+	public static String JSRuntimes_MissingPath;
 }

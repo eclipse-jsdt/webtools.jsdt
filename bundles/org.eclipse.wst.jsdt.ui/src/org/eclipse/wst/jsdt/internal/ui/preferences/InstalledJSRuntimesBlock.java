@@ -169,8 +169,9 @@ public class InstalledJSRuntimesBlock implements ISelectionProvider {
 							// Show full path
 							return runtime.getInstallLocation().getAbsolutePath();
 						} else {
-							// Show the "system-path" label
-							return PreferencesMessages.GlobalCommand_SystemPath_Label;
+							// Show the missing path decorator
+							return NLS.bind(PreferencesMessages.JSRuntimes_MissingPath, 
+										runtime.getInstallLocation().getAbsolutePath());
 						}
 				}
 			}
@@ -530,12 +531,6 @@ public class InstalledJSRuntimesBlock implements ISelectionProvider {
 				IJSRuntimeInstall install = iterator.next();
 				if (JSRuntimeManager.isContributedRuntimeInstall(install.getId())) {
 					fRemoveButton.setEnabled(false);
-					// FIXME: For now, disallow duplication of a location with
-					// unexisting paths (which is the case for system global
-					// commands)
-					if (!install.getInstallLocation().exists()) {
-						fCopyButton.setEnabled(false);
-					}
 					return;
 				}
 			}

@@ -38,6 +38,9 @@ public class Messages extends NLS {
 	public static String LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_SPECIFY_HOST;
 	public static String LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_INVALID_PORT;
 	public static String LAUNCH_CONFIGURATION_DELEGATE_CHROMIUM_DEBUGGER_DELAY_TASK;
+	
+	public static String LAUNCH_CONFIGURATION_FAILED_EXECUTION_ERROR;
+	public static String LAUNCH_CONFIGURATION_NO_RUNNER_FOUND_ERROR;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

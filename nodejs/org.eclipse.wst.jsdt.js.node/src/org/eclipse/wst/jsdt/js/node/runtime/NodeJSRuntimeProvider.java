@@ -10,12 +10,14 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.node.runtime;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstallProvider;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeType;
+import org.eclipse.wst.jsdt.js.node.internal.NodeUtil;
 
 /**
  * @author "Adalberto Lopez Venegas (adalbert)"
@@ -24,10 +26,14 @@ public class NodeJSRuntimeProvider implements IJSRuntimeInstallProvider {
 	@Override
 	public Collection<IJSRuntimeInstall> getJSRuntimeInstallContributions(IJSRuntimeType runtimeType) {
 		ArrayList<IJSRuntimeInstall> array = new ArrayList<IJSRuntimeInstall>();
-		IJSRuntimeInstall contributedRuntimeInstall = runtimeType.createRuntimeInstall("GlobalNodeJsRuntime");
-		contributedRuntimeInstall.setName ("Global Node.js");
-		array.add(contributedRuntimeInstall);
+		File nodeSystemPath = NodeUtil.findNodeSystemPath();
+		// Return a system path install if there is one, otherwise return nothing
+		if (nodeSystemPath != null) {
+			IJSRuntimeInstall contributedRuntimeInstall = runtimeType.createRuntimeInstall("GlobalNodeJsRuntime");
+			contributedRuntimeInstall.setName ("Global Node.js");
+			contributedRuntimeInstall.setInstallLocation(nodeSystemPath);
+			array.add(contributedRuntimeInstall);
+		}
 		return array;
 	}
-
 }

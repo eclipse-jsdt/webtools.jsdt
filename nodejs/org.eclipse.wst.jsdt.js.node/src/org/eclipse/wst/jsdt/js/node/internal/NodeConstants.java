@@ -43,6 +43,16 @@ public final class NodeConstants {
 	public static final String WIP_BACKEND_ID = "wip_backend_id"; //$NON-NLS-1$
 	// By default Node.js debug launch should use exact match detection of workspace resources
 	public static final String EXACT_MATCH = "EXACT_MATCH"; //$NON-NLS-1$
+	
+	// NodeUtil constants
+	public static final String NODE = "node"; //$NON-NLS-1$
+	public static final String NODE_WINDOWS = "node.exe"; //$NON-NLS-1$
+	public static final String FIND_NODE_SYSTEM_PATH_CONSTANTS_WHERE_COMMAND = "where"; //$NON-NLS-1$
+	public static final String FIND_NODE_SYSTEM_PATH_CONSTANTS_WHICH_LOCATION_1 = "/usr/bin/which"; //$NON-NLS-1$
+	public static final String FIND_NODE_SYSTEM_PATH_CONSTANTS_WHICH_LOCATION_2 = "/bin/which"; //$NON-NLS-1$
+	public static final String FIND_NODE_SYSTEM_PATH_CONSTANTS_WHICH_LOCATION_3 = "/usr/local/bin/which"; //$NON-NLS-1$
+	public static final String FIND_NODE_SYSTEM_PATH_ENV_VAR = "PATH"; //$NON-NLS-1$
+	public static final String FIND_NODE_SYSTEM_PATH_CONSTANTS_NODE_EXTRA_LOCATION = "/usr/local/bin"; //$NON-NLS-1$
 
 	private NodeConstants() {
 	}

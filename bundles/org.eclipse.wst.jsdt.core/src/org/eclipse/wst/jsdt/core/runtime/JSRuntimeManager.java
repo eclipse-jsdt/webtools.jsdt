@@ -54,7 +54,7 @@ public final class JSRuntimeManager {
 	
 	private static Map <String, IJSRuntimeInstall> jsRuntimes = new HashMap<String, IJSRuntimeInstall> ();
 	private static Set <String> contributedRuntimeInstallIds = new HashSet <String> ();
-	private static Map <String, IJSRuntimeInstall> defaultRuntimeInstalls = new HashMap<String, IJSRuntimeInstall> ();
+	private static Map <String, String> defaultRuntimeInstalls = new HashMap<String, String> ();
 	private static boolean runtimeManagerInitializing;
 	private static boolean runtimeManagerInitialized;
 	
@@ -104,7 +104,7 @@ public final class JSRuntimeManager {
 				for (IJSRuntimeType runtimeType : runtimeTypes) {
 					String defaultRuntimeId = container.getDefaultRuntimeInstallId(runtimeType.getId());
 					if (defaultRuntimeId != null) {
-						setDefaultRuntimeInstall(runtimeType.getId(), jsRuntimes.get(defaultRuntimeId));
+						setDefaultRuntimeInstall(runtimeType.getId(), defaultRuntimeId);
 						continue;
 					}
 				}
@@ -295,18 +295,20 @@ public final class JSRuntimeManager {
 							NLS.bind(RuntimeMessages.JSRuntimeManager_UnexistingRuntimeTypeException, runtimeTypeId));
 			}
 			
-			IJSRuntimeInstall defaultInstall = defaultRuntimeInstalls.get(runtimeTypeId);
+			String defaultInstallId = defaultRuntimeInstalls.get(runtimeTypeId);
+			
+			IJSRuntimeInstall defaultRuntimeInstall = getJSRuntimeInstall(defaultInstallId);
 			
 			// If for some reason there is no default for this install then try to re-calculate it
-			if (defaultRuntimeInstalls.get(runtimeTypeId) == null) {
+			if (defaultRuntimeInstall == null) {
 				IJSRuntimeInstall[] runtimeInstalls = getJSRuntimeInstallsByType(runtimeTypeId);
 				if (runtimeInstalls.length > 0) {
-					defaultInstall = runtimeInstalls[0];
-					defaultRuntimeInstalls.put (runtimeTypeId, defaultInstall);
+					defaultRuntimeInstall = runtimeInstalls[0];
+					defaultRuntimeInstalls.put (runtimeTypeId, defaultRuntimeInstall.getId());
 				}
 			}
 			
-			return defaultInstall;
+			return defaultRuntimeInstall;
 		}
 	}
 	
@@ -314,16 +316,16 @@ public final class JSRuntimeManager {
 	 * Set the default runtime install for a given runtime type on the manager
 	 * 
 	 * @param runtimeTypeId
-	 * @param runtimeInstall
+	 * @param runtimeInstallId
 	 */
-	public static void setDefaultRuntimeInstall (String runtimeTypeId, IJSRuntimeInstall runtimeInstall) {
+	public static void setDefaultRuntimeInstall (String runtimeTypeId, String runtimeInstallId) {
 		IJSRuntimeType type = JSRuntimeTypeRegistryReader.getJSRuntimeType(runtimeTypeId);
 		if (type == null) {
 			throw new IllegalArgumentException(
 						NLS.bind(RuntimeMessages.JSRuntimeManager_UnexistingRuntimeTypeException, runtimeTypeId));
 		}
 		
-		defaultRuntimeInstalls.put (runtimeTypeId, runtimeInstall);
+		defaultRuntimeInstalls.put (runtimeTypeId, runtimeInstallId);
 	}
 
 	/**

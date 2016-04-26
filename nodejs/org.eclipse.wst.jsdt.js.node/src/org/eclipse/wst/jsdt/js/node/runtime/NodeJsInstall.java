@@ -10,8 +10,6 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.node.runtime;
 
-import java.io.File;
-
 import org.eclipse.wst.jsdt.core.runtime.AbstractJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRunner;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeType;
@@ -20,7 +18,6 @@ import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeType;
  * @author "Adalberto Lopez Venegas (adalbert)"
  */
 public class NodeJsInstall extends AbstractJSRuntimeInstall{
-
 	public NodeJsInstall(IJSRuntimeType runtimeType, String id) {
 		super(runtimeType, id);
 	}
@@ -33,13 +30,5 @@ public class NodeJsInstall extends AbstractJSRuntimeInstall{
 			runner = new NodeJsRunner(this);
 		}
 		return runner;
-	}
-
-	@Override
-	public File getInstallLocation() {
-		if (fInstallLocation == null) {
-			return new File ("node");
-		}
-		return super.getInstallLocation();
 	}
 }

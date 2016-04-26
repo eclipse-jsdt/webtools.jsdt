@@ -270,12 +270,7 @@ public class StandardRuntimeInstallPage extends AbstractRuntimeInstallPage {
 		fRuntimeName.setText(fRuntimeInstall.getName());
 		File installLocation = fRuntimeInstall.getInstallLocation();
 		if (installLocation != null) {
-			if (installLocation.exists()) {
-				fRuntimeLocation.setText(installLocation.getAbsolutePath());
-			} else {
-				// Show it as-is
-				fRuntimeLocation.setText(installLocation.toString());
-			}
+			fRuntimeLocation.setText(installLocation.getAbsolutePath());
 		}
 		String runtimeArgs = fRuntimeInstall.getJSRuntimeArgumentsAsString();
 		if (runtimeArgs != null) {

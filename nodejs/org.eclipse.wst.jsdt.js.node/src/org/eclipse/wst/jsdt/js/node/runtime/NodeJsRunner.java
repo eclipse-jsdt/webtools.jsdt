@@ -16,12 +16,16 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.wst.jsdt.core.runtime.IJSRunner;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.JSRunnerConfiguration;
+import org.eclipse.wst.jsdt.js.node.NodePlugin;
+import org.eclipse.wst.jsdt.js.node.internal.Messages;
 
 /**
  * @author "Adalberto Lopez Venegas (adalbert)"
@@ -70,9 +74,9 @@ public class NodeJsRunner implements IJSRunner {
 			builder.redirectErrorStream(true);
 			return DebugPlugin.newProcess(launch, process, "Node.js process"); //$NON-NLS-1$
 		} catch (Exception ex) {
+			throw new CoreException(new Status (IStatus.ERROR, NodePlugin.PLUGIN_ID, 
+					Messages.LAUNCH_CONFIGURATION_FAILED_EXECUTION_ERROR, ex));
 		}
-		
-		return null;
 	}
 	
 	protected String[] combineRuntimeArgs(JSRunnerConfiguration configuration, IJSRuntimeInstall jsRuntimeInstall2) {

@@ -15,7 +15,9 @@ import java.io.File;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
@@ -27,10 +29,12 @@ import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.IJSRunner;
+import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.JSRunnerConfiguration;
 import org.eclipse.wst.jsdt.core.runtime.JSRuntimeManager;
+import org.eclipse.wst.jsdt.js.node.NodePlugin;
+import org.eclipse.wst.jsdt.js.node.internal.Messages;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
 import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
 import org.eclipse.wst.jsdt.js.node.runtime.NodeJsRuntimeType;
@@ -70,6 +74,11 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			// Resolve possible ${workspace_loc} variable
 			mainTypeName = LaunchConfigurationUtil.resolveValue(mainTypeName);
 			IJSRunner runner = getJSRunner(configuration, mode);
+			
+			if (runner == null) {
+				throw new CoreException(new Status (IStatus.ERROR, NodePlugin.PLUGIN_ID, 
+						Messages.LAUNCH_CONFIGURATION_NO_RUNNER_FOUND_ERROR));
+			}
 
 			File workingDir = verifyWorkingDirectory(configuration);
 			String workingDirName = null;
@@ -160,11 +169,10 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 
 	public IJSRunner getJSRunner(ILaunchConfiguration configuration, String mode) throws CoreException {
 		IJSRuntimeInstall runtimeInstall = verifyJSRuntimeInstall(configuration);
-		IJSRunner runner = runtimeInstall.getJSRunner(mode);
-		if (runner == null) {
-			return null;
+		if (runtimeInstall != null) {
+			return runtimeInstall.getJSRunner(mode);
 		}
-		return runner;
+		return null;
 	}
 
 	public IJSRuntimeInstall verifyJSRuntimeInstall(ILaunchConfiguration configuration) throws CoreException {

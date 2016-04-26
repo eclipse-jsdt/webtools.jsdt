@@ -11,18 +11,16 @@
 package org.eclipse.wst.jsdt.internal.ui.preferences;
 
 
-import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 
@@ -30,7 +28,6 @@ import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
  * Displays details of a runtime install (read only, for contributed runtimes).
  * 
  */
-@SuppressWarnings("restriction")
 public class RuntimeDetailsDialog extends Dialog {
 	
 	private IJSRuntimeInstall fRuntime;
@@ -66,19 +63,16 @@ public class RuntimeDetailsDialog extends Dialog {
 		createLabel(parent, PreferencesMessages.RuntimeDetailsDialog_LocationField_Label);
 		String home = fRuntime.getInstallLocation().exists() ? 
 					fRuntime.getInstallLocation().getAbsolutePath() :
-					PreferencesMessages.GlobalCommand_SystemPath_Label;
+					NLS.bind(PreferencesMessages.JSRuntimes_MissingPath, 
+								fRuntime.getInstallLocation().getAbsolutePath());
 		createLabel(parent, home);
 		
-		// Args
-		SWTFactory.createLabel(parent, PreferencesMessages.RuntimeDetailsDialog_ArgumentsField_Label, 1);
+		// Args (only show if worth it)
 		String text = fRuntime.getJSRuntimeArgumentsAsString();
-		if (text == null) {
-			text = ""; //$NON-NLS-1$
+		if (text != null) {
+			createLabel(parent, PreferencesMessages.RuntimeDetailsDialog_ArgumentsField_Label);
+			createLabel (parent, text);
 		}
-		Text argText = SWTFactory.createSingleText(parent, 1);
-		argText.setText(text);
-		GridData gd = (GridData) argText.getLayoutData(); 
-		gd.widthHint = 300;
 		
 		applyDialogFont(parent);
 		return parent;
