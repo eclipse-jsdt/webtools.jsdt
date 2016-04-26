@@ -16,6 +16,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -47,11 +49,9 @@ public class NodeLaunch implements ILaunchShortcut{
 	public void launch(ISelection selection, String mode) {
 		try {
 			Object objSelected = ((IStructuredSelection) selection).getFirstElement();
-			if (objSelected instanceof IFile) {
-				launchFile((IFile) objSelected, mode);
-			} else  if (objSelected instanceof IContainer) {
-                launchContainer((IContainer) objSelected, mode);
-            }
+			if (objSelected instanceof IResource) {
+				launchHelper((IResource) objSelected, mode);
+			}
 		} catch (CoreException e) {
 			NodePlugin.logError(e.getLocalizedMessage());
 		}
@@ -63,22 +63,17 @@ public class NodeLaunch implements ILaunchShortcut{
 			IEditorInput editorInput = editor.getEditorInput();
 			if (editorInput instanceof IFileEditorInput) {
 				IFile file = ((IFileEditorInput) editorInput).getFile();
-				launchFile(file, mode);
+				launchHelper(file, mode);
 			}
 		} catch (CoreException e) {
 			NodePlugin.logError(e.getLocalizedMessage());
 		}
 	}
 
-	private void launchContainer(IContainer container, String mode) throws CoreException {
-	    String path = container.getFullPath().toString();
+	protected void launchHelper(IResource file, String mode) throws CoreException {
 	    ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 	    ILaunchConfigurationType type = launchManager.getLaunchConfigurationType(NodeConstants.LAUNCH_CONFIGURATION_TYPE_ID);
-	    ILaunchConfiguration configuration = createLaunchConfiguration(type, path, container);
-	    launchHelper(configuration, mode);
-	}
-
-	protected void launchHelper(ILaunchConfiguration configuration, String mode){
+		ILaunchConfiguration configuration = createLaunchConfiguration(type, file);
 	    String mainScript = null;
 		try {
 			mainScript = configuration.getAttribute(NodeConstants.ATTR_APP_PATH, NodeConstants.EMPTY);
@@ -95,20 +90,11 @@ public class NodeLaunch implements ILaunchShortcut{
 		}
 	}
 
-	private void launchFile(IFile file, String mode) throws CoreException {
-		String path = ResourcesPlugin.getWorkspace().getRoot().findMember(file.getFullPath().toString()).getLocation()
-				.toOSString();
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-		ILaunchConfigurationType type = launchManager.getLaunchConfigurationType(NodeConstants.LAUNCH_CONFIGURATION_TYPE_ID);
-		ILaunchConfiguration configuration = createLaunchConfiguration(type, path, file);
-		launchHelper(configuration, mode);
-	}
-
-	private ILaunchConfiguration createLaunchConfiguration(ILaunchConfigurationType type, String path, IResource file)
+	private ILaunchConfiguration createLaunchConfiguration(ILaunchConfigurationType type, IResource file)
 			throws CoreException {
+		String path = NodeConstants.EMPTY;
 		IFile configFile = null;
 		if(file.getType() == IResource.PROJECT || file.getType() == IResource.FOLDER){
-			path = NodeConstants.EMPTY;
 			PackageJson packageJson = PackageJsonUtil.readPackageJsonFromIResource(file);
 			if(packageJson.getMain() != null){
 				IFile mainFile = file.getProject().getFile(packageJson.getMain());
@@ -116,9 +102,7 @@ public class NodeLaunch implements ILaunchShortcut{
 					configFile = mainFile;
 				}
 			}
-			if(configFile != null) {
-				path = ResourcesPlugin.getWorkspace().getRoot().findMember(configFile.getFullPath()).getLocation().toOSString();
-			} else {
+			if (configFile == null) {
 				IProject project = file.getProject();
 				// need to reuse the launch for the project if it has been already generated
 				ILaunchConfiguration launch = LaunchConfigurationUtil.getLaunchByName(project.getName(), type);
@@ -139,8 +123,13 @@ public class NodeLaunch implements ILaunchShortcut{
 
 		String configName = NodeConstants.EMPTY;
 		if(configFile!=null) {
+			// Get relative path
+			path = VariablesPlugin.getDefault().getStringVariableManager().generateVariableExpression("workspace_loc", //$NON-NLS-1$
+					configFile.getFullPath().toString());
+
+			// Get configuration name
 			configName = configFile.getFullPath().toString();
-			if (configName.startsWith("/")) {
+			if (configName.startsWith("/")) { //$NON-NLS-1$
 				configName = configName.substring(1, configName.length());
 			}
 		} else {

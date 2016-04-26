@@ -67,6 +67,8 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		try {
 			String project = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
 			String mainTypeName = configuration.getAttribute(NodeConstants.ATTR_APP_PATH, NodeConstants.EMPTY);
+			// Resolve possible ${workspace_loc} variable
+			mainTypeName = LaunchConfigurationUtil.resolveValue(mainTypeName);
 			IJSRunner runner = getJSRunner(configuration, mode);
 
 			File workingDir = verifyWorkingDirectory(configuration);

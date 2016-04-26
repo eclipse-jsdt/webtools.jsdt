@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
@@ -53,6 +54,7 @@ import org.eclipse.wst.jsdt.js.node.NodePlugin;
 import org.eclipse.wst.jsdt.js.node.internal.Messages;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
 import org.eclipse.wst.jsdt.js.node.internal.ui.ImageResource;
+import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
 
 /**
  * Main tab for node application launch configuration
@@ -227,10 +229,11 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 		});
 
 		if (dialog.open() == Window.OK) {
-			IFile file = (IFile)dialog.getFirstResult();
-			if(file != null){
-				String fullFileName = file.getLocation().toOSString();
-				return fullFileName;
+			IFile file = (IFile) dialog.getFirstResult();
+			if (file != null) {
+				return VariablesPlugin.getDefault().getStringVariableManager().generateVariableExpression(
+						"workspace_loc", //$NON-NLS-1$
+						file.getFullPath().toString());
 			}
 		}
 		return null;
@@ -293,11 +296,21 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 		String scriptFile = scriptText.getText();
 
         if (mainTabEntriesValid && scriptFile.length() > 0) {
-            File file = new File(scriptFile);
-            if (!file.exists()) {
-                setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_MAIN_FILE_DOES_NOT_EXIST);
-                mainTabEntriesValid = false;
-            }
+			// Resolve possible eclipse variables
+			try {
+				scriptFile = LaunchConfigurationUtil.resolveValue(scriptFile);
+			} catch (CoreException e) { // Do nothing
+			}
+
+			File file = null;
+			if (scriptFile != null) {
+				file = new File(scriptFile);
+			}
+
+			if (file == null || !file.exists() || file.isDirectory()) {
+				setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_MAIN_FILE_DOES_NOT_EXIST);
+				mainTabEntriesValid = false;
+			}
         } else if(mainTabEntriesValid && scriptFile.length() <= 0){
             setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_SPECIFY_MAIN_FILE);
             mainTabEntriesValid = false;
