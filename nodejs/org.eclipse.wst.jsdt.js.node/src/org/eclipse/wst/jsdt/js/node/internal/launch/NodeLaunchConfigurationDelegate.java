@@ -11,6 +11,8 @@
 package org.eclipse.wst.jsdt.js.node.internal.launch;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -126,7 +128,7 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			
 			// Launch Chromium V8 
 			if(mode.equals(ILaunchManager.DEBUG_MODE)){
-				String projectName = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
+			    String project = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
 			    ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 			    ILaunchConfigurationType type = launchManager.getLaunchConfigurationType(NodeConstants.CHROMIUM_LAUNCH_CONFIGURATION_TYPE_ID);
 				IContainer container = null;
@@ -145,9 +147,10 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 
 				chromiumLaunch.setAttribute(NodeConstants.SOURCE_LOOKUP_MODE, NodeConstants.EXACT_MATCH);
 				
-				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT, projectName);
+				chromiumLaunch.setAttribute(NodeConstants.CONFIG_PROPERTY, encode(NodeConstants.PREDEFIENED_WRAPPERS));
 				
-				
+				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT, project);
+
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -220,4 +223,20 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		String args = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(nodeArguments);
 		return args;
 	}
+	
+	
+	/**
+	 * Encoding predefined source wrappers via {@link MementoFormat} for correct
+	 * decoding in {@link PredefinedSourceWrapperIds}
+	 */
+	private String encode(List<String> wrappers) {
+		StringBuilder output = new StringBuilder();
+		Collections.sort(wrappers);
+		for (String wrapper : wrappers) {
+			output.append(wrapper.length());
+			output.append('(').append(wrapper).append(')');
+		}
+		return output.toString();
+	}
+	
 }
