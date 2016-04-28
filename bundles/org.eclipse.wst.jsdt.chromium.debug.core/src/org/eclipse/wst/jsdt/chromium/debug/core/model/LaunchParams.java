@@ -39,7 +39,7 @@ public class LaunchParams {
   public static final String WIP_BACKEND_ID = "wip_backend_id"; //$NON-NLS-1$
   
   // project attribute from {@link NodeConstants} required for debugging via JSDT editor 
-  public static final String ATTR_APP_PROJECT = "attr_app_project";
+  public static final String ATTR_APP_PROJECT = "attr_app_project"; //$NON-NLS-1$
  
   // PREDEFINED_SOURCE_WRAPPER_IDS see below.
 

@@ -22,7 +22,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -42,21 +41,23 @@ import org.eclipse.wst.jsdt.js.node.internal.Messages;
  */
 public class NodeLaunchArgumentsTab extends AbstractLaunchConfigurationTab {
     
-	protected Text nodeArgumentsText;
-	protected Text appArgumentsText;
-	protected Button nodeVariablesButton;
-	protected Button appVariablesButton;
+	private Text nodeArgumentsText;
+	private Text appArgumentsText;
+	private Button nodeVariablesButton;
+	private Button appVariablesButton;
 	
     NodeWorkingDirectoryBlock workingDirectoryBlock = new NodeWorkingDirectoryBlock(NodeConstants.ATTR_WORKING_DIRECTORY);
 
 	private ModifyListener modifyListener = new ModifyListener() {
-        public void modifyText(ModifyEvent e) {
+        @Override
+		public void modifyText(ModifyEvent e) {
             updateLaunchConfigurationDialog();
         }
     };
     
 	private SelectionListener nodeArgsSelectionListener = new SelectionListener() {
-        public void widgetSelected(SelectionEvent e) {
+        @Override
+		public void widgetSelected(SelectionEvent e) {
             StringVariableSelectionDialog dialog = new StringVariableSelectionDialog(getShell());
             dialog.open();
             String variable = dialog.getVariableExpression();
@@ -71,7 +72,8 @@ public class NodeLaunchArgumentsTab extends AbstractLaunchConfigurationTab {
     };
     
     private SelectionListener appArgsSelectionListener = new SelectionListener() {
-        public void widgetSelected(SelectionEvent e) {
+        @Override
+		public void widgetSelected(SelectionEvent e) {
             StringVariableSelectionDialog dialog = new StringVariableSelectionDialog(getShell());
             dialog.open();
             String variable = dialog.getVariableExpression();
@@ -163,11 +165,13 @@ public class NodeLaunchArgumentsTab extends AbstractLaunchConfigurationTab {
 		workingDirectoryBlock.createControl(parent);
 	}
 
-    public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+    @Override
+	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
     	workingDirectoryBlock.setDefaults(configuration);
     }
 
-    public void initializeFrom(ILaunchConfiguration configuration) {
+    @Override
+	public void initializeFrom(ILaunchConfiguration configuration) {
         try {
         	nodeArgumentsText.setText(configuration.getAttribute(NodeConstants.ATTR_NODE_ARGUMENTS, NodeConstants.EMPTY));
         	appArgumentsText.setText(configuration.getAttribute(NodeConstants.ATTR_APP_ARGUMENTS, NodeConstants.EMPTY));
@@ -178,24 +182,29 @@ public class NodeLaunchArgumentsTab extends AbstractLaunchConfigurationTab {
         }
     }
 
-    public void performApply(ILaunchConfigurationWorkingCopy configuration) {    	
+    @Override
+	public void performApply(ILaunchConfigurationWorkingCopy configuration) {    	
     	configuration.setAttribute(NodeConstants.ATTR_NODE_ARGUMENTS, nodeArgumentsText.getText().trim());
     	configuration.setAttribute(NodeConstants.ATTR_APP_ARGUMENTS, appArgumentsText.getText().trim());
     	workingDirectoryBlock.performApply(configuration);
     }
 
-    public boolean isValid(ILaunchConfiguration launchConfig) {
+    
+    @Override
+	public boolean isValid(ILaunchConfiguration launchConfig) {
         setErrorMessage(null);
         setMessage(null);
     	return workingDirectoryBlock.isValid(launchConfig);
     }
     
+	@Override
 	public void setLaunchConfigurationDialog(ILaunchConfigurationDialog dialog){
 		super.setLaunchConfigurationDialog(dialog);
 		workingDirectoryBlock.setLaunchConfigurationDialog(dialog);
 	}
 	
-    public String getErrorMessage() {
+    @Override
+	public String getErrorMessage() {
         String m = super.getErrorMessage();
         if (m == null) {
                 return workingDirectoryBlock.getErrorMessage();
@@ -203,7 +212,8 @@ public class NodeLaunchArgumentsTab extends AbstractLaunchConfigurationTab {
         return m;
     }
     
-    public String getMessage() {
+    @Override
+	public String getMessage() {
         String m = super.getMessage();
         if (m == null) {
             return workingDirectoryBlock.getMessage();
@@ -211,22 +221,13 @@ public class NodeLaunchArgumentsTab extends AbstractLaunchConfigurationTab {
         return m;
     }
 
-    public Composite createComposite(Composite parent, Font font, int columns, int hspan, int fill) {
-        Composite composite = new Composite(parent, SWT.NONE);
-        composite.setLayout(new GridLayout(columns, false));
-        composite.setFont(font);
-        GridData gridData = new GridData(fill);
-        gridData.horizontalSpan = hspan;
-        composite.setLayoutData(gridData);
-        return composite;
-    }
-
 	@Override
 	public Image getImage() {
 		return ImageResource.getImage(ImageResource.IMG_ARGUMENTS);
 	}
 
-    public String getName() {
+	@Override
+	public String getName() {
         return Messages.LAUNCH_CONFIGURATION_ARGUMENTS_TAB;
     }
 

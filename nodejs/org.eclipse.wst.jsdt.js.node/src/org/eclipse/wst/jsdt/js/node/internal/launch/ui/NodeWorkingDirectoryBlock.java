@@ -10,11 +10,11 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.node.internal.launch.ui;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.ui.WorkingDirectoryBlock;
 import org.eclipse.wst.jsdt.js.node.NodePlugin;
@@ -34,18 +34,21 @@ public class NodeWorkingDirectoryBlock extends WorkingDirectoryBlock {
 
 	@Override
 	protected IProject getProject(ILaunchConfiguration launchConfiguration) throws CoreException {
-		String projectLocation = NodeConstants.EMPTY;
+		String projectName = NodeConstants.EMPTY;
 		try {
-			projectLocation = launchConfiguration.getAttribute(NodeConstants.ATTR_APP_PROJECT,
+			projectName = launchConfiguration.getAttribute(NodeConstants.ATTR_APP_PROJECT,
 					NodeConstants.EMPTY);
 		} catch (CoreException e) {
 			NodePlugin.logError(e, e.getLocalizedMessage());
 		}
-		if (!projectLocation.equals(NodeConstants.EMPTY)) {
-			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(new File(projectLocation).getName());
-			if (project != null && project.isAccessible()) {
-				return project;
-			}
+		if (!projectName.equals(NodeConstants.EMPTY)) {
+			IStatus status = ResourcesPlugin.getWorkspace().validateName(projectName, IResource.PROJECT);
+        	if(status.isOK()){
+    			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+    			if (project != null && project.isAccessible()) {
+    				return project;
+    			}
+        	}
 		}
 		return null;
 	}

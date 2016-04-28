@@ -15,8 +15,11 @@ import java.io.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -28,6 +31,7 @@ import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ModifyEvent;
@@ -36,7 +40,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -64,8 +67,9 @@ import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
 public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 
     private Text scriptText;
-    private Button searchButton;
-	private boolean mainTabEntriesValid;
+    private Button workspaceButton;
+    private Text projectText;
+    private Button browseButton;
 
 	// Debug variables
 	private Label debugPortLabel;
@@ -91,7 +95,6 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
         }
     };
 
-	//
 	private VerifyListener onlyDigitsListener = new VerifyListener() {
 		@Override
 		public void verifyText(VerifyEvent e) {
@@ -131,7 +134,8 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 		layout.numColumns = 1;
 		composite.setLayout(layout);
 
-        createProgramGroup(composite);
+		createProjectGroup(composite);
+        createMainFileGroup(composite);
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
 			createDebugSpecificsGroup(composite);
 		}
@@ -147,7 +151,6 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 		connectionGroup.setLayout(new GridLayout(1, false));
 		connectionGroup.setFont(parent.getFont());
 
-		// Create
 		debugHostLabel = new Label(connectionGroup, SWT.NONE);
 		debugHostLabel.setText(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_HOST_TEXT);
 		debugHostText = new Text(connectionGroup, SWT.SINGLE | SWT.BORDER);
@@ -171,47 +174,119 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 				Messages.LAUNCH_CONFIGURATION_MAIN_TAB_DEBUGGER_NETWORK_CONSOLE_TEXT);
 		debugAddNetworkConsoleButton.addSelectionListener(selectionListener);
 	}
-
-	private void createProgramGroup(Composite parent) {
-        Group programGroup = new Group(parent, SWT.NONE);
-        programGroup.setText(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_MAIN_FILE_TEXT);
+	
+	private void createProjectGroup(Composite parent) {
+        Group projectGroup = new Group(parent, SWT.NONE);
+        projectGroup.setText(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_PROJECT_TEXT);
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        programGroup.setLayoutData(gd);
+        projectGroup.setLayoutData(gd);
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
-        programGroup.setLayout(layout);
-        programGroup.setFont(parent.getFont());
+        projectGroup.setLayout(layout);
+        projectGroup.setFont(parent.getFont());
 
-        //Script part
-        scriptText = new Text(programGroup, SWT.SINGLE | SWT.BORDER);
-        scriptText.setLayoutData(gd);
-        scriptText.setFont(parent.getFont());
-        scriptText.addModifyListener(modifyListener);
-        searchButton = createPushButton(programGroup, Messages.LAUNCH_CONFIGURATION_MAIN_TAB_WORKSPACE_BUTTON, null);
-        searchButton.addSelectionListener(new SelectionAdapter() {
+        projectText = new Text(projectGroup, SWT.SINGLE | SWT.BORDER);
+        projectText.setLayoutData(gd);
+        projectText.setFont(parent.getFont());
+        projectText.addModifyListener(modifyListener);
+        browseButton = createPushButton(projectGroup, Messages.LAUNCH_CONFIGURATION_MAIN_TAB_BROWSE_BUTTON, null);
+        browseButton.addSelectionListener(new SelectionAdapter() {
             @Override
 			public void widgetSelected(SelectionEvent e) {
-				String scriptFile = browseWorkspace(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_SELECT_MAIN_FILE_DESCRIPTION);
-				if (scriptFile != null && !scriptFile.equals(NodeConstants.EMPTY)) {
-					scriptText.setText(scriptFile);
+				String project = browseProjects(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_SELECT_PROJECT_DESCRIPTION);
+				if (project != null && !project.equals(NodeConstants.EMPTY)) {
+					projectText.setText(project);
 					updateLaunchConfigurationDialog();
 				}
             }
         });
 	}
 
-	protected String browseWorkspace(String description) {
+	private void createMainFileGroup(Composite parent) {
+        Group mainFileGroup = new Group(parent, SWT.NONE);
+        mainFileGroup.setText(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_MAIN_FILE_TEXT);
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+        mainFileGroup.setLayoutData(gd);
+        GridLayout layout = new GridLayout();
+        layout.numColumns = 2;
+        mainFileGroup.setLayout(layout);
+        mainFileGroup.setFont(parent.getFont());
+
+        scriptText = new Text(mainFileGroup, SWT.SINGLE | SWT.BORDER);
+        scriptText.setLayoutData(gd);
+        scriptText.setFont(parent.getFont());
+        scriptText.addModifyListener(modifyListener);
+        workspaceButton = createPushButton(mainFileGroup, Messages.LAUNCH_CONFIGURATION_MAIN_TAB_WORKSPACE_BUTTON, null);
+        workspaceButton.addSelectionListener(new SelectionAdapter() {
+            @Override
+			public void widgetSelected(SelectionEvent e) {
+				String script = browseWorkspace(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_SELECT_MAIN_FILE_DESCRIPTION);
+				if (script != null && !script.equals(NodeConstants.EMPTY)) {
+					scriptText.setText(script);
+					// Set project to be the same as the main file
+					String scriptLocation = null;
+					try {
+						scriptLocation = LaunchConfigurationUtil.resolveValue(script);
+					} catch (CoreException ex) { // Do nothing
+					}
+					
+					if(scriptLocation != null){
+						IPath location= Path.fromOSString(scriptLocation);
+						IFile iFile= ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
+						projectText.setText(iFile.getProject().getName());
+					}
+				}
+				updateLaunchConfigurationDialog();
+            }
+        });
+	}
+	
+	private String browseProjects(String description) {
 		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getControl().getShell(), new WorkbenchLabelProvider(), new WorkbenchContentProvider());
 		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
 		dialog.setAllowMultiple(false);
 		dialog.addFilter(new ViewerFilter() {
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				if (element instanceof IProject || element instanceof IFolder) {
-					return true;
+				if (element instanceof IProject) {
+					IProject project = (IProject) element;
+					if (project != null && project.exists() && project.isOpen()){
+						return true;
+					}
 			    }
-			    if(element instanceof IFile) {
-			    	return true;
+			    return false;
+			}
+		});
+		dialog.setTitle(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_SELECT_PROJECT_TITLE);
+		dialog.setMessage(description);
+		dialog.setValidator(new ISelectionStatusValidator() {
+			@Override
+			public IStatus validate(Object[] selection) {
+				if (selection != null && selection.length > 0 && selection[0] instanceof IProject){
+					return new Status(IStatus.OK, NodePlugin.PLUGIN_ID, IStatus.OK, NodeConstants.EMPTY, null);
+				}
+				return new Status(IStatus.ERROR, NodePlugin.PLUGIN_ID, IStatus.ERROR, NodeConstants.EMPTY, null);
+			}
+		});
+
+		if (dialog.open() == Window.OK) {
+			IProject project = (IProject) dialog.getFirstResult();
+			if (project != null) {
+				return project.getName();
+			}
+		}
+		return null;
+	}
+
+	private String browseWorkspace(String description) {
+		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getControl().getShell(), new WorkbenchLabelProvider(), new WorkbenchContentProvider());
+		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
+		dialog.setAllowMultiple(false);
+		dialog.addFilter(new ViewerFilter() {
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (element instanceof IProject || element instanceof IFolder || element instanceof IFile) {
+					return true;
 			    }
 			    return false;
 			}
@@ -231,8 +306,7 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 		if (dialog.open() == Window.OK) {
 			IFile file = (IFile) dialog.getFirstResult();
 			if (file != null) {
-				return VariablesPlugin.getDefault().getStringVariableManager().generateVariableExpression(
-						"workspace_loc", //$NON-NLS-1$
+				return VariablesPlugin.getDefault().getStringVariableManager().generateVariableExpression("workspace_loc", //$NON-NLS-1$
 						file.getFullPath().toString());
 			}
 		}
@@ -246,6 +320,7 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
     @Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
         try {
+        	projectText.setText(configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY));
             scriptText.setText(configuration.getAttribute(NodeConstants.ATTR_APP_PATH, NodeConstants.EMPTY));
 			if (getLaunchConfigurationDialog().getMode().equals(ILaunchManager.DEBUG_MODE)) {
 				debugHostText
@@ -263,6 +338,7 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 
     @Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
+    	configuration.setAttribute(NodeConstants.ATTR_APP_PROJECT, projectText.getText().trim());
     	configuration.setAttribute(NodeConstants.ATTR_APP_PATH, scriptText.getText().trim());
 		if (getLaunchConfigurationDialog().getMode().equals(ILaunchManager.DEBUG_MODE)) {
 			configuration.setAttribute(NodeConstants.ATTR_HOST_FIELD, debugHostText.getText().trim());
@@ -271,31 +347,53 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 					debugAddNetworkConsoleButton.getSelection());
 			configuration.setAttribute(NodeConstants.ATTR_BREAK_FIELD, debugBreakButton.getSelection());
 		}
-
-    	//Set default working directory
-    	if(!scriptText.getText().trim().equals(NodeConstants.EMPTY)) {
-    		File file = new File(scriptText.getText().trim());
-        	IFile iFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(file.getAbsolutePath()));
-        	if(iFile != null && iFile.exists()) {
-        		String project = iFile.getProject().getLocation().toOSString();
-        		configuration.setAttribute(NodeConstants.ATTR_APP_PROJECT, project);
+		
+		//Set mapped resources
+        String projectName = projectText.getText().trim();
+		configuration.setMappedResources(getResource(projectName));
+    }
+        
+    private IResource[] getResource(String projectName){
+        if (projectName.length() > 0) {
+        	IStatus status = ResourcesPlugin.getWorkspace().validateName(projectName, IResource.PROJECT);
+        	if(status.isOK()){
+            	IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+            	return new IResource[] {project}; 
         	}
-    	}
+        }
+		return null;
     }
 
     @Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
-    	validateEntries();
-    	return mainTabEntriesValid;
+    	return validateEntries();
     }
 
-	protected void validateEntries(){
+	private boolean validateEntries(){
         setErrorMessage(null);
-		mainTabEntriesValid = true;
 
-		String scriptFile = scriptText.getText();
-
-        if (mainTabEntriesValid && scriptFile.length() > 0) {
+        // Validate project
+        String projectName = projectText.getText().trim();
+        if (projectName.length() > 0) {
+        	IStatus status = ResourcesPlugin.getWorkspace().validateName(projectName, IResource.PROJECT);
+        	if(status.isOK()){
+            	IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+    			if (project == null || !project.exists() || !project.isOpen()){
+    				setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_PROJECT_DOES_NOT_EXIST);
+    				return false;
+    			}
+        	} else {
+				setErrorMessage(status.getMessage());
+				return false;
+        	}
+        } else {
+            setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_SPECIFY_PROJECT);
+            return false;
+        }
+        
+        // Validate main file
+		String scriptFile = scriptText.getText().trim();
+        if (scriptFile.length() > 0) {
 			// Resolve possible eclipse variables
 			try {
 				scriptFile = LaunchConfigurationUtil.resolveValue(scriptFile);
@@ -309,19 +407,29 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 
 			if (file == null || !file.exists() || file.isDirectory()) {
 				setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_MAIN_FILE_DOES_NOT_EXIST);
-				mainTabEntriesValid = false;
+				return false;
 			}
-        } else if(mainTabEntriesValid && scriptFile.length() <= 0){
+			
+			// Validate main file is contained in selected project
+			IWorkspace workspace= ResourcesPlugin.getWorkspace();    
+			IPath location= Path.fromOSString(file.getAbsolutePath());
+			IFile ifile= workspace.getRoot().getFileForLocation(location);
+			if(!ifile.getProject().getName().equals(projectName)){
+				setErrorMessage(NLS.bind(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_MAIN_FILE_NOT_IN_PROJECT, projectName));
+				return false;
+			}
+        } else {
             setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_SPECIFY_MAIN_FILE);
-            mainTabEntriesValid = false;
+            return false;
         }
 
+        // Debug mode validations
         if(getLaunchConfigurationDialog().getMode().equals(ILaunchManager.DEBUG_MODE)){
+        	//Validate host
     		String host = debugHostText.getText();
-
-    		if (mainTabEntriesValid && host.length() <= 0) {
+    		if (host.length() <= 0) {
     			setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_SPECIFY_HOST);
-    			mainTabEntriesValid = false;
+    			return false;
     		}
 
 			// Validate port range
@@ -331,22 +439,13 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 				portNumber = Integer.valueOf(port);
 			}
 
-			if (mainTabEntriesValid && (port.length() <= 0 || portNumber < 1024 || portNumber > 65535)) {
+			if (port.length() <= 0 || portNumber < 1024 || portNumber > 65535) {
 				setErrorMessage(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_INVALID_PORT);
-				mainTabEntriesValid = false;
+				return false;
 			}
         }
+		return true;
 	}
-
-    public Composite createComposite(Composite parent, Font font, int columns, int hspan, int fill) {
-        Composite g = new Composite(parent, SWT.NONE);
-        g.setLayout(new GridLayout(columns, false));
-        g.setFont(font);
-        GridData gd = new GridData(fill);
-        gd.horizontalSpan = hspan;
-        g.setLayoutData(gd);
-        return g;
-    }
 
 	@Override
 	public Image getImage() {

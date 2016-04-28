@@ -13,6 +13,7 @@ package org.eclipse.wst.jsdt.js.node.internal.launch;
 import java.io.File;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -69,7 +70,6 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		}
 
 		try {
-			String project = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
 			String mainTypeName = configuration.getAttribute(NodeConstants.ATTR_APP_PATH, NodeConstants.EMPTY);
 			// Resolve possible ${workspace_loc} variable
 			mainTypeName = LaunchConfigurationUtil.resolveValue(mainTypeName);
@@ -126,6 +126,7 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			
 			// Launch Chromium V8 
 			if(mode.equals(ILaunchManager.DEBUG_MODE)){
+				String projectName = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
 			    ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 			    ILaunchConfigurationType type = launchManager.getLaunchConfigurationType(NodeConstants.CHROMIUM_LAUNCH_CONFIGURATION_TYPE_ID);
 				IContainer container = null;
@@ -144,7 +145,7 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 
 				chromiumLaunch.setAttribute(NodeConstants.SOURCE_LOOKUP_MODE, NodeConstants.EXACT_MATCH);
 				
-				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT, project);
+				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT, projectName);
 				
 				
 				Display.getDefault().asyncExec(new Runnable() {
@@ -189,7 +190,10 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		File workingPath = null;
 		String workingDirectory = configuration.getAttribute(NodeConstants.ATTR_WORKING_DIRECTORY, NodeConstants.EMPTY);
 		if (workingDirectory.equals(NodeConstants.EMPTY)) {
-			workingDirectory = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
+			String projectName = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
+			if (!projectName.equals(NodeConstants.EMPTY)) {
+				workingDirectory = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).getLocation().toOSString();
+			}
 		}
 		if (workingDirectory.length() > 0){
 			workingDirectory = LaunchConfigurationUtil.resolveValue(workingDirectory);

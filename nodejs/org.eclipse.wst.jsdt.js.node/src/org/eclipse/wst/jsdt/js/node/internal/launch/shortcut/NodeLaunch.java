@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -142,7 +142,19 @@ public class NodeLaunch implements ILaunchShortcut{
 		IContainer container = null;
 		ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(container, configName);
 		workingCopy.setAttribute(NodeConstants.ATTR_APP_PATH, path);
-		workingCopy.setAttribute(NodeConstants.ATTR_APP_PROJECT, file.getProject().getLocation().toOSString());
+		workingCopy.setAttribute(NodeConstants.ATTR_APP_PROJECT, file.getProject().getName());
+		workingCopy.setMappedResources(getResource(file.getProject().getName()));
 		return workingCopy.doSave();
 	}
+	
+    private IResource[] getResource(String projectName){
+        if (projectName.length() > 0) {
+        	IStatus status = ResourcesPlugin.getWorkspace().validateName(projectName, IResource.PROJECT);
+        	if(status.isOK()){
+            	IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+            	return new IResource[] {project}; 
+        	}
+        }
+		return null;
+    }
 }

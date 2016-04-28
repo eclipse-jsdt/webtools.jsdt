@@ -33,12 +33,13 @@ public class ChromiumSourceComputer implements ISourcePathComputerDelegate {
 			throws CoreException {
 		List<ISourceContainer> containers = new ArrayList<ISourceContainer>();
 
-		String projectPath = configuration.getAttribute(LaunchParams.ATTR_APP_PROJECT, (String) null);
-		if (projectPath != null) {
-			IProject project = getProject(projectPath);
+		String projectName = configuration.getAttribute(LaunchParams.ATTR_APP_PROJECT, (String) null);
+		if (projectName != null) {
+			IProject project = getProject(projectName);
 			if (project != null && project.isAccessible()) {
+				String path = project.getLocation().toOSString();
 				// {@link SourceNameMapperContainer} for projects available in the workspace
-				SourceNameMapperContainer workspaceConatiner = createWorkspaceSourceContainer(project, projectPath);
+				SourceNameMapperContainer workspaceConatiner = createWorkspaceSourceContainer(project, path);
 				containers.add(workspaceConatiner);
 			}
 		}
@@ -50,19 +51,13 @@ public class ChromiumSourceComputer implements ISourcePathComputerDelegate {
 		return containers.toArray(new ISourceContainer[containers.size()]);
 	}
 
-	private IProject getProject(String path) {
-		IProject project = null;
-		File file = new File(path);
-		if (file.exists()) {
-			String projectName = file.getName();
-			project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		}
-		return project;
+	private IProject getProject(String name) {
+		return ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 	}
 
 	private SourceNameMapperContainer createWorkspaceSourceContainer(IProject project, String path) {
 		// Using absolute path as a mapping prefix for project
-		return new SourceNameMapperContainer(path + System.getProperty("file.separator"),
+		return new SourceNameMapperContainer(path + System.getProperty("file.separator"), //$NON-NLS-1$
 				new ProjectSourceContainer(project, true));
 	}
 
