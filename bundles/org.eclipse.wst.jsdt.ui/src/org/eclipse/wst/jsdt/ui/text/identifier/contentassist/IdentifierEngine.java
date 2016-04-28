@@ -61,6 +61,7 @@ public class IdentifierEngine {
 		JavaScriptUnit ast = JavaScriptPlugin.getDefault().getASTProvider().getAST(compilationUnit, ASTProvider.WAIT_YES, new NullProgressMonitor());
 
 		visitor = new ScopedCodeAssistVisitor(completionPosition);
+		if(ast == null ) return;
 		ast.accept(visitor);
 
 		if (context.getKey().contains(".")) {

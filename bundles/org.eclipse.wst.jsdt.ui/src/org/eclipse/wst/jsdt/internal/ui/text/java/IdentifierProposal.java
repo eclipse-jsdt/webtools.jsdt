@@ -28,6 +28,7 @@ import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.wst.jsdt.core.dom.JSdoc;
+import org.eclipse.wst.jsdt.internal.ui.JavaPluginImages;
 import org.eclipse.wst.jsdt.internal.ui.text.java.ScopedCodeAssistVisitor.Scope;
 import org.eclipse.wst.jsdt.ui.text.java.IJavaCompletionProposal;
 
@@ -91,8 +92,12 @@ public class IdentifierProposal implements IJavaCompletionProposal, ICompletionP
 	 * @see org.eclipse.jface.text.contentassist.ICompletionProposal#getImage()
 	 */
 	public Image getImage() {
-		// TODO Auto-generated method stub
-		return null;
+		if (this.type == IdentifierType.FUNCTION) {
+			return JavaPluginImages.get(JavaPluginImages.IMG_MISC_PUBLIC);
+		}
+		else {
+			return JavaPluginImages.get(JavaPluginImages.IMG_FIELD_PUBLIC);
+		}
 	}
 
 	/* (non-Javadoc)
