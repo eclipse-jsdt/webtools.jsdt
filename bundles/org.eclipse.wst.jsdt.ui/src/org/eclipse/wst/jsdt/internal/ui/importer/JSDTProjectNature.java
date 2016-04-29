@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat Inc.
+ * Copyright (c) 2015, 2016 Red Hat Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.ui.wizards.datatransfer.ProjectConfigurator;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.internal.core.util.ConvertUtility;
@@ -129,11 +128,6 @@ public class JSDTProjectNature implements ProjectConfigurator {
 	}
 
 	@Override
-	public IWizard getConfigurationWizard() {
-		return null;
-	}
-
-	@Override
 	public void configure(IProject project, Set<IPath> ignoredDirectories, IProgressMonitor monitor) {
 		try {
 			new ConvertUtility(project).configure(monitor);
@@ -153,7 +147,7 @@ public class JSDTProjectNature implements ProjectConfigurator {
 	}
 	
 	@Override
-	public Set<IFolder> getDirectoriesToIgnore(IProject project, IProgressMonitor monitor) {
+	public Set<IFolder> getFoldersToIgnore(IProject project, IProgressMonitor monitor) {
 		return null; // JSDT doesn't create "rubbish" directories
 	}
 
