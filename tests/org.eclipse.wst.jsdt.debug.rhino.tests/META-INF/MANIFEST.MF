@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.eclipse.wst.jsdt.debug.rhino.tests;singleton:=true
-Bundle-Version: 1.0.600.qualifier
+Bundle-Version: 1.0.700.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.junit;bundle-version="3.8.2",
  org.eclipse.wst.jsdt.debug.core,
  org.eclipse.wst.jsdt.debug.rhino,
  org.eclipse.wst.jsdt.debug.rhino.debugger,
- org.mozilla.javascript;bundle-version="1.7.4",
+ org.mozilla.javascript;bundle-version="1.7.5",
  org.eclipse.wst.jsdt.debug.transport,
  org.eclipse.jface.text
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

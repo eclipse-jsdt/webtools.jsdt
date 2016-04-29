@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.eclipse.wst.jsdt.debug.rhino.ui;singleton:=true
-Bundle-Version: 1.0.400.qualifier
+Bundle-Version: 1.0.500.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.debug.internal.rhino.ui.RhinoUIPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,
@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.jsdt.debug.rhino.debugger,
  org.eclipse.wst.jsdt.debug.rhino,
  org.eclipse.wst.jsdt.debug.core,
- org.mozilla.javascript;bundle-version="1.7.4",
+ org.mozilla.javascript;bundle-version="1.7.5",
  org.eclipse.core.expressions,
  org.eclipse.wst.jsdt.ui,
  org.eclipse.core.resources
