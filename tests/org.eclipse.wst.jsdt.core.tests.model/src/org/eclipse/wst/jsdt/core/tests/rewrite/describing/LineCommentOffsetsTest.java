@@ -220,7 +220,7 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		assertEquals(4, count);
 	}
 	
-	public void testBug95839() throws Exception {
+	public void DISABLED_testBug95839() throws Exception {
 		
 		IPackageFragment pack1= this.sourceFolder.createPackageFragment("test1", false, null);
 		StringBuffer buf= new StringBuffer();
@@ -258,7 +258,7 @@ public class LineCommentOffsetsTest extends ASTRewritingTest {
 		assertEqualString(preview, buf.toString());
 	}
 	
-	public void testBug128818() throws Exception {
+	public void DISABLED_testBug128818() throws Exception {
 		
 		IPackageFragment pack1= this.sourceFolder.createPackageFragment("test1", false, null);
 		StringBuffer buf= new StringBuffer();

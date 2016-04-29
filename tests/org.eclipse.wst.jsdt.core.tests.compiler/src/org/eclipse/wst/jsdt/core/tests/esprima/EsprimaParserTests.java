@@ -910,7 +910,24 @@ public class EsprimaParserTests {
 		}
 		fail();
 	}
-
+	
+	@Test
+	public void testRegularExpression_2(){
+		JavaScriptUnit unit = parse("/(^\\/)|(^#)|(^[\\d-\\u]*:)/;");
+		assertNotNull(unit);
+		List<ASTNode> statements = unit.statements();
+		assertFalse( (unit.getFlags() & ASTNode.MALFORMED) != 0);
+		for (ASTNode astNode : statements) {
+			if(astNode.getNodeType() == ASTNode.EXPRESSION_STATEMENT){
+				ExpressionStatement es = (ExpressionStatement)astNode;
+				assertTrue(es.getExpression() instanceof RegularExpressionLiteral);
+				RegularExpressionLiteral rel = (RegularExpressionLiteral)es.getExpression();
+				assertEquals("/(^\\/)|(^#)|(^[\\d-\\u]*:)/", rel.getRegularExpression());
+				return;
+			}
+		}
+		fail();
+	}
 
 	@Test
 	public void testRegularExpressionWithES6flags(){
