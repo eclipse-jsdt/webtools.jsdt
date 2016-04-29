@@ -17,6 +17,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 @SuppressWarnings("nls")
+@Ignore
 public class CamelCasingTests {
 	private static TestProjectSetup fTestProjectSetup;
 
