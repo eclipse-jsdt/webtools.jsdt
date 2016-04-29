@@ -12,6 +12,7 @@
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,6 +25,11 @@ public class NestedWithinParenthesesTests {
 	public static void setup() throws Exception {
 		fTestProjectSetup = new TestProjectSetup("ContentAssist", "root", false);
 		fTestProjectSetup.setUp();
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		fTestProjectSetup.tearDown();
 	}
 
 	@Ignore @Test

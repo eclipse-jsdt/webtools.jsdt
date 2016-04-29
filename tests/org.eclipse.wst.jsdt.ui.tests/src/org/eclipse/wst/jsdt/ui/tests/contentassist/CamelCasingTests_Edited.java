@@ -12,6 +12,7 @@
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,6 +29,11 @@ public class CamelCasingTests_Edited {
 		editFile_test13_0();
 		editFile_test11_0();
 		editFile_test11_1();
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		fTestProjectSetup.tearDown();
 	}
 
 	@Ignore @Test

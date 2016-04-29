@@ -12,6 +12,7 @@
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,6 +27,11 @@ public class GlobalFunctionTests_Edited {
 		fTestProjectSetup.setUp();
 		editFile_test0_0();
 		editFile_TestNamedFunctionsAssignedToVariables_0();
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		fTestProjectSetup.tearDown();
 	}
 
 	@Ignore @Test

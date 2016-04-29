@@ -12,6 +12,7 @@
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,6 +28,11 @@ public class InnerFunctionTests_Edited {
 		fTestProjectSetup.editFile("TestInnerFunctions_0.js", 2, 22, 0, "Edit");
 		fTestProjectSetup.editFile("TestInnerFunctions_0.js", 6, 17, 0, "Edit");
 		fTestProjectSetup.editFile("TestInnerFunctions_0.js", 10, 13, 0, "Edit");
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		fTestProjectSetup.tearDown();
 	}
 
 	@Ignore @Test

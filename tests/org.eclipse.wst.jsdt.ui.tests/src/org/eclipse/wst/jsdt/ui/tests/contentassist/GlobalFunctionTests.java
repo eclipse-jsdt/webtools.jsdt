@@ -13,6 +13,7 @@
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,6 +28,10 @@ public class GlobalFunctionTests {
 		fTestProjectSetup.setUp();
 	}
 
+	@AfterClass
+	public static void tearDown() throws Exception {
+		fTestProjectSetup.tearDown();
+	}
 
 	@Ignore @Test
 	public void testFindFunctions_OtherFile_BeforeOpen_ExpressionStarted_0() throws Exception {

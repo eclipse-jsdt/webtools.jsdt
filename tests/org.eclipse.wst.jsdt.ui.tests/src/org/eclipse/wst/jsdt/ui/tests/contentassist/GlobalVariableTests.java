@@ -24,6 +24,7 @@ import org.eclipse.wst.jsdt.core.search.SearchPattern;
 import org.eclipse.wst.jsdt.core.search.SearchRequestor;
 import org.eclipse.wst.jsdt.ui.JSdocContentAccess;
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -37,6 +38,11 @@ public class GlobalVariableTests {
 	public static void setup() throws Exception {
 		fTestProjectSetup = new TestProjectSetup("ContentAssist", "root", false);
 		fTestProjectSetup.setUp();
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		fTestProjectSetup.tearDown();
 	}
 
 	@Ignore @Test

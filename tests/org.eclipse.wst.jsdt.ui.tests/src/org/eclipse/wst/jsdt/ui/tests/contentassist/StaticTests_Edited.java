@@ -13,6 +13,7 @@
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,6 +29,11 @@ public class StaticTests_Edited {
 		editFile_StaticTests_0();
 		editFile_StaticTests_1();
 
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		fTestProjectSetup.tearDown();
 	}
 
 //	public void testStatic_CamelCase_OtherFile_AfterEdit_ExpressionStarted_1() throws Exception {

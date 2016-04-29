@@ -11,6 +11,7 @@
 package org.eclipse.wst.jsdt.ui.tests.contentassist;
 
 import org.eclipse.wst.jsdt.ui.tests.utils.TestProjectSetup;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,6 +39,11 @@ public class TypeTests_Edited {
 		fTestProjectSetup.editFile("TestJSClasses_0.js", 35, 0, 3, "Dev");
 		fTestProjectSetup.editFile("TestJSClasses_1.js", 4, 1, 2, "XP");
 		fTestProjectSetup.editFile("TestJSClasses_1.js", 8, 0, 3, "Dev");
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		fTestProjectSetup.tearDown();
 	}
 
 	@Ignore @Test
