@@ -33,6 +33,10 @@ public void acceptFieldReference(char[] fieldName, int sourcePosition) {}
  */
 public void acceptImport(int declarationStart, int declarationEnd, char[][] tokens, boolean onDemand) {}
 /**
+ * acceptExport method comment.
+ */
+public void acceptExport(int declarationStart, int declarationEnd, char[][] tokens) {}
+/**
  * acceptLineSeparatorPositions method comment.
  */
 public void acceptLineSeparatorPositions(int[] positions) {}
@@ -116,5 +120,9 @@ public void exitInitializer(int sourceEnd) {
  * exitType method comment.
  */
 public void exitType(int declarationEnd) {}
+/* (non-Javadoc)
+ * @see org.eclipse.wst.jsdt.internal.compiler.ISourceElementRequestor#acceptExport(int, int, char[][])
+ */
+
 
 }

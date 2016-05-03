@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -47,6 +47,11 @@ public class CompilationUnitStructureRequestor extends ReferenceInfoAdapter impl
 	 * The import container info - null until created
 	 */
 	protected JavaElementInfo importContainerInfo = null;
+	
+	/**
+	 * The export container info - null until created
+	 */
+	protected JavaElementInfo exportContainerInfo = null;
 
 	/**
 	 * Hashtable of children elements of the compilation unit.
@@ -138,6 +143,38 @@ public void acceptImport(int declarationStart, int declarationEnd, char[][] toke
 	addToChildren(this.importContainerInfo, handle);
 	this.newElements.put(handle, info);
 }
+
+/**
+ * @see ISourceElementRequestor
+ */
+public void acceptExport(int declarationStart, int declarationEnd, char[][] tokens) {
+	JavaElement parentHandle= (JavaElement) this.handleStack.peek();
+	if (!(parentHandle.getElementType() == IJavaScriptElement.JAVASCRIPT_UNIT)) {
+		Assert.isTrue(false); // Should not happen
+	}
+
+	IJavaScriptUnit parentCU= (IJavaScriptUnit)parentHandle;
+	//create the export container and its info
+	ExportContainer exportContainer= (ExportContainer)parentCU.getExportContainer();
+	if (this.exportContainerInfo == null) {
+		this.exportContainerInfo = new JavaElementInfo();
+		JavaElementInfo parentInfo = (JavaElementInfo) this.infoStack.peek();
+		addToChildren(parentInfo, exportContainer);
+		this.newElements.put(exportContainer, this.exportContainerInfo);
+	}
+
+	String elementName = JavaModelManager.getJavaModelManager().intern(new String(CharOperation.concatWith(tokens, '.')));
+	ExportDeclaration handle = new ExportDeclaration(exportContainer, elementName);
+	resolveDuplicates(handle);
+
+	ExportDeclarationElementInfo info = new ExportDeclarationElementInfo();
+	info.setSourceRangeStart(declarationStart);
+	info.setSourceRangeEnd(declarationEnd);
+
+	addToChildren(this.exportContainerInfo, handle);
+	this.newElements.put(handle, info);
+}
+
 /*
  * Table of line separator position. This table is passed once at the end
  * of the parse action, so as to allow computation of normalized ranges.

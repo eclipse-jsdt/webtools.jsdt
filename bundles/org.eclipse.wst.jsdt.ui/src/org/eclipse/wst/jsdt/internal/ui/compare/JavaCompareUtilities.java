@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -47,6 +47,8 @@ class JavaCompareUtilities {
 	private static final char PACKAGEDECLARATION= '%';
 	private static final char IMPORTDECLARATION= '#';
 	private static final char IMPORT_CONTAINER= '<';
+	private static final char EXPORTDECLARATION = '#';
+	private static final char EXPORT_CONTAINER = '<';
 	private static final char FIELD= '^';
 	private static final char METHOD= '~';
 	private static final char INITIALIZER= '|';
@@ -96,6 +98,10 @@ class JavaCompareUtilities {
 			return JavaPluginImages.DESC_OBJS_IMPDECL;
 		case IJavaScriptElement.IMPORT_CONTAINER:
 			return JavaPluginImages.DESC_OBJS_IMPCONT;
+		case IJavaScriptElement.EXPORT_DECLARATION:
+			return JavaPluginImages.DESC_OBJS_EXPDECL;
+		case IJavaScriptElement.EXPORT_CONTAINER:
+			return JavaPluginImages.DESC_OBJS_EXPCONT;
 		case IJavaScriptElement.JAVASCRIPT_UNIT:
 			return JavaPluginImages.DESC_OBJS_CUNIT;
 		}
@@ -170,6 +176,13 @@ class JavaCompareUtilities {
 			sb.append(IMPORTDECLARATION);
 			sb.append(je.getElementName());			
 			break;
+		case IJavaScriptElement.EXPORT_CONTAINER:
+			sb.append(EXPORT_CONTAINER);
+			break;
+		case IJavaScriptElement.EXPORT_DECLARATION:
+			sb.append(EXPORTDECLARATION);
+			sb.append(je.getElementName());
+			break;
 		default:
 			return null;
 		}
@@ -215,6 +228,13 @@ class JavaCompareUtilities {
 			break;
 		case JavaNode.IMPORT_CONTAINER:
 			sb.append(IMPORT_CONTAINER);
+			break;
+		case JavaNode.EXPORT:
+			sb.append(EXPORTDECLARATION);
+			sb.append(name);
+			break;
+		case JavaNode.EXPORT_CONTAINER:
+			sb.append(EXPORT_CONTAINER);
 			break;
 		default:
 			Assert.isTrue(false);

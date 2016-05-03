@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -68,6 +68,8 @@ public class JavaPluginImages {
 	public static final String IMG_OBJS_PACKDECL= NAME_PREFIX + "packd_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_IMPDECL= NAME_PREFIX + "imp_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_IMPCONT= NAME_PREFIX + "impc_obj.gif"; 			//$NON-NLS-1$
+	public static final String IMG_OBJS_EXPDECL= NAME_PREFIX + "exp_obj.gif"; 			//$NON-NLS-1$
+	public static final String IMG_OBJS_EXPCONT= NAME_PREFIX + "expc_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_JSEARCH= NAME_PREFIX + "jsearch_obj.gif"; 		//$NON-NLS-1$
 	public static final String IMG_OBJS_SEARCH_DECL= NAME_PREFIX + "search_decl_obj.gif"; //$NON-NLS-1$
 	public static final String IMG_OBJS_SEARCH_REF= NAME_PREFIX + "search_ref_obj.gif"; 	//$NON-NLS-1$
@@ -192,6 +194,8 @@ public class JavaPluginImages {
 	public static final ImageDescriptor DESC_OBJS_PACKDECL= createManagedFromKey(T_OBJ, IMG_OBJS_PACKDECL);
 	public static final ImageDescriptor DESC_OBJS_IMPDECL= createManagedFromKey(T_OBJ, IMG_OBJS_IMPDECL);
 	public static final ImageDescriptor DESC_OBJS_IMPCONT= createManagedFromKey(T_OBJ, IMG_OBJS_IMPCONT);
+	public static final ImageDescriptor DESC_OBJS_EXPDECL= createManagedFromKey(T_OBJ, IMG_OBJS_EXPDECL);
+	public static final ImageDescriptor DESC_OBJS_EXPCONT= createManagedFromKey(T_OBJ, IMG_OBJS_EXPCONT);
 	public static final ImageDescriptor DESC_OBJS_JSEARCH= createManagedFromKey(T_OBJ, IMG_OBJS_JSEARCH);
 	public static final ImageDescriptor DESC_OBJS_SEARCH_DECL= createManagedFromKey(T_OBJ, IMG_OBJS_SEARCH_DECL);
 	public static final ImageDescriptor DESC_OBJS_SEARCH_REF= createManagedFromKey(T_OBJ, IMG_OBJS_SEARCH_REF);

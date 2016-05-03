@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -164,6 +164,12 @@ public class SourceMapper
 	private HashMap importsCounterTable;
 
 	/**
+	 * exports references
+	 */
+	private HashMap exportsTable;
+	private HashMap exportsCounterTable;
+	
+	/**
 	 * Enclosing type information
 	 */
 	IType[] types;
@@ -214,6 +220,8 @@ public class SourceMapper
 		this.parameterNames = new HashMap();
 		this.importsTable = new HashMap();
 		this.importsCounterTable = new HashMap();
+		this.exportsTable = new HashMap();
+		this.exportsCounterTable = new HashMap();
 	}
 
 	/**
@@ -251,6 +259,35 @@ public class SourceMapper
 		this.importsTable.put(this.binaryType, imports);
 		this.importsCounterTable.put(this.binaryType, Integer.valueOf(importsCounter));
 	}
+	
+	/**
+	 * @see ISourceElementRequestor
+	 */
+	public void acceptExport(
+			int declarationStart,
+			int declarationEnd,
+			char[][] tokens) {
+		char[][] exports = (char[][]) this.exportsTable.get(this.binaryType);
+		int exportsCounter;
+		if (exports == null) {
+			exports = new char[5][];
+			exportsCounter = 0;
+		} else {
+			exportsCounter = ((Integer) this.exportsCounterTable.get(this.binaryType)).intValue();
+		}
+		if (exports.length == exportsCounter) {
+			System.arraycopy(
+				exports,
+				0,
+				(exports = new char[exportsCounter * 2][]),
+				0,
+				exportsCounter);
+		}
+		char[] name = CharOperation.concatWith(tokens, '.');
+		exports[exportsCounter++] = name;
+		this.exportsTable.put(this.binaryType, exports);
+		this.exportsCounterTable.put(this.binaryType, Integer.valueOf(exportsCounter));
+	}	
 
 	/**
 	 * @see ISourceElementRequestor
@@ -1158,6 +1195,8 @@ public class SourceMapper
 
 		this.importsTable.remove(this.binaryType);
 		this.importsCounterTable.remove(this.binaryType);
+		this.exportsTable.remove(this.binaryType);
+		this.exportsCounterTable.remove(this.binaryType);
 		this.searchedElement = elementToFind;
 		this.types = new IType[1];
 		this.typeDeclarationStarts = new int[1];
@@ -1277,6 +1316,26 @@ public class SourceMapper
 			this.importsTable.put(type, imports);
 		}
 		return imports;
+	}
+	
+	/**
+	 * Return a char[][] array containing the exports of the attached source for the binary type
+	 */
+	public char[][] getExports(BinaryType type) {
+		char[][] exports = (char[][]) this.exportsTable.get(type);
+		if (exports != null) {
+			int exportsCounter = ((Integer) this.exportsCounterTable.get(type)).intValue();
+			if (exports.length != exportsCounter) {
+				System.arraycopy(
+					exports,
+					0,
+					(exports = new char[exportsCounter][]),
+					0,
+					exportsCounter);
+			}
+			this.exportsTable.put(type, exports);
+		}
+		return exports;
 	}
 
 	private boolean hasToRetrieveSourceRangesForLocalClass(char[] eltName) {

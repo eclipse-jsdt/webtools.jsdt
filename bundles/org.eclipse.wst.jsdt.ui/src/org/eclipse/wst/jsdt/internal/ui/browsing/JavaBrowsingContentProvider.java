@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.jsdt.core.ElementChangedEvent;
 import org.eclipse.wst.jsdt.core.IClassFile;
 import org.eclipse.wst.jsdt.core.IElementChangedListener;
+import org.eclipse.wst.jsdt.core.IExportContainer;
 import org.eclipse.wst.jsdt.core.IImportContainer;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptElementDelta;
@@ -120,7 +121,8 @@ class JavaBrowsingContentProvider extends StandardJavaScriptElementContentProvid
 
 		Object[] result= new Object[0];
 		for (int i= 0; i < sourceRefs.length; i++)
-			result= concatenate(result, removeImportAndPackageDeclarations(getChildren(sourceRefs[i])));
+			result= concatenate(result, removeExportAndPackageDeclarations(
+						removeImportAndPackageDeclarations(getChildren(sourceRefs[i]))));
 		return concatenate(result, fragment.getNonJavaScriptResources());
 	}
 
@@ -128,6 +130,14 @@ class JavaBrowsingContentProvider extends StandardJavaScriptElementContentProvid
 		ArrayList tempResult= new ArrayList(members.length);
 		for (int i= 0; i < members.length; i++)
 			if (!(members[i] instanceof IImportContainer))
+				tempResult.add(members[i]);
+		return tempResult.toArray();
+	}
+	
+	private Object[] removeExportAndPackageDeclarations(Object[] members) {
+		ArrayList tempResult= new ArrayList(members.length);
+		for (int i= 0; i < members.length; i++)
+			if (!(members[i] instanceof IExportContainer))
 				tempResult.add(members[i]);
 		return tempResult.toArray();
 	}
@@ -142,13 +152,19 @@ class JavaBrowsingContentProvider extends StandardJavaScriptElementContentProvid
 		if (type.getDeclaringType() != null)
 			return type.getChildren();
 
-		// Add import declarations
+		// Add import and export declarations
 		IJavaScriptElement[] members= parent.getChildren();
 		ArrayList tempResult= new ArrayList(members.length);
 		for (int i= 0; i < members.length; i++)
 			if ((members[i] instanceof IImportContainer))
 				tempResult.add(members[i]);
+
+		for (int i= 0; i < members.length; i++)
+			if ((members[i] instanceof IExportContainer))
+				tempResult.add(members[i]);
+		
 		tempResult.addAll(Arrays.asList(type.getChildren()));
+		
 		return tempResult.toArray();
 	}
 

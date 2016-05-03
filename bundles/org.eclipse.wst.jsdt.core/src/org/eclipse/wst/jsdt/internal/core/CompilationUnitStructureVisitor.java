@@ -27,6 +27,7 @@ import org.eclipse.wst.jsdt.core.compiler.IProblem;
 import org.eclipse.wst.jsdt.core.dom.ASTNode;
 import org.eclipse.wst.jsdt.core.dom.Block;
 import org.eclipse.wst.jsdt.core.dom.DefaultASTVisitor;
+import org.eclipse.wst.jsdt.core.dom.ExportDeclaration;
 import org.eclipse.wst.jsdt.core.dom.Expression;
 import org.eclipse.wst.jsdt.core.dom.ExpressionStatement;
 import org.eclipse.wst.jsdt.core.dom.FieldAccess;
@@ -73,6 +74,11 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 	 * The import container info - null until created
 	 */
 	protected JavaElementInfo importContainerInfo = null;
+	
+ 	/**
+	 * The export container info - null until created
+	 */
+	protected JavaElementInfo exportContainerInfo = null;		
 	
 	/**
 	 * Stack of parent scope info objects. The info on the
@@ -366,11 +372,88 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 		}
 		return false;
 	}
+
+	private void visitExportModule(ExportDeclaration parent, ModuleSpecifier module) {
+		JavaElement parentHandle = this.handleStack.peek();
+		if (!(parentHandle.getElementType() == IJavaScriptElement.JAVASCRIPT_UNIT)) {
+			Assert.isTrue(false); // Should not happen
+		}
+
+		IJavaScriptUnit parentCU = (IJavaScriptUnit) parentHandle;
+		// create the export container and its info
+		ExportContainer exportContainer = (ExportContainer) parentCU.getExportContainer();
+		if (this.exportContainerInfo == null) {
+			this.exportContainerInfo = new JavaElementInfo();
+			JavaElementInfo parentInfo = this.infoStack.peek();
+			addToChildren(parentInfo, exportContainer);
+			this.newElements.put(exportContainer, this.exportContainerInfo);
+		}
+
+		final SimpleName localName = module.getLocal();
+		StringBuilder nameString = parent.getSource() != null ? new StringBuilder(parent.getSource().getLiteralValue()) : new StringBuilder("export");
+		nameString.append(" as ");
+		nameString.append(localName.getIdentifier());
+		String elementName = JavaModelManager.getJavaModelManager().intern(nameString.toString());
+		org.eclipse.wst.jsdt.internal.core.ExportDeclaration handle = new org.eclipse.wst.jsdt.internal.core.ExportDeclaration(exportContainer, elementName);
+		resolveDuplicates(handle);
+
+		ExportDeclarationElementInfo info = new ExportDeclarationElementInfo();
+		info.setNameSourceStart(localName.getStartPosition());
+		info.setNameSourceEnd(localName.getStartPosition() + localName.getLength() - 1);
+		info.setSourceRangeStart(parent.getStartPosition());
+		info.setSourceRangeEnd(parent.getStartPosition() + parent.getLength() - 1);
+
+		addToChildren(this.exportContainerInfo, handle);
+		this.newElements.put(handle, info);
+	}
+
+	public boolean visit(ExportDeclaration node) {
+		List specifiers = node.specifiers();
+		if (specifiers.isEmpty()) {
+			JavaElement parentHandle = this.handleStack.peek();
+			if (!(parentHandle.getElementType() == IJavaScriptElement.JAVASCRIPT_UNIT)) {
+				Assert.isTrue(false); // Should not happen
+			}
+
+			IJavaScriptUnit parentCU = (IJavaScriptUnit) parentHandle;
+			// create the export container and its info
+			ExportContainer exportContainer = (ExportContainer) parentCU.getExportContainer();
+			if (this.exportContainerInfo == null) {
+				this.exportContainerInfo = new JavaElementInfo();
+				JavaElementInfo parentInfo = this.infoStack.peek();
+				addToChildren(parentInfo, exportContainer);
+				this.newElements.put(exportContainer, this.exportContainerInfo);
+			}
+
+			String elementName = node.getSource() != null ? JavaModelManager.getJavaModelManager().intern(node.getSource().getLiteralValue()) : "export";
+
+			org.eclipse.wst.jsdt.internal.core.ExportDeclaration handle = new org.eclipse.wst.jsdt.internal.core.ExportDeclaration(exportContainer, elementName);
+			resolveDuplicates(handle);
+
+			ExportDeclarationElementInfo info = new ExportDeclarationElementInfo();
+			info.setNameSourceStart(node.getStartPosition());
+			info.setNameSourceEnd(node.getStartPosition() + node.getLength() - 1);
+			info.setSourceRangeStart(node.getStartPosition());
+			info.setSourceRangeEnd(node.getStartPosition() + node.getLength() - 1);
+
+			addToChildren(this.exportContainerInfo, handle);
+			this.newElements.put(handle, info);
+
+		}
+		else {
+			for (Iterator iterator = specifiers.iterator(); iterator.hasNext();) {
+				ModuleSpecifier module = (ModuleSpecifier) iterator.next();
+				visitExportModule(node, module);
+			}
+		}
+		return false;
+	}
 	
 	public boolean visit(VariableDeclarationFragment node){
 		JavaElementInfo parentInfo = this.infoStack.peek();
 		JavaElement parentHandle= this.handleStack.peek();
-		String fieldName = JavaModelManager.getJavaModelManager().intern(new String(node.getName().getIdentifier()));
+		String fieldName = JavaModelManager.getJavaModelManager().intern(
+					new String(node.getName().getIdentifier()));
 		SourceField handle = new SourceField(parentHandle, fieldName);
 		resolveDuplicates(handle);
 		
@@ -434,6 +517,11 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 		if (this.importContainerInfo != null) {
 			setChildren(this.importContainerInfo);
 		}
+
+		// set export container children
+		if (this.exportContainerInfo != null) {
+			setChildren(this.exportContainerInfo);
+		}		
 
 		// set children
 		setChildren(this.unitInfo);

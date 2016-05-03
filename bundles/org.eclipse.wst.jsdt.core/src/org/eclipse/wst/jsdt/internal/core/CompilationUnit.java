@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,6 +31,8 @@ import org.eclipse.wst.jsdt.core.CompletionRequestor;
 import org.eclipse.wst.jsdt.core.Flags;
 import org.eclipse.wst.jsdt.core.IBuffer;
 import org.eclipse.wst.jsdt.core.IBufferFactory;
+import org.eclipse.wst.jsdt.core.IExportContainer;
+import org.eclipse.wst.jsdt.core.IExportDeclaration;
 import org.eclipse.wst.jsdt.core.IField;
 import org.eclipse.wst.jsdt.core.IFunction;
 import org.eclipse.wst.jsdt.core.IImportContainer;
@@ -73,6 +75,7 @@ public class CompilationUnit extends Openable implements IJavaScriptUnit, org.ec
 	/*package*/ static final int JLS2_INTERNAL = AST.JLS2;
 
 	private static final IImportDeclaration[] NO_IMPORTS = new IImportDeclaration[0];
+	private static final IExportDeclaration[] NO_EXPORTS = new IExportDeclaration[0];
 	protected String name;
 	public WorkingCopyOwner owner;
 	public String superTypeName;
@@ -290,6 +293,26 @@ public class CompilationUnit extends Openable implements IJavaScriptUnit, org.ec
 		op.runOperation(monitor);
 		return getImport(importName);
 	}
+
+	/**
+	 * @see IJavaScriptUnit#createExport(String, IJavaScriptElement, IProgressMonitor)
+	 */
+	public IExportDeclaration createExport(String exportName, IJavaScriptElement sibling, IProgressMonitor monitor) throws JavaScriptModelException {
+		return createExport(exportName, sibling, Flags.AccDefault, monitor);
+	}
+
+	/**
+	 * @see IJavaScriptUnit#createExport(String, IJavaScriptElement, int, IProgressMonitor)
+	 * @since 3.0
+	 */
+	public IExportDeclaration createExport(String exportName, IJavaScriptElement sibling, int flags, IProgressMonitor monitor) throws JavaScriptModelException {
+		CreateExportOperation op = new CreateExportOperation(exportName, this, flags);
+		if (sibling != null) {
+			op.createBefore(sibling);
+		}
+		op.runOperation(monitor);
+		return getExport(exportName);
+	}
 	
 	/**
 	 * @see IJavaScriptUnit#createType(String, IJavaScriptElement, boolean, IProgressMonitor)
@@ -381,6 +404,12 @@ public class CompilationUnit extends Openable implements IJavaScriptUnit, org.ec
 					break;
 				case IJavaScriptElement.IMPORT_DECLARATION:
 					currentElement = ((IImportContainer)currentElement).getImport(child.getElementName());
+					break;
+				case IJavaScriptElement.EXPORT_CONTAINER:
+					currentElement = ((IJavaScriptUnit)currentElement).getExportContainer();
+					break;
+				case IJavaScriptElement.EXPORT_DECLARATION:
+					currentElement = ((IExportContainer)currentElement).getExport(child.getElementName());
 					break;
 				case IJavaScriptElement.TYPE:
 					switch (currentElement.getElementType()) {
@@ -720,6 +749,46 @@ public class CompilationUnit extends Openable implements IJavaScriptUnit, org.ec
 		return imports;
 	}
 	
+
+	/**
+	 * @see IJavaScriptUnit#getExport(String)
+	 */
+	public IExportDeclaration getExport(String exportName) {
+		return getExportContainer().getExport(exportName);
+	}
+	
+	/**
+	 * @see IJavaScriptUnit#getExportContainer()
+	 */
+	public IExportContainer getExportContainer() {
+		return new ExportContainer(this);
+	}
+	
+	/**
+	 * @see IJavaScriptUnit#getExports()
+	 */
+	public IExportDeclaration[] getExports() throws JavaScriptModelException {
+		IExportContainer container= getExportContainer();
+		JavaModelManager manager = JavaModelManager.getJavaModelManager();
+		Object info = manager.getInfo(container);
+		if (info == null) {
+			if (manager.getInfo(this) != null)
+				// CU was opened, but no export container, then no exports
+				return NO_EXPORTS;
+			else {
+				open(null); // force opening of CU
+				info = manager.getInfo(container);
+				if (info == null)
+					// after opening, if no export container, then no exports
+					return NO_EXPORTS;
+			}
+		}
+		IJavaScriptElement[] elements = ((JavaElementInfo) info).children;
+		int length = elements.length;
+		IExportDeclaration[] exports = new IExportDeclaration[length];
+		System.arraycopy(elements, 0, exports, 0, length);
+		return exports;
+	}
 	/**
 	 * @see IMember#getTypeRoot()
 	 */

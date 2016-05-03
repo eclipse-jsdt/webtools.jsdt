@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -36,6 +36,8 @@ public class JavaNode extends DocumentRangeNode implements ITypedElement {
 	public static final int INIT= 9;
 	public static final int CONSTRUCTOR= 10;
 	public static final int METHOD= 11;
+	public static final int EXPORT_CONTAINER = 12;
+	public static final int EXPORT = 13;
 
 	private int fInitializerCount= 1;
 
@@ -100,6 +102,8 @@ public class JavaNode extends DocumentRangeNode implements ITypedElement {
 			return CompareMessages.JavaNode_initializer; 
 		case IMPORT_CONTAINER:
 			return CompareMessages.JavaNode_importDeclarations; 
+		case EXPORT_CONTAINER:
+			return CompareMessages.JavaNode_exportDeclarations;
 		case CU:
 			return CompareMessages.JavaNode_compilationUnit; 
 		case PACKAGE:
@@ -133,6 +137,12 @@ public class JavaNode extends DocumentRangeNode implements ITypedElement {
 			break;
 		case IMPORT_CONTAINER:
 			id= JavaCompareUtilities.getImageDescriptor(IJavaScriptElement.IMPORT_CONTAINER);
+			break;
+		case EXPORT:
+			id = JavaCompareUtilities.getImageDescriptor(IJavaScriptElement.EXPORT_DECLARATION);
+			break;
+		case EXPORT_CONTAINER:
+			id = JavaCompareUtilities.getImageDescriptor(IJavaScriptElement.EXPORT_CONTAINER);
 			break;
 		case CLASS:
 			id= JavaCompareUtilities.getTypeImageDescriptor(true);

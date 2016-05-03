@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -123,6 +123,18 @@ public interface IJavaScriptElement extends IAdaptable, ILookupScope{
 	 */
 	int LOCAL_VARIABLE = 14;
 
+	/**
+	 * Constant representing all export declarations within a compilation unit.
+	 * A JavaScript element with this type can be safely cast to {@link IExportContainer}.
+	 */
+	int EXPORT_CONTAINER = 15;
+
+	/**
+	 * Constant representing an export declaration within a compilation unit.
+	 * A JavaScript element with this type can be safely cast to {@link IExportDeclaration}.
+	 */
+	int EXPORT_DECLARATION = 16;	
+	
 	/**
 	 * Returns whether this JavaScript element exists in the model.
 	 * <p>

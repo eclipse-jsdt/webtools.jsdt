@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2009 IBM Corporation and others.
+ * Copyright (c) 2006, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -41,6 +41,8 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.jsdt.core.ElementChangedEvent;
 import org.eclipse.wst.jsdt.core.IElementChangedListener;
+import org.eclipse.wst.jsdt.core.IExportContainer;
+import org.eclipse.wst.jsdt.core.IExportDeclaration;
 import org.eclipse.wst.jsdt.core.IImportContainer;
 import org.eclipse.wst.jsdt.core.IImportDeclaration;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
@@ -187,6 +189,15 @@ public class DefaultJavaFoldingStructureProvider implements IJavaFoldingStructur
 		 */
 		public boolean collapseImportContainer() {
 			return fAllowCollapsing && fCollapseImportContainer;
+		}
+		
+		/**
+		 * Returns <code>true</code> if export containers should be collapsed.
+		 * 
+		 * @return <code>true</code> if export containers should be collapsed
+		 */
+		public boolean collapseExportContainer() {
+			return fAllowCollapsing && fCollapseExportContainer;
 		}
 
 		/**
@@ -386,6 +397,15 @@ public class DefaultJavaFoldingStructureProvider implements IJavaFoldingStructur
 				if (delta.getAffectedChildren().length == 1 && delta.getAffectedChildren()[0].getElement() instanceof IImportContainer) {
 					IJavaScriptElement elem= SelectionConverter.getElementAtOffset(ast.getJavaElement(), new TextSelection(editor.getCachedSelectedRange().x, editor.getCachedSelectedRange().y));
 					if (!(elem instanceof IImportDeclaration))
+						return false;
+					
+				} else if (delta.getAffectedChildren().length == 1 && 
+							delta.getAffectedChildren()[0].getElement() instanceof IExportContainer) {
+					IJavaScriptElement elem= SelectionConverter.getElementAtOffset(
+								ast.getJavaElement(), 
+								new TextSelection(editor.getCachedSelectedRange().x, 
+											editor.getCachedSelectedRange().y));
+					if (!(elem instanceof IExportDeclaration))
 						return false;
 					
 				}
@@ -690,6 +710,7 @@ public class DefaultJavaFoldingStructureProvider implements IJavaFoldingStructur
 	/* preferences */
 	private boolean fCollapseJavadoc= false;
 	private boolean fCollapseImportContainer= true;
+	private boolean fCollapseExportContainer= true;
 	private boolean fCollapseInnerTypes= true;
 	private boolean fCollapseMembers= false;
 	private boolean fCollapseHeaderComments= true;
@@ -860,6 +881,7 @@ public class DefaultJavaFoldingStructureProvider implements IJavaFoldingStructur
 		IPreferenceStore store= JavaScriptPlugin.getDefault().getPreferenceStore();
 		fCollapseInnerTypes= store.getBoolean(PreferenceConstants.EDITOR_FOLDING_INNERTYPES);
 		fCollapseImportContainer= store.getBoolean(PreferenceConstants.EDITOR_FOLDING_IMPORTS);
+		fCollapseExportContainer = store.getBoolean(PreferenceConstants.EDITOR_FOLDING_EXPORTS);
 		fCollapseJavadoc= store.getBoolean(PreferenceConstants.EDITOR_FOLDING_JAVADOC);
 		fCollapseMembers= store.getBoolean(PreferenceConstants.EDITOR_FOLDING_METHODS);
 		fCollapseHeaderComments= store.getBoolean(PreferenceConstants.EDITOR_FOLDING_HEADERS);
@@ -986,7 +1008,7 @@ public class DefaultJavaFoldingStructureProvider implements IJavaFoldingStructur
 	 * <li>true members (not for top-level types)</li>
 	 * <li>the javadoc comments of any member</li>
 	 * <li>header comments (javadoc or multi-line comments appearing before the first type's
-	 * javadoc or before the package or import declarations).</li>
+	 * javadoc or before the package or import / export declarations).</li>
 	 * </ul>
 	 * </p>
 	 * 
@@ -1001,6 +1023,9 @@ public class DefaultJavaFoldingStructureProvider implements IJavaFoldingStructur
 
 			case IJavaScriptElement.IMPORT_CONTAINER:
 				collapse= ctx.collapseImportContainer();
+				break;
+			case IJavaScriptElement.EXPORT_CONTAINER:
+				collapse = ctx.collapseExportContainer();
 				break;
 			case IJavaScriptElement.TYPE:
 				collapseCode= isInnerType((IType) element);
@@ -1138,7 +1163,7 @@ public class DefaultJavaFoldingStructureProvider implements IJavaFoldingStructur
 		 * scan the header content up to the first type. Once a comment is
 		 * found, accumulate any additional comments up to the stop condition.
 		 * The stop condition is reaching a package declaration, import container,
-		 * or the end of the input.
+		 * export container or the end of the input.
 		 */
 		IScanner scanner= ctx.getScanner();
 		scanner.resetTo(start, end);

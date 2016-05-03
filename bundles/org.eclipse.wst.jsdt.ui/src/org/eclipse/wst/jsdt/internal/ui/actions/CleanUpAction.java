@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -127,6 +127,7 @@ public abstract class CleanUpAction extends SelectionDispatchAction {
 							case IJavaScriptElement.JAVASCRIPT_UNIT:
 								return true;
 							case IJavaScriptElement.IMPORT_CONTAINER:
+							case IJavaScriptElement.EXPORT_CONTAINER:
 								return true;
 							case IJavaScriptElement.PACKAGE_FRAGMENT:
 							case IJavaScriptElement.PACKAGE_FRAGMENT_ROOT:
@@ -230,6 +231,9 @@ public abstract class CleanUpAction extends SelectionDispatchAction {
 								result.add(elem);
 								break;
 							case IJavaScriptElement.IMPORT_CONTAINER:
+								result.add(elem.getParent());
+								break;
+							case IJavaScriptElement.EXPORT_CONTAINER:
 								result.add(elem.getParent());
 								break;
 							case IJavaScriptElement.PACKAGE_FRAGMENT:

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,6 +25,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.part.IShowInTargetList;
 import org.eclipse.wst.jsdt.core.IClassFile;
+import org.eclipse.wst.jsdt.core.IExportContainer;
+import org.eclipse.wst.jsdt.core.IExportDeclaration;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.IImportContainer;
 import org.eclipse.wst.jsdt.core.IImportDeclaration;
@@ -187,6 +189,22 @@ public class MembersView extends JavaBrowsingPart implements IPropertyChangeList
 				}
 			}
 		}
+		else if (element instanceof IExportDeclaration)
+			return isValidElement(((IJavaScriptElement)element).getParent());
+		else if (element instanceof IExportContainer) {
+			Object input = getViewer().getInput();
+			if (input instanceof IJavaScriptElement) {
+				IJavaScriptUnit cu = (IJavaScriptUnit)((IJavaScriptElement)input).getAncestor(IJavaScriptElement.JAVASCRIPT_UNIT);
+				if (cu != null) {
+					IJavaScriptUnit exportContainerCu = (IJavaScriptUnit)((IJavaScriptElement)element).getAncestor(IJavaScriptElement.JAVASCRIPT_UNIT);
+					return cu.equals(exportContainerCu);
+				} else {
+					IClassFile cf = (IClassFile)((IJavaScriptElement)input).getAncestor(IJavaScriptElement.CLASS_FILE);
+					IClassFile exportContainerCf = (IClassFile)((IJavaScriptElement)element).getAncestor(IJavaScriptElement.CLASS_FILE);
+					return cf != null && cf.equals(exportContainerCf);
+				}
+			}
+		}
 		return false;
 	}
 
@@ -209,6 +227,7 @@ public class MembersView extends JavaBrowsingPart implements IPropertyChangeList
 			case IJavaScriptElement.INITIALIZER:
 			case IJavaScriptElement.FIELD:
 			case IJavaScriptElement.IMPORT_CONTAINER:
+			case IJavaScriptElement.EXPORT_CONTAINER:
 				return je;
 			case IJavaScriptElement.IMPORT_DECLARATION:
 				IJavaScriptUnit cu= (IJavaScriptUnit)je.getParent().getParent();
@@ -220,6 +239,18 @@ public class MembersView extends JavaBrowsingPart implements IPropertyChangeList
 					}
 				} catch (JavaScriptModelException ex) {
 					// return je;
+				}
+				return je;
+			case IJavaScriptElement.EXPORT_DECLARATION:
+				cu = (IJavaScriptUnit)je.getParent().getParent();
+				try {
+					if (cu.getExports()[0].equals(je)) {
+						Object selectedElement = getSingleElementFromSelection(getViewer().getSelection());
+						if (selectedElement instanceof IExportContainer)
+							return (IExportContainer)selectedElement;
+					}
+				} catch (JavaScriptModelException ex) {
+					// return je
 				}
 				return je;
 		}
@@ -254,9 +285,19 @@ public class MembersView extends JavaBrowsingPart implements IPropertyChangeList
 				IJavaScriptElement parent= je.getParent();
 				if (parent instanceof IJavaScriptUnit) {
 					return getTypeForCU((IJavaScriptUnit)parent);
-				}
-				else if (parent instanceof IClassFile)
+				} else if (parent instanceof IClassFile) {
 					return findInputForJavaElement(parent);
+				}
+				return null;
+			case IJavaScriptElement.EXPORT_DECLARATION:
+				return findInputForJavaElement(je.getParent());
+			case IJavaScriptElement.EXPORT_CONTAINER:
+				parent = je.getParent();
+				if (parent instanceof IJavaScriptUnit) {
+					return getTypeForCU((IJavaScriptUnit)parent);
+				} else if (parent instanceof IClassFile) {
+					return findInputForJavaElement(parent);
+				}
 				return null;
 			default:
 				if (je instanceof IMember)

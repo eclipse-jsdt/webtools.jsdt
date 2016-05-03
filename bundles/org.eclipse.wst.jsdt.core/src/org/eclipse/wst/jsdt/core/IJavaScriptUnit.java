@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -404,6 +404,39 @@ IImportContainer getImportContainer();
  *		exception occurs while accessing its corresponding resource
  */
 IImportDeclaration[] getImports() throws JavaScriptModelException;
+
+/**
+ * Returns the first export declaration in this javaScript file with the given name.
+ * This is a handle-only method. The export declaration may or may not exist. This
+ * is a convenience method - exports can also be accessed from a javaScript file's
+ * export container.
+ *
+ * @param name the name of the export to find
+ * @return a handle onto the corresponding export declaration. The export declaration may or may not exist.
+ */
+IExportDeclaration getExport(String name) ;
+/**
+ * Returns the export container for this javaScript file.
+ * This is a handle-only method. The export container may or
+ * may not exist. The export container can used to access the
+ * exports.
+ *
+ * @return a handle onto the corresponding export container. The
+ *		export contain may or may not exist.
+ */
+IExportContainer getExportContainer();
+/**
+ * Returns the export declarations in this javaScript file
+ * in the order in which they appear in the source. This is
+ * a convenience method - export declarations can also be
+ * accessed from a javaScript file's export container.
+ *
+ * @return the export declarations in this javaScript file
+ * @throws JavaScriptModelException if this element does not exist or if an
+ *		exception occurs while accessing its corresponding resource
+ */
+IExportDeclaration[] getExports() throws JavaScriptModelException;
+
 /**
  * Returns the primary javaScript file (whose owner is the primary owner)
  * this working copy was created from, or this javaScript file if this a primary

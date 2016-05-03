@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -145,6 +145,10 @@ public class DeleteElementsOperation extends MultiOperation {
 		// keep track of the import statements - if all are removed, delete
 		// the import container (and report it in the delta)
 		int numberOfImports = cu.getImports().length;
+		
+		// keep track of the export statements - if all are removed, delete
+		// the export container (and report it in the delta)
+		int numberOfExports = cu.getExports().length;
 
 		JavaElementDelta delta = new JavaElementDelta(cu);
 		IJavaScriptElement[] cuElements = ((IRegion) childrenToRemove.get(cu)).getElements();
@@ -157,6 +161,11 @@ public class DeleteElementsOperation extends MultiOperation {
 					numberOfImports--;
 					if (numberOfImports == 0) {
 						delta.removed(cu.getImportContainer());
+					}
+				} else if (e.getElementType() == IJavaScriptElement.EXPORT_DECLARATION) {
+					numberOfExports--;
+					if (numberOfExports == 0) {
+						delta.removed(cu.getExportContainer());
 					}
 				}
 			}

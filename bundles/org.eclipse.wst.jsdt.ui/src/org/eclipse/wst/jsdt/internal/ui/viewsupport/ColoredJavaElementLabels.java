@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -137,6 +137,8 @@ public class ColoredJavaElementLabels {
 				break;
 			case IJavaScriptElement.IMPORT_CONTAINER:
 			case IJavaScriptElement.IMPORT_DECLARATION:
+			case IJavaScriptElement.EXPORT_CONTAINER:
+			case IJavaScriptElement.EXPORT_DECLARATION:
 				getDeclarationLabel(element, flags, result);
 				break;
 			case IJavaScriptElement.JAVASCRIPT_PROJECT:
@@ -583,7 +585,9 @@ public class ColoredJavaElementLabels {
 			}	
 		}
 		if (declaration.getElementType() == IJavaScriptElement.IMPORT_CONTAINER) {
-			result.append(JavaUIMessages.JavaElementLabels_import_container); 
+			result.append(JavaUIMessages.JavaElementLabels_import_container);
+		} else if (declaration.getElementType() == IJavaScriptElement.EXPORT_CONTAINER) {
+			result.append(JavaUIMessages.JavaElementLabels_export_container);
 		} else {
 			result.append(declaration.getElementName());
 		}

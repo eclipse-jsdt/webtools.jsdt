@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,6 +20,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.jsdt.core.IBuffer;
+import org.eclipse.wst.jsdt.core.IExportContainer;
 import org.eclipse.wst.jsdt.core.IField;
 import org.eclipse.wst.jsdt.core.IImportContainer;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
@@ -99,6 +100,8 @@ public class TypedSource {
 				|| 	type == IJavaScriptElement.TYPE
 				|| 	type == IJavaScriptElement.IMPORT_CONTAINER
 				|| 	type == IJavaScriptElement.IMPORT_DECLARATION
+				||	type == IJavaScriptElement.EXPORT_CONTAINER
+				||	type == IJavaScriptElement.EXPORT_DECLARATION
 				|| 	type == IJavaScriptElement.INITIALIZER
 				|| 	type == IJavaScriptElement.METHOD;
 	}
@@ -136,16 +139,29 @@ public class TypedSource {
 			return null;
 		if (elem.getElementType() == IJavaScriptElement.IMPORT_CONTAINER) 
 			return createTypedSourcesForImportContainer(tuple, (IImportContainer)elem);
+		else if (elem.getElementType() == IJavaScriptElement.EXPORT_CONTAINER)
+			return createTypedSourcesForExportContainer(tuple, (IExportContainer)elem);
 		else if (elem.getElementType() == IJavaScriptElement.FIELD) 
 			return new TypedSource[] {create(getFieldSource((IField)elem, tuple), elem.getElementType())};
 		return new TypedSource[] {create(getSourceOfDeclararationNode(elem, tuple.unit), elem.getElementType())};
 	}
 
-	private static TypedSource[] createTypedSourcesForImportContainer(SourceTuple tuple, IImportContainer container) throws JavaScriptModelException, CoreException {
+	private static TypedSource[] createTypedSourcesForImportContainer(SourceTuple tuple, IImportContainer container) 
+				throws JavaScriptModelException, CoreException {
 		IJavaScriptElement[] imports= container.getChildren();
 		List result= new ArrayList(imports.length);
 		for (int i= 0; i < imports.length; i++) {
 			result.addAll(Arrays.asList(createTypedSources(imports[i], tuple)));
+		}
+		return (TypedSource[]) result.toArray(new TypedSource[result.size()]);
+	}
+	
+	private static TypedSource[] createTypedSourcesForExportContainer(SourceTuple tuple, IExportContainer container) 
+				throws JavaScriptModelException, CoreException {
+		IJavaScriptElement[] exports= container.getChildren();
+		List result= new ArrayList(exports.length);
+		for (int i= 0; i < exports.length; i++) {
+			result.addAll(Arrays.asList(createTypedSources(exports[i], tuple)));
 		}
 		return (TypedSource[]) result.toArray(new TypedSource[result.size()]);
 	}
@@ -170,6 +186,7 @@ public class TypedSource {
 
 	private static String getSourceOfDeclararationNode(IJavaScriptElement elem, IJavaScriptUnit cu) throws JavaScriptModelException, CoreException {
 		Assert.isTrue(elem.getElementType() != IJavaScriptElement.IMPORT_CONTAINER);
+		Assert.isTrue(elem.getElementType() != IJavaScriptElement.EXPORT_CONTAINER);
 		if (elem instanceof ISourceReference) {
 			ISourceReference reference= (ISourceReference) elem;
 			String source= reference.getSource();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -109,6 +109,18 @@ public interface ISourceElementRequestor {
 	 */
 	void acceptImport(int declarationStart, int declarationEnd, char[][] tokens, boolean onDemand);
 
+	/**
+	 * @param declarationStart
+	 *                   This is the position of the first character of the export
+	 *                   keyword.
+	 * @param declarationEnd
+	 *                   This is the position of the ';' ending the export statement or
+	 *                   the end of the comment following the export.
+	 * @param tokens
+	 *                   This are the tokens of the export like specified in the source.
+	 */
+	void acceptExport(int declarationStart, int declarationEnd, char[][] tokens);	
+	
 	/*
 	 * Table of line separator position. This table is passed once at the end of
 	 * the parse action, so as to allow computation of normalized ranges.

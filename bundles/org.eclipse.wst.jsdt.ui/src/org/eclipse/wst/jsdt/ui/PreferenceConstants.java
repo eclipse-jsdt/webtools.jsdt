@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -2990,6 +2990,16 @@ public class PreferenceConstants {
 	public static final String EDITOR_FOLDING_IMPORTS= "editor_folding_default_imports"; //$NON-NLS-1$
 
 	/**
+	 * A named preference that stores the value for exports folding for the default folding provider.
+	 * <p>
+	 * Value is of type <code>Boolean</code>.
+	 * </p>
+	 * 
+	 * 
+	 */
+	public static final String EDITOR_FOLDING_EXPORTS= "editor_folding_default_exports"; //$NON-NLS-1$	
+	
+	/**
 	 * A named preference that stores the value for header comment folding for the default folding provider.
 	 * <p>
 	 * Value is of type <code>Boolean</code>.
@@ -3638,6 +3648,7 @@ public class PreferenceConstants {
 		store.setDefault(PreferenceConstants.EDITOR_FOLDING_INNERTYPES, false);
 		store.setDefault(PreferenceConstants.EDITOR_FOLDING_METHODS, false);
 		store.setDefault(PreferenceConstants.EDITOR_FOLDING_IMPORTS, true);
+		store.setDefault(PreferenceConstants.EDITOR_FOLDING_EXPORTS, true);
 		store.setDefault(PreferenceConstants.EDITOR_FOLDING_HEADERS, true);
 		
 		// properties file editor
