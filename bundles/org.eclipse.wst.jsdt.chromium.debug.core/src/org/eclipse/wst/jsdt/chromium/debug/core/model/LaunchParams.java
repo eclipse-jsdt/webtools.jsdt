@@ -40,7 +40,10 @@ public class LaunchParams {
   
   // project attribute from {@link NodeConstants} required for debugging via JSDT editor 
   public static final String ATTR_APP_PROJECT = "attr_app_project"; //$NON-NLS-1$
- 
+  
+  // file attribute from {@link NodeConstants} required for debugging via JSDT editor 
+  public static final String ATTR_APP_PROJECT_RELATIVE_PATH = "attr_app_project_relative_path"; //$NON-NLS-1$
+
   // PREDEFINED_SOURCE_WRAPPER_IDS see below.
 
   public enum LookupMode {

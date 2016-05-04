@@ -25,6 +25,7 @@ public final class NodeConstants {
 	public static final String ATTR_NODE_ARGUMENTS = "attr_node_arguments"; //$NON-NLS-1$
 	public static final String ATTR_APP_ARGUMENTS = "attr_app_arguments"; //$NON-NLS-1$
 	public static final String ATTR_APP_PROJECT = "attr_app_project"; //$NON-NLS-1$
+	public static final String ATTR_APP_PROJECT_RELATIVE_PATH = "attr_app_project_relative_path"; //$NON-NLS-1$
 	public static final String ATTR_HOST_FIELD = "attr_host_field"; //$NON-NLS-1$
 	public static final String ATTR_PORT_FIELD = "attr_port_field"; //$NON-NLS-1$
 	public static final String ATTR_ADD_NETWORK_CONSOLE_FIELD = "attr_add_network_console_field"; //$NON-NLS-1$

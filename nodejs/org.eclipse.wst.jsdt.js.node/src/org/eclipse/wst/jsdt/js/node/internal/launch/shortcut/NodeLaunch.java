@@ -143,6 +143,7 @@ public class NodeLaunch implements ILaunchShortcut{
 		ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(container, configName);
 		workingCopy.setAttribute(NodeConstants.ATTR_APP_PATH, path);
 		workingCopy.setAttribute(NodeConstants.ATTR_APP_PROJECT, file.getProject().getName());
+		workingCopy.setAttribute(NodeConstants.ATTR_APP_PROJECT_RELATIVE_PATH, file.getProjectRelativePath().toOSString());
 		workingCopy.setMappedResources(getResource(file.getProject().getName()));
 		return workingCopy.doSave();
 	}

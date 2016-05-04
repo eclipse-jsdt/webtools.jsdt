@@ -129,6 +129,8 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			// Launch Chromium V8 
 			if(mode.equals(ILaunchManager.DEBUG_MODE)){
 			    String project = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
+			    String projectRelativePath = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT_RELATIVE_PATH, NodeConstants.EMPTY);
+			    
 			    ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 			    ILaunchConfigurationType type = launchManager.getLaunchConfigurationType(NodeConstants.CHROMIUM_LAUNCH_CONFIGURATION_TYPE_ID);
 				IContainer container = null;
@@ -150,6 +152,8 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 				chromiumLaunch.setAttribute(NodeConstants.CONFIG_PROPERTY, encode(NodeConstants.PREDEFIENED_WRAPPERS));
 				
 				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT, project);
+				
+				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT_RELATIVE_PATH, projectRelativePath);
 
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override

@@ -72,7 +72,7 @@ public class LaunchConfigurationUtil {
 				IPath configPath = getIPathFromLaunchConfig(config, attributeName);
 				if (configPath != null) {
 					String path = resolveValue(configPath.toOSString());
-					if (path.equals(file.getRawLocation().toOSString())) {
+					if (path != null && path.equals(file.getRawLocation().toOSString())) {
 						match = true;
 					}
 				}
