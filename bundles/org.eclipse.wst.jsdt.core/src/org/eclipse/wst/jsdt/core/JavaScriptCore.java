@@ -550,6 +550,11 @@ public final class JavaScriptCore extends Plugin {
 	 * Possible  configurable option ID.
 	 * @see #getDefaultOptions()
 	 */
+	public static final String COMPILER_SOURCE_TYPE = PLUGIN_ID + ".compiler.source.type"; //$NON-NLS-1$
+	/**
+	 * Possible  configurable option ID.
+	 * @see #getDefaultOptions()
+	 */
 	public static final String COMPILER_TASK_PRIORITIES = PLUGIN_ID + ".compiler.taskPriorities"; //$NON-NLS-1$
 	/**
 	 * Possible  configurable option value for COMPILER_TASK_PRIORITIES.
@@ -886,6 +891,16 @@ public final class JavaScriptCore extends Plugin {
 	 * @see #getDefaultOptions()
 	 */
 	public static final String WARNING = "warning"; //$NON-NLS-1$
+	/**
+	 * Possible  configurable option value.
+	 * @see #getDefaultOptions()
+	 */
+	public static final String SOURCE_TYPE_SCRIPT = "script"; //$NON-NLS-1$
+	/**
+	 * Possible  configurable option value.
+	 * @see #getDefaultOptions()
+	 */
+	public static final String SOURCE_TYPE_MODULE = "module"; //$NON-NLS-1$
 	/**
 	 * Possible  configurable option value.
 	 * @see #getDefaultOptions()

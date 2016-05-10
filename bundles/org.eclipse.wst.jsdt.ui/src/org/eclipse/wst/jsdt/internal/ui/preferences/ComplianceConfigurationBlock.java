@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
@@ -33,6 +34,7 @@ import org.eclipse.wst.jsdt.internal.corext.util.JavaModelUtil;
 import org.eclipse.wst.jsdt.internal.corext.util.Messages;
 import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 import org.eclipse.wst.jsdt.internal.ui.dialogs.StatusInfo;
+import org.eclipse.wst.jsdt.internal.ui.util.PixelConverter;
 import org.eclipse.wst.jsdt.internal.ui.wizards.IStatusChangeListener;
 import org.eclipse.wst.jsdt.internal.ui.wizards.buildpaths.BuildPathSupport;
 import org.eclipse.wst.jsdt.launching.IVMInstall;
@@ -53,6 +55,7 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 	
 	private static final Key PREF_SOURCE_COMPATIBILITY= getJDTCoreKey(JavaScriptCore.COMPILER_SOURCE);
 	private static final Key PREF_COMPLIANCE= getJDTCoreKey(JavaScriptCore.COMPILER_COMPLIANCE);
+	private static final Key PREF_SOURCE_TYPE = getJDTCoreKey(JavaScriptCore.COMPILER_SOURCE_TYPE);
 	private static final Key PREF_PB_ASSERT_AS_IDENTIFIER= getJDTCoreKey(JavaScriptCore.COMPILER_PB_ASSERT_IDENTIFIER);
 	
 	private static final Key INTR_DEFAULT_COMPLIANCE= getJDTUIKey("internal.default.compliance"); //$NON-NLS-1$
@@ -75,6 +78,9 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 	private static final String ERROR= JavaScriptCore.ERROR;
 	private static final String WARNING= JavaScriptCore.WARNING;
 	private static final String IGNORE= JavaScriptCore.IGNORE;
+	
+	private static final String SOURCE_TYPE_SCRIPT = JavaScriptCore.SOURCE_TYPE_SCRIPT;
+	private static final String SOURCE_TYPE_MODULE = JavaScriptCore.SOURCE_TYPE_MODULE;
 
 	private static final String ENABLED= JavaScriptCore.ENABLED;
 //	private static final String DISABLED= JavaScriptCore.DISABLED;
@@ -100,6 +106,8 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 	private Link fJRE50InfoText;
 	private Composite fControlsComposite;
 	private ControlEnableState fBlockEnableState;
+	
+	private PixelConverter fPixelConverter;
 
 	public ComplianceConfigurationBlock(IStatusChangeListener context, IProject project, IWorkbenchPreferenceContainer container) {
 		super(context, project, getKeys(), container);
@@ -123,7 +131,8 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 				PREF_LOCAL_VARIABLE_ATTR, PREF_LINE_NUMBER_ATTR, PREF_SOURCE_FILE_ATTR, PREF_CODEGEN_UNUSED_LOCAL,
 				PREF_CODEGEN_INLINE_JSR_BYTECODE,
 				PREF_COMPLIANCE, PREF_SOURCE_COMPATIBILITY,
-				PREF_CODEGEN_TARGET_PLATFORM, PREF_PB_ASSERT_AS_IDENTIFIER
+				PREF_CODEGEN_TARGET_PLATFORM, PREF_PB_ASSERT_AS_IDENTIFIER,
+				PREF_SOURCE_TYPE
 			};
 	}
 		
@@ -140,7 +149,7 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 	 * @see org.eclipse.jface.preference.PreferencePage#createContents(Composite)
 	 */
 	protected Control createContents(Composite parent) {
-//		fPixelConverter= new PixelConverter(parent);
+		fPixelConverter= new PixelConverter(parent);
 		setShell(parent.getShell());
 		
 		Composite complianceComposite = createComplianceTabContent(parent);
@@ -197,17 +206,17 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 		layout.numColumns= 1;
 		fControlsComposite.setLayout(layout);
 
-		//int nColumns= 3;
+		int nColumns= 3;
 
-		//layout= new GridLayout();
-		//layout.numColumns= nColumns;
+		layout= new GridLayout();
+		layout.numColumns= nColumns;
 
-		/*Group group= new Group(fControlsComposite, SWT.NONE);
+		Group group= new Group(fControlsComposite, SWT.NONE);
 		group.setFont(fControlsComposite.getFont());
-		group.setText(PreferencesMessages.ComplianceConfigurationBlock_compliance_group_label); 
+		//group.setText(PreferencesMessages.ComplianceConfigurationBlock_compliance_group_label); 
 		group.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));
 		group.setLayout(layout);
-	*/
+	
 		//String label= PreferencesMessages.ComplianceConfigurationBlock_compiler_compliance_label; 
 		//Combo combo = addComboBox(group, label, PREF_COMPLIANCE, values3456, values3456Labels, 1);
 //		combo.setEnabled(false);
@@ -234,16 +243,24 @@ public class ComplianceConfigurationBlock extends OptionsConfigurationBlock {
 //		label= PreferencesMessages.ComplianceConfigurationBlock_source_compatibility_label; 
 //		addComboBox(group, label, PREF_SOURCE_COMPATIBILITY, values3456, values3456Labels, indent);	
 //
-//		String[] errorWarningIgnore= new String[] { ERROR, WARNING, IGNORE };
-//		
-//		String[] errorWarningIgnoreLabels= new String[] {
-//			PreferencesMessages.ComplianceConfigurationBlock_error,  
-//			PreferencesMessages.ComplianceConfigurationBlock_warning, 
-//			PreferencesMessages.ComplianceConfigurationBlock_ignore
-//		};
 //
 //		label= PreferencesMessages.ComplianceConfigurationBlock_pb_assert_as_identifier_label; 
-//		addComboBox(group, label, PREF_PB_ASSERT_AS_IDENTIFIER, errorWarningIgnore, errorWarningIgnoreLabels, indent);		
+//		addComboBox(group, label, PREF_PB_ASSERT_AS_IDENTIFIER, errorWarningIgnore, errorWarningIgnoreLabels, indent);
+
+		int indent= fPixelConverter.convertWidthInCharsToPixels(2);
+		
+		// Source type for Esprima parser
+		
+		String[] sourceTypeScriptModule = new String[] { SOURCE_TYPE_SCRIPT, SOURCE_TYPE_MODULE };
+		String[] sourceTypeScriptModuleLabels = new String[] {
+			PreferencesMessages.ComplianceConfigurationBlock_source_type_script,  
+			PreferencesMessages.ComplianceConfigurationBlock_source_type_module
+		};		
+		
+		String label = PreferencesMessages.ComplianceConfigurationBlock_source_type_label;
+		addComboBox(group, label, PREF_SOURCE_TYPE, sourceTypeScriptModule, sourceTypeScriptModuleLabels, indent);
+		
+
 //
 //		label= PreferencesMessages.ComplianceConfigurationBlock_pb_enum_as_identifier_label; 
 //		addComboBox(group, label, PREF_PB_ENUM_AS_IDENTIFIER, errorWarningIgnore, errorWarningIgnoreLabels, indent);		

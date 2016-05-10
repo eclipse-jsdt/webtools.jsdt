@@ -466,6 +466,8 @@ public final class PreferencesMessages extends NLS {
 	public static String ComplianceConfigurationBlock_error;
 	public static String ComplianceConfigurationBlock_warning;
 	public static String ComplianceConfigurationBlock_ignore;
+	public static String ComplianceConfigurationBlock_source_type_script;
+	public static String ComplianceConfigurationBlock_source_type_module;
 	public static String ComplianceConfigurationBlock_version00;
 	public static String ComplianceConfigurationBlock_version11;
 	public static String ComplianceConfigurationBlock_version12;
@@ -483,6 +485,7 @@ public final class PreferencesMessages extends NLS {
 	public static String ComplianceConfigurationBlock_compiler_compliance_label;
 	public static String ComplianceConfigurationBlock_default_settings_label;
 	public static String ComplianceConfigurationBlock_source_compatibility_label;
+	public static String ComplianceConfigurationBlock_source_type_label;
 	public static String ComplianceConfigurationBlock_codegen_targetplatform_label;
 	public static String ComplianceConfigurationBlock_pb_assert_as_identifier_label;
 	public static String ComplianceConfigurationBlock_pb_enum_as_identifier_label;

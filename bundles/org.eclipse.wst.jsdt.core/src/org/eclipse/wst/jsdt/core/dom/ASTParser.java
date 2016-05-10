@@ -643,7 +643,12 @@ public class ASTParser {
 		   	  throw new IllegalStateException("source not specified"); //$NON-NLS-1$
 		   }
 			if(this.typeRoot instanceof IJavaScriptUnit ){
-				JavaScriptUnit unit = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit)this.typeRoot).parse();
+				String sourceType = project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true);			
+				JavaScriptUnit unit = EsprimaParser.newParser()
+							.includeComments()
+							.setSourceType(sourceType)
+							.setSource((IJavaScriptUnit)this.typeRoot)
+							.parse();
 				unit.setTypeRoot(typeRoot);
 				result = unit;
 				if(this.resolveBindings)

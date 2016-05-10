@@ -85,6 +85,7 @@ public class CompilerOptions {
 	public static final String OPTION_ReportRawTypeReference =  "org.eclipse.wst.jsdt.core.compiler.problem.rawTypeReference"; //$NON-NLS-1$
 	public static final String OPTION_ReportFinalParameterBound = "org.eclipse.wst.jsdt.core.compiler.problem.finalParameterBound"; //$NON-NLS-1$
 	public static final String OPTION_Source = "org.eclipse.wst.jsdt.core.compiler.source"; //$NON-NLS-1$
+	public static final String OPTION_SourceType = "org.eclipse.wst.jsdt.core.compiler.source.type"; //$NON-NLS-1$
 	public static final String OPTION_TargetPlatform = "org.eclipse.wst.jsdt.core.compiler.codegen.targetPlatform"; //$NON-NLS-1$
 	public static final String OPTION_Compliance = "org.eclipse.wst.jsdt.core.compiler.compliance"; //$NON-NLS-1$
 	public static final String OPTION_Encoding = "org.eclipse.wst.jsdt.core.encoding"; //$NON-NLS-1$
@@ -253,6 +254,7 @@ public class CompilerOptions {
 	public long complianceLevel = ClassFileConstants.JDK1_4; // by default be compliant with 1.4
 	public long sourceLevel = ClassFileConstants.JDK1_3; //1.3 source behavior by default
 	public long targetJDK = ClassFileConstants.JDK1_2; // default generates for JVM1.2
+	public String sourceType = "script"; // default source type for Esprima parser
 
 	// source encoding format
 	public String defaultEncoding = null; // will use the platform default encoding
@@ -421,6 +423,7 @@ public class CompilerOptions {
 		optionsMap.put(OPTION_ReportUnusedLabel, getSeverityString(UnusedLabel));
 		optionsMap.put(OPTION_Compliance, versionFromJdkLevel(this.complianceLevel));
 		optionsMap.put(OPTION_Source, versionFromJdkLevel(this.sourceLevel));
+		optionsMap.put(OPTION_SourceType, sourceType);
 		optionsMap.put(OPTION_TargetPlatform, versionFromJdkLevel(this.targetJDK));
 		optionsMap.put(OPTION_FatalOptionalError, this.treatOptionalErrorAsFatal ? ENABLED : DISABLED);
 		if (this.defaultEncoding != null) {

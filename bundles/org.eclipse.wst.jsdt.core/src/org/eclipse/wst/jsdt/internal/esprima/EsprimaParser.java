@@ -56,6 +56,11 @@ public class EsprimaParser {
 	 * "tolerant" option for esprima
 	 */
 	private static final String ESPRIMA_OPT_TOLERANT = "tolerant"; //$NON-NLS-1$
+	
+	/**
+	 * "sourceType" option for esprima
+	 */
+	private static final String ESPRIMA_OPT_SOURCE_TYPE = "sourceType"; //$NON-NLS-1$
 
 	private static ScriptEngine engine;
 	private static CompiledScript compiledEsprima;
@@ -67,12 +72,13 @@ public class EsprimaParser {
 	private boolean range = Boolean.TRUE;
 	private boolean errorReporting = Boolean.TRUE;
 	private boolean includeJsdocs = Boolean.FALSE;
+	private String sourceType;
 
 	/**
 	 *
 	 */
 	private EsprimaParser() {
-		this.bindings = engine.createBindings();
+		this.bindings = engine.createBindings();		
 		try {
 			compiledEsprima.eval(this.bindings);
 		}
@@ -184,6 +190,11 @@ public class EsprimaParser {
 		this.includeJsdocs = true;
 		return this;
 	}
+	
+	public EsprimaParser setSourceType(String value) {
+		this.sourceType = value;
+		return this;
+	}
 
 	/**
 	 * @param jsObject
@@ -200,11 +211,12 @@ public class EsprimaParser {
 		return (ScriptObjectMirror) esprima.callMember("parse", content, getOptions()); //$NON-NLS-1$
 	}
 
-	private HashMap<String, Boolean> getOptions() {
-		HashMap<String , Boolean> $ = new HashMap<String, Boolean>();
+	private HashMap<String, Object> getOptions() {	
+		HashMap<String, Object> $ = new HashMap<String, Object>();
 		$.put(ESPRIMA_OPT_RANGE, range);
 		$.put(ESPRIMA_OPT_TOLERANT, tolerant);
 		$.put(ESPRIMA_OPT_ATTACH_COMMENT, includeJsdocs);
+		$.put(ESPRIMA_OPT_SOURCE_TYPE, sourceType);
 		return $;
 	}
 
