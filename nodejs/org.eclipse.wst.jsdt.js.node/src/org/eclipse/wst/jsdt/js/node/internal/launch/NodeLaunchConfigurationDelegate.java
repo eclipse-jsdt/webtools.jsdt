@@ -61,7 +61,12 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 
     @Override
 	public void launch(ILaunchConfiguration configuration, final String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-        if (monitor == null) {
+		if (mode.equals(ILaunchManager.DEBUG_MODE) && !LaunchConfigurationUtil.isChromiumAvailable()) {
+			throw new CoreException(new Status(IStatus.ERROR, NodePlugin.PLUGIN_ID,
+					Messages.LAUNCH_CONFIGURATION_CHROMIUM_IS_NOT_AVAILABLE_ERROR));
+		}
+
+		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
 

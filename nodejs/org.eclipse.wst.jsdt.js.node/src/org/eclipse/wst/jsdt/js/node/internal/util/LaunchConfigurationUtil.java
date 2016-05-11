@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.variables.IStringVariableManager;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
@@ -29,12 +30,17 @@ import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
  * @author "Adalberto Lopez Venegas (adalbert)"
  */
 public class LaunchConfigurationUtil {
-
-	private static void validateVariables(String expression) throws CoreException {
-		IStringVariableManager manager = VariablesPlugin.getDefault().getStringVariableManager();
-		manager.validateStringVariables(expression);
+	
+	/**
+	 * Check if the Chromium core bundle is available
+	 *
+	 * @see <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=493234">Bug 493234</a>
+	 * @return true if the Chromium core bundle is available, false otherwise.
+	 */
+	public static boolean isChromiumAvailable() {
+		return Platform.getBundle("org.eclipse.wst.jsdt.chromium.debug.core") != null; //$NON-NLS-1$
 	}
-
+	
 	public static String resolveValue(String expression) throws CoreException {
 		String expanded= null;
 		try {
@@ -44,11 +50,6 @@ public class LaunchConfigurationUtil {
 			return null;
 		}
 		return expanded;
-	}
-
-	private static String getValue(String expression) throws CoreException {
-		IStringVariableManager manager = VariablesPlugin.getDefault().getStringVariableManager();
-		return manager.performStringSubstitution(expression);
 	}
 
 	/**
@@ -116,4 +117,15 @@ public class LaunchConfigurationUtil {
 		}
 		return configPath;
 	}
+	
+	private static String getValue(String expression) throws CoreException {
+		IStringVariableManager manager = VariablesPlugin.getDefault().getStringVariableManager();
+		return manager.performStringSubstitution(expression);
+	}
+	
+	private static void validateVariables(String expression) throws CoreException {
+		IStringVariableManager manager = VariablesPlugin.getDefault().getStringVariableManager();
+		manager.validateStringVariables(expression);
+	}
+	
 }
