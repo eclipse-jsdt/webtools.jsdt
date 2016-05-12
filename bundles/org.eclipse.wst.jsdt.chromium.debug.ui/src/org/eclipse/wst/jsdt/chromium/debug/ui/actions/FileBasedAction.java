@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.mapping.ResourceMapping;
@@ -114,7 +115,10 @@ class FileBasedAction {
       }
     };
     try {
-      resourceMapping.accept(null, visitor, null);
+        // This will always return one project
+        IProject project = resourceMapping.getProjects()[0];
+        if(project.isOpen())
+      	  resourceMapping.accept(null, visitor, null);
     } catch (CoreException e) {
       throw new RuntimeException(e);
     }
