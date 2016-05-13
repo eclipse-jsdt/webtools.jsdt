@@ -4,7 +4,7 @@ Bundle-Name: Common Node.js Utilities
 Bundle-SymbolicName: org.eclipse.wst.jsdt.js.node.common;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.js.node.common.CommonPlugin
-Bundle-Vendor: IBM
+Bundle-Vendor: Eclipse Web Tools Platform
 Require-Bundle: org.eclipse.core.runtime,
  com.google.gson;bundle-version="[2.2.4,3.0.0)",
  org.eclipse.core.resources,

@@ -18,3 +18,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.debug.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Eclipse Web Tools Platform

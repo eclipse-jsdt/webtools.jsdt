@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.wst.jsdt.nashorn.extension
 Bundle-Version: 1.0.0.qualifier
-Bundle-Name: %pluginName
-Bundle-Vendor: %providerName
+Bundle-Name: Nashorn Classloader
+Bundle-Vendor: Eclipse Web Tools Platform
 Fragment-Host: org.eclipse.osgi;bundle-version="3.10.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Provide-Capability: nashorn.extension.classpath

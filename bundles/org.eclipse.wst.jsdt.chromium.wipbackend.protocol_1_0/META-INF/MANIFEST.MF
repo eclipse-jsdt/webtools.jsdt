@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Chromium Developer Tools SDK WIP backend Protocol v. 1.0
-Bundle-Vendor: The Chromium Authors
+Bundle-Vendor: Eclipse Web Tools Platform
 Bundle-SymbolicName: org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0;singleton:=true
 Bundle-Version: 0.4.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
