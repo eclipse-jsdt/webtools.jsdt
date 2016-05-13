@@ -23,7 +23,6 @@ import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
 import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 import org.eclipse.wst.jsdt.js.gulp.GulpPlugin;
 import org.eclipse.wst.jsdt.js.gulp.internal.GulpConstants;
-import org.eclipse.wst.jsdt.js.gulp.internal.Messages;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -47,12 +46,9 @@ public class GulpLaunchConfigurationDelegate implements ILaunchConfigurationDele
 
 	private void launchGulp(IProject project, IPath dir, CLICommand command, IProgressMonitor monitor) {
 		try {
-			new CLI(project, dir).execute(command, monitor);
+			new CLI(project, dir, command).execute(monitor);
 		} catch (CoreException e) {
 			GulpPlugin.logError(e);
-			WorkbenchResourceUtil.showErrorDialog(Messages.GulpLaunchError_Title, Messages.GulpLaunchError_Message,
-					e.getStatus());
-
 		}
 	}
 	

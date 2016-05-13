@@ -22,7 +22,6 @@ import org.eclipse.wst.jsdt.js.cli.core.CLI;
 import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
 import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 import org.eclipse.wst.jsdt.js.npm.NpmPlugin;
-import org.eclipse.wst.jsdt.js.npm.internal.Messages;
 import org.eclipse.wst.jsdt.js.npm.internal.NpmConstants;
 
 /**
@@ -46,11 +45,9 @@ public class NpmLaunchConfigurationDelegate  implements ILaunchConfigurationDele
 	
 	private void launchNpm(IProject project, IPath dir, CLICommand command, IProgressMonitor monitor) {
 		try {
-			 new CLI(project, dir).execute(command, monitor);
+			 new CLI(project, dir, command).execute(monitor);
 		} catch (CoreException e) {
 			NpmPlugin.logError(e);
-			WorkbenchResourceUtil.showErrorDialog(Messages.NpmLaunchError_Title,
-					Messages.NpmLaunchError_Message, e.getStatus());
 		}
 	}
 	

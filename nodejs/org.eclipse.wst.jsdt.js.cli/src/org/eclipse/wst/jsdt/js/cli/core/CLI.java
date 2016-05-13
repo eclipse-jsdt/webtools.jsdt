@@ -41,6 +41,7 @@ import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.wst.jsdt.js.cli.CLIPlugin;
 import org.eclipse.wst.jsdt.js.cli.Messages;
 import org.eclipse.wst.jsdt.js.cli.internal.util.ExternalProcessUtility;
+import org.eclipse.wst.jsdt.js.cli.internal.util.ProcessUtil;
 
 /**
  * Wrapper around CLI. Provides low level 
@@ -57,9 +58,10 @@ public class CLI {
 	private static Map<String, Lock> projectLock = Collections.synchronizedMap(new HashMap<String,Lock>());
 	private IProject project;
 	private IPath workingDir;
+	private CLICommand command;
 
 		
-	public CLI( IProject project, IPath workingDir) {
+	public CLI( IProject project, IPath workingDir, CLICommand command) {
 		if (project == null) {
 			throw new IllegalArgumentException(Messages.Error_NoProjectSpecified);
 		}
@@ -67,10 +69,11 @@ public class CLI {
 		this.project = project;
 		// Use the project's location as the working directory if dir is null
 		this.workingDir = (workingDir == null) ? project.getLocation() : workingDir;
-	
+		
+		this.command = command;
 	}
 	
-	public CLIResult execute(CLICommand command, IProgressMonitor monitor) throws CoreException {
+	public CLIResult execute(IProgressMonitor monitor) throws CoreException {
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
@@ -100,10 +103,7 @@ public class CLI {
 	
 	protected void sendCLICommand(final IProcess process, final CLICommand command,
 			final IProgressMonitor monitor) throws CoreException {
-		Lock lock = projectLock();
-		lock.lock();
 		try {
-			
 			DebugPlugin.getDefault().addDebugEventListener(processTerminateListener);
 			final IStreamsProxy streamProxy = process.getStreamsProxy();
 			streamProxy.write(command.toString());
@@ -119,7 +119,13 @@ public class CLI {
 		} catch (IOException | InterruptedException e) {
 			throw new CoreException(new Status(IStatus.ERROR, CLIPlugin.PLUGIN_ID, Messages.Error_FatalInvokingCLI, e));
 		} finally {
-			lock.unlock();
+			// Something went wrong during termination - need to kill process
+			if (process.getExitValue() != 0) {
+				String pid = ProcessUtil.getPID(command, workingDir.toOSString());
+				if (pid != null) {
+					ProcessUtil.terminateProcessById(pid, false, true);						
+				}
+			}	
 		}
 	}
 	

@@ -141,11 +141,11 @@ public class ExternalProcessUtility {
 			return null;
 		}
 		Process process = DebugPlugin.exec(command, workingDirectory, envp);
-		
 		Map<String, String> processAttributes = generateProcessAttributes(command, launchConfiguration);
 		Launch launch = new Launch(launchConfiguration, "run", null); //$NON-NLS-1$
 		IProcess prcs = DebugPlugin.newProcess(launch, process, command[0], processAttributes);
 		DebugPlugin.getDefault().getLaunchManager().addLaunch(launch);
+	
 		return prcs;
 	}
 	
