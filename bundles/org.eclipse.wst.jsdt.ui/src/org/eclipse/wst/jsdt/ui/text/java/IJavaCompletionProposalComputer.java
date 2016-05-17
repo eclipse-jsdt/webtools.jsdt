@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.contentassist.IContextInformation;
 
 /**
  * Computes completions and context information displayed by the JavaScript editor content assistant.
@@ -53,7 +54,7 @@ public interface IJavaCompletionProposalComputer {
 	 *        invocation, i.e. there is no need for the receiver to spawn a sub monitor.
 	 * @return a list of context information objects (element type: {@link org.eclipse.jface.text.contentassist.IContextInformation})
 	 */
-	List<ICompletionProposal> computeContextInformation(ContentAssistInvocationContext context, IProgressMonitor monitor);
+	List<IContextInformation> computeContextInformation(ContentAssistInvocationContext context, IProgressMonitor monitor);
 
 	/**
 	 * Returns the reason why this computer was unable to produce any completion proposals or
