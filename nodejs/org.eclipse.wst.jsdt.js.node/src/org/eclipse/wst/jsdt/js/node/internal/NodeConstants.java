@@ -17,6 +17,10 @@ import java.util.List;
  * @author "Adalberto Lopez Venegas (adalbert)"
  */
 public final class NodeConstants {
+	public static final String CONSOLE_ENCODING = "org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING"; //$NON-NLS-1$
+	public static final String CHARSET_UTF_8 = "UTF-8"; //$NON-NLS-1$
+	public static final String ID_NODEJS_PROCESS_TYPE = "Node.js"; //$NON-NLS-1$
+	
 	// Node.js constants and launch parameters
 	public static final String LAUNCH_CONFIGURATION_TYPE_ID = "org.eclipse.wst.jsdt.js.node.NodeLaunchConfigurationType"; //$NON-NLS-1$
 	public static final String EMPTY = ""; //$NON-NLS-1$

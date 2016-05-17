@@ -26,6 +26,8 @@ import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.JSRunnerConfiguration;
 import org.eclipse.wst.jsdt.js.node.NodePlugin;
 import org.eclipse.wst.jsdt.js.node.internal.Messages;
+import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
+import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
 
 /**
  * @author "Adalberto Lopez Venegas (adalbert)"
@@ -72,7 +74,8 @@ public class NodeJsRunner implements IJSRunner {
 		try {
 			Process process = builder.start();
 			builder.redirectErrorStream(true);
-			return DebugPlugin.newProcess(launch, process, "Node.js process"); //$NON-NLS-1$
+			launch.setAttribute(NodeConstants.CONSOLE_ENCODING, NodeConstants.CHARSET_UTF_8);
+			return DebugPlugin.newProcess(launch, process, "Node.js process", LaunchConfigurationUtil.getDefaultAttributes()); //$NON-NLS-1$
 		} catch (Exception ex) {
 			throw new CoreException(new Status (IStatus.ERROR, NodePlugin.PLUGIN_ID, 
 					Messages.LAUNCH_CONFIGURATION_FAILED_EXECUTION_ERROR, ex));

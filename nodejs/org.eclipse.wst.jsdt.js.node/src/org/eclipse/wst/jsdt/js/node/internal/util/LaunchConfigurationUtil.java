@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.node.internal.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -21,6 +24,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.wst.jsdt.js.node.NodePlugin;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
 
@@ -126,6 +130,12 @@ public class LaunchConfigurationUtil {
 	private static void validateVariables(String expression) throws CoreException {
 		IStringVariableManager manager = VariablesPlugin.getDefault().getStringVariableManager();
 		manager.validateStringVariables(expression);
+	}
+	
+	public static Map<String, String> getDefaultAttributes() {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(IProcess.ATTR_PROCESS_TYPE, NodeConstants.ID_NODEJS_PROCESS_TYPE);
+		return map;
 	}
 	
 }
