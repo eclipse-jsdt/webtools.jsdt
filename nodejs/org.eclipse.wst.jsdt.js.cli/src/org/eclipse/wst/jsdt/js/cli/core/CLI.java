@@ -89,6 +89,7 @@ public class CLI {
 			ILaunchConfiguration cfg = type.newInstance(null, command.getToolName());
 			ILaunchConfigurationWorkingCopy wc = cfg.getWorkingCopy();
 			wc.setAttribute(IProcess.ATTR_PROCESS_LABEL, command.getToolName() + " " + command.getCommandName()); //$NON-NLS-1$
+			wc.setAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING, "UTF-8"); //$NON-NLS-1$
 			cfg = wc.doSave();
 			return cfg;
 		} catch (CoreException e) {
