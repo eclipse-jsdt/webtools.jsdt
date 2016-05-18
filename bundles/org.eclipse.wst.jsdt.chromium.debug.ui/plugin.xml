@@ -200,6 +200,15 @@
         commandId="org.eclipse.wst.jsdt.chromium.debug.ui.commands.Inspect"
         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
   </extension>
+  
+  <extension point="org.eclipse.core.runtime.adapters">
+    <factory
+        adaptableType="org.eclipse.core.resources.mapping.ResourceMapping"
+        class="org.eclipse.wst.jsdt.chromium.debug.ui.actions.FileExtensionFilterAdapterFactory">
+        <adapter 
+            type="org.eclipse.ui.IActionFilter"/>
+    </factory>
+  </extension>
 
   <extension point="org.eclipse.ui.popupMenus">           
     <viewerContribution
@@ -317,6 +326,11 @@
             objectClass="org.eclipse.core.resources.mapping.ResourceMapping"
             adaptable="true"
             id="org.eclipse.wst.jsdt.chromium.debug.ui.ChromiumSourceFileActionsId">
+            
+            <visibility>
+                <objectState name="fileExtension" value="js"/>
+            </visibility>
+            
          <menu id="org.eclipse.wst.jsdt.chromium.debug.ui.ChromiumSourceFileActionsId.MenuId"
                label="%ChromiumSourceFileActionsId.menu.label"
          >
