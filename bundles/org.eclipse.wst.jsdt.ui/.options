@@ -1,2 +1,3 @@
 org.eclipse.wst.jsdt.ui/statusbar/offset=false
 org.eclipse.wst.jsdt.ui/debug/ResultCollector=false
+org.eclipse.wst.jsdt.ui/debug/ASTProvider=false

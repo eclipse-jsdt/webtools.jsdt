@@ -311,6 +311,9 @@ public final class ASTProvider {
 				fReconcilingJavaElement= null;
 			}
 		}
+		if (DEBUG)
+			System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "act. editor changed: fIsReconciling: " + fIsReconciling); //$NON-NLS-1$ //$NON-NLS-2$
+
 	}
 
 	/**
@@ -355,6 +358,8 @@ public final class ASTProvider {
 			fReconcilingJavaElement= javaElement;
 		}
 		cache(null, javaElement);
+		if (DEBUG)
+			System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "about: fIsReconciling: " + fIsReconciling); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -457,20 +462,17 @@ public final class ASTProvider {
 		boolean isActiveElement;
 		synchronized (this) {
 			isActiveElement= je.equals(fActiveJavaElement);
-			if (isActiveElement) {
+			if (isActiveElement && waitFlag == WAIT_NO) {
 				if (fAST != null) {
 					if (DEBUG)
 						System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "returning cached AST:" + toString(fAST) + " for: " + je.getElementName()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 					return fAST;
 				}
-				if (waitFlag == WAIT_NO) {
-					if (DEBUG)
-						System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "returning null (WAIT_NO) for: " + je.getElementName()); //$NON-NLS-1$ //$NON-NLS-2$
+				if (DEBUG)
+					System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "returning null (WAIT_NO) for: " + je.getElementName()); //$NON-NLS-1$ //$NON-NLS-2$
 
-					return null;
-
-				}
+				return null;
 			}
 		}
 		if (isActiveElement && isReconciling(je)) {
@@ -498,7 +500,7 @@ public final class ASTProvider {
 			} catch (InterruptedException e) {
 				return null; // thread has been interrupted don't compute AST
 			}
-		} else if (waitFlag == WAIT_NO || (waitFlag == WAIT_ACTIVE_ONLY && !(isActiveElement && fAST == null)))
+		} else if (waitFlag == WAIT_NO)
 			return null;
 
 		if (isActiveElement)
@@ -641,23 +643,29 @@ public final class ASTProvider {
 			System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "reconciled: " + toString(javaElement) + ", AST: " + toString(ast)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		synchronized (fReconcileLock) {
-
-			fIsReconciling= progressMonitor != null && progressMonitor.isCanceled();
-			if (javaElement == null || !javaElement.equals(fReconcilingJavaElement)) {
-
-				if (DEBUG)
-					System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "  ignoring AST of out-dated editor"); //$NON-NLS-1$ //$NON-NLS-2$
-
-				// Signal - threads might wait for wrong element
-				synchronized (fWaitLock) {
-					fWaitLock.notifyAll();
+			try {
+				fIsReconciling= progressMonitor != null && progressMonitor.isCanceled();
+				if (javaElement == null || !javaElement.equals(fReconcilingJavaElement)) {
+	
+					if (DEBUG)
+						System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "  ignoring AST of out-dated editor"); //$NON-NLS-1$ //$NON-NLS-2$
+	
+					// Signal - threads might wait for wrong element
+					synchronized (fWaitLock) {
+						fWaitLock.notifyAll();
+					}
+	
+					return;
 				}
-
-				return;
+	
+				cache(ast, javaElement);
+			} finally {
+				fIsReconciling = false;
 			}
-
-			cache(ast, javaElement);
 		}
+		if (DEBUG)
+			System.out.println(getThreadName() + " - " + DEBUG_PREFIX + "reconciled: fIsReconciling: " + fIsReconciling); //$NON-NLS-1$ //$NON-NLS-2$
+
 	}
 
 	private String getThreadName() {

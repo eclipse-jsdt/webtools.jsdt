@@ -29,16 +29,16 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
-import org.eclipse.wst.jsdt.core.JavaScriptModelException;
-import org.eclipse.wst.jsdt.core.dom.ASTNode;
+//import org.eclipse.wst.jsdt.core.JavaScriptModelException;
+//import org.eclipse.wst.jsdt.core.dom.ASTNode;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
-import org.eclipse.wst.jsdt.internal.corext.dom.ASTNodes;
+//import org.eclipse.wst.jsdt.internal.corext.dom.ASTNodes;
 import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 import org.eclipse.wst.jsdt.internal.ui.javaeditor.ASTProvider;
 import org.eclipse.wst.jsdt.internal.ui.javaeditor.WorkingCopyManager;
 import org.eclipse.wst.jsdt.ui.JavaScriptUI;
 
-public class JavaReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
+public class JavascriptReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
 
 	private ITextEditor fEditor;
@@ -52,7 +52,7 @@ public class JavaReconcilingStrategy implements IReconcilingStrategy, IReconcili
 	private boolean fIsJavaReconcilingListener;
 
 
-	public JavaReconcilingStrategy(ITextEditor editor) {
+	public JavascriptReconcilingStrategy(ITextEditor editor) {
 		fEditor= editor;
 		fManager= JavaScriptPlugin.getDefault().getWorkingCopyManager();
 		fDocumentProvider= JavaScriptPlugin.getDefault().getCompilationUnitDocumentProvider();
@@ -75,43 +75,29 @@ public class JavaReconcilingStrategy implements IReconcilingStrategy, IReconcili
 			if (unit != null) {
 				SafeRunner.run(new ISafeRunnable() {
 					public void run() {
+						/* fix for missing cancel flag communication */
+						IProblemRequestorExtension extension= getProblemRequestorExtension();
+						if (extension != null) {
+							extension.setProgressMonitor(fProgressMonitor);
+							extension.setIsActive(true);
+						}
+						
 						try {
-							
+							boolean isASTNeeded= initialReconcile || JavaScriptPlugin.getDefault().getASTProvider().isActive(unit);
+							// reconcile
+							if (fIsJavaReconcilingListener && isASTNeeded) {
+								ast[0] = JavaScriptPlugin.getDefault().getASTProvider().getAST(unit, ASTProvider.WAIT_ACTIVE_ONLY, fProgressMonitor);
+							} 
+						} catch (OperationCanceledException ex) {
+							Assert.isTrue(fProgressMonitor == null || fProgressMonitor.isCanceled());
+							ast[0]= null;
+						} finally {
+
 							/* fix for missing cancel flag communication */
-							IProblemRequestorExtension extension= getProblemRequestorExtension();
 							if (extension != null) {
-								extension.setProgressMonitor(fProgressMonitor);
-								extension.setIsActive(true);
+								extension.setProgressMonitor(null);
+								extension.setIsActive(false);
 							}
-							
-							try {
-								boolean isASTNeeded= initialReconcile || JavaScriptPlugin.getDefault().getASTProvider().isActive(unit);
-								// reconcile
-								if (fIsJavaReconcilingListener && isASTNeeded) {
-									int reconcileFlags= IJavaScriptUnit.FORCE_PROBLEM_DETECTION 
-										| (ASTProvider.SHARED_AST_STATEMENT_RECOVERY ? IJavaScriptUnit.ENABLE_STATEMENTS_RECOVERY : 0)
-										| (ASTProvider.SHARED_BINDING_RECOVERY ? IJavaScriptUnit.ENABLE_BINDINGS_RECOVERY : 0);
-											
-									ast[0]= unit.reconcile(ASTProvider.SHARED_AST_LEVEL, reconcileFlags, null, fProgressMonitor);
-									if (ast[0] != null) {
-										// mark as unmodifiable
-										ASTNodes.setFlagsToAST(ast[0], ASTNode.PROTECT);
-									}
-								} else
-									unit.reconcile(IJavaScriptUnit.NO_AST, true, null, fProgressMonitor);
-							} catch (OperationCanceledException ex) {
-								Assert.isTrue(fProgressMonitor == null || fProgressMonitor.isCanceled());
-								ast[0]= null;
-							} finally {
-								/* fix for missing cancel flag communication */
-								if (extension != null) {
-									extension.setProgressMonitor(null);
-									extension.setIsActive(false);
-								}
-							}
-							
-						} catch (JavaScriptModelException ex) {
-							handleException(ex);
 						}
 					}
 					public void handleException(Throwable ex) {

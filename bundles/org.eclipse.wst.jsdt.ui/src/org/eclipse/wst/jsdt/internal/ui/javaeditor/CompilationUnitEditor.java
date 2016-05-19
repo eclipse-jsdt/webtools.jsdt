@@ -1545,10 +1545,6 @@ public class CompilationUnitEditor extends JavaEditor implements IJavaReconcilin
 	 * 
 	 */
 	public void aboutToBeReconciled() {
-
-		// Notify AST provider
-		JavaScriptPlugin.getDefault().getASTProvider().aboutToBeReconciled(getInputJavaElement());
-
 		// Notify listeners
 		Object[] listeners = fReconcilingListeners.getListeners();
 		for (int i = 0, length= listeners.length; i < length; ++i)
@@ -1565,9 +1561,6 @@ public class CompilationUnitEditor extends JavaEditor implements IJavaReconcilin
 		JavaScriptPlugin javaPlugin= JavaScriptPlugin.getDefault();
 		if (javaPlugin == null)
 			return;
-		
-		// Always notify AST provider
-		javaPlugin.getASTProvider().reconciled(ast, getInputJavaElement(), progressMonitor);
 
 		// Notify listeners
 		Object[] listeners = fReconcilingListeners.getListeners();

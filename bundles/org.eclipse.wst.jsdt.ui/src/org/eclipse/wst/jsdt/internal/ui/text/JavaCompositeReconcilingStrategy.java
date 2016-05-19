@@ -20,6 +20,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 import org.eclipse.wst.jsdt.internal.ui.text.java.IProblemRequestorExtension;
+import org.eclipse.wst.jsdt.internal.ui.text.java.JavascriptReconcilingStrategy;
 //import org.eclipse.wst.jsdt.internal.ui.text.java.JavaReconcilingStrategy;
 import org.eclipse.wst.jsdt.internal.ui.text.java.JavascriptValidationStrategy;
 import org.eclipse.wst.jsdt.internal.ui.text.spelling.JavaSpellingReconcileStrategy;
@@ -32,7 +33,7 @@ import org.eclipse.wst.jsdt.ui.text.IJavaScriptPartitions;
 public class JavaCompositeReconcilingStrategy  extends CompositeReconcilingStrategy {
 
 	private ITextEditor fEditor;
-//	private JavaReconcilingStrategy fJavaStrategy;
+	private JavascriptReconcilingStrategy fJavascriptStrategy;
 	private JavascriptValidationStrategy fJavascriptValidationStrategy;
 
 	/**
@@ -44,10 +45,10 @@ public class JavaCompositeReconcilingStrategy  extends CompositeReconcilingStrat
 	 */
 	public JavaCompositeReconcilingStrategy(ISourceViewer viewer, ITextEditor editor, String documentPartitioning) {
 		fEditor= editor;
-//		fJavaStrategy= new JavaReconcilingStrategy(editor);
+		fJavascriptStrategy= new JavascriptReconcilingStrategy(editor);
 		fJavascriptValidationStrategy = new JavascriptValidationStrategy(viewer); 
 		setReconcilingStrategies(new IReconcilingStrategy[] {
-//			fJavaStrategy,
+			fJavascriptStrategy,
 			fJavascriptValidationStrategy,
 			new JavaSpellingReconcileStrategy(viewer, EditorsUI.getSpellingService(), IJavaScriptPartitions.JAVA_PARTITIONING)
 		});
@@ -110,7 +111,7 @@ public class JavaCompositeReconcilingStrategy  extends CompositeReconcilingStrat
 	 * @param notify <code>true</code> if listeners should be notified
 	 */
 	public void notifyListeners(boolean notify) {
-//		fJavaStrategy.notifyListeners(notify);
+		fJavascriptStrategy.notifyListeners(notify);
 	}
 
 	/*
@@ -136,7 +137,7 @@ public class JavaCompositeReconcilingStrategy  extends CompositeReconcilingStrat
 	 * 
 	 */
 	public void aboutToBeReconciled() {
-//		fJavaStrategy.aboutToBeReconciled();
+		fJavascriptStrategy.aboutToBeReconciled();
 		fJavascriptValidationStrategy.aboutToBeReconciled();
 	}
 }
