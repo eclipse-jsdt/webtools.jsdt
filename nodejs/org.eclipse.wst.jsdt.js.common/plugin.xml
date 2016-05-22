@@ -26,6 +26,12 @@
     </extension>
    
    <extension point="org.eclipse.core.runtime.adapters">
+        <!-- Bug 494153 - "Run as.." actions are not available from the Project Explorer when installed from "Eclipse IDE for JavaScript and Web Developers" -->
+        <factory 
+            class=""
+            adaptableType="org.eclipse.core.resources.IResource">
+            <adapter type="org.eclipse.debug.ui.actions.ILaunchable"/>
+        </factory>
         <factory 
             class="org.eclipse.wst.jsdt.js.common.build.system.FileAdapterFactory" 
             adaptableType="org.eclipse.wst.jsdt.js.common.build.system.ITask">
