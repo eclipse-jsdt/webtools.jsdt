@@ -55,7 +55,8 @@ public class FileExtensionFilterAdapter implements IActionFilter {
 			ResourceMapping obj = (ResourceMapping) target;
 			
 			if (FILE_EXTENSION.equals(name) && obj.getModelObject() instanceof IFile) {
-				return value != null && value.toLowerCase().equals(((IFile) obj.getModelObject()).getFileExtension().toLowerCase());
+				String fileExtension = ((IFile) obj.getModelObject()).getFileExtension();
+				return value != null && fileExtension != null && value.toLowerCase().equals(fileExtension.toLowerCase());
 			}
 		}
 		

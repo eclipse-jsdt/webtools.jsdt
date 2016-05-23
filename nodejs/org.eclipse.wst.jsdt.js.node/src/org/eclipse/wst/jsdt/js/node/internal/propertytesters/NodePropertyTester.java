@@ -56,7 +56,7 @@ public class NodePropertyTester extends PropertyTester {
 	private boolean isValidFile(IFile file) {
 		// File must be a js file
 		String fileExtension = file.getFileExtension();
-		if (!fileExtension.equals(JS_EXT)) {
+		if (fileExtension == null || !fileExtension.equals(JS_EXT)) {
 			return false;
 		}
 
