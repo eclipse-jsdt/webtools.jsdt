@@ -42,13 +42,15 @@ public class KeywordCompletionProposalComputer implements IJavaCompletionProposa
 	}
 
 	public List computeCompletionProposals(ContentAssistInvocationContext context, IProgressMonitor monitor) {
-		JavaContentAssistInvocationContext javaContext = (JavaContentAssistInvocationContext) context;
-		IJavaScriptUnit unit = javaContext.getCompilationUnit();
-		engine.complete(javaContext.getViewer(), javaContext.getInvocationOffset(), unit);
-		
-		KeywordProposal[] keywordProposals =  engine.getResults();
-		List<KeywordProposal> result = new ArrayList<KeywordProposal>(Arrays.asList(keywordProposals));
-		
+		List<KeywordProposal> result = Collections.emptyList();
+		if (context instanceof JavaContentAssistInvocationContext) {
+			JavaContentAssistInvocationContext javaContext = (JavaContentAssistInvocationContext) context;
+			IJavaScriptUnit unit = javaContext.getCompilationUnit();
+			engine.complete(javaContext.getViewer(), javaContext.getInvocationOffset(), unit);
+			
+			KeywordProposal[] keywordProposals =  engine.getResults();
+			result = new ArrayList<KeywordProposal>(Arrays.asList(keywordProposals));
+		}		
 		return result;
 	}
 

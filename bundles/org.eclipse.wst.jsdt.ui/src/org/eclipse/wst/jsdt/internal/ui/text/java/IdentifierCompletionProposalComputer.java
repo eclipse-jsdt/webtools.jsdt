@@ -13,6 +13,7 @@ package org.eclipse.wst.jsdt.internal.ui.text.java;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -46,15 +47,17 @@ public class IdentifierCompletionProposalComputer implements IJavaCompletionProp
 	 * @see org.eclipse.wst.jsdt.ui.text.java.IJavaCompletionProposalComputer#computeCompletionProposals(org.eclipse.wst.jsdt.ui.text.java.ContentAssistInvocationContext, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	public List computeCompletionProposals(ContentAssistInvocationContext context, IProgressMonitor monitor) {
-		JavaContentAssistInvocationContext javaContext = (JavaContentAssistInvocationContext) context;
-		IJavaScriptUnit unit = javaContext.getCompilationUnit();
-
-		engine.reset();
-		engine.complete(javaContext.getProject(), javaContext.getViewer(), javaContext.getInvocationOffset(), unit);
-
-		ICompletionProposal[] identifierProposals =  engine.getResults();
-		List<ICompletionProposal> result = new ArrayList<ICompletionProposal>(Arrays.asList(identifierProposals));
-
+		List<ICompletionProposal> result = Collections.emptyList();
+		if (context instanceof JavaContentAssistInvocationContext) {
+			JavaContentAssistInvocationContext javaContext = (JavaContentAssistInvocationContext) context;
+			IJavaScriptUnit unit = javaContext.getCompilationUnit();
+	
+			engine.reset();
+			engine.complete(javaContext.getProject(), javaContext.getViewer(), javaContext.getInvocationOffset(), unit);
+	
+			ICompletionProposal[] identifierProposals =  engine.getResults();
+			result = new ArrayList<ICompletionProposal>(Arrays.asList(identifierProposals));
+		}
 		return result;
 	}
 

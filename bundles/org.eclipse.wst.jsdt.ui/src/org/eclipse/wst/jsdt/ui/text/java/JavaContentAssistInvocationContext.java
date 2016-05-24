@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2009 IBM Corporation and others.
+ * Copyright (c) 2005, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.ui.text.java;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.wst.jsdt.core.CompletionContext;
@@ -105,6 +106,28 @@ public class JavaContentAssistInvocationContext extends ContentAssistInvocationC
 		return unit == null ? null : unit.getJavaScriptProject();
 	}
 	
+	/**
+	 * Returns the editor the context is associated with.
+	 * 
+	 * @return the IEditorPart editor, possibly <code>null</code>
+	 * @since 2.0
+	 */
+	public IEditorPart getEditor() {
+		return fEditor;
+	}
+	
+	/**
+	 * Returns the underlined resource,
+	 * <code>null</code> if none.
+	 * 
+	 * @return the current IResource resource, possibly <code>null</code>
+	 * @since 2.0
+	 */
+	public IResource getResource() {
+		IJavaScriptUnit unit= getCompilationUnit();
+		return unit == null ? null : unit.getResource();
+	}
+
 	/**
 	 * Returns the keyword proposals that are available in this context, possibly none.
 	 * <p>
