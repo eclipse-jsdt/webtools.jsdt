@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -162,14 +162,17 @@ public class SetFilterWizardPage extends NewElementWizardPage {
 	
 		IPath[] pattern= (IPath[]) entryToEdit.getAttribute(key);
 		
-		ArrayList elements= new ArrayList(pattern.length);
-		for (int i= 0; i < pattern.length; i++) {
-			String patternName= pattern[i].toString();
-			if (patternName.length() > 0)
-				elements.add(patternName);
+		if (pattern != null) {
+			ArrayList elements= new ArrayList(pattern.length);
+			for (int i= 0; i < pattern.length; i++) {
+				String patternName= pattern[i].toString();
+				if (patternName.length() > 0)
+					elements.add(patternName);
+			}
+			patternList.setElements(elements);
+			patternList.selectFirstElement();
 		}
-		patternList.setElements(elements);
-		patternList.selectFirstElement();
+
 		patternList.enableButton(IDX_ADD_MULTIPLE, fCurrSourceFolder != null);
 		patternList.setViewerComparator(new ViewerComparator());
 		return patternList;
