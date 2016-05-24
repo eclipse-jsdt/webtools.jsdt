@@ -88,21 +88,15 @@ public class JavaScriptValidator extends AbstractValidator {
 			return null; 
 		
 		// assumes the file exists in at least one of the source folders & is not excluded
-		ClasspathMultiDirectory md = sourceLocations[0];
-		if (sourceLocations.length > 1) {
-			IPath sourceFileFullPath = file.getFullPath();
-			for (int j = 0, m = sourceLocations.length; j < m; j++) {
-				if (sourceLocations[j].getSourceFolder().getFullPath().isPrefixOf(sourceFileFullPath)) {
-					md = sourceLocations[j];
-					if (md.getExclusionPatterns() == null && md.getInclusionPatterns() == null)
-						break;
-					if (!Util.isExcluded(file, md.getInclusionPatterns(), md.getExclusionPatterns()))
-						break;
-				}
+		IPath sourceFileFullPath = file.getFullPath();
+		for (int j = 0, m = sourceLocations.length; j < m; j++) {
+			ClasspathMultiDirectory md = sourceLocations[j];
+			if (!md.getSourceFolder().getFullPath().isPrefixOf(sourceFileFullPath)) {
+				continue;
 			}
-		}
-		
-		if (!Util.isExcluded(file, md.getInclusionPatterns(), md.getExclusionPatterns())) {
+			if (Util.isExcluded(file, md.getInclusionPatterns(), md.getExclusionPatterns())) {
+				continue;
+			}
 			return new SourceFile(file, md);
 		}
 		
