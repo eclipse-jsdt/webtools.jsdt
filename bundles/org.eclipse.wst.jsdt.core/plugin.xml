@@ -91,11 +91,15 @@
            version="1"
            markerId="org.eclipse.wst.jsdt.core.problem">
         <include>
-           <rules>
-			<projectNature id="org.eclipse.wst.jsdt.core.jsNature" />
-			<contentType id="org.eclipse.wst.jsdt.core.jsSource"></contentType>
-			<fileext caseSensitive="false" ext="js"></fileext>
-		</rules>
+            <rules>
+                <projectNature id="org.eclipse.wst.jsdt.core.jsNature" />
+            </rules>
+        </include>
+        <include>
+            <rules>
+                <contentType id="org.eclipse.wst.jsdt.core.jsSource"></contentType>
+                <fileext caseSensitive="false" ext="js"></fileext>
+            </rules>
         </include>
         <group id="org.eclipse.wst.sse.core.structuredModelGroup"/>
      </validator>
