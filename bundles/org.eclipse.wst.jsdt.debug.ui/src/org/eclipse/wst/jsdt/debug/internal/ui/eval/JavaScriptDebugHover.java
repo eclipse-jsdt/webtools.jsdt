@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2010, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -69,10 +69,11 @@ public class JavaScriptDebugHover implements IJavaEditorTextHover, ITextHoverExt
                     if(var != null) {
                     	return var;
                     }
+                    
                     //might be in 'this'
                     var = frame.getThisObject();
                     try {
-	                    IValue val = var.getValue();
+	                    IValue val = var == null ? null : var.getValue();
 	                    if(val != null) {
 	                    	IVariable[] vars = val.getVariables();
 	                    	for (int i = 0; i < vars.length; i++) {
