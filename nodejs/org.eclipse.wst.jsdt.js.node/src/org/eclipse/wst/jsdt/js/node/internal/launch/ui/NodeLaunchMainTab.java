@@ -415,7 +415,7 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 			IWorkspace workspace= ResourcesPlugin.getWorkspace();    
 			IPath location= Path.fromOSString(file.getAbsolutePath());
 			IFile ifile= workspace.getRoot().getFileForLocation(location);
-			if(!ifile.getProject().getName().equals(projectName)){
+			if(ifile == null || !ifile.getProject().getName().equals(projectName)){
 				setErrorMessage(NLS.bind(Messages.LAUNCH_CONFIGURATION_MAIN_TAB_ERROR_MAIN_FILE_NOT_IN_PROJECT, projectName));
 				return false;
 			}
