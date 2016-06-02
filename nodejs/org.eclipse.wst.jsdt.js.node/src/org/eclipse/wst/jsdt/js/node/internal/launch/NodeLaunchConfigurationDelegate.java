@@ -14,6 +14,7 @@ import java.io.File;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -210,7 +211,10 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		if (workingDirectory.equals(NodeConstants.EMPTY)) {
 			String projectName = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
 			if (!projectName.equals(NodeConstants.EMPTY)) {
-				workingDirectory = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).getLocation().toOSString();
+				IPath location = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).getLocation();
+				if (location != null) {
+					workingDirectory = location.toOSString();
+				}
 			}
 		}
 		if (workingDirectory.length() > 0){
