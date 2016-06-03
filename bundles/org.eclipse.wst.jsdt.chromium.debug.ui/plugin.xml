@@ -328,7 +328,10 @@
             id="org.eclipse.wst.jsdt.chromium.debug.ui.ChromiumSourceFileActionsId">
             
             <visibility>
-                <objectState name="fileExtension" value="js"/>
+                <or>
+                    <objectState name="fileExtension" value="js"/>
+                    <objectState name="fileExtension" value="chromium"/>
+                </or>
             </visibility>
             
          <menu id="org.eclipse.wst.jsdt.chromium.debug.ui.ChromiumSourceFileActionsId.MenuId"

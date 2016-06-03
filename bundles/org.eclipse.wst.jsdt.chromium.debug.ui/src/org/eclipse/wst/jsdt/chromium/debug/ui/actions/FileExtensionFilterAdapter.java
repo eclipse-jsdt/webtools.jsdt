@@ -36,7 +36,10 @@ import org.eclipse.ui.IActionFilter;
  *         id="org.eclipse.wst.jsdt.chromium.debug.ui.ExampleActionId">
  *           
  *         <visibility>
- *             <objectState name="fileExtension" value="js"/>
+ *              <or>
+ *                  <objectState name="fileExtension" value="js"/>
+ *                  <objectState name="fileExtension" value="chromium"/>
+ *              </or>
  *         </visibility>
  * 
  * @author Shane Bryzak
