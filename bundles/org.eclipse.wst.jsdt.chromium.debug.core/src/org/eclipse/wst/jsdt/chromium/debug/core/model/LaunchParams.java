@@ -43,6 +43,9 @@ public class LaunchParams {
   
   // file attribute from {@link NodeConstants} required for debugging via JSDT editor 
   public static final String ATTR_APP_PROJECT_RELATIVE_PATH = "attr_app_project_relative_path"; //$NON-NLS-1$
+  
+  // attribute is required for tuning source mapping in {@link ChromiumSourceComputer} for remote debugging
+  public static final String ATTR_REMOTE_HOME_DIR = "attr_remote_home dir"; //$NON-NLS-1$
 
   // PREDEFINED_SOURCE_WRAPPER_IDS see below.
 
@@ -82,7 +85,7 @@ public class LaunchParams {
           return LookupMode.valueOf(persistent);
         } catch (IllegalArgumentException e) {
           Status status = new Status(IStatus.ERROR, ChromiumDebugPlugin.PLUGIN_ID,
-              "Failed to parse lookup mode value", e);
+              "Failed to parse lookup mode value", e); //$NON-NLS-1$
           throw new CoreException(status);
         }
       }
@@ -127,7 +130,7 @@ public class LaunchParams {
 
     public String getDirectionStringValue() {
       if (direction == null) {
-        return "";
+        return ""; //$NON-NLS-1$
       } else {
         return direction.toString();
       }
@@ -210,7 +213,7 @@ public class LaunchParams {
               try {
                 result.add(parser.nextComponent());
               } catch (ParserException e) {
-                throw new RuntimeException("Failed to read config value '" + persistent + "'", e);
+                throw new RuntimeException("Failed to read config value '" + persistent + "'", e); //$NON-NLS-1$ //$NON-NLS-2$
               }
             }
             return result;
@@ -220,7 +223,7 @@ public class LaunchParams {
     public static List<IPredefinedSourceWrapProvider.Entry> resolveEntries(
         ILaunchConfiguration config) throws CoreException {
       String attributeValue = config.getAttribute(
-          LaunchParams.PredefinedSourceWrapperIds.CONFIG_PROPERTY, "");
+          LaunchParams.PredefinedSourceWrapperIds.CONFIG_PROPERTY, ""); //$NON-NLS-1$
       List<String> predefinedWrapperIds =
           LaunchParams.PredefinedSourceWrapperIds.CONVERTER.decode(attributeValue);
       Map<String, IPredefinedSourceWrapProvider.Entry> entries =
@@ -231,7 +234,7 @@ public class LaunchParams {
         IPredefinedSourceWrapProvider.Entry entry = entries.get(id);
         if (entry == null) {
           throw new CoreException(new Status(IStatus.ERROR, ChromiumDebugPlugin.PLUGIN_ID,
-              "Failed to find source wrapper by id '" + id + "'"));
+              "Failed to find source wrapper by id '" + id + "'"));  //$NON-NLS-1$//$NON-NLS-2$
         }
         result.add(entry);
       }

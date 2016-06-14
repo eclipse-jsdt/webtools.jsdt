@@ -15,7 +15,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions,
  com.google.gson;bundle-version="[2.2.4,3.0.0)",
  org.eclipse.wst.jsdt.js.node.common,
- org.eclipse.debug.core
+ org.eclipse.debug.core,
+ org.eclipse.wst.jsdt.chromium.debug.core;bundle-version="0.4.0",
+ org.eclipse.wst.jsdt.chromium;bundle-version="0.4.0",
+ org.eclipse.wst.jsdt.chromium.debug;bundle-version="0.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse Web Tools Platform

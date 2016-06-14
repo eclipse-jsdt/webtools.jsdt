@@ -43,6 +43,7 @@ import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
  * Launch configuration shortcut for node application
  *
  * @author "Adalberto Lopez Venegas (adalbert)"
+ * @author "Ilya Buziuk (ibuziuk)"
  */
 public class NodeLaunch implements ILaunchShortcut{
 	@Override
@@ -145,6 +146,8 @@ public class NodeLaunch implements ILaunchShortcut{
 		workingCopy.setAttribute(NodeConstants.ATTR_APP_PROJECT, file.getProject().getName());
 		workingCopy.setAttribute(NodeConstants.ATTR_APP_PROJECT_RELATIVE_PATH, file.getProjectRelativePath().toOSString());
 		workingCopy.setMappedResources(getResource(file.getProject().getName()));
+		LaunchConfigurationUtil.addSourceLookupAttr(workingCopy);
+	
 		return workingCopy.doSave();
 	}
 	
@@ -158,4 +161,5 @@ public class NodeLaunch implements ILaunchShortcut{
         }
 		return null;
     }
+
 }

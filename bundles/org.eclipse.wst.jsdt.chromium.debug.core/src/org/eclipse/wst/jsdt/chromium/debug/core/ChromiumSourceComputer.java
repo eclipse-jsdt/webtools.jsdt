@@ -35,12 +35,15 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.LaunchParams;
  * V8/Chrome debug sessions and {@link SourceNameMapperContainer} for projects available in the workspace
  */
 public class ChromiumSourceComputer implements ISourcePathComputerDelegate {
+
+	
 	public ISourceContainer[] computeSourceContainers(ILaunchConfiguration configuration, IProgressMonitor monitor)
 			throws CoreException {
 		List<ISourceContainer> containers = new ArrayList<ISourceContainer>();
 
 		String projectName = configuration.getAttribute(LaunchParams.ATTR_APP_PROJECT, (String) null);
 		String path = configuration.getAttribute(LaunchParams.ATTR_APP_PROJECT_RELATIVE_PATH, (String) null);
+		String remoteDir = configuration.getAttribute(LaunchParams.ATTR_REMOTE_HOME_DIR, (String) null);
 		
 		if (projectName != null && path != null) {
 			IProject project = getProject(projectName);
@@ -49,14 +52,15 @@ public class ChromiumSourceComputer implements ISourcePathComputerDelegate {
 				IResource resource = project.getFile(resourcePath);
 				if (resource.isAccessible()) {
 					IContainer container = resource.getParent();
-					String mapping = container.getLocation().toOSString();
+					String mapping = (remoteDir != null) ? remoteDir : container.getLocation().toOSString();
 					// {@link SourceNameMapperContainer} for projects available in the workspace
 					SourceNameMapperContainer workspaceConatiner = createWorkspaceSourceContainer(container, mapping);
 					containers.add(workspaceConatiner);
 				}
 			}
 		}
-
+		
+		
 		// Default source files container for V8/Chrome debug sessions 
 		// contains files which are not available in the workspace e.g. node.js
 		containers.add(new VProjectSourceContainer());

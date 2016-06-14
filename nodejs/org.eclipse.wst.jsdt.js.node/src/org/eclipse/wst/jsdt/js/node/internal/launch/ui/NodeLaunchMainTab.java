@@ -346,6 +346,7 @@ public class NodeLaunchMainTab extends AbstractLaunchConfigurationTab {
 			configuration.setAttribute(NodeConstants.ATTR_ADD_NETWORK_CONSOLE_FIELD,
 					debugAddNetworkConsoleButton.getSelection());
 			configuration.setAttribute(NodeConstants.ATTR_BREAK_FIELD, debugBreakButton.getSelection());
+			LaunchConfigurationUtil.addSourceLookupAttr(configuration);
 		}
 		
 		//Set mapped resources

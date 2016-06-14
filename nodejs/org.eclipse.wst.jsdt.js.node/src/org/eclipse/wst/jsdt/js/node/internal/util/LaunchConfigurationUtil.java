@@ -10,7 +10,9 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.node.internal.util;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -23,8 +25,11 @@ import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.LaunchParams.PredefinedSourceWrapperIds;
+import org.eclipse.wst.jsdt.chromium.debug.core.util.MementoFormat;
 import org.eclipse.wst.jsdt.js.node.NodePlugin;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
 
@@ -136,6 +141,28 @@ public class LaunchConfigurationUtil {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(IProcess.ATTR_PROCESS_TYPE, NodeConstants.ID_NODEJS_PROCESS_TYPE);
 		return map;
+	}
+	
+	/**
+	 * Set attributes for V8 debugger `live edit` functionality
+	 */
+	public static void addSourceLookupAttr(ILaunchConfigurationWorkingCopy wc) {
+		wc.setAttribute(NodeConstants.SOURCE_LOOKUP_MODE, NodeConstants.EXACT_MATCH);
+		wc.setAttribute(NodeConstants.CONFIG_PROPERTY, encode(NodeConstants.PREDEFIENED_WRAPPERS));
+	}
+
+	/**
+	 * Encoding predefined source wrappers via {@link MementoFormat} for correct
+	 * decoding in {@link PredefinedSourceWrapperIds}
+	 */
+	private static String encode(List<String> wrappers) {
+		StringBuilder output = new StringBuilder();
+		Collections.sort(wrappers);
+		for (String wrapper : wrappers) {
+			output.append(wrapper.length());
+			output.append('(').append(wrapper).append(')');
+		}
+		return output.toString();
 	}
 	
 }

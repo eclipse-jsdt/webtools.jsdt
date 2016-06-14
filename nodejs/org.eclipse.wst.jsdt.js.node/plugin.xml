@@ -45,7 +45,9 @@
           id="org.eclipse.wst.jsdt.js.node.NodeLaunchConfigurationType"
           delegate="org.eclipse.wst.jsdt.js.node.internal.launch.NodeLaunchConfigurationDelegate"
           modes="run,debug"
-          name="Node.js Application">
+          name="Node.js Application"
+          sourceLocatorId="org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceDirector"
+          sourcePathComputerId="org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceComputer">
     </launchConfigurationType>
   </extension>
   

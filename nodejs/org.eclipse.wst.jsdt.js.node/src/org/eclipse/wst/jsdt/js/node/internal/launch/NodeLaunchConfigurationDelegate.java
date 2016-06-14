@@ -11,10 +11,7 @@
 package org.eclipse.wst.jsdt.js.node.internal.launch;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,13 +22,10 @@ import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
-import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.jsdt.core.runtime.IJSRunner;
 import org.eclipse.wst.jsdt.core.runtime.IJSRuntimeInstall;
 import org.eclipse.wst.jsdt.core.runtime.JSRunnerConfiguration;
@@ -47,19 +41,12 @@ import org.eclipse.wst.jsdt.launching.ExecutionArguments;
  * Launch configuration delegate for node application
  *
  * @author "Adalberto Lopez Venegas (adalbert)"
+ * @author "Ilya Buziuk (ibuziuk)"
+ * @author "Gorkem Ercan (gercan)"
  */
 public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.debug.core.model.ILaunchConfigurationDelegate#launch(org.
-     * eclipse.debug.core.ILaunchConfiguration, java.lang.String,
-     * org.eclipse.debug.core.ILaunch,
-     * org.eclipse.core.runtime.IProgressMonitor)
-     */
 
-    @Override
+	@Override
 	public void launch(ILaunchConfiguration configuration, final String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		if (mode.equals(ILaunchManager.DEBUG_MODE) && !LaunchConfigurationUtil.isChromiumAvailable()) {
 			throw new CoreException(new Status(IStatus.ERROR, NodePlugin.PLUGIN_ID,
@@ -129,56 +116,74 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			monitor.worked(1);
 
 			// Launch the configuration - 1 unit of work
-			runner.run(runConfig, launch, monitor);
+			IProcess process = runner.run(runConfig, launch, monitor);
+
+			if (process == null) return;
 			
-			// Launch Chromium V8 
-			if(mode.equals(ILaunchManager.DEBUG_MODE)){
-			    String project = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT, NodeConstants.EMPTY);
-			    String projectRelativePath = configuration.getAttribute(NodeConstants.ATTR_APP_PROJECT_RELATIVE_PATH, NodeConstants.EMPTY);
-			    
-			    ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-			    ILaunchConfigurationType type = launchManager.getLaunchConfigurationType(NodeConstants.CHROMIUM_LAUNCH_CONFIGURATION_TYPE_ID);
-				IContainer container = null;
-				final ILaunchConfigurationWorkingCopy chromiumLaunch = type.newInstance(container, configuration.getName());
+			// Attaching V8 debugger process
+			if (mode.equals(ILaunchManager.DEBUG_MODE)) {
+				DebuggerConnectRunnable runnable = new DebuggerConnectRunnable();
+				runnable.connector = new NodeDebugConnector(configuration, launch);
 
-				chromiumLaunch.setAttribute(NodeConstants.CHROMIUM_DEBUG_HOST,
-						configuration.getAttribute(NodeConstants.ATTR_HOST_FIELD, NodeConstants.DEFAULT_HOST));
+				Thread thread = new Thread(runnable, "Connect to node.js debugger thread"); //$NON-NLS-1$
+				thread.setDaemon(true);
+				thread.start();
 
-				chromiumLaunch.setAttribute(NodeConstants.CHROMIUM_DEBUG_PORT, Integer.parseInt(configuration
-						.getAttribute(NodeConstants.ATTR_PORT_FIELD, String.valueOf(NodeConstants.DEFAULT_PORT))));
-
-				chromiumLaunch.setAttribute(NodeConstants.ADD_NETWORK_CONSOLE,
-						configuration.getAttribute(NodeConstants.ATTR_ADD_NETWORK_CONSOLE_FIELD, false));
-
-				chromiumLaunch.setAttribute(NodeConstants.BREAKPOINT_SYNC_DIRECTION, NodeConstants.MERGE);
-
-				chromiumLaunch.setAttribute(NodeConstants.SOURCE_LOOKUP_MODE, NodeConstants.EXACT_MATCH);
-				
-				chromiumLaunch.setAttribute(NodeConstants.CONFIG_PROPERTY, encode(NodeConstants.PREDEFIENED_WRAPPERS));
-				
-				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT, project);
-				
-				chromiumLaunch.setAttribute(NodeConstants.ATTR_APP_PROJECT_RELATIVE_PATH, projectRelativePath);
-
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						DebugUITools.launch(chromiumLaunch, mode);
+				while (thread.isAlive()) {
+					if (monitor.isCanceled()) {
+						thread.interrupt();
+						if (process.canTerminate()) {
+							process.terminate();
+						}
 					}
-				});
+					try {
+						Thread.sleep(100);
+					} catch (Exception e) {
+					}
+				}
 
+				if (runnable.exception != null) {
+					if (runnable.exception instanceof CoreException) {
+						throw (CoreException) runnable.exception;
+					}
+					throw new CoreException(new Status(IStatus.ERROR, NodePlugin.PLUGIN_ID,
+							runnable.exception.getMessage(), runnable.exception));
+				}
 			}
-
+			
 			// check for cancellation
 			if (monitor.isCanceled()) {
 				return;
 			}
-		}
-		finally {
+
+		} finally {
 			monitor.done();
 		}
 
     }
+    
+	class DebuggerConnectRunnable implements Runnable {
+		private static final int TIMEOUT = 15000;
+		Exception exception = null;
+		NodeDebugConnector connector;
+
+		@Override
+		public void run() {
+			long start = System.currentTimeMillis();
+			boolean attached = false;
+			Exception e = null;
+			do {
+				try {
+					attached = connector.attach();
+				} catch (Exception ex) {
+					e = ex;
+				}
+			} while (!attached && System.currentTimeMillis() < start + TIMEOUT);
+			if (!attached) {
+				exception = e;
+			}
+		}
+	}
 
 	public IJSRunner getJSRunner(ILaunchConfiguration configuration, String mode) throws CoreException {
 		IJSRuntimeInstall runtimeInstall = verifyJSRuntimeInstall(configuration);
@@ -231,21 +236,6 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		String nodeArguments = configuration.getAttribute(NodeConstants.ATTR_NODE_ARGUMENTS, NodeConstants.EMPTY);
 		String args = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(nodeArguments);
 		return args;
-	}
-	
-	
-	/**
-	 * Encoding predefined source wrappers via {@link MementoFormat} for correct
-	 * decoding in {@link PredefinedSourceWrapperIds}
-	 */
-	private String encode(List<String> wrappers) {
-		StringBuilder output = new StringBuilder();
-		Collections.sort(wrappers);
-		for (String wrapper : wrappers) {
-			output.append(wrapper.length());
-			output.append('(').append(wrapper).append(')');
-		}
-		return output.toString();
 	}
 	
 }
