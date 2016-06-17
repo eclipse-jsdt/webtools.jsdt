@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -156,10 +157,34 @@ public static void writeState(Object state, DataOutputStream out) throws IOExcep
 	((State) state).write(out);
 }
 
+private static final IProject[] EMPTY_PROJECTS = new IProject[0];
 public IProject[] build(int kind, Map ignored, IProgressMonitor monitor) {
-	// Simply rely on the ValidationBuilder behavior
-	return super.build(kind, ignored, monitor);
+	// We shouldn't run the validation builder again if validation builder exists on a project.
+	if (!isValidationBuilderDefined()) {
+		// Simply rely on the ValidationBuilder behavior
+		return super.build(kind, ignored, monitor);
+	}
+	return EMPTY_PROJECTS;
 }
+
+private static final String VALIDATION_BUILDER = "org.eclipse.wst.validation.validationbuilder"; //$NON-NLS-1$
+private boolean isValidationBuilderDefined() {
+	try {
+		ICommand[] spec = getProject().getDescription().getBuildSpec();
+		if (spec != null) {
+			for (ICommand cmd : spec) {
+				if(VALIDATION_BUILDER.equals(cmd.getBuilderName())) {
+					return true;
+				}
+			}
+		}
+	} catch (CoreException e) {
+		// Cannot obtain description for the project - skip it
+		return true;
+	}
+	return false;
+}
+
 
 protected void clean(IProgressMonitor monitor) throws CoreException {
 	super.clean(monitor);
