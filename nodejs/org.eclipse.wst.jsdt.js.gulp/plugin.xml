@@ -65,6 +65,54 @@
     	</shortcut>
     </extension>
     
+    <extension
+        point="org.eclipse.ui.commands">        
+        <command
+        	id="org.eclipse.wst.jsdt.js.gulp.commands.gulpLaunch"
+        	name="%run_as_gulp_task">
+        </command>        
+   </extension>
+   
+   <extension
+   		point="org.eclipse.core.expressions.propertyTesters">
+   		<propertyTester
+   			class="org.eclipse.wst.jsdt.js.gulp.internal.GulpProjectPropertyTester"
+   			id="org.eclipse.wst.jsdt.js.gulp.gulpProjectTester"
+   			namespace="org.eclipse.wst.jsdt.js.gulp.gulpProjectTester"
+   			properties="isGulpProject"
+   			type="java.lang.Object">
+   		</propertyTester>
+   </extension>
+   
+   <extension
+   		point="org.eclipse.core.expressions.definitions">
+   		
+   		<definition
+   			id="org.eclipse.wst.jsdt.js.gulp.isGulpProject">
+   			<with
+   				variable="activeWorkbenchWindow.activePerspective">
+   				<test
+   					forcePluginActivation="true"
+   					property="org.eclipse.wst.jsdt.js.gulp.gulpProjectTester.isGulpProject">
+   				</test>
+   			</with>
+   		</definition>   		
+   </extension>
+   
+   <extension
+   		point="org.eclipse.ui.handlers">   		
+   		<handler
+   			class="org.eclipse.wst.jsdt.js.gulp.internal.RunGulpTaskCommand"
+   			commandId="org.eclipse.wst.jsdt.js.gulp.commands.gulpLaunch">
+        	
+        	<enabledWhen>
+        	    <reference
+        	    	definitionId="org.eclipse.wst.jsdt.js.gulp.isGulpProject">
+        	    </reference>
+        	</enabledWhen>
+   		</handler>   		
+   </extension>   
+    
    <extension
        point="org.eclipse.debug.core.launchConfigurationTypes">
     <launchConfigurationType

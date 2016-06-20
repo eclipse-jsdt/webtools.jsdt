@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -49,9 +49,9 @@ public class GulpLaunch implements ILaunchShortcut {
 	}
 
 	@Override
-	public void launch(IEditorPart arg0, String arg1) {	
+	public void launch(IEditorPart arg0, String arg1) {
 	}
-	
+
 	protected void launch(ITask task, String mode) {
 		try {
 			IFile buildFile = task.getBuildFile();
@@ -77,12 +77,13 @@ public class GulpLaunch implements ILaunchShortcut {
 				IProject project = buildFile.getProject();	
 				ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration(
 						project.getName() + " - " + task.getName() + " [" + buildFile.getName() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+
 				newConfiguration.setAttribute(GulpConstants.BUILD_FILE, buildFile.getLocation().toOSString());
 				newConfiguration.setAttribute(GulpConstants.PROJECT, project.getName());
 				newConfiguration.setAttribute(GulpConstants.DIR, buildFile.getParent().getLocation().toOSString());
 				newConfiguration.setAttribute(GulpConstants.COMMAND, task.getName());
 				newConfiguration.doSave();
-				DebugUITools.launch(newConfiguration, mode);				
+				DebugUITools.launch(newConfiguration, mode);
 			}
 		} catch (CoreException e) {
 			GulpPlugin.logError(e, e.getMessage());
@@ -97,7 +98,7 @@ public class GulpLaunch implements ILaunchShortcut {
 				launchManager.generateLaunchConfigurationName(namePrefix));
 		return launchConfiguration;
 	}
-	
+
 	private ITask createDefaultTask(IFile resource) {
 		return new GulpTask("", resource, true, null); //$NON-NLS-1$
 	}
