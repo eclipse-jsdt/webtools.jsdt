@@ -9,16 +9,21 @@
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.wst.jsdt.js.gulp.internal;
+package org.eclipse.wst.jsdt.js.grunt.internal;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
 
-public class GulpProjectPropertyTester extends PropertyTester {
+/**
+ * PropertyTester implementation that tests whether the currently selected
+ * project is a Grunt project, i.e. it contains a resource named Gruntfile.js.
+ *
+ * @author Shane Bryzak
+ */
+public class GruntProjectPropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		return WorkbenchResourceUtil.getNamedFileOrTaskSelection(GulpConstants.GULP_FILE_JS, GulpTask.class) != null;
+		return WorkbenchResourceUtil.getNamedFileOrTaskSelection(GruntConstants.GRUNT_FILE_JS, GruntTask.class) != null;
 	}
-
 }

@@ -8,35 +8,32 @@
  * 	Contributors:
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.wst.jsdt.js.gulp.internal;
+package org.eclipse.wst.jsdt.js.grunt.internal;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
-import org.eclipse.wst.jsdt.js.gulp.internal.launch.shortcut.GulpLaunch;
+import org.eclipse.wst.jsdt.js.grunt.internal.launch.shortcut.GruntLaunch;
 
 /**
- * Provides a command to the quick start that allows either a selected Gulp
- * task, or the default Gulp task in the selected project to be run.
+ * A command that executes the "Run as Grunt" task for the currently selected
+ * project, if it is a Grunt project.
  *
  * @author Shane Bryzak
  */
-public class RunGulpTaskCommand extends AbstractHandler {
-
-	public static final String GULP_FILE_NAME = "gulpfile.js";
-	public static final String GULP_TASK_RUN = "run";
+public class RunGruntTaskCommand extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = WorkbenchResourceUtil.getNamedFileOrTaskSelection(GulpConstants.GULP_FILE_JS,
-				GulpTask.class);
+
+		ISelection selection = WorkbenchResourceUtil.getNamedFileOrTaskSelection(GruntConstants.GRUNT_FILE_JS,
+				GruntTask.class);
 		if (selection != null) {
-			new GulpLaunch().launch(selection, GulpConstants.RUN_COMMAND);
+			new GruntLaunch().launch(selection, GruntConstants.RUN_COMMAND);
 		}
 
 		return null;
 	}
-
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,7 +19,7 @@ public final class GruntConstants {
 
 	private GruntConstants() {
 	}
-	
+
 	// Launch constants
 	public static final String LAUNCH_CONFIGURATION_ID = GruntPlugin.PLUGIN_ID + ".gruntLaunchConfigurationType"; //$NON-NLS-1$
 	public static final String PROJECT = GruntPlugin.PLUGIN_ID + ".PROJECT"; //$NON-NLS-1$
@@ -29,8 +29,12 @@ public final class GruntConstants {
 	public static final String PARAMETERS = GruntPlugin.PLUGIN_ID + ".PARAMETERS"; //$NON-NLS-1$
 
 	public static final String GRUNT = "grunt"; //$NON-NLS-1$
-	public static final String GRUNT_FILE_JS = "gruntfile.js"; //$NON-NLS-1$
+	public static final String GRUNT_FILE_JS = "Gruntfile.js"; //$NON-NLS-1$
+
 	public static final String DEFAULT_COMMAND = "default"; //$NON-NLS-1$
-	public static final String GRUNT_NO_COLOR = "--no-color";
+	public static final String GRUNT_NO_COLOR = "--no-color"; //$NON-NLS-1$
+
+	public static final String RUN_COMMAND = "run"; //$NON-NLS-1$
+
 
 }

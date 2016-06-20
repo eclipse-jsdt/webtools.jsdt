@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Red Hat, Inc. 
+ * Copyright (c) 2015, 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -28,10 +29,15 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorRegistry;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -39,6 +45,7 @@ import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wst.jsdt.js.common.CommonPlugin;
+import org.eclipse.wst.jsdt.js.common.build.system.ITask;
 
 /**
  * @author Ilya Buziuk (ibuziuk)
@@ -57,8 +64,8 @@ public final class WorkbenchResourceUtil {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.openEditor(new FileEditorInput(file), editorID, true, IWorkbenchPage.MATCH_ID);
 	}
-	
-	
+
+
 
 	public static void createFile(final IFile file, final String content) throws CoreException {
 		if (!file.exists()) {
@@ -70,7 +77,7 @@ public final class WorkbenchResourceUtil {
 			}
 		}
 	}
-	
+
 	public static void updateFile(IFile file, String content) throws CoreException {
 		if (file != null && file.exists()) {
 			InputStream source = new ByteArrayInputStream(content.getBytes());
@@ -111,7 +118,7 @@ public final class WorkbenchResourceUtil {
 
 		return null;
 	}
-	
+
 	public static IResource getResource(IProject project, String filePath) {
 		if (project != null && project.exists()) {
 			try {
@@ -125,7 +132,7 @@ public final class WorkbenchResourceUtil {
 
 		return null;
 	}
-	
+
 	public static IContainer getContainerFromSelection(IStructuredSelection selection) {
 		IContainer container = null;
 		if (selection != null && !selection.isEmpty()) {
@@ -138,7 +145,7 @@ public final class WorkbenchResourceUtil {
 		}
 		return container;
 	}
-	
+
 	public static String getAbsolutePath(IResource resource) {
 		IPath path = null;
 		String absoluteLocation = null;
@@ -161,7 +168,7 @@ public final class WorkbenchResourceUtil {
 			}
 		}
 	}
-	
+
 	public static IFile findFileRecursively(IContainer container, String name) throws CoreException {
 		for (IResource r : container.members()) {
 			if (r instanceof IContainer) {
@@ -175,7 +182,7 @@ public final class WorkbenchResourceUtil {
 		}
 		return null;
 	}
-	
+
 	public static File getFile(String path) {
 		if (path != null) {
 			File file = new File(path);
@@ -185,7 +192,7 @@ public final class WorkbenchResourceUtil {
 		}
 		return null;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static IFile getFileForLocation(String path) {
 		if (path == null) {
@@ -198,25 +205,7 @@ public final class WorkbenchResourceUtil {
 		}
 		return null;
 	}
-	
-	public static IPath getRelativePath(IContainer container, IResource resource) {
-		if (resource == null) {
-			return null;
-		}
-		if (container == null) {
-			return resource.getFullPath();
-		}
-	
-		IPath containerPath = container.getFullPath();
-		IPath resourcePath = resource.getFullPath();
-	
-		if (containerPath.isPrefixOf(resourcePath)) {
-			int containerPathSegmentCount = containerPath.segmentCount();
-			return resourcePath.removeFirstSegments(containerPathSegmentCount);			
-		}
-		return null;
-	}
-	
+
 	public static void showErrorDialog(final String title, final String message, final IStatus status) {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
@@ -226,5 +215,104 @@ public final class WorkbenchResourceUtil {
 			}
 		});
 	}
-	
+
+	public static IFile getEditorFile(IWorkbenchPart part) {
+		IFile file = null;
+
+		if (part instanceof IEditorPart) {
+			IEditorPart editorPart = (IEditorPart) part;
+
+			if (editorPart.getEditorInput() instanceof IFileEditorInput) {
+				IFileEditorInput fileEditorInput = (IFileEditorInput) editorPart.getEditorInput();
+				file = fileEditorInput.getFile();
+			}
+		}
+
+		return file;
+	}
+
+	/**
+	 * This method tests the current workbench state and returns one of the
+	 * following:
+	 *
+	 * 1. A StructuredSelection containing the currently edited file if it
+	 * matches the specified name 2. The current selection if its first element
+	 * is a file matching the specified name 3. The current selection if its
+	 * first element is an ITask 4. A StructuredSelection containing the first
+	 * IFile instance in the currently selected container that matches the
+	 * specified name.
+	 *
+	 * @param fileName
+	 *            The file name to test for
+	 * @return The file or ITask selection depending on the documented
+	 *         conditions
+	 */
+	public static ISelection getNamedFileOrTaskSelection(String fileName, Class<? extends ITask> taskClass) {
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window != null) {
+			IContainer container = null;
+
+			IWorkbenchPage page = window.getActivePage();
+			if (page != null) {
+				IWorkbenchPart part = page.getActivePart();
+				if (part != null) {
+					IFile activeEditorFile = getEditorFile(part);
+
+					if (activeEditorFile != null) {
+						if (activeEditorFile.getName() != null && activeEditorFile.getName().equals(fileName)) {
+							return new StructuredSelection(activeEditorFile);
+						} else {
+							container = activeEditorFile.getProject();
+						}
+					}
+				}
+
+				if (container == null) {
+					IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
+					if (selection instanceof TreeSelection) {
+						TreeSelection treeSelection = (TreeSelection) selection;
+						Object element = treeSelection.getFirstElement();
+
+						if (element != null) {
+							if (element instanceof IFile) {
+								IFile fileElement = (IFile) element;
+								if (fileElement.getName() != null && fileElement.getName().equals(fileName)) {
+									return treeSelection;
+								}
+							} else if (taskClass != null && taskClass.isInstance(element)) {
+								return selection;
+							}
+						}
+
+						TreePath path = treeSelection.getPaths()[0];
+
+						Object first = path.getFirstSegment();
+						if (first instanceof IAdaptable) {
+							container = ((IAdaptable) first).getAdapter(IContainer.class);
+						}
+					} else {
+						Object firstElement = selection.getFirstElement();
+						if (firstElement instanceof IAdaptable) {
+							container = ((IAdaptable) firstElement).getAdapter(IContainer.class);
+						}
+					}
+				}
+
+			}
+
+			if (container != null) {
+				try {
+					IFile file = WorkbenchResourceUtil.findFileRecursively(container, fileName);
+
+					if (file != null && file.exists()) {
+						return new StructuredSelection(file);
+					}
+				} catch (CoreException ex) {
+				}
+			}
+
+		}
+		return null;
+	}
+
 }
