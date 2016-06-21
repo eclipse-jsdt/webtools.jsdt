@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.common.build.system.launch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.wst.jsdt.js.common.CommonPlugin;
@@ -19,20 +22,32 @@ import org.eclipse.wst.jsdt.js.common.build.system.ITask;
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public class LaunchConfigurationAutoFill {
-	
-	public static ILaunchConfiguration chooseLaunchConfiguration(ILaunchConfiguration[] configurations, ITask task, String attribute) {
+
+	/**
+	 * Filters configurations for launch configurations with the same build file as a task.
+	 *
+	 * @param configurations - the launch configurations to filter
+	 * @param task - the target task
+	 * @param buildAttribute - the name of the launch configuration attribute that stores the build file.
+	 * @return an array of launch configurations that target the same build file as task
+	 */
+	public static ILaunchConfiguration[] getAllLaunchConfigurations(
+			ILaunchConfiguration[] configurations, ITask task, String buildAttribute) {
+
+		List<ILaunchConfiguration> validConfigs = new ArrayList<>();
 		try {
 			for (ILaunchConfiguration conf : configurations) {
-				String buildFileAttribute = conf.getAttribute(attribute, (String) null);
+				String buildFileAttribute = conf.getAttribute(buildAttribute, (String) null);
 				String buildFilePath = task.getBuildFile().getLocation().toOSString();
 				// Launch Configuration per build file (i.e. Gruntfile.js / gulpfile.js)
 				if (buildFilePath.equals(buildFileAttribute)) {
-					return conf;
+					validConfigs.add(conf);
 				}
 			}
 		} catch (CoreException e) {
 			CommonPlugin.logError(e, e.getMessage());
 		}
-		return null;
+
+		return validConfigs.toArray(new ILaunchConfiguration[validConfigs.size()]);
 	}
 }

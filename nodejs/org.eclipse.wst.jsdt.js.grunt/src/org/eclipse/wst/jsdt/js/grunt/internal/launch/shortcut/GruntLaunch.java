@@ -63,19 +63,22 @@ public class GruntLaunch implements ILaunchShortcut {
 			ILaunchConfiguration[] configurations = DebugPlugin.getDefault()
 					.getLaunchManager().getLaunchConfigurations(gruntLaunchConfiguraionType);
 			
-			ILaunchConfiguration existingConfiguraion = LaunchConfigurationAutoFill
-					.chooseLaunchConfiguration(configurations, task, GruntConstants.BUILD_FILE);
-			
-			if (existingConfiguraion != null) {
-				ILaunchConfigurationWorkingCopy wc = existingConfiguraion.getWorkingCopy();
-				// Updating task in the existing launch
-				wc.setAttribute(GruntConstants.COMMAND, task.getName());
-				existingConfiguraion = wc.doSave();
-				DebugUITools.launch(existingConfiguraion, mode);
-			// Creating Launch Configuration from scratch
-			} else if (buildFile != null){
+			// Get only configurations for this Gruntfile.
+			ILaunchConfiguration[] existingConfigurations = LaunchConfigurationAutoFill
+					.getAllLaunchConfigurations(configurations, task, GruntConstants.BUILD_FILE);
+
+			for (ILaunchConfiguration conf : existingConfigurations) {
+				if (conf.getAttribute(GruntConstants.COMMAND, (String) null).equals(task.getName())) {
+					DebugUITools.launch(conf, mode);
+					return;
+				}
+			}
+
+			// No configuration found; create a new one.
+			if (buildFile != null){
 				IProject project = buildFile.getProject();	
-				ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration(project.getName() + " [" + buildFile.getName() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+				ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration(
+						project.getName() + " - " + task.getName() + " [" + buildFile.getName() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 				newConfiguration.setAttribute(GruntConstants.BUILD_FILE, buildFile.getLocation().toOSString());
 				newConfiguration.setAttribute(GruntConstants.PROJECT, project.getName());
 				newConfiguration.setAttribute(GruntConstants.DIR, buildFile.getParent().getLocation().toOSString());

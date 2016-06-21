@@ -26,8 +26,11 @@ public final class GruntConstants {
 	public static final String DIR = GruntPlugin.PLUGIN_ID + ".DIR"; //$NON-NLS-1$
 	public static final String COMMAND = GruntPlugin.PLUGIN_ID + ".COMMAND"; //$NON-NLS-1$
 	public static final String BUILD_FILE = GruntPlugin.PLUGIN_ID + ".BUILD_FILE"; //$NON-NLS-1$
+	public static final String PARAMETERS = GruntPlugin.PLUGIN_ID + ".PARAMETERS"; //$NON-NLS-1$
 
 	public static final String GRUNT = "grunt"; //$NON-NLS-1$
 	public static final String GRUNT_FILE_JS = "gruntfile.js"; //$NON-NLS-1$
+	public static final String DEFAULT_COMMAND = "default"; //$NON-NLS-1$
+	public static final String GRUNT_NO_COLOR = "--no-color";
 
 }

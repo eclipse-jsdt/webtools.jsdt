@@ -47,6 +47,7 @@ public abstract class GenericBuildSystemTab extends AbstractLaunchConfigurationT
 	private WidgetListener defaultListener = new WidgetListener();
 	protected Text buildFileText;
 	protected Combo tasksCommbo;
+	protected Text parametersText;
 	
 	protected abstract String[] getTasksFromFile(IFile file) throws JavaScriptModelException;
 	
@@ -57,6 +58,7 @@ public abstract class GenericBuildSystemTab extends AbstractLaunchConfigurationT
 		((GridLayout) comp.getLayout()).verticalSpacing = 0;		
 		createBuildFileEditor(comp);
 		createTaskComboEditor(comp);
+		createParametersText(comp);
 		setControl(comp);
 	}
 	
@@ -64,6 +66,12 @@ public abstract class GenericBuildSystemTab extends AbstractLaunchConfigurationT
 		Group group = SWTFactory.createGroup(parent, Messages.LaunchTab_Tasks, 1, 1, GridData.FILL_HORIZONTAL);
 		tasksCommbo = SWTFactory.createCombo(group, SWT.BORDER|SWT.H_SCROLL, 0, null);
 		tasksCommbo.addModifyListener(defaultListener);
+	}
+
+	private void createParametersText(Composite parent) {
+		Group group = SWTFactory.createGroup(parent, Messages.LaunchTab_Parameters, 1, 1, GridData.FILL_HORIZONTAL);
+		parametersText = SWTFactory.createSingleText(group, 1);
+		parametersText.addModifyListener(defaultListener);
 	}
 
 	private void createBuildFileEditor(Composite parent) {

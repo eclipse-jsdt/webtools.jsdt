@@ -32,6 +32,7 @@ import org.eclipse.wst.jsdt.js.common.tests.suites.TestRunner;
 import org.eclipse.wst.jsdt.js.common.tests.util.ResourceUtil;
 import org.eclipse.wst.jsdt.js.grunt.util.GruntVisitor;
 import org.eclipse.wst.jsdt.js.gulp.util.GulpVisitor;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -61,6 +62,12 @@ public class BuildSystemVisitorTest {
 		gulpfile.create(new FileInputStream(gulp.getAbsolutePath()), true, null);
 	}
 
+	@AfterClass
+	public static void teardown() throws CoreException {
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("TestJsProject");
+		project.delete(true, true, null);
+	}
+
 	@Test
 	public void GruntTasksTest() {
 		try {
@@ -69,8 +76,8 @@ public class BuildSystemVisitorTest {
 			unit.accept(visitor);
 			Set<ITask> tasks = visitor.getTasks();
 			assertTrue("Task list is empty", !tasks.isEmpty());
-			// There are 8 tasks defined in gruntfile.js
-			assertTrue("Not all grunt tasks were found", tasks.size() == 8);
+			// There are 7 tasks defined in gruntfile.js
+			assertTrue("Not all grunt tasks were found", tasks.size() == 7);
 		} catch (CoreException e) {
 			fail("Exception occured while reading file");
 		}

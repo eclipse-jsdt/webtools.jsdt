@@ -26,8 +26,9 @@ public final class GulpConstants {
 	public static final String DIR = GulpPlugin.PLUGIN_ID + ".DIR"; //$NON-NLS-1$
 	public static final String COMMAND = GulpPlugin.PLUGIN_ID + ".COMMAND"; //$NON-NLS-1$
 	public static final String BUILD_FILE = GulpPlugin.PLUGIN_ID + ".BUILD_FILE"; //$NON-NLS-1$
+	public static final String PARAMETERS = GulpPlugin.PLUGIN_ID + ".PARAMETERS"; //$NON-NLS-1$
 	
 	public static final String GULP = "gulp"; //$NON-NLS-1$
 	public static final String GULP_FILE_JS = "gilpfile.js"; //$NON-NLS-1$
-
+	public static final String DEFAULT_COMMAND = "default"; //$NON-NLS-1$
 }

@@ -22,6 +22,7 @@ public class Messages extends NLS {
 	public static String GruntLaunchError_Message;
 	public static String GruntLaunchTab_Main;
 	public static String GruntLaunchTab_ErrorNotExist;
+	public static String GruntLaunchTab_WarningTaskNotExist;
 	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

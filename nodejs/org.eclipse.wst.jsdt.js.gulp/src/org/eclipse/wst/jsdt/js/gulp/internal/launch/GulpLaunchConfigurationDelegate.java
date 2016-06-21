@@ -34,11 +34,12 @@ public class GulpLaunchConfigurationDelegate implements ILaunchConfigurationDele
 		String projectName = conf.getAttribute(GulpConstants.PROJECT, (String) null);
 		String dirPath = conf.getAttribute(GulpConstants.DIR, (String) null);
 		String commandName = conf.getAttribute(GulpConstants.COMMAND, (String) null);
+		String parameters = conf.getAttribute(GulpConstants.PARAMETERS, (String) null);
 		
 		IProject project = WorkbenchResourceUtil.getProject(projectName);
 		if (project != null && project.exists()) {
 			IPath dir = (dirPath == null) ? project.getLocation() : new Path(dirPath);
-			CLICommand command = generateCLICommand(commandName);
+			CLICommand command = generateCLICommand(commandName, parameters);
 			launchGulp(project, dir, command, monitor);
 		}	
 	}
@@ -52,8 +53,8 @@ public class GulpLaunchConfigurationDelegate implements ILaunchConfigurationDele
 		}
 	}
 	
-	protected CLICommand generateCLICommand(String commandName) {
-		return new CLICommand(GulpConstants.GULP, commandName, null, null);
+	protected CLICommand generateCLICommand(String commandName, String parameters) {
+		return new CLICommand(GulpConstants.GULP, commandName, parameters, null);
 	}
 
 }

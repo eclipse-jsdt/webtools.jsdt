@@ -26,6 +26,7 @@ public class Messages extends NLS {
 	public static String LaunchTab_Browse;
 	public static String LaunchTab_DialogTitle;
 	public static String LaunchTab_DialogMessage;
+	public static String LaunchTab_Parameters;
 	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

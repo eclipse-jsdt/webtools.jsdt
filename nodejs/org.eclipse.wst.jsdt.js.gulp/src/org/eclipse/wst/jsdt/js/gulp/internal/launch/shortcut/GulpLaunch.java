@@ -55,26 +55,28 @@ public class GulpLaunch implements ILaunchShortcut {
 	protected void launch(ITask task, String mode) {
 		try {
 			IFile buildFile = task.getBuildFile();
-			ILaunchConfigurationType gulpLaunchConfiguraionType = DebugPlugin.getDefault().getLaunchManager()
+			ILaunchConfigurationType gulpLaunchConfigurationType = DebugPlugin.getDefault().getLaunchManager()
 					.getLaunchConfigurationType(GulpConstants.LAUNCH_CONFIGURATION_ID); 
 			
 			// Check if configuration already exists
 			ILaunchConfiguration[] configurations = DebugPlugin.getDefault()
-					.getLaunchManager().getLaunchConfigurations(gulpLaunchConfiguraionType);
+					.getLaunchManager().getLaunchConfigurations(gulpLaunchConfigurationType);
 			
-			ILaunchConfiguration existingConfiguraion = LaunchConfigurationAutoFill
-					.chooseLaunchConfiguration(configurations, task, GulpConstants.BUILD_FILE);
-			
-			if (existingConfiguraion != null) {
-				ILaunchConfigurationWorkingCopy wc = existingConfiguraion.getWorkingCopy();
-				// Updating task in the existing launch
-				wc.setAttribute(GulpConstants.COMMAND, task.getName());
-				existingConfiguraion = wc.doSave();
-				DebugUITools.launch(existingConfiguraion, mode);
-			// Creating Launch Configuration from scratch
-			} else if (buildFile != null){
+			ILaunchConfiguration[] existingConfigurations = LaunchConfigurationAutoFill
+					.getAllLaunchConfigurations(configurations, task, GulpConstants.BUILD_FILE);
+
+			for (ILaunchConfiguration conf : existingConfigurations) {
+				if (conf.getAttribute(GulpConstants.COMMAND, (String) null).equals(task.getName())) {
+					DebugUITools.launch(conf, mode);
+					return;
+				}
+			}
+
+			// Existing configuration not found, create new Launch Configuration from scratch
+			if (buildFile != null){
 				IProject project = buildFile.getProject();	
-				ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration(project.getName() + " [" + buildFile.getName() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+				ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration(
+						project.getName() + " - " + task.getName() + " [" + buildFile.getName() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 				newConfiguration.setAttribute(GulpConstants.BUILD_FILE, buildFile.getLocation().toOSString());
 				newConfiguration.setAttribute(GulpConstants.PROJECT, project.getName());
 				newConfiguration.setAttribute(GulpConstants.DIR, buildFile.getParent().getLocation().toOSString());

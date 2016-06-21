@@ -32,6 +32,7 @@ public class GruntVisitor extends BuildSystemVisitor {
 	private static final String GRUNT_INIT_CONFIG = "grunt.initConfig"; //$NON-NLS-1$
 	private static final String GRUNT_REGISTER_TASK = "grunt.registerTask"; //$NON-NLS-1$
 	private static final String GRUNT_REGISTER_MULTI_TASK = "grunt.registerMultiTask"; //$NON-NLS-1$
+	private static final String GRUNT_PROPERTY_IGNORE = "pkg"; //$NON-NLS-1$
 	
 	private Set<ITask> tasks;
 	private IFile file;
@@ -52,7 +53,8 @@ public class GruntVisitor extends BuildSystemVisitor {
 			
 			// http://gruntjs.com/api/grunt.task#grunt.task.registertask
 			if (GRUNT_REGISTER_TASK.equals(expression.toString())) {
-				if (argSize == 2) {
+				if (argSize == 2 || argSize == 3) {
+					// Register task supports an optional description field as argument 1.
 					Expression task = arguments.get(0);
 					tasks.add(new GruntTask(ASTUtil.beautify(task), file, false, new Location(task.getStartPosition(), task.getLength()))); 
 				}
@@ -73,6 +75,9 @@ public class GruntVisitor extends BuildSystemVisitor {
 					List<ObjectLiteralField> fields = jsObject.fields();
 					for (ObjectLiteralField f : fields) {
 						Expression field = f.getFieldName();
+						if (field.toString().equals(GRUNT_PROPERTY_IGNORE)){
+							continue;
+						}
 						tasks.add(new GruntTask((field.toString()), file, false, new Location(field.getStartPosition(), field.getLength())));
 					}
 				}

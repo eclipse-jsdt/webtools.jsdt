@@ -22,6 +22,7 @@ public class Messages extends NLS {
 	public static String GulpLaunchError_Message;
 	public static String GulpLaunchTab_Main;
 	public static String GulpLaunchTab_ErrorNotExist;
+	public static String GulpLaunchTab_WarningTaskNotExist;
 	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

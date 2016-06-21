@@ -34,11 +34,12 @@ public class GruntLaunchConfigurationDelegate implements ILaunchConfigurationDel
 		String projectName = conf.getAttribute(GruntConstants.PROJECT, (String) null);
 		String dirPath = conf.getAttribute(GruntConstants.DIR, (String) null);
 		String commandName = conf.getAttribute(GruntConstants.COMMAND, (String) null);
+		String parameters = conf.getAttribute(GruntConstants.PARAMETERS, (String) null);
 		
 		IProject project = WorkbenchResourceUtil.getProject(projectName);
 		if (project != null && project.exists()) {
 			IPath dir = (dirPath == null) ? project.getLocation() : new Path(dirPath);
-			CLICommand command = generateCLICommand(commandName);
+			CLICommand command = generateCLICommand(commandName, parameters);
 			launchGrunt(project, dir, command, monitor);
 		}	
 	}
@@ -52,8 +53,10 @@ public class GruntLaunchConfigurationDelegate implements ILaunchConfigurationDel
 		}
 	}
 	
-	protected CLICommand generateCLICommand(String commandName) {
-		return new CLICommand(GruntConstants.GRUNT, commandName, null, null);
+	protected CLICommand generateCLICommand(String commandName, String parameters) {
+		// ANSI color codes are not supported.
+		String[] options = {GruntConstants.GRUNT_NO_COLOR};
+		return new CLICommand(GruntConstants.GRUNT, commandName, parameters, options);
 	}
 
 }

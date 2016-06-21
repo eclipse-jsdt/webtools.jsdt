@@ -11,6 +11,8 @@
 package org.eclipse.wst.jsdt.js.grunt.internal.launch.ui;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -38,6 +40,7 @@ public class GruntLaunchTab extends GenericBuildSystemTab {
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		setErrorMessage(null);
+		setWarningMessage(null);
 		
 		String buildFilePath = buildFileText.getText();
 		File file = WorkbenchResourceUtil.getFile(buildFilePath);
@@ -46,6 +49,26 @@ public class GruntLaunchTab extends GenericBuildSystemTab {
 			return false;
 		}
 		
+		// Check if the selected task exists in the Gruntfile, display warning if it does not.
+		try {
+			String task = tasksCommbo.getText();
+			if (task.isEmpty()) {
+				return true;
+			}
+			String rootTask = task.split(":")[0];
+			IFile ifile =  WorkbenchResourceUtil.getFileForLocation(file.getAbsolutePath());
+
+			List<String> availTasks = Arrays.asList(getTaskNames(
+					ASTUtil.getTasks(buildFilePath, new GruntVisitor(ifile))));
+
+			if (!availTasks.contains(rootTask)) {
+				setWarningMessage(Messages.GruntLaunchTab_WarningTaskNotExist);
+			}
+
+		} catch (JavaScriptModelException e) {
+			GruntPlugin.logError(e, e.getMessage());
+		}
+
 		return true;
 	}
 		
@@ -69,17 +92,28 @@ public class GruntLaunchTab extends GenericBuildSystemTab {
 				ifile = WorkbenchResourceUtil.getFileForLocation(file.getAbsolutePath());
 			}
 			
-			
+			// If launch config has a defined task, use that, if not use 'default'. If there is 
+			// no default, leave task field blank.
+			String task = lc.getAttribute(GruntConstants.COMMAND, (String) null);
 			Set<ITask> tasks = ASTUtil.getTasks(buildFileLocation, new GruntVisitor(ifile));
-			if (!tasks.isEmpty()) {
-				updateTasks(getTaskNames(tasks));
-				String task = lc.getAttribute(GruntConstants.COMMAND, (String) null);
-				if (task != null && tasks.contains(task)) {
-					tasksCommbo.setText(task);
+			List<String> tasknames = Arrays.asList(getTaskNames(tasks));
+			updateTasks(getTaskNames(tasks));
+			if (task != null && !task.isEmpty()) {
+				tasksCommbo.setText(task);
+			} else {
+				if (tasknames.contains(GruntConstants.DEFAULT_COMMAND)) {
+					tasksCommbo.setText(GruntConstants.DEFAULT_COMMAND);
 				} else {
-					tasksCommbo.setText(tasks.iterator().next().getName());
+					tasksCommbo.setText("");
 				}
-			}	
+			}
+
+			String params = lc.getAttribute(GruntConstants.PARAMETERS, (String) null);
+			if (params != null) {
+				parametersText.setText(params);
+			} else {
+				parametersText.setText("");
+			}
 		} catch (CoreException e) {
 			GruntPlugin.logError(e, e.getMessage());
 		}		
@@ -94,6 +128,7 @@ public class GruntLaunchTab extends GenericBuildSystemTab {
 			wc.setAttribute(GruntConstants.PROJECT, project.getName());
 			wc.setAttribute(GruntConstants.DIR, buildFile.getParent().getLocation().toOSString());
 			wc.setAttribute(GruntConstants.COMMAND, tasksCommbo.getText());
+			wc.setAttribute(GruntConstants.PARAMETERS, parametersText.getText());
 		}
 	}
 	

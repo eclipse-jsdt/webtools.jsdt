@@ -11,6 +11,8 @@
 package org.eclipse.wst.jsdt.js.gulp.internal.launch.ui;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -38,6 +40,7 @@ public class GulpLaunchTab extends GenericBuildSystemTab {
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		setErrorMessage(null);
+		setWarningMessage(null);
 		
 		String buildFilePath = buildFileText.getText();
 		File file = WorkbenchResourceUtil.getFile(buildFilePath);
@@ -46,6 +49,23 @@ public class GulpLaunchTab extends GenericBuildSystemTab {
 			return false;
 		}
 		
+		// Check if the entered task exists in the Gulpfile, display warning if it does not.
+		try {
+			String task = tasksCommbo.getText();
+			if (task.isEmpty()) {
+				return true;
+			}
+			IFile ifile = WorkbenchResourceUtil.getFileForLocation(file.getAbsolutePath());
+			List<String> availTasks = Arrays.asList(getTaskNames(
+					ASTUtil.getTasks(buildFilePath, new GulpVisitor(ifile))));
+
+			if (!availTasks.contains(task)) {
+				setWarningMessage(Messages.GulpLaunchTab_WarningTaskNotExist);
+			}
+		} catch (JavaScriptModelException e) {
+			GulpPlugin.logError(e, e.getMessage());
+		}
+
 		return true;
 	}
 		
@@ -62,26 +82,33 @@ public class GulpLaunchTab extends GenericBuildSystemTab {
 		try {
 			buildFileLocation = lc.getAttribute(GulpConstants.BUILD_FILE, (String) null);
 			buildFileText.setText(buildFileLocation != null ? buildFileLocation : ""); //$NON-NLS-1$
-			
-			
+
 			File file = WorkbenchResourceUtil.getFile(buildFileLocation);
 			IFile ifile = null;
 			if (file != null) {
 				ifile = WorkbenchResourceUtil.getFileForLocation(file.getAbsolutePath());
 			}
-			
-			
+
 			Set<ITask> tasks = ASTUtil.getTasks(buildFileLocation, new GulpVisitor(ifile));
-			
-			if (!tasks.isEmpty()) {
-				updateTasks(getTaskNames(tasks));
-				String task = lc.getAttribute(GulpConstants.COMMAND, (String) null);
-				if (task != null && tasks.contains(task)) {
-					tasksCommbo.setText(task);
+			List<String> tasknames = Arrays.asList(getTaskNames(tasks));
+			updateTasks(getTaskNames(tasks));
+			String task = lc.getAttribute(GulpConstants.COMMAND, (String) null);
+			if (task != null && !task.isEmpty()) {
+				tasksCommbo.setText(task);
+			} else {
+				if (tasknames.contains(GulpConstants.DEFAULT_COMMAND)) {
+					tasksCommbo.setText(GulpConstants.DEFAULT_COMMAND);
 				} else {
-					tasksCommbo.setText(tasks.iterator().next().getName());
+					tasksCommbo.setText("");
 				}
-			}	
+			}
+
+			String params = lc.getAttribute(GulpConstants.PARAMETERS, (String) null);
+			if (params != null) {
+				parametersText.setText(params);
+			} else {
+				parametersText.setText("");
+			}
 		} catch (CoreException e) {
 			GulpPlugin.logError(e, e.getMessage());
 		}		
@@ -96,6 +123,7 @@ public class GulpLaunchTab extends GenericBuildSystemTab {
 			wc.setAttribute(GulpConstants.PROJECT, project.getName());
 			wc.setAttribute(GulpConstants.DIR, buildFile.getParent().getLocation().toOSString());
 			wc.setAttribute(GulpConstants.COMMAND, tasksCommbo.getText());
+			wc.setAttribute(GulpConstants.PARAMETERS, parametersText.getText());
 		}
 	}
 	
