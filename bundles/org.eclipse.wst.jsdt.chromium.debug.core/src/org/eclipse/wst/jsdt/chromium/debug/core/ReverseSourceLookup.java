@@ -119,7 +119,7 @@ public class ReverseSourceLookup {
       return new ContainerWrapper() {
         @Override
         public String lookup(IFile resource) {
-          String subResult = targetContainerWrapper.lookup(resource);
+          String subResult = targetContainerWrapper == null ? null : targetContainerWrapper.lookup(resource);
           if (subResult == null) {
             return null;
           }
