@@ -209,21 +209,11 @@ public class ReconcileWorkingCopyOperation extends JavaModelOperation {
 
 			// create AST if needed
 			if (this.astLevel != IJavaScriptUnit.NO_AST){
-//					&& unit !=null/*unit is null if working copy is consistent && (problem detection not forced || non-Java project) -> don't create AST as per API*/) {
 				Map options = workingCopy.getJavaScriptProject().getOptions(true);
 				// convert AST
 				ASTParser parser = ASTParser.newParser(AST.JLS3);
 				parser.setSource(workingCopy);
 				this.ast = (JavaScriptUnit) parser.createAST(this.progressMonitor);
-//					AST.convertCompilationUnit(
-//						this.astLevel,
-//						unit,
-//						contents,
-//						options,
-//						this.resolveBindings,
-//						workingCopy,
-//						reconcileFlags,
-//						this.progressMonitor);
 				if (this.ast != null) {
 					this.deltaBuilder.delta = new JavaElementDelta(workingCopy);
 					this.deltaBuilder.delta.changedAST(this.ast);
