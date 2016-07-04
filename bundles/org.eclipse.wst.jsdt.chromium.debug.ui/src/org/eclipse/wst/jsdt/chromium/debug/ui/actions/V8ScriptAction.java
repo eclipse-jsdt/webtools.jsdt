@@ -29,7 +29,7 @@ public abstract class V8ScriptAction extends FileBasedAction.Single<IFile> {
   }
 
   @Override
-  protected ActionRunnable createRunnable(final IFile file) {
+  public ActionRunnable createRunnable(final IFile file) {
     return new ActionRunnable() {
       public void adjustAction() {
       }

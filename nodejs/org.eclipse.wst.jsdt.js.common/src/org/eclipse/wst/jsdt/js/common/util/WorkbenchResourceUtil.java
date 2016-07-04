@@ -54,6 +54,22 @@ public final class WorkbenchResourceUtil {
 
 	private WorkbenchResourceUtil() {
 	}
+	
+	/**
+	 * Must be called from SWT UI thread only
+	 * @return The active {@link Shell}
+	 */
+	public static Shell getActiveShell() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+	}
+	
+	/**
+	 * Must be called from SWT UI thread only
+	 * @return The active {@link IWorkbenchPart}
+	 */
+	public static IWorkbenchPart getActivePart() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+	}
 
 	public static void openInEditor(final IFile file, String editorID) throws PartInitException {
 		IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
@@ -64,8 +80,6 @@ public final class WorkbenchResourceUtil {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.openEditor(new FileEditorInput(file), editorID, true, IWorkbenchPage.MATCH_ID);
 	}
-
-
 
 	public static void createFile(final IFile file, final String content) throws CoreException {
 		if (!file.exists()) {

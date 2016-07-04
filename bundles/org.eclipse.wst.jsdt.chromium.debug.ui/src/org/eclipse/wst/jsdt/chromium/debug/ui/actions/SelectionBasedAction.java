@@ -120,7 +120,7 @@ public abstract class SelectionBasedAction<S> implements IObjectActionDelegate, 
 
   protected abstract ActionRunnable createRunnable(S selectedElements);
 
-  protected interface ActionRunnable {
+  public interface ActionRunnable {
     void adjustAction();
     void run(Shell shell, IWorkbenchPart workbenchPart);
   }

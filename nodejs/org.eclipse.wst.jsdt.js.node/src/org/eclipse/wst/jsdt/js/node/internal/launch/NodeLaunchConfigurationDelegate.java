@@ -19,7 +19,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.variables.VariablesPlugin;
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
@@ -33,6 +35,7 @@ import org.eclipse.wst.jsdt.core.runtime.JSRuntimeManager;
 import org.eclipse.wst.jsdt.js.node.NodePlugin;
 import org.eclipse.wst.jsdt.js.node.internal.Messages;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
+import org.eclipse.wst.jsdt.js.node.internal.listeners.JavaScriptChangeListener;
 import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
 import org.eclipse.wst.jsdt.js.node.runtime.NodeJsRuntimeType;
 import org.eclipse.wst.jsdt.launching.ExecutionArguments;
@@ -45,6 +48,8 @@ import org.eclipse.wst.jsdt.launching.ExecutionArguments;
  * @author "Gorkem Ercan (gercan)"
  */
 public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
+ 	private IProcess nodeProcess;
+ 	private JavaScriptChangeListener jsChangeListener;
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, final String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
@@ -116,24 +121,29 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			monitor.worked(1);
 
 			// Launch the configuration - 1 unit of work
-			IProcess process = runner.run(runConfig, launch, monitor);
+			nodeProcess = runner.run(runConfig, launch, monitor);
 
-			if (process == null) return;
+			if (nodeProcess == null) return;
 			
 			// Attaching V8 debugger process
 			if (mode.equals(ILaunchManager.DEBUG_MODE)) {
+				
 				DebuggerConnectRunnable runnable = new DebuggerConnectRunnable();
 				runnable.connector = new NodeDebugConnector(configuration, launch);
 
 				Thread thread = new Thread(runnable, "Connect to node.js debugger thread"); //$NON-NLS-1$
 				thread.setDaemon(true);
 				thread.start();
+				
+				jsChangeListener = new JavaScriptChangeListener();
+				ResourcesPlugin.getWorkspace().addResourceChangeListener(jsChangeListener);
+				DebugPlugin.getDefault().addDebugEventListener(processTerminateListener);
 
 				while (thread.isAlive()) {
 					if (monitor.isCanceled()) {
 						thread.interrupt();
-						if (process.canTerminate()) {
-							process.terminate();
+						if (nodeProcess.canTerminate()) {
+							nodeProcess.terminate();
 						}
 					}
 					try {
@@ -141,7 +151,7 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 					} catch (Exception e) {
 					}
 				}
-
+				
 				if (runnable.exception != null) {
 					if (runnable.exception instanceof CoreException) {
 						throw (CoreException) runnable.exception;
@@ -154,7 +164,7 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			// check for cancellation
 			if (monitor.isCanceled()) {
 				return;
-			}
+			} 
 
 		} finally {
 			monitor.done();
@@ -184,6 +194,21 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			}
 		}
 	}
+	
+	IDebugEventSetListener processTerminateListener = new IDebugEventSetListener() {
+
+		@Override
+		public void handleDebugEvents(DebugEvent[] events) {
+			for (DebugEvent event : events) {
+				if (event.getKind() == DebugEvent.TERMINATE) {
+					Object source = event.getSource();
+					if (source instanceof IProcess && source.equals(nodeProcess) && jsChangeListener != null) {
+						ResourcesPlugin.getWorkspace().removeResourceChangeListener(jsChangeListener);
+					}
+				}
+			}
+		}
+	};
 
 	public IJSRunner getJSRunner(ILaunchConfiguration configuration, String mode) throws CoreException {
 		IJSRuntimeInstall runtimeInstall = verifyJSRuntimeInstall(configuration);
@@ -237,5 +262,5 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 		String args = VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(nodeArguments);
 		return args;
 	}
-	
+
 }
