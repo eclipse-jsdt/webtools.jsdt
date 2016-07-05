@@ -63,8 +63,7 @@ ${type_declaration}</template>
 <template name="classbody" id="org.eclipse.wst.jsdt.ui.text.codetemplates.classbody" description="%CodeTemplates.classbody" context="org.eclipse.jsdt.classbody_context" enabled="true">
 </template>
 
-<template name="catchblock" id="org.eclipse.wst.jsdt.ui.text.codetemplates.catchblock" description="%CodeTemplates.catchblock" context="org.eclipse.jsdt.catchblock_context" enabled="true">// ${todo} %CodeTemplates.catchblock.tododesc
-${exception_var}.printStackTrace();</template>
+<template name="catchblock" id="org.eclipse.wst.jsdt.ui.text.codetemplates.catchblock" description="%CodeTemplates.catchblock" context="org.eclipse.jsdt.catchblock_context" enabled="true">// ${todo} %CodeTemplates.catchblock.tododesc</template>
 
 <template name="methodbody" id="org.eclipse.wst.jsdt.ui.text.codetemplates.methodbody" description="%CodeTemplates.methodstub" context="org.eclipse.jsdt.methodbody_context" enabled="true">// ${todo} %CodeTemplates.methodstub.tododesc
 ${body_statement}</template>

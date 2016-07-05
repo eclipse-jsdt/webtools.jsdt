@@ -66,7 +66,7 @@
 }</template>
 
 <template name="catch" description="%Templates.catch" id="org.eclipse.wst.jsdt.ui.templates.catch" context="javaScript" enabled="true" autoinsert="false">catch (e) {
-	${cursor}// ${todo}: handle exception
+	// ${todo}: handle exception${cursor}
 }</template>
 
 <template name="function" description="%Templates.public_method" id="org.eclipse.wst.jsdt.ui.templates.public_method" context="javaScript" enabled="true" autoinsert="false">function ${name}(${}) {
@@ -107,7 +107,7 @@ return ${name};</template>
 }</template>
 
 <template name="class" description="%Templates.class" id="org.eclipse.wst.jsdt.ui.templates.class" context="javaScript" enabled="true" autoinsert="false">class ${ClassName} {
-	constructor() {
+	constructor(${}) {
 		${line_selection}${cursor}
 	}
 }</template>
@@ -129,11 +129,11 @@ return ${name};</template>
 }</template>
 
 <template name="staticfunction" description="%Templates.staticfunction" id="org.eclipse.wst.jsdt.ui.templates.staticfunction" context="javaScript" enabled="true" autoinsert="false">static ${name}(${}) {
-	${cursor}// ${todo}
+	// ${todo}${cursor}
 }</template>
 
 <template name="generator" description="%Templates.generator" id="org.eclipse.wst.jsdt.ui.templates.generator" context="javaScript" enabled="true" autoinsert="false">function* ${name}(${}) {
-	${cursor}// ${todo}
+	// ${todo}${cursor}
 }</template>
 
 <template name="arrow" description="%Templates.arrow" id="org.eclipse.wst.jsdt.ui.templates.arrow" context="javaScript" enabled="true" autoinsert="false">${param} => ${output}</template>
@@ -142,7 +142,7 @@ return ${name};</template>
 
 <template name="importalias" description="%Templates.importalias" id="org.eclipse.wst.jsdt.ui.templates.importalias" context="javaScript" enabled="true" autoinsert="false">import * as ${alias} from ${module};</template>
 
-<template name="anonymousfunction" description="%Templates.anonymousfunction" id="org.eclipse.wst.jsdt.ui.templates.anonymousfunction" context="javaScript" enabled="true" autoinsert="false">(${params}) => {
+<template name="arrowfunction" description="%Templates.arrowfunction" id="org.eclipse.wst.jsdt.ui.templates.arrowfunction" context="javaScript" enabled="true" autoinsert="false">(${params}) => {
 	
 }</template>
 
