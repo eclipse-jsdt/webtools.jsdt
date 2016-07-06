@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -34,15 +34,16 @@ public class NpmLaunchConfigurationDelegate  implements ILaunchConfigurationDele
 		String projectName = configuration.getAttribute(NpmConstants.LAUNCH_PROJECT, (String) null);
 		String dirPath = configuration.getAttribute(NpmConstants.LAUNCH_DIR, (String) null);
 		String commandName = configuration.getAttribute(NpmConstants.LAUNCH_COMMAND, (String) null);
-		
+		String subCommand = configuration.getAttribute(NpmConstants.LAUNCH_SUBCOMMAND, (String) null);
+
 		IProject project = WorkbenchResourceUtil.getProject(projectName);
 		if (project != null && project.exists()) {
 			IPath dir = (dirPath == null) ? project.getLocation() : new Path(dirPath);
-			CLICommand command = generateCommand(commandName);
+			CLICommand command = generateCommand(commandName, subCommand);
 			launchNpm(project, dir, command, monitor);
 		}
 	}
-	
+
 	private void launchNpm(IProject project, IPath dir, CLICommand command, IProgressMonitor monitor) {
 		try {
 			 new CLI(project, dir, command).execute(monitor);
@@ -50,10 +51,10 @@ public class NpmLaunchConfigurationDelegate  implements ILaunchConfigurationDele
 			NpmPlugin.logError(e);
 		}
 	}
-	
-	private CLICommand generateCommand(String commandName) {
-		return new CLICommand(NpmConstants.NPM, commandName, null, null);	
+
+	private CLICommand generateCommand(String commandName, String subCommand) {
+		return new CLICommand(NpmConstants.NPM, commandName, subCommand, null);
 	}
-	
+
 }
 

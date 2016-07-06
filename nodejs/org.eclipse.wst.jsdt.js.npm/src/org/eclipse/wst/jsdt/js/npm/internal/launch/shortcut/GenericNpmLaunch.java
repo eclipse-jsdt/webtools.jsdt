@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Red Hat, Inc. 
+ * Copyright (c) 2015, 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,13 +27,14 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.wst.jsdt.js.npm.NpmPlugin;
 import org.eclipse.wst.jsdt.js.npm.internal.NpmConstants;
+import org.eclipse.wst.jsdt.js.npm.internal.NpmScriptTask;
 import org.eclipse.wst.jsdt.js.npm.util.NpmUtil;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public abstract class GenericNpmLaunch implements ILaunchShortcut {
-		
+
 	protected abstract String getCommandName();
 
 	@Override
@@ -43,10 +44,13 @@ public abstract class GenericNpmLaunch implements ILaunchShortcut {
 			 if (element instanceof IResource) {
 				IResource selectedResource = (IResource) element;
 				launch(selectedResource, mode);
+			 } else if (element instanceof NpmScriptTask) {
+				 NpmScriptTask scriptTask = (NpmScriptTask) element;
+				launch(scriptTask.getParent(), mode, scriptTask.getName());
 			 }
 		}
 	}
-	
+
 	@Override
 	public void launch(IEditorPart editor, String mode) {
 		IEditorInput editorInput = editor.getEditorInput();
@@ -55,8 +59,12 @@ public abstract class GenericNpmLaunch implements ILaunchShortcut {
 			launch(file, mode);
 		}
 	}
-	
+
 	private void launch(final IResource resource, final String mode) {
+		launch(resource, mode, null);
+	}
+
+	private void launch(final IResource resource, final String mode, final String subCommand) {
 		try {
 			IProject project = resource.getProject();
 			IPath workingDirectory = getWorkingDirectory(resource);
@@ -67,18 +75,19 @@ public abstract class GenericNpmLaunch implements ILaunchShortcut {
 				ILaunchConfigurationWorkingCopy npmLaunch = npmLaunchType.newInstance(null, generateLaunchName(projectName));
 				npmLaunch.setAttribute(NpmConstants.LAUNCH_COMMAND, getCommandName());
 				npmLaunch.setAttribute(NpmConstants.LAUNCH_PROJECT, projectName);
-				npmLaunch.setAttribute(NpmConstants.LAUNCH_DIR, workingDirectory.toOSString());	
+				npmLaunch.setAttribute(NpmConstants.LAUNCH_DIR, workingDirectory.toOSString());
+				npmLaunch.setAttribute(NpmConstants.LAUNCH_SUBCOMMAND, subCommand);
 				DebugUITools.launch(npmLaunch, mode);
 			}
 		} catch (CoreException e) {
 			NpmPlugin.logError(e, e.getMessage());
 		}
 	}
-	
+
 	private String generateLaunchName(String projectName) {
 		return projectName + " [" + NpmConstants.NPM + " " + getCommandName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
-	
+
 	protected IPath getWorkingDirectory(IResource resource) throws CoreException {
 		IPath workingDir = null;
 		if (resource != null && resource.exists()) {

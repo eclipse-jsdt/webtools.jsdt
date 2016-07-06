@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Red Hat, Inc. 
+ * Copyright (c) 2015, 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.js.npm.util;
 
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ import org.eclipse.wst.jsdt.js.npm.internal.NpmConstants;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -56,10 +59,19 @@ public final class NpmUtil {
 		Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 		return gson.toJson(packageJson);
 	}
-	
-	
+
+	public static PackageJson parsePackageJsonFile(final IFile packageJsonFile)
+			throws UnsupportedEncodingException, CoreException {
+		JsonReader reader = new JsonReader(new InputStreamReader(packageJsonFile.getContents(), NpmConstants.UTF_8));
+
+		Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+		PackageJson pj = gson.fromJson(reader, PackageJson.class);
+
+		return pj;
+	}
+
 	/**
-	 * @return path to directory in which native npm call must be performed. Basically, the method scans 
+	 * @return path to directory in which native npm call must be performed. Basically, the method scans
 	 * project for package.json file and returns it's parent, ignoring "node_modules"
 	 * @throws CoreException
 	 */

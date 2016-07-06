@@ -8,8 +8,9 @@
  * 	Contributors:
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.wst.jsdt.js.grunt.internal.ui;
+package org.eclipse.wst.jsdt.js.npm.internal.ui;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,30 +21,33 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.wst.jsdt.core.JavaScriptModelException;
-import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.js.common.build.system.ITask;
-import org.eclipse.wst.jsdt.js.common.build.system.util.ASTUtil;
-import org.eclipse.wst.jsdt.js.grunt.GruntPlugin;
-import org.eclipse.wst.jsdt.js.grunt.util.GruntVisitor;
+import org.eclipse.wst.jsdt.js.common.build.system.Location;
+import org.eclipse.wst.jsdt.js.npm.NpmPlugin;
+import org.eclipse.wst.jsdt.js.npm.PackageJson;
+import org.eclipse.wst.jsdt.js.npm.internal.NpmScriptTask;
+import org.eclipse.wst.jsdt.js.npm.util.NpmUtil;
 
 /**
- * @author "Ilya Buziuk (ibuziuk)"
+ * Scans the package.json file and extracts the names of the available scripts
+ * to run.
+ *
+ * @author Shane Bryzak
+ *
  */
-public class GruntFileContentProvider implements ITreeContentProvider, IResourceChangeListener {
+public class NpmScriptContentProvider implements ITreeContentProvider, IResourceChangeListener {
 
 	private Viewer viewer;
-
 	private IResource resource;
 
 	protected static final Object[] EMPTY_ARRAY = new Object[0];
 
 	@Override
 	public void dispose() {
-	    if (resource != null) {
-	        resource.getWorkspace().removeResourceChangeListener(this);
-	        resource = null;
-	    }
+		if (resource != null) {
+			resource.getWorkspace().removeResourceChangeListener(this);
+			resource = null;
+		}
 	}
 
 	/*
@@ -55,17 +59,17 @@ public class GruntFileContentProvider implements ITreeContentProvider, IResource
 	 */
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		   if (resource != null) {
-		        resource.getWorkspace().removeResourceChangeListener(this);
-		    }
+		if (resource != null) {
+			resource.getWorkspace().removeResourceChangeListener(this);
+		}
 
-		    resource = (IResource) newInput;
+		resource = (IResource) newInput;
 
-		    if (resource != null) {
-		        resource.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
-		    }
+		if (resource != null) {
+			resource.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+		}
 
-		    this.viewer =  viewer;
+		this.viewer = viewer;
 	}
 
 	/*
@@ -77,18 +81,24 @@ public class GruntFileContentProvider implements ITreeContentProvider, IResource
 	public Object[] getChildren(Object parentNode) {
 		Set<ITask> tasks = null;
 		if (parentNode instanceof IFile) {
-			try {
-				IFile buildFile = (IFile) parentNode;
-				JavaScriptUnit unit = ASTUtil.getJavaScriptUnit(buildFile);
-				GruntVisitor visitor = new GruntVisitor(buildFile);
-				unit.accept(visitor);
-				tasks = visitor.getTasks();
 
-			} catch (JavaScriptModelException e) {
-				GruntPlugin.logError(e, e.getMessage());
+			try {
+				PackageJson packageJson = NpmUtil.parsePackageJsonFile((IFile) parentNode);
+
+				tasks = new HashSet<ITask>();
+
+				for (String scriptName : packageJson.getScripts().keySet()) {
+					tasks.add(
+							new NpmScriptTask(((IFile) parentNode), scriptName, null, false, new Location(0, 1)));
+				}
+
+
+			} catch (Exception ex) {
+				NpmPlugin.logError(ex, ex.getMessage());
 			}
 			return tasks.toArray();
 		}
+
 		return null;
 	}
 

@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+	<extension
+		point="org.eclipse.ui.navigator.viewer">
+		<viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+			<includes>
+				<contentExtension pattern="org.eclipse.wst.jsdt.js.npm.internal.ui.npmFileContent" />
+			</includes>
+		</viewerContentBinding>
+	</extension>
+	
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent 
+            id="org.eclipse.wst.jsdt.js.npm.internal.ui.npmFileContent" 
+            name="NPM Script Content Provider"
+            contentProvider="org.eclipse.wst.jsdt.js.npm.internal.ui.NpmScriptContentProvider"
+            labelProvider="org.eclipse.wst.jsdt.js.npm.internal.ui.NpmScriptLabelProvider" 
+            activeByDefault="true"
+            icon="icons/npm_16.png"
+            priority="highest" >
+         <triggerPoints>
+	            <and>
+	               <instanceof value="org.eclipse.core.resources.IResource"/>
+	               <test
+	                     forcePluginActivation="true"
+	                     property="org.eclipse.core.resources.name"
+	                     value="package.json"/>
+	            </and>
+         </triggerPoints>
+      </navigatorContent>
+   </extension>
+
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
 	    <propertyTester
@@ -11,6 +42,33 @@
 	      	class="org.eclipse.wst.jsdt.js.npm.internal.launch.tester.NpmLaunchTester">
 	    </propertyTester>
    </extension>
+   
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+     	 <shortcut
+            class="org.eclipse.wst.jsdt.js.npm.internal.launch.shortcut.NpmRunScript"
+            description="NPM Script"
+            helpContextId="org.eclipse.ui.externaltools.launchShortcutHelpContext.npmScriptShortcut"
+            icon="icons/npm_16.png"
+            id="org.eclipse.wst.jsdt.js.npm.script"
+            label="npm Script"
+            modes="run">
+        <contextualLaunch>
+           <enablement>
+             <with variable="selection">
+               <count value="1"/>
+                <iterate ifEmpty="false">
+                      <instanceof value="org.eclipse.wst.jsdt.js.npm.internal.NpmScriptTask" />
+               </iterate>
+             </with>
+           </enablement>
+           <contextLabel
+         	  mode="run"
+         	  label="npm Script"/>
+  		 </contextualLaunch>
+    	</shortcut>
+    </extension>   
+   
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
@@ -34,6 +92,7 @@
          </contextualLaunch>
       </shortcut>
    </extension>
+
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
@@ -57,6 +116,7 @@
          </contextualLaunch>
       </shortcut>
    </extension>
+
    <extension
       point = "org.eclipse.ui.newWizards">
       <wizard
@@ -69,14 +129,16 @@
             <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
    </extension>
+
    <extension
        point="org.eclipse.debug.core.launchConfigurationTypes">
     <launchConfigurationType
           id="org.eclipse.wst.jsdt.js.npm.npmLaunchConfigurationType"
           delegate="org.eclipse.wst.jsdt.js.npm.internal.launch.NpmLaunchConfigurationDelegate"
           modes="run"
-          name=""
+          name="npm"
      	  public="false">
     </launchConfigurationType>
  </extension>
+
 </plugin>

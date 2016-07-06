@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -28,7 +28,7 @@ import org.eclipse.wst.jsdt.js.gulp.GulpPlugin;
 import org.eclipse.wst.jsdt.js.gulp.util.GulpVisitor;
 
 public class GulpFileContentProvider implements ITreeContentProvider, IResourceChangeListener {
-	
+
 	private Viewer viewer;
 	private IResource resource;
 
@@ -44,7 +44,7 @@ public class GulpFileContentProvider implements ITreeContentProvider, IResourceC
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
 	 * .viewers.Viewer, java.lang.Object, java.lang.Object)
@@ -66,7 +66,7 @@ public class GulpFileContentProvider implements ITreeContentProvider, IResourceC
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(Object)
 	 */
 	@Override
@@ -90,7 +90,7 @@ public class GulpFileContentProvider implements ITreeContentProvider, IResourceC
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(Object)
 	 */
 	@Override
@@ -100,17 +100,17 @@ public class GulpFileContentProvider implements ITreeContentProvider, IResourceC
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(Object)
 	 */
 	@Override
 	public boolean hasChildren(Object element) {
-		return false;
+		return element instanceof IFile;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.jface.viewers.IStructuredContentProvider#getElements(Object)
 	 */
@@ -131,7 +131,7 @@ public class GulpFileContentProvider implements ITreeContentProvider, IResourceC
 			@Override
 			public void run() {
 				viewer.refresh();
-			}	
+			}
 		});
 	}
 }
