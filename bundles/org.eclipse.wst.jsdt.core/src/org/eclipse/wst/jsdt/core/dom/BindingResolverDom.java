@@ -232,17 +232,26 @@ class BindingResolverDom extends BindingResolver {
 
 	@Override
 	IFunctionBinding resolveMethod(FunctionInvocation method) {
-		return (IFunctionBinding) ast2BindingsMap.get(method.getName());
+		Object binding = ast2BindingsMap.get(method.getName());
+		return (binding instanceof IFunctionBinding ?
+					(IFunctionBinding)binding :
+						null); 
 	}
 
 	@Override
 	ITypeBinding resolveType(TypeDeclaration type) {
-		return (ITypeBinding) ast2BindingsMap.get(type.getName());
+		Object binding = ast2BindingsMap.get(type.getName());
+		return (binding instanceof ITypeBinding ? 
+					(ITypeBinding)binding :
+						null); 
 	}
 
 	@Override
 	IVariableBinding resolveVariable(org.eclipse.wst.jsdt.core.dom.VariableDeclaration variable) {
-		return (IVariableBinding) ast2BindingsMap.get(variable.getName());
+		Object binding = ast2BindingsMap.get(variable.getName());
+		return (binding instanceof IVariableBinding ?
+					(IVariableBinding) binding :
+						null);
 	}
 
 
