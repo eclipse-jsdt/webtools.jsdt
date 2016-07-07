@@ -20,16 +20,16 @@ import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
  * Property tester for Node Launch Shortcut
  *
  * @author "Adalberto Lopez Venegas (adalbert)"
+ * @author "Ilya Buziuk (ibuziuk)"
  */
 public class NodePropertyTester extends PropertyTester {
 	// Properties
-	private static final String IS_NODE_INIT = "isNodeInit";
+	private static final String IS_NODE_INIT = "isNodeInit"; //$NON-NLS-1$
 
 	// File extensions
 	private static final String JS_EXT = "js"; //$NON-NLS-1$
 
-	// Invalid parent folders for js files
-	private static final String NODE_MODULES_FOLDER = "node_modules"; //$NON-NLS-1$
+	// Invalid parent folder for running Node.js apps
 	private static final String BOWER_COMPONENTS_FOLDER = "bower_components"; //$NON-NLS-1$
 
 	@Override
@@ -45,7 +45,7 @@ public class NodePropertyTester extends PropertyTester {
 		return false;
 	}
 
-	private boolean hasPackageJson(IProject project){
+	private boolean hasPackageJson(IProject project) {
 		IFile packageJsonFile = project.getFile(NodeConstants.PACKAGE_JSON);
 		if (packageJsonFile != null && packageJsonFile.isAccessible()) {
 			return true;
@@ -64,9 +64,8 @@ public class NodePropertyTester extends PropertyTester {
 		if (file.exists() && file.isAccessible()) {
 			String filePath = file.getFullPath().toOSString();
 
-			// Js file cannot be inside node_modules or bower_components
-			if (filePath != null
-					&& !filePath.contains(NODE_MODULES_FOLDER) && !filePath.contains(BOWER_COMPONENTS_FOLDER)) {
+			// Js file cannot be inside bower_components
+			if (filePath != null && !filePath.contains(BOWER_COMPONENTS_FOLDER)) {
 				return true;
 			}
 		}
