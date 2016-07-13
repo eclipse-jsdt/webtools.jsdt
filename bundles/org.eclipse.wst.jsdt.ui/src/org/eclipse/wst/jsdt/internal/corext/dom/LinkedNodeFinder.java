@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -55,10 +55,12 @@ public class LinkedNodeFinder  {
 	 * @return Return 
 	 */
 	public static SimpleName[] findByBinding(ASTNode root, IBinding binding) {
-		ArrayList res= new ArrayList();
-		BindingFinder nodeFinder= new BindingFinder(binding, res);
-		root.accept(nodeFinder);
-		return (SimpleName[]) res.toArray(new SimpleName[res.size()]);
+		ArrayList<SimpleName> res= new ArrayList<SimpleName>();
+		if (root != null) {
+			BindingFinder nodeFinder= new BindingFinder(binding, res);
+			root.accept(nodeFinder);
+		}
+		return res.toArray(new SimpleName[res.size()]);
 	}
 	
 	/**
