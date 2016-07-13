@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -176,7 +176,7 @@ public class CreateMultipleSourceFoldersDialog extends TrayDialog {
 
 		if (dialog.open() == Window.OK) {
 			Object[] elements= dialog.getResult();	
-			for (int i= 0; i < elements.length; i++) {
+			for (int i= 0; elements != null && i < elements.length; i++) {
 				IResource res= (IResource)elements[i];
 				
 				IPath[] defaultExclusions = JavaScriptCore.getJavaScriptCore().getDefaultClasspathExclusionPatterns(); 
