@@ -24,5 +24,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
-Export-Package: org.eclipse.wst.jsdt.js.npm
+Export-Package: org.eclipse.wst.jsdt.js.npm,
+ org.eclipse.wst.jsdt.js.npm.util
 

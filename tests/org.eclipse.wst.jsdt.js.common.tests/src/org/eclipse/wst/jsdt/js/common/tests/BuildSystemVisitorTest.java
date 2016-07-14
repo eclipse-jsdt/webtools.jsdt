@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -42,22 +42,22 @@ import org.junit.Test;
 public class BuildSystemVisitorTest {
 	private static IFile gruntfile;
 	private static IFile gulpfile;
-	
+
 	@BeforeClass
 	public static void init() throws CoreException, IOException, URISyntaxException {
 		File grunt = ResourceUtil.getFileFromBundle(TestRunner.PLUGIN_ID, "resources/gruntfile.js");
 		File gulp = ResourceUtil.getFileFromBundle(TestRunner.PLUGIN_ID, "resources/gulpfile.js");
-		
+
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("TestJsProject");
 		IProjectDescription description = ResourcesPlugin.getWorkspace()
 				.newProjectDescription("Testing common js functionality");
 		description.setNatureIds(new String[] { JavaScriptCore.NATURE_ID });
 		project.create(description, null);
 		project.open(null);
-		
+
 		gruntfile = project.getFile("gruntfile.js");
 		gruntfile.create(new FileInputStream(grunt.getAbsolutePath()), true, null);
-		
+
 		gulpfile = project.getFile("gulpfile.js");
 		gulpfile.create(new FileInputStream(gulp.getAbsolutePath()), true, null);
 	}
@@ -82,7 +82,7 @@ public class BuildSystemVisitorTest {
 			fail("Exception occured while reading file");
 		}
 	}
-	
+
 	@Test
 	public void GulpTasksTest() {
 		try {
@@ -97,5 +97,6 @@ public class BuildSystemVisitorTest {
 			fail("Exception occured while reading file");
 		}
 	}
-	
+
+
 }

@@ -1,0 +1,12 @@
+{
+  "name": "gulptest",
+  "version": "0.0.0",
+  "description": "Generated with Eclipse npm Tools",
+  "main": "index.js",
+  "scripts": {
+    "tests": "echo 'Error: no test specified' && exit 1",
+    "doSomething": "echo 'Doing something now' && exit 0",
+    "foo": "echo 'bar bar' && exit 0"},
+  "author": "",
+  "license": "ISC"
+}
