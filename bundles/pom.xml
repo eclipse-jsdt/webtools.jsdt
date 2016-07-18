@@ -42,10 +42,10 @@
     <module>org.eclipse.wst.jsdt.chromium.debug.core</module>
     <module>org.eclipse.wst.jsdt.chromium.debug.jsdtbridge</module>
     <module>org.eclipse.wst.jsdt.chromium.debug.ui</module>
+    <module>org.eclipse.wst.jsdt.chromium.debug.js</module>
     <module>org.eclipse.wst.jsdt.chromium</module>
     <module>org.eclipse.wst.jsdt.chromium.wip.eclipse</module>
     <module>org.eclipse.wst.jsdt.chromium.wipbackend.dev</module>
     <module>org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0</module>
-    
   </modules>
 </project>

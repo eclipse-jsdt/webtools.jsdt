@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <!-- Chrome / Chromium Command -->
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Chrome / Chromium"
+            id="org.eclipse.wst.jsdt.chromium.debug.js.category">
+      </category>
+      <command
+            categoryId="org.eclipse.wst.jsdt.chromium.debug.js.category"
+            id="org.eclipse.wst.jsdt.chromium.debug.js.openWithChromium"
+            name="Open with Chromium">
+      </command>
+  </extension>
+  
+  <!-- Chrome / Chromium Handler -->
+  <extension
+         point="org.eclipse.ui.handlers">
+      	 <handler
+            class="org.eclipse.wst.jsdt.chromium.debug.js.handlers.ChromiumHandler"
+            commandId="org.eclipse.wst.jsdt.chromium.debug.js.openWithChromium">
+	        <activeWhen>
+            <with variable="selection">
+              <and>
+                 <count
+                       value="1">
+                 </count>
+                 <iterate
+                       ifEmpty="false"
+                       operator="or">
+                    <instanceof
+                          value="org.eclipse.wst.server.ui.IServerModule">
+                    </instanceof>
+                 </iterate>
+                 <test
+                       forcePluginActivation="true"
+                       property="org.eclipse.wst.jsdt.chromium.debug.js.serverStarted">
+                 </test>
+              </and>
+           </with>
+          </activeWhen>
+      	 </handler>
+  </extension>
+  
+   <!-- Server State Tester -->
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.eclipse.wst.jsdt.chromium.debug.js.testers.ServerStateTester"
+            id="org.eclipse.wst.jsdt.chromium.debug.js.serverStateTester"
+            namespace="org.eclipse.wst.jsdt.chromium.debug.js"
+            properties="serverStarted"
+            type="org.eclipse.jface.viewers.ITreeSelection">
+      </propertyTester> 
+   </extension>
+  
+  <!-- Chrome / Chromium editor contribution -->
+  <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            extensions="html"
+            icon="icons/chromium_16.png"
+            id="org.eclipse.wst.jsdt.chromium.debug.js.editor.chromium"
+            launcher="org.eclipse.wst.jsdt.chromium.debug.js.launchers.ChromiumEditorLauncher"
+            name="Chrome / Chromium">
+      </editor>
+   </extension>
+   
+   <!-- Chrome / Chromium menu contribution for IServerModule -->
+   <extension point="org.eclipse.ui.menus">
+    	<menuContribution 
+      		locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+	              <command
+	                   commandId="org.eclipse.wst.jsdt.chromium.debug.js.openWithChromium"
+	                   icon="icons/chromium_16.png"
+	                   label="Chrome / Chromium"
+	                   style="push">
+	              </command>
+	              <visibleWhen>
+	                      <with variable="selection">
+	                        <iterate
+	                              ifEmpty="false"
+	                              operator="or">
+	                            <adapt
+	                                  type="org.eclipse.wst.server.ui.IServerModule">
+	                            </adapt>
+	                        </iterate>
+	                      </with>
+	              </visibleWhen>
+      	</menuContribution>
+    </extension>
+   
+  <!-- Chrome / Chromium Runtime -->
+  <extension
+        point="org.eclipse.wst.jsdt.core.JSRuntimeType">
+     <runtimeType
+           id="org.eclipse.wst.jsdt.chromium.debug.js.runtimeType"
+           class="org.eclipse.wst.jsdt.chromium.debug.js.runtime.ChromiumRuntimeType">
+     </runtimeType>
+  </extension>
+  <extension
+        point="org.eclipse.wst.jsdt.core.JSRuntimeInstallProvider">
+     <runtimeProvider
+           class="org.eclipse.wst.jsdt.chromium.debug.js.runtime.ChromiumRuntimeProvider"
+           runtimeTypeId="org.eclipse.wst.jsdt.chromium.debug.js.runtimeType">
+     </runtimeProvider>
+  </extension>
+  
+</plugin>
