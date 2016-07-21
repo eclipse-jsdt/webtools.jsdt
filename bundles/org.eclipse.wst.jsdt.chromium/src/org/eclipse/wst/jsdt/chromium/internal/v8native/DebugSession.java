@@ -290,7 +290,7 @@ public class DebugSession {
 
   public void maybeRethrowContextException(ContextDismissedCheckedException e) {
     // TODO(peter.rybin): make some kind of option out of this
-    final boolean strictPolicy = true;
+    final boolean strictPolicy = false;
     if (strictPolicy) {
       throw new InvalidContextException(e);
     }
@@ -299,7 +299,7 @@ public class DebugSession {
   public RelayOk maybeRethrowContextException(ContextDismissedCheckedException e,
       SyncCallback syncCallback) {
     // TODO(peter.rybin): make some kind of option out of this
-    final boolean strictPolicy = true;
+    final boolean strictPolicy = false;
     if (strictPolicy) {
       throw new InvalidContextException(e);
     } else {
