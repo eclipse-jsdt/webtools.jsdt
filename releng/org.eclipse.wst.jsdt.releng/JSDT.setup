@@ -5,13 +5,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:git="http://www.eclipse.org/oomph/setup/git/1.0"
     xmlns:jdt="http://www.eclipse.org/oomph/setup/jdt/1.0"
+    xmlns:mylyn="http://www.eclipse.org/oomph/setup/mylyn/1.0"
     xmlns:predicates="http://www.eclipse.org/oomph/predicates/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
     xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
     xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/setup/mylyn/1.0 index:/models/Mylyn.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
     name="wtp.jsdt"
     label="JSDT">
   <setupTask
@@ -378,6 +379,48 @@
       </predicate>
     </workingSet>
     <description>The dynamic working sets for ${scope.project.label}</description>
+  </setupTask>
+  <setupTask
+      xsi:type="mylyn:MylynQueriesTask"
+      repositoryURL="https://bugs.eclipse.org/bugs"
+      userID="${bugzilla.id}"
+      password="${eclipse.user.password}">
+    <query summary="JSDT Bugs"
+        url="https://bugs.eclipse.org/bugs/buglist.cgi?product=JSDT&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=blocker&amp;bug_severity=critical&amp;bug_severity=major&amp;bug_severity=normal&amp;bug_severity=minor&amp;bug_severity=trivial"/>
+    <query summary="JSDT Features"
+        url="https://bugs.eclipse.org/bugs/buglist.cgi?product=JSDT&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=enhancement"/>
+    <query summary="JSDT Unspecified Version"
+        url="https://bugs.eclipse.org/bugs/buglist.cgi?product=JSDT&amp;version=unspecified"/>
+  </setupTask>
+  <setupTask
+      xsi:type="mylyn:MylynQueriesTask"
+      connectorKind="org.eclipse.mylyn.gerrit"
+      repositoryURL="https://git.eclipse.org/r"
+      userID="${git.user.id}"
+      password="${eclipse.user.password}">
+    <query summary="JSDT Reviews">
+      <attribute
+          key="gerrit query type"
+          value="custom"/>
+      <attribute
+          key="gerrit query project"
+          value="jsdt/webtools.jsdt"/>
+      <attribute
+          key="gerrit query string"
+          value="project:jsdt/webtools.jsdt status:open"/>
+    </query>
+  </setupTask>
+  <setupTask
+      xsi:type="mylyn:MylynBuildsTask"
+      serverURL="https://hudson.eclipse.org/webtools"
+      userID="${bugzilla.id}"
+      password="${eclipse.user.password}">
+    <buildPlan
+        name="jsdt-gerrit"/>
+    <buildPlan
+        name="jsdt-snapshots"/>
+    <buildPlan
+        name="jsdt-sonar"/>
   </setupTask>
   <stream name="master"
       label="Master"/>
