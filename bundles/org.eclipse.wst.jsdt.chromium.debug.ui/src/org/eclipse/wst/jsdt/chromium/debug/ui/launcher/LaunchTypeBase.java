@@ -10,6 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
+import org.eclipse.wst.jsdt.chromium.ConnectionLogger;
 import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.BreakpointSynchronizer.Direction;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.ConnectionLoggerImpl;
@@ -23,17 +34,10 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.SourceWrapSupport;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.VProjectWorkspaceBridge;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.WorkspaceBridge;
 import org.eclipse.wst.jsdt.chromium.debug.ui.PluginUtil;
-import org.eclipse.wst.jsdt.chromium.ConnectionLogger;
+import org.eclipse.wst.jsdt.chromium.debug.ui.listeners.JavaScriptChangeListener;
+import org.eclipse.wst.jsdt.chromium.debug.ui.listeners.LaunchTerminateListener;
 import org.eclipse.wst.jsdt.chromium.util.Destructable;
 import org.eclipse.wst.jsdt.chromium.util.DestructingGuard;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunch;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 /**
  * A launch configuration delegate for the JavaScript debugging.
@@ -47,7 +51,6 @@ public abstract class LaunchTypeBase implements ILaunchConfigurationDelegate {
       return;
     }
 
-
     String host = config.getAttribute(LaunchParams.CHROMIUM_DEBUG_HOST,
         PluginVariablesUtil.getValue(PluginVariablesUtil.DEFAULT_HOST));
 
@@ -55,7 +58,7 @@ public abstract class LaunchTypeBase implements ILaunchConfigurationDelegate {
         PluginVariablesUtil.getValueAsInt(PluginVariablesUtil.DEFAULT_PORT));
 
     if (host == null && port == -1) {
-      throw new RuntimeException("Missing parameters in launch config");
+      throw new RuntimeException("Missing parameters in launch config"); //$NON-NLS-1$
     }
 
     boolean addNetworkConsole = config.getAttribute(LaunchParams.ADD_NETWORK_CONSOLE, false);
@@ -104,7 +107,9 @@ public abstract class LaunchTypeBase implements ILaunchConfigurationDelegate {
 
         launch.addDebugTarget(target);
         monitor.done();
-
+        
+        addListeners(launch);
+  
         // All OK
         destructingGuard.discharge();
       } finally {
@@ -128,6 +133,13 @@ public abstract class LaunchTypeBase implements ILaunchConfigurationDelegate {
       ChromiumDebugPlugin.log(e);
     }
   }
+  
+	private void addListeners(ILaunch launch) {
+		IResourceChangeListener listener = new JavaScriptChangeListener();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener);
+		DebugPlugin.getDefault().addDebugEventListener(new LaunchTerminateListener(launch, listener));
+	}
+  
 
   static ConnectionLogger createConsoleAndLogger(final ILaunch launch,
       final boolean addLaunchToManager, final String title) {

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugException;
@@ -38,6 +40,8 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.NamedConnectionLoggerFacto
 import org.eclipse.wst.jsdt.chromium.debug.core.model.SourceWrapSupport;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.VProjectWorkspaceBridge;
 import org.eclipse.wst.jsdt.chromium.debug.core.model.WorkspaceBridge;
+import org.eclipse.wst.jsdt.chromium.debug.ui.listeners.JavaScriptChangeListener;
+import org.eclipse.wst.jsdt.chromium.debug.ui.listeners.LaunchTerminateListener;
 import org.eclipse.wst.jsdt.chromium.util.Destructable;
 import org.eclipse.wst.jsdt.chromium.util.DestructingGuard;
 import org.eclipse.wst.jsdt.js.node.NodePlugin;
@@ -122,13 +126,22 @@ final public class NodeDebugConnector {
 			launch.addDebugTarget(target);
 
 			destructingGuard.discharge();
-
+			
+			addListeners(launch);
+			
 			return true;
 
 		} finally {
 			destructingGuard.doFinally();
 		}
 	}
+	
+	private void addListeners(ILaunch launch) {
+		IResourceChangeListener listener = new JavaScriptChangeListener();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener);
+		DebugPlugin.getDefault().addDebugEventListener(new LaunchTerminateListener(launch, listener));
+	}
+	
 
 	private static ConnectionLogger createConsoleAndLogger(final ILaunch launch, final boolean addLaunchToManager,
 			final String title) {

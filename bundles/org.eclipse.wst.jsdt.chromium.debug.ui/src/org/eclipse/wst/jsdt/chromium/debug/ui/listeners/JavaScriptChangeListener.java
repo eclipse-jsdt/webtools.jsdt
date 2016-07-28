@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  * 	Contributors:
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.wst.jsdt.js.node.internal.listeners;
+package org.eclipse.wst.jsdt.chromium.debug.ui.listeners;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -18,9 +18,8 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.wst.jsdt.chromium.debug.ui.ChromiumDebugUIPlugin;
 import org.eclipse.wst.jsdt.chromium.debug.ui.actions.PushChangesAction;
-import org.eclipse.wst.jsdt.js.common.util.WorkbenchResourceUtil;
-import org.eclipse.wst.jsdt.js.node.NodePlugin;
 
 /**
  * Tracking changes in JavaScript files during debug session and executing {@link PushChangesAction}
@@ -48,8 +47,8 @@ public class JavaScriptChangeListener implements IResourceChangeListener {
 								@Override
 								public void run() {
 									ACTION.createRunnable(file).run(
-											WorkbenchResourceUtil.getActiveShell(),
-											WorkbenchResourceUtil.getActivePart());
+											ChromiumDebugUIPlugin.getActiveShell(),
+											ChromiumDebugUIPlugin.getActivePart());
 								}
 							});
 						}
@@ -57,9 +56,8 @@ public class JavaScriptChangeListener implements IResourceChangeListener {
 					}
 				});
 			} catch (CoreException e) {
-				NodePlugin.logError(e);
+				ChromiumDebugUIPlugin.logError(e, e.getMessage());
 			}
 		}
 	}
-
 }

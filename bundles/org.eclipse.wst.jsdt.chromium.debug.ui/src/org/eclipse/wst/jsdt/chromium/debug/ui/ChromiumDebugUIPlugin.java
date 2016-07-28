@@ -1,4 +1,4 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
+// Copyright (c) 2009 - 2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
@@ -7,11 +7,14 @@
 package org.eclipse.wst.jsdt.chromium.debug.ui;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -82,6 +85,26 @@ public class ChromiumDebugUIPlugin extends AbstractUIPlugin {
   public static IWorkbenchWindow getActiveWorkbenchWindow() {
     return getDefault().getWorkbench().getActiveWorkbenchWindow();
   }
+  
+  
+	/**
+	 * Must be called from SWT UI thread only
+	 * 
+	 * @return The active {@link Shell}
+	 */
+	public static Shell getActiveShell() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+	}
+
+	/**
+	 * Must be called from SWT UI thread only
+	 * 
+	 * @return The active {@link IWorkbenchPart}
+	 */
+	public static IWorkbenchPart getActivePart() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+	}
+
 
   /**
    * Creates a status dialog using the given {@code status}.
@@ -124,5 +147,13 @@ public class ChromiumDebugUIPlugin extends AbstractUIPlugin {
       }
     }
   }
+
+	public static void logError(Throwable e) {
+		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+	}
+
+	public static void logError(Throwable e, String message) {
+		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, message, e));
+	}
 
 }

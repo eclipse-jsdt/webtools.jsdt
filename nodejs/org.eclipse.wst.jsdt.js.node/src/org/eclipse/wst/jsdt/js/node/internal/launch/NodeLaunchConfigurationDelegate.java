@@ -19,9 +19,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.variables.VariablesPlugin;
-import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
@@ -35,7 +33,6 @@ import org.eclipse.wst.jsdt.core.runtime.JSRuntimeManager;
 import org.eclipse.wst.jsdt.js.node.NodePlugin;
 import org.eclipse.wst.jsdt.js.node.internal.Messages;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
-import org.eclipse.wst.jsdt.js.node.internal.listeners.JavaScriptChangeListener;
 import org.eclipse.wst.jsdt.js.node.internal.util.LaunchConfigurationUtil;
 import org.eclipse.wst.jsdt.js.node.runtime.NodeJsRuntimeType;
 import org.eclipse.wst.jsdt.launching.ExecutionArguments;
@@ -48,8 +45,6 @@ import org.eclipse.wst.jsdt.launching.ExecutionArguments;
  * @author "Gorkem Ercan (gercan)"
  */
 public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
- 	private IProcess nodeProcess;
- 	private JavaScriptChangeListener jsChangeListener;
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, final String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
@@ -121,9 +116,9 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			monitor.worked(1);
 
 			// Launch the configuration - 1 unit of work
-			nodeProcess = runner.run(runConfig, launch, monitor);
+			IProcess process = runner.run(runConfig, launch, monitor);
 
-			if (nodeProcess == null) return;
+			if (process == null) return;
 			
 			// Attaching V8 debugger process
 			if (mode.equals(ILaunchManager.DEBUG_MODE)) {
@@ -134,16 +129,12 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 				Thread thread = new Thread(runnable, "Connect to node.js debugger thread"); //$NON-NLS-1$
 				thread.setDaemon(true);
 				thread.start();
-				
-				jsChangeListener = new JavaScriptChangeListener();
-				ResourcesPlugin.getWorkspace().addResourceChangeListener(jsChangeListener);
-				DebugPlugin.getDefault().addDebugEventListener(processTerminateListener);
 
 				while (thread.isAlive()) {
 					if (monitor.isCanceled()) {
 						thread.interrupt();
-						if (nodeProcess.canTerminate()) {
-							nodeProcess.terminate();
+						if (process.canTerminate()) {
+							process.terminate();
 						}
 					}
 					try {
@@ -194,21 +185,6 @@ public class NodeLaunchConfigurationDelegate extends LaunchConfigurationDelegate
 			}
 		}
 	}
-	
-	IDebugEventSetListener processTerminateListener = new IDebugEventSetListener() {
-
-		@Override
-		public void handleDebugEvents(DebugEvent[] events) {
-			for (DebugEvent event : events) {
-				if (event.getKind() == DebugEvent.TERMINATE) {
-					Object source = event.getSource();
-					if (source instanceof IProcess && source.equals(nodeProcess) && jsChangeListener != null) {
-						ResourcesPlugin.getWorkspace().removeResourceChangeListener(jsChangeListener);
-					}
-				}
-			}
-		}
-	};
 
 	public IJSRunner getJSRunner(ILaunchConfiguration configuration, String mode) throws CoreException {
 		IJSRuntimeInstall runtimeInstall = verifyJSRuntimeInstall(configuration);

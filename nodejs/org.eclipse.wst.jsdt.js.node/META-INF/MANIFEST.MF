@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.jsdt.chromium.debug.core;bundle-version="0.4.0",
  org.eclipse.wst.jsdt.chromium;bundle-version="0.4.0",
  org.eclipse.wst.jsdt.chromium.debug;bundle-version="0.4.0",
- org.eclipse.wst.jsdt.chromium.debug.ui;bundle-version="[0.5.0,0.6.0)"
+ org.eclipse.wst.jsdt.chromium.debug.ui;bundle-version="[0.6.0,0.7.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse Web Tools Platform
