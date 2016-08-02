@@ -33,6 +33,9 @@ public final class ChromiumDetector {
 	public static final String CHROMIUM_EXTRA_LOCATION = "/usr/local/bin"; //$NON-NLS-1$
 	private static final String CHROMIUM_BROWSER = "chromium-browser"; //$NON-NLS-1$
 	private static final String CHROME_WINDOWS = "chrome.exe"; //$NON-NLS-1$
+	private static final String CHROME_WINDOWS_REG_HKCU_LOCATION = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe"; //$NON-NLS-1$
+	private static final String CHROME_WINDOWS_REG_HKLM_LOCATION = "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe"; //$NON-NLS-1$
+	private static final String CHROME_WINDOWS_REG_KEY_NAME = "Path"; //$NON-NLS-1$
 
 	private ChromiumDetector() {
 	}
@@ -106,6 +109,24 @@ public final class ChromiumDetector {
 					chromiumFile = tempFile;
 				}
 			}
+			
+			if (chromiumFile == null && isWindows) {
+				// We will try to determine the location of Chrome from the Windows registry, checking both 
+				// HKEY_CURRENT_USER (for user-only Chrome installation) and HKEY_LOCAL_MACHINE (for all-users 
+				// Chrome installation).
+				path = WindowsRegistryUtil.readKeyValue(CHROME_WINDOWS_REG_HKCU_LOCATION, CHROME_WINDOWS_REG_KEY_NAME);
+				if (path == null) {
+					path = WindowsRegistryUtil.readKeyValue(CHROME_WINDOWS_REG_HKLM_LOCATION, CHROME_WINDOWS_REG_KEY_NAME);
+				}
+				
+				if (path != null) {
+					File tempFile = new File(path, chromeFileName);
+					if (tempFile.exists()) {
+						notFound = false;
+						chromiumFile = tempFile;
+					}
+				}
+			}			
 			return chromiumFile;
 		}
 		chromiumFile = new File(output);
