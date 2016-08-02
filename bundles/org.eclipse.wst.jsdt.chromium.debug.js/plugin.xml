@@ -10,8 +10,8 @@
       </category>
       <command
             categoryId="org.eclipse.wst.jsdt.chromium.debug.js.category"
-            id="org.eclipse.wst.jsdt.chromium.debug.js.openWithChromium"
-            name="Open with Chromium">
+            id="org.eclipse.wst.jsdt.chromium.debug.js.command"
+            name="Chrome / Chromium Debugger">
       </command>
   </extension>
   
@@ -20,7 +20,7 @@
          point="org.eclipse.ui.handlers">
       	 <handler
             class="org.eclipse.wst.jsdt.chromium.debug.js.handlers.ChromiumHandler"
-            commandId="org.eclipse.wst.jsdt.chromium.debug.js.openWithChromium">
+            commandId="org.eclipse.wst.jsdt.chromium.debug.js.command">
 	        <activeWhen>
             <with variable="selection">
               <and>
@@ -55,27 +55,15 @@
             type="org.eclipse.jface.viewers.ITreeSelection">
       </propertyTester> 
    </extension>
-  
-  <!-- Chrome / Chromium editor contribution -->
-  <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            extensions="html"
-            icon="icons/chromium_16.png"
-            id="org.eclipse.wst.jsdt.chromium.debug.js.editor.chromium"
-            launcher="org.eclipse.wst.jsdt.chromium.debug.js.launchers.ChromiumEditorLauncher"
-            name="Chrome / Chromium">
-      </editor>
-   </extension>
    
    <!-- Chrome / Chromium menu contribution for IServerModule -->
    <extension point="org.eclipse.ui.menus">
     	<menuContribution 
       		locationURI="popup:org.eclipse.ui.popup.any?after=additions">
 	              <command
-	                   commandId="org.eclipse.wst.jsdt.chromium.debug.js.openWithChromium"
+	                   commandId="org.eclipse.wst.jsdt.chromium.debug.js.command"
 	                   icon="icons/chromium_16.png"
-	                   label="Chrome / Chromium"
+	                   label="Chrome / Chromium Debugger"
 	                   style="push">
 	              </command>
 	              <visibleWhen>
@@ -91,6 +79,44 @@
 	              </visibleWhen>
       	</menuContribution>
     </extension>
+    
+   <extension
+       point="org.eclipse.debug.core.launchConfigurationTypes">
+    <launchConfigurationType
+          id="org.eclipse.wst.jsdt.js.chromium.ChromiumLaunchConfigurationType"
+          delegate="org.eclipse.wst.jsdt.chromium.debug.js.launch.ChromiumLaunchConfigurationDelegate"
+          modes="debug"
+          name="Chrome / Chromium Debugger"
+          sourceLocatorId="org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceDirector"
+          sourcePathComputerId="org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceComputer"
+          public="false">
+    </launchConfigurationType>
+  </extension>
+  
+  <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.eclipse.wst.jsdt.chromium.debug.js.launch.shortcuts.ChromiumShortcut"
+            id="org.eclipse.wst.jsdt.chromium.debug.js"
+            label="Chrome / Chromium Debugger"
+            icon="icons/chromium_16.png"
+            modes="debug">
+        <contextualLaunch>
+            <enablement>
+                <with variable="selection">
+                    <count value="1"/>
+                    <iterate>
+                        <adapt type="org.eclipse.core.resources.IResource">
+                        <and>
+                             <test property="org.eclipse.core.resources.name" value="*.html"/>
+                        </and>
+                        </adapt> 
+                    </iterate>
+                </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
+   </extension>
    
   <!-- Chrome / Chromium Runtime -->
   <extension

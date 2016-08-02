@@ -17,16 +17,23 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getName().toString().toLowerCase();
+
 	public static String LAUNCH_CONFIGURATION_FAILED_EXECUTION_ERROR;
 	public static String CHROMIUM_RUNTIME_NAME;
 	public static String CHROMIUM_RUNTIME_PROVIDER_NAME;
+	public static String LAUNCH_CONFIGURATION_NO_RUNNER_FOUND_ERROR; 
+	
+	public static String ERROR_DIALOG_TITLE;
+	public static String ERROR_UNABLE_TO_DETECT_LAUNCH_URL;
+	public static String ERROR_UNABLE_TO_DETECT_DEBUGGING_PROJECT;
+	public static String ERROR_UNABLE_TO_DETECT_WEBAPP_FOLDER;
 
-
+	private Messages() {
+	}
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
 
-	private Messages() {
-	}
 }

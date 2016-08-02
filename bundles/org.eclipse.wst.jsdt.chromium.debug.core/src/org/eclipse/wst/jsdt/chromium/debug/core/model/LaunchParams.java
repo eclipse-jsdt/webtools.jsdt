@@ -46,6 +46,9 @@ public class LaunchParams {
   
   // attribute is required for tuning source mapping in {@link ChromiumSourceComputer} for remote debugging
   public static final String ATTR_REMOTE_HOME_DIR = "attr_remote_home dir"; //$NON-NLS-1$
+  
+  // attribute is required for tuning source mapping in {@link ChromiumSourceComputer} for WIP debugging
+  public static final String ATTR_BASE_URL = "attr_base_url"; //$NON-NLS-1$
 
   // PREDEFINED_SOURCE_WRAPPER_IDS see below.
 

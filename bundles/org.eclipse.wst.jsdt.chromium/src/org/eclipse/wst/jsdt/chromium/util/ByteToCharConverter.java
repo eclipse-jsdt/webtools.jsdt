@@ -63,9 +63,11 @@ public class ByteToCharConverter {
     // Process main bulk.
     CoderResult res = decoder.decode(input, out, false);
     if (!res.isUnderflow()) {
-      throw new RuntimeException("Unexpected error: " + res);
+    	return out;
+//      file:// protocol is not decoded correctly^  
+//      throw new RuntimeException("Unexpected error: " + res);
     }
-    // Save what remained for future processing.
+    // Save what remained for future processing.	
     unprocessedBuffer.clear();
     while (input.hasRemaining()) {
       unprocessedBuffer.put(input.get());

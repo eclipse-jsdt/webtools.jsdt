@@ -113,7 +113,7 @@ public final class ChromiumDetector {
 	private static String locateSystemCommandPath(String commandName) {
 
 		List<String> cmdLine = new ArrayList<String>();
-		boolean isWindows = Platform.getOS().startsWith("win");
+		boolean isWindows = Platform.getOS().startsWith("win"); //$NON-NLS-1$
 
 		// Is windows?
 		if (isWindows) { // $NON-NLS-1$

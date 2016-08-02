@@ -10,14 +10,19 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.chromium.debug.js.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.URL;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
@@ -25,7 +30,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
-import org.eclipse.wst.jsdt.chromium.debug.js.launchers.ChromiumEditorLauncher;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.IURLProvider;
@@ -35,10 +39,34 @@ import org.eclipse.wst.server.ui.IServerModule;
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public final class ChromiumUtil {
+	private static final String USER_HOME = System.getProperty("user.home"); //$NON-NLS-1$
+	private static final String JSDT_CHROMIUM = ".jsdt-chromium"; //$NON-NLS-1$
 	
 	private ChromiumUtil(){
 	}
-	
+
+	/**
+	 * Creates '.jsdt-chromium' directory in user.home for using it as
+	 * '--user-data-dir' parameter witch force Chrome / Chromium to start a new
+	 * browser instance, not just a new window
+	 * 
+	 * @see <a href=
+	 *      "https://www.chromium.org/user-experience/user-data-directory">--user-data-dir</a>
+	 * @return Absolute path to '.jsdt-chromium' folder that will be used as
+	 *         --user-data-dir parameter
+	 */
+	public static String getChromiumUserDataDir() {
+		File chromiumDir = new File(USER_HOME, JSDT_CHROMIUM);
+		chromiumDir.mkdir();
+		return chromiumDir.getAbsolutePath();
+	}
+
+	public static int getRandomOpenPort() throws IOException {
+		try (ServerSocket socket = new ServerSocket(0)) {
+			return socket.getLocalPort();
+		}
+	}
+
 	public static String guessUrl() {
 		String url = null;
 		
@@ -48,9 +76,7 @@ public final class ChromiumUtil {
 			if (page != null) {
 				IWorkbenchPart part = page.getActivePart();
 				IFile activeEditorFile = getEditorFile(part);
-				if (isSupportedFile(activeEditorFile)) {
-					url = toUrl(activeEditorFile);
-				}
+				url = toUrl(activeEditorFile);
 			}
 			
 			if (url == null) {
@@ -67,21 +93,36 @@ public final class ChromiumUtil {
 
 		return url;
 	}
+	
+	public static String toUrl(IResource resource) {
+		String url = null;
 
-	private static boolean isSupportedFile(IFile file) {
-		if (file != null) {
-			IEditorDescriptor[] editors = PlatformUI.getWorkbench()
-					.getEditorRegistry().getEditors(file.getName());
-
-			for (IEditorDescriptor editor : editors) {
-				if (ChromiumEditorLauncher.EDITOR_ID.equals(editor.getId())) {
-					return true;
-				}
+		if (resource != null) {
+			IPath location = resource.getLocation();
+			if (location != null) {
+				url = location.toFile().toURI().toASCIIString();
 			}
 		}
-		
-		return false;
+		return url;
 	}
+		
+	public static IProject guessProject() {
+		IProject project = null;
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		ISelection selection = window.getSelectionService().getSelection();
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection ssel = (IStructuredSelection) selection;
+			Object firstSelectedElement = ssel.getFirstElement();
+			if (firstSelectedElement != null) {
+				@SuppressWarnings("deprecation")
+				IServerModule serverModule = (IServerModule) ResourceUtil.getAdapter(firstSelectedElement, IServerModule.class, false);
+				IModule module = serverModule.getModule()[0];
+				project = module.getProject();
+			}
+		}
+		return project;
+	}
+
 	
 	/**
 	 * If {@code part} is Internal Web IBrowser, returns opened URL. Otherwise
@@ -122,27 +163,13 @@ public final class ChromiumUtil {
 
 		if (firstSelectedElement instanceof IFile) {
 			IFile selectedFile = getSelectedFile(firstSelectedElement);
-			if (isSupportedFile(selectedFile)) {
-				url = toUrl(selectedFile);
-			}
+			url = toUrl(selectedFile);
 		// org.eclipse.wst.server.* bundles are optional 
 		} else if (Platform.getBundle("org.eclipse.wst.server.core") != null && Platform.getBundle("org.eclipse.wst.server.ui") != null) {  //$NON-NLS-1$//$NON-NLS-2$
 			@SuppressWarnings("deprecation")
 			IServerModule serverModule = (IServerModule) ResourceUtil.getAdapter(firstSelectedElement, IServerModule.class, false);
 			if (serverModule != null) {
 				url = toUrl(serverModule);
-			}
-		}
-		return url;
-	}
-
-	private static String toUrl(IFile file) {
-		String url = null;
-
-		if (file != null) {
-			IPath location = file.getLocation();
-			if (location != null) {
-				url = location.toFile().toURI().toASCIIString();
 			}
 		}
 		return url;

@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.chromium.debug.js.runtime;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +53,6 @@ public class ChromiumRunner implements IJSRunner {
 			}
 		}
 
-		String mainFile = configuration.getFileToLaunch();
-		cmdLine.add(mainFile);
-
 		String[] appArguments = configuration.getProgramArguments();
 		if (appArguments.length != 0) {
 			for (String argument : appArguments) {
@@ -64,22 +60,15 @@ public class ChromiumRunner implements IJSRunner {
 			}
 		}
 
-		File workingPath = null;
-		String workingDirectory = configuration.getWorkingDirectory();
-		if (workingDirectory.length() > 0) {
-			workingPath = new File(workingDirectory);
-		}
-
 		String[] cmds = {};
 		cmds = cmdLine.toArray(cmds);
 
 		ProcessBuilder builder = new ProcessBuilder(cmds);
-		builder.directory(workingPath);
 		try {
 			Process process = builder.start();
 			builder.redirectErrorStream(true);
 			launch.setAttribute(CONSOLE_ENCODING, CHARSET_UTF_8);
-			return DebugPlugin.newProcess(launch, process, "Chrome / Chromium process", //$NON-NLS-1$
+			return DebugPlugin.newProcess(launch, process, cmds[0],
 					LaunchConfigurationUtil.getDefaultAttributes());
 		} catch (Exception ex) {
 			throw new CoreException(new Status(IStatus.ERROR, JSDebuggerPlugin.PLUGIN_ID,

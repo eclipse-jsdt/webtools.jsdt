@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -35,7 +36,7 @@ import org.eclipse.wst.jsdt.chromium.debug.core.model.LaunchParams;
  * V8/Chrome debug sessions and {@link SourceNameMapperContainer} for projects available in the workspace
  */
 public class ChromiumSourceComputer implements ISourcePathComputerDelegate {
-
+	private static final String SEPARATOR = System.getProperty("file.separator"); //$NON-NLS-1$
 	
 	public ISourceContainer[] computeSourceContainers(ILaunchConfiguration configuration, IProgressMonitor monitor)
 			throws CoreException {
@@ -43,18 +44,34 @@ public class ChromiumSourceComputer implements ISourcePathComputerDelegate {
 
 		String projectName = configuration.getAttribute(LaunchParams.ATTR_APP_PROJECT, (String) null);
 		String path = configuration.getAttribute(LaunchParams.ATTR_APP_PROJECT_RELATIVE_PATH, (String) null);
+		
+		// Optional parameter for Node.js remote debugging
 		String remoteDir = configuration.getAttribute(LaunchParams.ATTR_REMOTE_HOME_DIR, (String) null);
+		// Optional parameter for WIP debugging via http:// and file:// protocols
+		String baseURL = configuration.getAttribute(LaunchParams.ATTR_BASE_URL, (String) null);
 		
 		if (projectName != null && path != null) {
 			IProject project = getProject(projectName);
 			if (project != null && project.isAccessible()) {
 				IPath resourcePath = new Path(path);
-				IResource resource = project.getFile(resourcePath);
+				IResource resource = project.findMember(resourcePath);
 				if (resource.isAccessible()) {
-					IContainer container = resource.getParent();
-					String mapping = (remoteDir != null) ? remoteDir : container.getLocation().toOSString();
+					IContainer container = getContainerForMapping(resource);
+					
+					String containerMapping;
+					// Node.js remote debugging
+					if (remoteDir != null) {
+						containerMapping = remoteDir;
+					// WIP debugging via http:// and file:// protocols
+					} else if (baseURL != null) {
+						containerMapping = baseURL;
+					// Local Node.js Debugging
+					} else {
+						containerMapping = container.getLocation().toOSString();
+					}
+					
 					// {@link SourceNameMapperContainer} for projects available in the workspace
-					SourceNameMapperContainer workspaceConatiner = createWorkspaceSourceContainer(container, mapping);
+ 					SourceNameMapperContainer workspaceConatiner = createWorkspaceSourceContainer(container, containerMapping);
 					containers.add(workspaceConatiner);
 				}
 			}
@@ -71,8 +88,18 @@ public class ChromiumSourceComputer implements ISourcePathComputerDelegate {
 	private IProject getProject(String name) {
 		return ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 	}
+	
+	private IContainer getContainerForMapping(final IResource resource) {
+		IContainer container = null;
+		if (resource instanceof IFile) {
+			container = resource.getParent();
+		} else if (resource instanceof IContainer) {
+			container = (IContainer) resource;
+		}
+		return container;
+	}
 
-	private SourceNameMapperContainer createWorkspaceSourceContainer(IContainer container, String path) {
+	private SourceNameMapperContainer createWorkspaceSourceContainer(IContainer container, String containerMapping) {
 		ContainerSourceContainer sourceContainer = null;
 		if (container instanceof IProject) {
 			sourceContainer = new ProjectSourceContainer((IProject) container, true);
@@ -80,8 +107,9 @@ public class ChromiumSourceComputer implements ISourcePathComputerDelegate {
 			sourceContainer = new FolderSourceContainer((IFolder) container, true);
 		}
 
+		containerMapping = (containerMapping.endsWith(SEPARATOR)) ? containerMapping : containerMapping + SEPARATOR;
+
 		// Using absolute path as a mapping prefix for project
-		return new SourceNameMapperContainer(path + System.getProperty("file.separator"), //$NON-NLS-1$
-				sourceContainer);
+		return new SourceNameMapperContainer(containerMapping, sourceContainer);
 	}
 }

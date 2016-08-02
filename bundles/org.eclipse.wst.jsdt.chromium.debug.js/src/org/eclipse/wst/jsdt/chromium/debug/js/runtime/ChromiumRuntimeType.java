@@ -36,7 +36,7 @@ public class ChromiumRuntimeType extends AbstractJSRuntimeType {
 
 	@Override
 	protected IStatus doValidateInstallLocation(File tempFile) {
-		// FIXME: Add Chrome / Chromium path validation
+		// FIXME: Bug 499567 - Need to add path validation for Chromium / Chrome Runtime
 		return Status.OK_STATUS;
 	}
 

@@ -8,7 +8,6 @@
  * 	Contributors:
  * 		 Red Hat Inc. - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.wst.jsdt.chromium.debug.js.util;
 
 import java.io.InputStream;
@@ -22,11 +21,11 @@ import java.util.regex.Pattern;
  */
 public class WindowsRegistryUtil {
 	
-	private static final Pattern REGISTRY_PATTERN = Pattern.compile("HKEY_.*\\r\\n\\s*\\S+\\s+REG_SZ\\s+(.+)");
+	private static final Pattern REGISTRY_PATTERN = Pattern.compile("HKEY_.*\\r\\n\\s*\\S+\\s+REG_SZ\\s+(.+)"); //$NON-NLS-1$
 
     public static String readKeyValue(String location, String key){
         try {
-            Process process = Runtime.getRuntime().exec("reg query \"" + location + "\" /v " + key);
+            Process process = Runtime.getRuntime().exec("reg query \"" + location + "\" /v " + key); //$NON-NLS-1$ //$NON-NLS-2$
 
             InputStream is = process.getInputStream();
             StringBuilder sb = new StringBuilder();
