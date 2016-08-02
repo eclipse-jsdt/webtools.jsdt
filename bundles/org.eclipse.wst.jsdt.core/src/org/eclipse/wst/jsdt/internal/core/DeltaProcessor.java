@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     IBM Corporation - initial API and implementation
+ *     IBM Corporation - initial API and implementation	
  *******************************************************************************/
 package org.eclipse.wst.jsdt.internal.core;
 
@@ -47,7 +47,6 @@ import org.eclipse.wst.jsdt.core.IPackageFragmentRoot;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.compiler.CharOperation;
-import org.eclipse.wst.jsdt.internal.compiler.SourceElementParser;
 import org.eclipse.wst.jsdt.internal.core.builder.JavaBuilder;
 import org.eclipse.wst.jsdt.internal.core.hierarchy.TypeHierarchy;
 import org.eclipse.wst.jsdt.internal.core.search.AbstractSearchScope;
@@ -273,11 +272,6 @@ public class DeltaProcessor {
 	 * Type of event that should be processed no matter what the real event type is.
 	 */
 	public int overridenEventType = -1;
-
-	/*
-	 * Cache SourceElementParser for the project being visited
-	 */
-	private SourceElementParser sourceElementParserCache;
 
 	/*
 	 * Map from IProject to ClasspathChange
@@ -1326,11 +1320,6 @@ public class DeltaProcessor {
 		this.javaModelDeltas = new ArrayList();
 	}
 
-	private SourceElementParser getSourceElementParser(Openable element) {
-		if (this.sourceElementParserCache == null)
-			this.sourceElementParserCache = this.manager.indexManager.getSourceElementParser(element.getJavaScriptProject(), null/*requestor will be set by indexer*/);
-		return this.sourceElementParserCache;
-	}
 	/*
 	 * Finds the root info this path is included in.
 	 * Returns null if not found.
@@ -1935,7 +1924,6 @@ public class DeltaProcessor {
 								registerJavaModelDelta(translatedDelta);
 							}
 						} finally {
-							this.sourceElementParserCache = null; // don't hold onto parser longer than necessary
 							startDeltas();
 						}
 						IElementChangedListener[] listeners;
@@ -2044,9 +2032,6 @@ public class DeltaProcessor {
 		// process current delta
 		boolean processChildren = true;
 		if (res instanceof IProject) {
-			// reset source element parser cache
-			this.sourceElementParserCache = null;
-
 			processChildren =
 				this.updateCurrentDeltaAndIndex(
 					delta,
@@ -2535,7 +2520,7 @@ public class DeltaProcessor {
 						if ((flags & IResourceDelta.CONTENT) == 0 && (flags & IResourceDelta.ENCODING) == 0)
 							break;
 					case IResourceDelta.ADDED :
-						indexManager.addSource(file, file.getProject().getFullPath(), getSourceElementParser(element));
+						indexManager.addSource(file, file.getProject().getFullPath());
 						// Clean file from secondary types cache but do not update indexing secondary type cache as it will be updated through indexing itself
 						this.manager.secondaryTypesRemoving(file, false);
 						break;

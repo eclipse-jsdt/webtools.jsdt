@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Red Hat Inc. - Incremental improvements
  *******************************************************************************/
 package org.eclipse.wst.jsdt.internal.core.search.indexing;
 
@@ -15,8 +16,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
 import java.util.zip.CRC32;
 
 import org.eclipse.core.filesystem.EFS;
@@ -31,7 +30,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.jsdt.core.IIncludePathEntry;
-import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.core.compiler.CharOperation;
@@ -39,10 +37,6 @@ import org.eclipse.wst.jsdt.core.search.IJavaScriptSearchScope;
 import org.eclipse.wst.jsdt.core.search.SearchDocument;
 import org.eclipse.wst.jsdt.core.search.SearchEngine;
 import org.eclipse.wst.jsdt.core.search.SearchParticipant;
-import org.eclipse.wst.jsdt.internal.compiler.ISourceElementRequestor;
-import org.eclipse.wst.jsdt.internal.compiler.SourceElementParser;
-import org.eclipse.wst.jsdt.internal.compiler.impl.CompilerOptions;
-import org.eclipse.wst.jsdt.internal.compiler.problem.DefaultProblemFactory;
 import org.eclipse.wst.jsdt.internal.compiler.util.SimpleLookupTable;
 import org.eclipse.wst.jsdt.internal.compiler.util.SimpleSet;
 import org.eclipse.wst.jsdt.internal.core.ClasspathEntry;
@@ -115,11 +109,10 @@ public void addBinary(IFile resource, IPath containerPath) {
  * Trigger addition of a resource to an index
  * Note: the actual operation is performed in background
  */
-public void addSource(IFile resource, IPath containerPath, SourceElementParser parser) {
+public void addSource(IFile resource, IPath containerPath) {
 	if (JavaScriptCore.getPlugin() == null) return;
 	SearchParticipant participant = SearchEngine.getDefaultSearchParticipant();
 	SearchDocument document = participant.getDocument(resource.getFullPath().toString());
-	((InternalSearchDocument) document).parser = parser;
 	IPath indexLocation = computeIndexLocation(containerPath);
 	scheduleDocumentIndexing(document, containerPath, indexLocation, participant);
 }
@@ -194,26 +187,7 @@ public void ensureIndexExists(IPath indexLocation, IPath containerPath) {
 		getIndex(containerPath, indexLocation, true, true);
 	}
 }
-public SourceElementParser getSourceElementParser(IJavaScriptProject project, ISourceElementRequestor requestor) {
-	// disable task tags to speed up parsing
-	Map options = project.getOptions(true);
-	options.put(JavaScriptCore.COMPILER_TASK_TAGS, ""); //$NON-NLS-1$
 
-	SourceElementParser parser = new IndexingParser(
-		requestor,
-		new DefaultProblemFactory(Locale.getDefault()),
-		new CompilerOptions(options),
-		true, // index local declarations
-		true, // optimize string literals
-		false); // do not use source javadoc parser to speed up parsing
-	parser.reportOnlyOneSyntaxError = true;
-
-	// Always check javadoc while indexing
-	parser.javadocParser.checkDocComment = true;
-	parser.javadocParser.reportProblems = false;
-
-	return parser;
-}
 /**
  * Returns the index for a given project, according to the following algorithm:
  * - if index is already in memory: answers this one back

@@ -26,7 +26,6 @@ import org.eclipse.wst.jsdt.internal.core.PackageFragment;
 //import org.eclipse.wst.jsdt.internal.core.ResolvedSourceMethod;
 //import org.eclipse.wst.jsdt.internal.core.ResolvedSourceType;
 import org.eclipse.wst.jsdt.internal.core.SourceRefElement;
-import org.eclipse.wst.jsdt.internal.core.search.matching.PatternLocator;
 
 /**
  * Abstract class for Java Search tests.
@@ -40,6 +39,7 @@ public class AbstractJavaSearchTests extends AbstractJavaModelTests implements I
 	protected static int EQUIVALENT_RULE = EXACT_RULE | SearchPattern.R_EQUIVALENT_MATCH;
 	protected static int ERASURE_RULE = EXACT_RULE | SearchPattern.R_ERASURE_MATCH;
 	protected static int RAW_RULE = EXACT_RULE | SearchPattern.R_ERASURE_MATCH | SearchPattern.R_EQUIVALENT_MATCH;
+	protected static int SUPER_INVOCATION_FLAVOR = 0x0200;
 
 //	IJavaScriptUnit[] workingCopies;
 //	boolean discard;
@@ -207,7 +207,7 @@ public class AbstractJavaSearchTests extends AbstractJavaModelTests implements I
 			}
 		}
 		private boolean showSuperInvocation() {
-			return (this.showFlavors & PatternLocator.SUPER_INVOCATION_FLAVOR) != 0;
+			return (this.showFlavors & SUPER_INVOCATION_FLAVOR) != 0;
 		}
 		protected void append(IField field) throws JavaScriptModelException {
 			append(field.getDeclaringType());

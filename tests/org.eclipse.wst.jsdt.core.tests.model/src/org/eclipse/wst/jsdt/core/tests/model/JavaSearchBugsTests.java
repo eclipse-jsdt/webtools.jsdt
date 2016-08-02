@@ -48,7 +48,6 @@ import org.eclipse.wst.jsdt.internal.core.SourceMethod;
 import org.eclipse.wst.jsdt.internal.core.search.AbstractSearchScope;
 import org.eclipse.wst.jsdt.internal.core.search.indexing.IIndexConstants;
 import org.eclipse.wst.jsdt.internal.core.search.matching.MatchLocator;
-import org.eclipse.wst.jsdt.internal.core.search.matching.PatternLocator;
 
 /**
  * Non-regression tests for bugs fixed in Java Search engine.
@@ -1972,7 +1971,7 @@ public void testBug83388() throws CoreException {
 		DECLARATIONS, 
 		EXACT_RULE);
 	assertNotNull("Pattern should not be null", pattern);
-	MatchLocator.setFocus(pattern, importDeclaration);
+	pattern.setFocus(importDeclaration);
 	new SearchEngine(workingCopies).search(
 		pattern,
 		new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant()},
@@ -6821,7 +6820,7 @@ public void testBug156491() throws CoreException {
 		"}\n"
 	);
 	IFunction method = workingCopies[0].getType("X").getFunction("toString", new String[0]);
-	this.resultCollector.showFlavors = PatternLocator.SUPER_INVOCATION_FLAVOR;
+	this.resultCollector.showFlavors = AbstractJavaSearchTests.SUPER_INVOCATION_FLAVOR;
 	search(method, REFERENCES);
 	assertSearchResults(
 		"src/pack/Test.java void pack.Test.validMatches(X) [toString()] EXACT_MATCH\n" + 
@@ -6859,7 +6858,7 @@ public void testBug156491a() throws CoreException {
 	resultCollector.showRule = true;
 	setUpBug156491();
 	IFunction method = workingCopies[0].getType("L2").getFunction("test", new String[0]);
-	this.resultCollector.showFlavors = PatternLocator.SUPER_INVOCATION_FLAVOR;
+	this.resultCollector.showFlavors = AbstractJavaSearchTests.SUPER_INVOCATION_FLAVOR;
 	search(method, REFERENCES);
 	assertSearchResults(
 		"src/other/Test.java void other.Test.testInterface(I) [test()] EXACT_MATCH SUPER INVOCATION\n" + 
@@ -6871,7 +6870,7 @@ public void testBug156491b() throws CoreException {
 	resultCollector.showRule = true;
 	setUpBug156491();
 	IFunction method = workingCopies[0].getType("L1").getFunction("test", new String[0]);
-	this.resultCollector.showFlavors = PatternLocator.SUPER_INVOCATION_FLAVOR;
+	this.resultCollector.showFlavors = AbstractJavaSearchTests.SUPER_INVOCATION_FLAVOR;
 	search(method, REFERENCES);
 	assertSearchResults(
 		"src/other/Test.java void other.Test.testInterface(I) [test()] EXACT_MATCH SUPER INVOCATION\n" + 

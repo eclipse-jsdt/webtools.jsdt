@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -116,6 +116,11 @@ public abstract class InternalSearchPattern {
 	boolean isPolymorphicSearch() {
 		return false;
 	}
+
+	public void setFocus(IJavaScriptElement focus) {
+		this.focus = focus;
+	}
+
 	EntryResult[] queryIn(Index index) throws IOException {
 		SearchPattern pattern = (SearchPattern) this;
 		return index.query(pattern.getIndexCategories(), pattern.getIndexKey(), pattern.getMatchRule());

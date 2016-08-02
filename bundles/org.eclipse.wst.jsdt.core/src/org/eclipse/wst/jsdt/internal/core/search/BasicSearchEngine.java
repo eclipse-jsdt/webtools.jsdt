@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Red Hat Inc. - Minor updates/fixes
  *******************************************************************************/
 package org.eclipse.wst.jsdt.internal.core.search;
 
@@ -22,6 +23,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.wst.jsdt.core.IField;
 import org.eclipse.wst.jsdt.core.IFunction;
@@ -230,6 +232,7 @@ public class BasicSearchEngine {
 	 */
 	void findMatches(SearchPattern pattern, SearchParticipant[] participants, IJavaScriptSearchScope scope, SearchRequestor requestor, IProgressMonitor monitor) throws CoreException {
 		if (monitor != null && monitor.isCanceled()) throw new OperationCanceledException();
+		SubMonitor localMonitor = SubMonitor.convert(monitor);
 		try {
 			if (VERBOSE) {
 				Util.verbose("Searching for pattern: " + pattern.toString()); //$NON-NLS-1$
@@ -242,27 +245,25 @@ public class BasicSearchEngine {
 
 			/* initialize progress monitor */
 			int length = participants.length;
-			if (monitor != null)
-				monitor.beginTask(Messages.engine_searching, 100 * length);
+			localMonitor.beginTask(Messages.engine_searching, 100*length);
+			
 			IndexManager indexManager = JavaModelManager.getJavaModelManager().getIndexManager();
 			requestor.beginReporting();
 			for (int i = 0; i < length; i++) {
-				if (monitor != null && monitor.isCanceled()) throw new OperationCanceledException();
 
 				SearchParticipant participant = participants[i];
 				try {
-					if (monitor != null) monitor.subTask(Messages.bind(Messages.engine_searching_indexing, new String[] {participant.getDescription()}));
+					localMonitor.subTask(Messages.bind(Messages.engine_searching_indexing, new String[] {participant.getDescription()}));
 					participant.beginSearching();
 					requestor.enterParticipant(participant);
 					PathCollector pathCollector = new PathCollector();
 					indexManager.performConcurrentJob(
 						new PatternSearchJob(pattern, participant, scope, pathCollector),
 						IJavaScriptSearchConstants.WAIT_UNTIL_READY_TO_SEARCH,
-						monitor==null ? null : new SubProgressMonitor(monitor, 50));
-					if (monitor != null && monitor.isCanceled()) throw new OperationCanceledException();
+						localMonitor.split(50));
 
 					// locate index matches if any (note that all search matches could have been issued during index querying)
-					if (monitor != null) monitor.subTask(Messages.bind(Messages.engine_searching_matching, new String[] {participant.getDescription()}));
+					localMonitor.subTask(Messages.bind(Messages.engine_searching_matching, new String[] {participant.getDescription()}));
 					String[] indexMatchPaths = pathCollector.getPaths();
 					if (indexMatchPaths != null) {
 						pathCollector = null; // release
@@ -272,7 +273,7 @@ public class BasicSearchEngine {
 							indexMatches[j] = participant.getDocument(indexMatchPaths[j]);
 						}
 						SearchDocument[] matches = MatchLocator.addWorkingCopies(pattern, indexMatches, getWorkingCopies(), participant);
-						participant.locateMatches(matches, pattern, scope, requestor, monitor==null ? null : new SubProgressMonitor(monitor, 50));
+						participant.locateMatches(matches, pattern, scope, requestor, localMonitor.split(50));
 					}
 				} finally {
 					requestor.exitParticipant(participant);

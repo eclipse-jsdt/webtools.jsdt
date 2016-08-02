@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Red Hat Inc - incremental improvements
  *******************************************************************************/
 package org.eclipse.wst.jsdt.core.search;
 
@@ -28,11 +29,11 @@ import org.eclipse.wst.jsdt.internal.compiler.parser.ScannerHelper;
 import org.eclipse.wst.jsdt.internal.compiler.parser.TerminalTokens;
 import org.eclipse.wst.jsdt.internal.core.LocalVariable;
 import org.eclipse.wst.jsdt.internal.core.search.indexing.IIndexConstants;
+import org.eclipse.wst.jsdt.internal.core.search.matching.AndPattern;
 import org.eclipse.wst.jsdt.internal.core.search.matching.ConstructorPattern;
 import org.eclipse.wst.jsdt.internal.core.search.matching.FieldPattern;
 import org.eclipse.wst.jsdt.internal.core.search.matching.InternalSearchPattern;
 import org.eclipse.wst.jsdt.internal.core.search.matching.LocalVariablePattern;
-import org.eclipse.wst.jsdt.internal.core.search.matching.MatchLocator;
 import org.eclipse.wst.jsdt.internal.core.search.matching.MethodPattern;
 import org.eclipse.wst.jsdt.internal.core.search.matching.OrPattern;
 import org.eclipse.wst.jsdt.internal.core.search.matching.PackageDeclarationPattern;
@@ -460,7 +461,7 @@ public static final boolean camelCaseMatch(String pattern, int patternStart, int
  * @return an "and" pattern
  */
 public static SearchPattern createAndPattern(SearchPattern leftPattern, SearchPattern rightPattern) {
-	return MatchLocator.createAndPattern(leftPattern, rightPattern);
+	return new AndPattern(leftPattern, rightPattern);
 }
 
 /**
@@ -1468,7 +1469,7 @@ public static SearchPattern createPattern(IJavaScriptElement element, int limitT
 			break;
 	}
 	if (searchPattern != null)
-		MatchLocator.setFocus(searchPattern, element);
+		searchPattern.setFocus(element);
 	return searchPattern;
 }
 
@@ -1545,6 +1546,7 @@ private static SearchPattern createTypePattern(String patternString, int limitTo
 				case TerminalTokens.TokenNameLESS:
 					argCount++;
 					// fall through default case to add token to type
+					//$FALL-THROUGH$
 				default: // all other tokens are considered identifiers (see bug 21763 Problem in JavaScript search [search])
 					if (type == null)
 						type = scanner.getCurrentTokenString();
@@ -1600,15 +1602,15 @@ private static SearchPattern createTypePattern(String patternString, int limitTo
 		typeChars = null;
 	}
 	switch (limitTo) {
-		case IJavaScriptSearchConstants.DECLARATIONS : // cannot search for explicit member types
-			return new TypeDeclarationPattern(typePart, matchRule);
+		case IJavaScriptSearchConstants.DECLARATIONS :
+			return new TypeDeclarationPattern(qualificationChars, typeChars, matchRule);
 		case IJavaScriptSearchConstants.REFERENCES :
 			return new TypeReferencePattern(qualificationChars, typeChars, typeSignature, matchRule);
 		case IJavaScriptSearchConstants.IMPLEMENTORS :
 			return new SuperTypeReferencePattern(QualificationHelpers.createFullyQualifiedName(qualificationChars, typeChars), matchRule);
 		case IJavaScriptSearchConstants.ALL_OCCURRENCES :
 			return new OrPattern(
-				new TypeDeclarationPattern(typePart, matchRule),// cannot search for explicit member types
+				new TypeDeclarationPattern(qualificationChars, typeChars, matchRule),
 				new TypeReferencePattern(qualificationChars, typeChars, matchRule));
 	}
 	return null;

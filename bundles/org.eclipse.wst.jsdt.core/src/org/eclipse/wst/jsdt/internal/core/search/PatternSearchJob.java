@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,7 +22,6 @@ import org.eclipse.wst.jsdt.internal.core.JavaModelManager;
 import org.eclipse.wst.jsdt.internal.core.index.Index;
 import org.eclipse.wst.jsdt.internal.core.search.indexing.IndexManager;
 import org.eclipse.wst.jsdt.internal.core.search.indexing.ReadWriteMonitor;
-import org.eclipse.wst.jsdt.internal.core.search.matching.MatchLocator;
 import org.eclipse.wst.jsdt.internal.core.search.processing.IJob;
 import org.eclipse.wst.jsdt.internal.core.search.processing.JobManager;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
@@ -113,7 +112,8 @@ public boolean search(Index index, IProgressMonitor progressMonitor) {
 	try {
 		monitor.enterRead(); // ask permission to read
 		long start = System.currentTimeMillis();
-		MatchLocator.findIndexMatches(this.pattern, index, requestor, this.participant, this.scope, progressMonitor);
+		pattern.findIndexMatches(index, requestor, this.participant, this.scope, progressMonitor);
+
 		executionTime += System.currentTimeMillis() - start;
 		return COMPLETE;
 	} catch (IOException e) {

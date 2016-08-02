@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * <p>Tests for TypeDeclarationPattern.</p>
  */
-@Ignore("Ignored until search is fixed")
+@Ignore("Type Search only implemented for ES6 syntax")
 @SuppressWarnings("nls")
 public class TestTypeDeclarationPattern extends AbstractSearchTest {
 	

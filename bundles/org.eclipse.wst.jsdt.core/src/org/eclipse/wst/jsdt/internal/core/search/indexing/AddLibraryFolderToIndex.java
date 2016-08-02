@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -40,7 +40,7 @@ class AddLibraryFolderToIndex extends IndexRequest {
 //		AddLibraryFileToIndex request = new AddLibraryFileToIndex(resource,this.manager);
 //		if (!this.manager.isJobWaiting(request))
 //			this.manager.request(request);
-		this.manager.addSource(resource, folderPath, null);
+		this.manager.addSource(resource, folderPath);
 	}
 //	private void indexFile(IPath resource) {
 //		AddLibraryFileToIndex request = new AddLibraryFileToIndex(resource,this.manager);

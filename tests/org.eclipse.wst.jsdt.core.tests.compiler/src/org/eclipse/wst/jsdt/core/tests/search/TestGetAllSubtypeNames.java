@@ -15,8 +15,10 @@ import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.search.IJavaScriptSearchConstants;
 import org.eclipse.wst.jsdt.core.search.SearchEngine;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore("Searching for subtypes is not implemented for pre ES6")
 public class TestGetAllSubtypeNames extends AbstractSearchTest {
 	@Test
 	public void testGetAllSubtypeNames01() throws Exception {

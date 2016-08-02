@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.jsdt.core.IIncludePathEntry;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
-import org.eclipse.wst.jsdt.internal.compiler.SourceElementParser;
 import org.eclipse.wst.jsdt.internal.compiler.util.SimpleLookupTable;
 import org.eclipse.wst.jsdt.internal.core.ClasspathEntry;
 import org.eclipse.wst.jsdt.internal.core.JavaProject;
@@ -207,7 +206,6 @@ public class IndexAllProject extends IndexRequest {
 				}
 			}
 
-			SourceElementParser parser = this.manager.getSourceElementParser(javaProject, null/*requestor will be set by indexer*/);
 			Object[] names = indexedFileNames.keyTable;
 			Object[] values = indexedFileNames.valueTable;
 			for (int i = 0, namesLength = names.length; i < namesLength; i++) {
@@ -220,7 +218,7 @@ public class IndexAllProject extends IndexRequest {
 						if (value == DELETED)
 							this.manager.remove(name, this.containerPath);
 						else
-							this.manager.addSource((IFile) value, this.containerPath, parser);
+							this.manager.addSource((IFile) value, this.containerPath);
 					}
 				}
 			}

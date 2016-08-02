@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 import org.eclipse.wst.jsdt.core.search.IJavaScriptSearchConstants;
 import org.eclipse.wst.jsdt.core.search.SearchMatch;
 import org.eclipse.wst.jsdt.core.search.SearchPattern;
+import org.junit.Ignore;
 import org.junit.Test;
 
 @SuppressWarnings("nls")
@@ -49,7 +50,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 1, results.length);
 	}
 	
-	@Test
+	@Test @Ignore("prototype is not handled well by ASTParser")
 	public void testDeclarationSearch03() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"SearchConstructor." + getName(),
@@ -92,7 +93,7 @@ public class TestMethodSearch extends AbstractSearchTest {
 		assertEquals("wrong number of files containing references found", 2, results.length);
 	}
 	
-	@Test
+	@Test @Ignore("Prototype is not handled well by ASTParser")
 	public void testDeclarationSearch06() throws Exception {
 		SearchMatch[] results = runSearchTest(getName(),
 			"SearchConstructor.*",

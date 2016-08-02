@@ -18,8 +18,6 @@ import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.wst.jsdt.core.JavaScriptCore;
-import org.eclipse.wst.jsdt.internal.compiler.SourceElementParser;
 import org.eclipse.wst.jsdt.internal.core.index.Index;
 import org.eclipse.wst.jsdt.internal.core.search.processing.JobManager;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
@@ -55,7 +53,6 @@ class AddFolderToIndex extends IndexRequest {
 
 			final IPath container = this.containerPath;
 			final IndexManager indexManager = this.manager;
-			final SourceElementParser parser = indexManager.getSourceElementParser(JavaScriptCore.create(this.project), null/*requestor will be set by indexer*/);
 			if (this.exclusionPatterns == null && this.inclusionPatterns == null) {
 				folder.accept(
 					new IResourceProxyVisitor() {
@@ -63,7 +60,7 @@ class AddFolderToIndex extends IndexRequest {
 							if (proxy.getType() == IResource.FILE) {
 								if (org.eclipse.wst.jsdt.internal.core.util.Util.isJavaLikeFileName(proxy.getName())
 										||org.eclipse.wst.jsdt.internal.core.util.Util.isMetadataFileName(proxy.getName()))
-									indexManager.addSource((IFile) proxy.requestResource(), container, parser);
+									indexManager.addSource((IFile) proxy.requestResource(), container);
 								return false;
 							}
 							return true;
@@ -80,7 +77,7 @@ class AddFolderToIndex extends IndexRequest {
 									if (org.eclipse.wst.jsdt.internal.core.util.Util.isJavaLikeFileName(proxy.getName())) {
 										IResource resource = proxy.requestResource();
 										if (!Util.isExcluded(resource, inclusionPatterns, exclusionPatterns))
-											indexManager.addSource((IFile)resource, container, parser);
+											indexManager.addSource((IFile)resource, container);
 									}
 									return false;
 								case IResource.FOLDER :

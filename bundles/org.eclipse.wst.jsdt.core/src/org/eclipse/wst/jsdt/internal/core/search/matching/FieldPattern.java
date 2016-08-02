@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,6 +19,7 @@ import org.eclipse.wst.jsdt.internal.core.Logger;
 import org.eclipse.wst.jsdt.internal.core.index.EntryResult;
 import org.eclipse.wst.jsdt.internal.core.index.Index;
 import org.eclipse.wst.jsdt.internal.core.util.QualificationHelpers;
+import org.eclipse.wst.jsdt.internal.core.util.Util;
 
 public class FieldPattern extends VariablePattern {
 	/**
@@ -238,24 +239,31 @@ public class FieldPattern extends VariablePattern {
 	 * @see org.eclipse.wst.jsdt.core.search.SearchPattern#decodeIndexKey(char[])
 	 */
 	public void decodeIndexKey(char[] key) {
-		char[][] seperated = CharOperation.splitOn(SEPARATOR, key);
+		char[][] separated = CharOperation.splitOn(SEPARATOR, key);
 		
 		//get the name
-		this.name = seperated[0];
-		
-		if (seperated.length > 1) {
+		this.name = separated[0];
+
+		if (separated.length > 1 && separated.length <= 4) {
 			// get the declaring type
-			char[][] declaringType = QualificationHelpers.seperateFullyQualifedName(seperated[1]);
+			char[][] declaringType = QualificationHelpers.seperateFullyQualifedName(separated[1]);
 			this.setDeclaringQualification(declaringType[QualificationHelpers.QULIFIERS_INDEX]);
 			this.setDeclaringSimpleName(declaringType[QualificationHelpers.SIMPLE_NAMES_INDEX]);
 
 			// get the type of the field
-			char[][] type = QualificationHelpers.seperateFullyQualifedName(seperated[2]);
+			char[][] type = QualificationHelpers.seperateFullyQualifedName(separated[2]);
 			this.typeQualification = type[QualificationHelpers.QULIFIERS_INDEX];
 			this.typeSimpleName = type[QualificationHelpers.SIMPLE_NAMES_INDEX];
 
 			// get the modifiers
-			this.modifiers = seperated[3][0] + seperated[3][1];
+			this.modifiers = separated[3][0] + separated[3][1];
+		} else if (separated.length > 4) {
+			// Since any JavaScript Strings is a valid property name,
+			// it's possible that a property name contains SEPARATOR,
+			// breaking the array split.
+			Util.verbose("Error decoding index key; " + new String(key) //$NON-NLS-1$
+						+ "\n\t Key contains separator character."); //$NON-NLS-1$
+			return;
 		}
 	}
 	
