@@ -42,6 +42,15 @@
     <description>Initialize JDT's package explorer to show working sets as its root objects</description>
   </setupTask>
   <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      id="AERI_preferences_resourceCreation"
+      excludedTriggers="STARTUP MANUAL"
+      content="anonymizeMessages=false&#xA;anonymizeStackTraces=true&#xA;configured=true&#xA;eclipse.preferences.version=1&#xA;reporterEmail=${bugzilla.id}&#xA;reporterName=${scope.user.name}&#xA;resetSendMode=KEEP&#xA;resetSendModeOn=0&#xA;sendMode=NOTIFY&#xA;servers/org.eclipse.epp.logging.aeri.ide.server/anonymizeStackTraces=true&#xA;servers/org.eclipse.epp.logging.aeri.ide.server/configured=true&#xA;servers/org.eclipse.epp.logging.aeri.ide.server/reporterEmail=${bugzilla.id}&#xA;servers/org.eclipse.epp.logging.aeri.ide.server/reporterName=${scope.user.name}&#xA;"
+      targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.epp.logging.aeri.ide.prefs"
+      encoding="UTF-8">
+    <description>Initialize AERI preferences to enable error report</description>
+  </setupTask>
+  <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
         name="org.eclipse.platform.feature.group"/>
