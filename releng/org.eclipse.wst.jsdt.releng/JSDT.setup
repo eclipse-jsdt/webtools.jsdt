@@ -12,7 +12,7 @@
     xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
     xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/setup/mylyn/1.0 index:/models/Mylyn.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/setup/mylyn/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
     name="wtp.jsdt"
     label="JSDT">
   <setupTask
@@ -231,102 +231,52 @@
   <setupTask
       xsi:type="setup.workingsets:WorkingSetTask">
     <workingSet
-        name="JSDT Docs, Features and Tests">
-      <predicate
-          xsi:type="predicates:OrPredicate">
-        <operand
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.wst\.jsdt\.doc"/>
-        <operand
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.wst\.jsdt\..*\.feature"/>
-        <operand
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.wst\.jsdt\..*\.tests.*"/>
-      </predicate>
-    </workingSet>
-    <workingSet
         name="JSDT Core">
       <predicate
-          xsi:type="predicates:OrPredicate">
+          xsi:type="predicates:AndPredicate">
         <operand
-            xsi:type="predicates:AndPredicate">
+            xsi:type="predicates:RepositoryPredicate"
+            project="org.eclipse.wst.jsdt.core"/>
+        <operand
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/(nashorn|development|bundles)/.*"/>
+        <operand
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.wst\.jsdt\..*"/>
+        <operand
+            xsi:type="predicates:NotPredicate">
           <operand
               xsi:type="predicates:NamePredicate"
-              pattern="org\.eclipse\.wst\.jsdt\.nashorn\..*"/>
-          <operand
-              xsi:type="predicates:LocationPredicate"
-              pattern=".*/nashorn/.*"/>
-        </operand>
-        <operand
-            xsi:type="predicates:AndPredicate">
-          <operand
-              xsi:type="predicates:NamePredicate"
-              pattern="org\.eclipse\.wst\.jsdt\..*"/>
-          <operand
-              xsi:type="predicates:NotPredicate">
-            <operand
-                xsi:type="predicates:NamePredicate"
-                pattern="org\.eclipse\.wst\.jsdt\.chromium\..*"/>
-          </operand>
-          <operand
-              xsi:type="predicates:LocationPredicate"
-              pattern=".*/development/.*"/>
-        </operand>
-        <operand
-            xsi:type="predicates:AndPredicate">
-          <operand
-              xsi:type="predicates:NamePredicate"
-              pattern="org\.eclipse\.wst\.jsdt.*"/>
-          <operand
-              xsi:type="predicates:LocationPredicate"
-              pattern=".*/bundles/.*"/>
+              pattern="org\.eclipse\.wst\.jsdt\.(js|chromium).*"/>
         </operand>
       </predicate>
     </workingSet>
     <workingSet
         name="JSDT NodeJS">
       <predicate
-          xsi:type="predicates:OrPredicate">
+          xsi:type="predicates:AndPredicate">
         <operand
-            xsi:type="predicates:AndPredicate">
-          <operand
-              xsi:type="predicates:NamePredicate"
-              pattern="org\.eclipse\.wst\.jsdt\.js\..*"/>
-          <operand
-              xsi:type="predicates:LocationPredicate"
-              pattern=".*/nodejs/.*"/>
-        </operand>
+            xsi:type="predicates:RepositoryPredicate"
+            project="org.eclipse.wst.jsdt.js.node"/>
         <operand
-            xsi:type="predicates:AndPredicate">
-          <operand
-              xsi:type="predicates:NamePredicate"
-              pattern="org\.eclipse\.wst\.jsdt\.chromium\..*"/>
-          <operand
-              xsi:type="predicates:LocationPredicate"
-              pattern=".*/development/.*"/>
-        </operand>
+            xsi:type="predicates:LocationPredicate"
+            pattern=".*/(nodejs|bundles)/.*"/>
         <operand
-            xsi:type="predicates:OrPredicate">
-          <operand
-              xsi:type="predicates:AndPredicate">
-            <operand
-                xsi:type="predicates:NamePredicate"
-                pattern="org\.eclipse\.wst\.jsdt\.js\..*"/>
-            <operand
-                xsi:type="predicates:LocationPredicate"
-                pattern=".*/nodejs/.*"/>
-          </operand>
-          <operand
-              xsi:type="predicates:AndPredicate">
-            <operand
-                xsi:type="predicates:NamePredicate"
-                pattern="org\.eclipse\.wst\.jsdt\.chromium\..*"/>
-            <operand
-                xsi:type="predicates:LocationPredicate"
-                pattern=".*/development/.*"/>
-          </operand>
-        </operand>
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.wst\.jsdt\.(js|chromium).*"/>
+      </predicate>
+    </workingSet>
+    <workingSet
+        name="JSDT Others"
+        id="">
+      <predicate
+          xsi:type="predicates:AndPredicate">
+        <operand
+            xsi:type="predicates:RepositoryPredicate"
+            project="org.eclipse.wst.jsdt.core"/>
+        <operand
+            xsi:type="workingsets:ExclusionPredicate"
+            excludedWorkingSet="//@setupTasks.15/@workingSets.0 //@setupTasks.15/@workingSets.1"/>
       </predicate>
     </workingSet>
     <workingSet
@@ -384,7 +334,7 @@
             project="org.eclipse.json"/>
         <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSet="//@setupTasks.14/@workingSets.3 //@setupTasks.14/@workingSets.4"/>
+            excludedWorkingSet="//@setupTasks.15/@workingSets.3 //@setupTasks.15/@workingSets.4"/>
       </predicate>
     </workingSet>
     <description>The dynamic working sets for ${scope.project.label}</description>
