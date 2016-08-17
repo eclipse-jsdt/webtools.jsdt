@@ -141,8 +141,9 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 	}
 	
 	public boolean visit(FunctionInvocation node ){
-		JavaElement parentHandle= this.handleStack.peek();
-		return parentHandle.getElementType() == IJavaScriptElement.JAVASCRIPT_UNIT;
+		// We return true here to allow structure to be built for e.g.
+		// anonymous functions that define a namespace (see: module pattern)
+		return true;
 	}
 
 	public boolean visit(JavaScriptUnit node){
