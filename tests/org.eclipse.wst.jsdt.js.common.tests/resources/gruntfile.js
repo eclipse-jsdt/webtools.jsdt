@@ -49,4 +49,21 @@ module.exports = function(grunt) {
   
   grunt.registerTask('test', ['jshint', 'qunit']);
   grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);
+
+  // Bug 499729 - Grunt plugin doesn't see all tasks 
+  grunt.task.registerTask('publish', function(type) {
+    grunt.task.run('setVersion: ' + type);
+  });
+
+  grunt.task.registerTask('fetchDependencies', ['jshint', 'qunit']);
+
+  grunt.task.registerTask('watchCommon', 'Watches directory for changes' , ['jshint', 'qunit']);
+
+  grunt.task.registerMultiTask('log', 'Log stuff.', function() {
+    grunt.log.writeln(this.target + ': ' + this.data);
+  });
+
+  grunt.registerMultiTask('noDescriptionTask', function() {
+    grunt.log.writeln('Task without description');
+  });
 };

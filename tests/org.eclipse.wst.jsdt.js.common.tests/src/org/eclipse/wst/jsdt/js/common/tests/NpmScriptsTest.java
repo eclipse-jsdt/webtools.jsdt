@@ -43,22 +43,22 @@ public class NpmScriptsTest {
 
 	@BeforeClass
 	public static void init() throws CoreException, IOException, URISyntaxException {
-		File npm = ResourceUtil.getFileFromBundle(TestRunner.PLUGIN_ID, "resources/package.json");
+		File npm = ResourceUtil.getFileFromBundle(TestRunner.PLUGIN_ID, "resources/package.json"); //$NON-NLS-1$
 
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("TestNpmProject");
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("TestNpmProject"); //$NON-NLS-1$
 		IProjectDescription description = ResourcesPlugin.getWorkspace()
-				.newProjectDescription("Testing common js functionality");
+				.newProjectDescription("Testing common js functionality"); //$NON-NLS-1$
 		description.setNatureIds(new String[] { JavaScriptCore.NATURE_ID });
 		project.create(description, null);
 		project.open(null);
 
-		packageJsonFile = project.getFile("package.json");
+		packageJsonFile = project.getFile("package.json"); //$NON-NLS-1$
 		packageJsonFile.create(new FileInputStream(npm.getAbsolutePath()), true, null);
 	}
 
 	@AfterClass
 	public static void teardown() throws CoreException {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("TestNpmProject");
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("TestNpmProject"); //$NON-NLS-1$
 		project.delete(true, true, null);
 	}
 
@@ -67,7 +67,7 @@ public class NpmScriptsTest {
 		try {
 			PackageJson packageJson = NpmUtil.parsePackageJsonFile(packageJsonFile);
 
-			assertTrue("Not all npm scripts found", packageJson.getScripts().size() == 3);
+			assertTrue("Not all npm scripts found", packageJson.getScripts().size() == 3); //$NON-NLS-1$
 
 			boolean foundTests = false;
 			boolean foundDoSomething = false;
@@ -75,22 +75,22 @@ public class NpmScriptsTest {
 
 			for (String scriptName : packageJson.getScripts().keySet()) {
 
-				if ("tests".equals(scriptName)) {
+				if ("tests".equals(scriptName)) { //$NON-NLS-1$
 					foundTests = true;
-				} else if ("doSomething".equals(scriptName)) {
+				} else if ("doSomething".equals(scriptName)) { //$NON-NLS-1$
 					foundDoSomething = true;
-				} else if ("foo".equals(scriptName)) {
+				} else if ("foo".equals(scriptName)) { //$NON-NLS-1$
 					foundFoo = true;
 				}
 			}
 
-			assertTrue("Couldn't find script 'tests'", foundTests);
-			assertTrue("Couldn't find script 'doSomething'", foundDoSomething);
-			assertTrue("Couldn't find script 'foo'", foundFoo);
+			assertTrue("Couldn't find script 'tests'", foundTests); //$NON-NLS-1$
+			assertTrue("Couldn't find script 'doSomething'", foundDoSomething); //$NON-NLS-1$
+			assertTrue("Couldn't find script 'foo'", foundFoo); //$NON-NLS-1$
 		} catch (CoreException e) {
-			fail("CoreException occured while reading file");
+			fail("CoreException occured while reading file"); //$NON-NLS-1$
 		} catch (UnsupportedEncodingException e) {
-			fail("UnsupportedEncodingException occured while reading file");
+			fail("UnsupportedEncodingException occured while reading file"); //$NON-NLS-1$
 		}
 
 	}

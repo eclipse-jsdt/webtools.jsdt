@@ -304,7 +304,7 @@ public final class WorkbenchResourceUtil {
 						if (first instanceof IAdaptable) {
 							container = ((IAdaptable) first).getAdapter(IContainer.class);
 						}
-					} else {
+					} else if (selection != null) {
 						Object firstElement = selection.getFirstElement();
 						if (firstElement instanceof IAdaptable) {
 							container = ((IAdaptable) firstElement).getAdapter(IContainer.class);

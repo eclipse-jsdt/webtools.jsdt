@@ -22,5 +22,5 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ BuildSystemVisitorTest.class, NpmScriptsTest.class })
 public class TestRunner {
-	public static final String PLUGIN_ID = "org.eclipse.wst.jsdt.js.common.tests";
+	public static final String PLUGIN_ID = "org.eclipse.wst.jsdt.js.common.tests"; //$NON-NLS-1$
 }

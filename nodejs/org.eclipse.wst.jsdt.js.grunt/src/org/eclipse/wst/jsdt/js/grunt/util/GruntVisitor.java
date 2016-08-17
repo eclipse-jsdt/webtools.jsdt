@@ -31,7 +31,9 @@ import org.eclipse.wst.jsdt.js.grunt.internal.GruntTask;
 public class GruntVisitor extends BuildSystemVisitor {
 	private static final String GRUNT_INIT_CONFIG = "grunt.initConfig"; //$NON-NLS-1$
 	private static final String GRUNT_REGISTER_TASK = "grunt.registerTask"; //$NON-NLS-1$
+	private static final String GRUNT_TASK_REGISTER_TASK = "grunt.task.registerTask"; //$NON-NLS-1$
 	private static final String GRUNT_REGISTER_MULTI_TASK = "grunt.registerMultiTask"; //$NON-NLS-1$
+	private static final String GRUNT_TASK_REGISTER_MULTI_TASK = "grunt.task.registerMultiTask"; //$NON-NLS-1$
 	private static final String GRUNT_PROPERTY_IGNORE = "pkg"; //$NON-NLS-1$
 	
 	private Set<ITask> tasks;
@@ -50,26 +52,21 @@ public class GruntVisitor extends BuildSystemVisitor {
 		
 		if (expression != null && arguments != null) {
 			int argSize = arguments.size();
+			String expressionName = expression.toString();
 			
 			// http://gruntjs.com/api/grunt.task#grunt.task.registertask
-			if (GRUNT_REGISTER_TASK.equals(expression.toString())) {
+			// http://gruntjs.com/api/grunt.task#grunt.task.registermultitask
+			if (GRUNT_REGISTER_TASK.equals(expressionName) || GRUNT_TASK_REGISTER_TASK.equals(expressionName)
+					|| GRUNT_REGISTER_MULTI_TASK.equals(expressionName)
+					|| GRUNT_TASK_REGISTER_MULTI_TASK.equals(expressionName)) {
 				if (argSize == 2 || argSize == 3) {
 					// Register task supports an optional description field as argument 1.
 					Expression task = arguments.get(0);
 					tasks.add(new GruntTask(ASTUtil.beautify(task), file, false, new Location(task.getStartPosition(), task.getLength()))); 
 				}
 				return false;
-			
-			// http://gruntjs.com/api/grunt.task#grunt.task.registermultitask
-			} else if (GRUNT_REGISTER_MULTI_TASK.equals(expression)) {
-				if (argSize == 3) {
-					Expression task = arguments.get(0);
-					tasks.add(new GruntTask(ASTUtil.beautify(task), file, false, new Location(task.getStartPosition(), task.getLength()))); 
-				}
-				return false;
-				
 			// http://gruntjs.com/api/grunt#grunt.initconfig
-			} else if (GRUNT_INIT_CONFIG.equals(expression.toString())) {
+			} else if (GRUNT_INIT_CONFIG.equals(expressionName)) {
 				if (argSize == 1 && arguments.get(0) instanceof ObjectLiteral) {
 					ObjectLiteral jsObject = (ObjectLiteral) arguments.get(0);
 					List<ObjectLiteralField> fields = jsObject.fields();
