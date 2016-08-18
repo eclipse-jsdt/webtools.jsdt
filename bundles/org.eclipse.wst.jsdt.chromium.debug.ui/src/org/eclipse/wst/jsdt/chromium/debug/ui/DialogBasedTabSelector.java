@@ -41,18 +41,18 @@ public class DialogBasedTabSelector {
       List<CONNECTOR> filteredTabs = new ArrayList<CONNECTOR>(allTabs.size());
 
       for (CONNECTOR tab : allTabs) {
-        if (!isAttached(tab)) {
+        if (!isAttached(tab) && isImortant(tab)) {
           filteredTabs.add(tab);
         }
       }
 
       if (autoSelectSingleTab()) {
-        if (allTabs.size() == 1 && filteredTabs.size() == 1) {
+        if (filteredTabs.size() == 1) {
           // if all crystal clear -- choose by default
           // disable auto-select if there are some already attached tabs:
           //  user has already seen this dialog and might have got used to it
           //  he might not understand why it didn't show up this time
-          return allTabs.get(0);
+          return filteredTabs.get(0);
         }
       }
 
@@ -82,7 +82,7 @@ public class DialogBasedTabSelector {
         return result.get(0);
       }
     }
-
+   
     protected abstract List<? extends CONNECTOR> getTabs(SOURCE tabFetcher) throws IOException;
 
     protected abstract boolean isAttached(CONNECTOR connector);
@@ -91,6 +91,15 @@ public class DialogBasedTabSelector {
     private boolean autoSelectSingleTab() {
       return true;
     }
+    
+    /**
+     * @return true if url protocol of browser tab is either http(s) or file, false otherwise
+     */
+    private boolean isImortant(CONNECTOR tab) {
+    	String url = getUrl(tab);
+    	return url.startsWith("http") || url.startsWith("file"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+    
   }
 
   private static class Impl extends Base<TabConnector, TabFetcher> implements TabSelector {
