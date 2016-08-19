@@ -1,4 +1,4 @@
-// Copyright (c) 2009, 2016 The Chromium Authors. All rights reserved.
+// Copyright (c) 2009, 2017 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
@@ -16,33 +16,47 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
-import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceDirector;
-import org.eclipse.wst.jsdt.chromium.debug.core.ScriptNameManipulator.ScriptNamePattern;
-import org.eclipse.wst.jsdt.chromium.debug.core.model.BreakpointSynchronizer.Callback;
-import org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumLineBreakpoint.MutableProperty;
-import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResource.Metadata;
-import org.eclipse.wst.jsdt.chromium.debug.core.util.ChromiumDebugPluginUtil;
-import org.eclipse.wst.jsdt.chromium.debug.core.util.JavaScriptRegExpSupport;
-import org.eclipse.wst.jsdt.chromium.Breakpoint;
-import org.eclipse.wst.jsdt.chromium.CallFrame;
-import org.eclipse.wst.jsdt.chromium.ExceptionData;
-import org.eclipse.wst.jsdt.chromium.JavascriptVm;
-import org.eclipse.wst.jsdt.chromium.JavascriptVm.ExceptionCatchMode;
-import org.eclipse.wst.jsdt.chromium.JavascriptVm.ScriptsCallback;
-import org.eclipse.wst.jsdt.chromium.RelayOk;
-import org.eclipse.wst.jsdt.chromium.Script;
-import org.eclipse.wst.jsdt.chromium.SyncCallback;
-import org.eclipse.wst.jsdt.chromium.util.GenericCallback;
+import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.ITextFileBuffer;
+import org.eclipse.core.filebuffers.ITextFileBufferManager;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.jsdt.chromium.Breakpoint;
+import org.eclipse.wst.jsdt.chromium.CallFrame;
+import org.eclipse.wst.jsdt.chromium.ExceptionData;
+import org.eclipse.wst.jsdt.chromium.JavascriptVm;
+import org.eclipse.wst.jsdt.chromium.JavascriptVm.ScriptsCallback;
+import org.eclipse.wst.jsdt.chromium.RelayOk;
+import org.eclipse.wst.jsdt.chromium.Script;
+import org.eclipse.wst.jsdt.chromium.SyncCallback;
+import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
+import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumSourceDirector;
+import org.eclipse.wst.jsdt.chromium.debug.core.ScriptNameManipulator.ScriptNamePattern;
+import org.eclipse.wst.jsdt.chromium.debug.core.internal.sourcemap.SourceMap;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.BreakpointSynchronizer.Callback;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumLineBreakpoint.MutableProperty;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResource.Metadata;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResourceRef.Visitor;
+import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.SourcePositionMapBuilder;
+import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.TextSectionMapping;
+import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.extension.ISourceMapLanguageSupport;
+import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.extension.ISourceMapManager;
+import org.eclipse.wst.jsdt.chromium.debug.core.util.ChromiumDebugPluginUtil;
+import org.eclipse.wst.jsdt.chromium.debug.core.util.JavaScriptRegExpSupport;
 
 /**
  * Virtual project-supporting implementation of {@link WorkspaceBridge}.
@@ -78,14 +92,16 @@ public class VProjectWorkspaceBridge implements WorkspaceBridge {
   private final ResourceManager resourceManager;
   private final ConnectedTargetData connectedTargetData;
   private final ChromiumSourceDirector sourceDirector;
-
+  private final UpdateMappingVisitor updateMappingVisitor;
+  
   public VProjectWorkspaceBridge(String projectName, ConnectedTargetData connectedTargetData,
       JavascriptVm javascriptVm) {
     this.connectedTargetData = connectedTargetData;
     this.javascriptVm = javascriptVm;
     this.debugProject = ChromiumDebugPluginUtil.createEmptyProject(projectName);
     this.resourceManager = new ResourceManager(debugProject);
-
+    this.updateMappingVisitor = new UpdateMappingVisitor();
+    
     ILaunch launch = connectedTargetData.getDebugTarget().getLaunch();
 
     sourceDirector = (ChromiumSourceDirector) launch.getSourceLocator();
@@ -250,6 +266,7 @@ public class VProjectWorkspaceBridge implements WorkspaceBridge {
     public RelayOk createBreakpointOnRemote(final ChromiumLineBreakpoint lineBreakpoint,
         final VmResourceRef vmResourceRef,
         final CreateCallback createCallback, SyncCallback syncCallback) throws CoreException {
+      vmResourceRef.accept(updateMappingVisitor);	
       return lineBreakpointHandler.createBreakpointOnRemote(lineBreakpoint, vmResourceRef,
           createCallback, syncCallback);
     }
@@ -774,4 +791,121 @@ public class VProjectWorkspaceBridge implements WorkspaceBridge {
   public ConnectedTargetData getConnectedTargetData() {
     return connectedTargetData;
   }
+  
+  
+	class UpdateMappingVisitor implements Visitor<Object> {
+
+		@Override
+		public Object visitRegExpBased(ScriptNamePattern scriptNamePattern) {
+			return null;
+		}
+
+		@Override
+		public Object visitResourceId(final VmResourceId tsResourceId) {
+			try {
+				String fileName = tsResourceId.getName();
+				int index = fileName.lastIndexOf('.');
+				if (index == -1) {
+					return null;
+				}
+				ISourceMapManager manager = ChromiumDebugPlugin.getSourceMapManager();
+				String fileExtension = fileName.substring(index + 1, fileName.length());
+				// check if the given resource support source map
+				ISourceMapLanguageSupport support = manager.getSourceMapLanguageSupport(fileExtension);
+				if (support == null) {
+					return null;
+				}
+
+				IPath tsFilePath = new Path(fileName);
+				final IFile tsFile = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(tsFilePath)[0];
+				
+				IPath jsFilePath = support.getJsFile(tsFilePath);
+				final IFile jsFile = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(jsFilePath)[0];
+				
+				IPath sourceMapFilePath = support.getSourceMapFile(tsFilePath);
+				final IFile sourceMapFile = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(sourceMapFilePath)[0];
+				final SourceMap sourceMap = SourceMap.load(sourceMapFile.getContents());
+				
+				
+				VmResourceRef jsRef = sourceDirector.findVmResourceRef(jsFile);
+				
+				jsRef.accept(new Visitor<Object>() {
+					@Override
+					public Object visitRegExpBased(ScriptNamePattern scriptNamePattern) {
+						// TODO Auto-generated method stub
+						return null;
+					}
+					
+					@Override
+					public Object visitResourceId(VmResourceId jsResourceId) {
+						SourcePositionMapBuilder.ResourceSection vmResourceSection = create(jsFile, jsResourceId);
+						SourcePositionMapBuilder.ResourceSection originalResourceSection = create(tsFile, tsResourceId);
+
+						try {
+							TextSectionMapping mapTable = sourceMap.getMapping(tsFile.getName());
+							connectedTargetData.getSourcePositionMapBuilder().addMapping(originalResourceSection,
+									vmResourceSection, mapTable);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						return null;
+					}
+				});
+				
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+
+		}
+
+	}
+	
+	private static SourcePositionMapBuilder.ResourceSection create(IFile file, VmResourceId resourceId) {
+		IDocument document = getDocument(file);
+		int endLine = document.getNumberOfLines();
+		if (endLine > 0) {
+			endLine--;
+		}
+		int endColumn = 0;
+		try {
+			endColumn = document.getLineLength(endLine);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+		return new SourcePositionMapBuilder.ResourceSection(resourceId, 0, 0, endLine, endColumn);
+	}
+
+	private static IDocument getDocument(IFile file) {
+		ITextFileBufferManager manager = FileBuffers.getTextFileBufferManager();
+		IPath location = file.getLocation();
+		boolean connected = false;
+		try {
+			ITextFileBuffer buffer = manager.getTextFileBuffer(location, LocationKind.NORMALIZE);
+			if (buffer == null) {
+				// no existing file buffer..create one
+				manager.connect(location, LocationKind.NORMALIZE, new NullProgressMonitor());
+				connected = true;
+				buffer = manager.getTextFileBuffer(location, LocationKind.NORMALIZE);
+				if (buffer == null) {
+					return null;
+				}
+			}
+
+			return buffer.getDocument();
+		} catch (CoreException ce) {
+			ChromiumDebugPlugin.log(ce);
+			return null;
+		} finally {
+			if (connected) {
+				try {
+					manager.disconnect(location, LocationKind.NORMALIZE, new NullProgressMonitor());
+				} catch (CoreException e) {
+					ChromiumDebugPlugin.log(e);
+				}
+			}
+		}
+	}
 }

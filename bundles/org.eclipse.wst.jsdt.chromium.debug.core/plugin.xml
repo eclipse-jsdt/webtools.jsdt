@@ -10,6 +10,10 @@
 
 <plugin>
 
+ <extension-point id="sourceMapLanguageSupports" 
+ 				  name="%sourceMapLanguageSupports.name"
+				  schema="schema/sourceMapLanguageSupports.exsd" />
+
   <!-- Breakpoint-related extensions -->
   <extension point="org.eclipse.debug.core.breakpoints">
       <breakpoint

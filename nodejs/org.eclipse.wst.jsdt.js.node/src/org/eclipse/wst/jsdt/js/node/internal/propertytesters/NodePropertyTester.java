@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corporation.
+ * Copyright (c) 2016, 2017 IBM Corporation.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,7 @@ import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin;
 import org.eclipse.wst.jsdt.js.node.internal.NodeConstants;
 
 /**
@@ -56,7 +57,8 @@ public class NodePropertyTester extends PropertyTester {
 	private boolean isValidFile(IFile file) {
 		// File must be a js file
 		String fileExtension = file.getFileExtension();
-		if (fileExtension == null || !fileExtension.equals(JS_EXT)) {
+		if (fileExtension == null || !(fileExtension.equals(JS_EXT)
+				|| ChromiumDebugPlugin.getSourceMapManager().canSupportSourceMap(fileExtension))) {
 			return false;
 		}
 

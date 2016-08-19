@@ -1,4 +1,4 @@
-// Copyright (c) 2009 The Chromium Authors. All rights reserved.
+// Copyright (c) 2009, 2017 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
 // under the terms of the Eclipse Public License v1.0 which accompanies
 // this distribution, and is available at
@@ -14,13 +14,6 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumBreakpointWBAFactory;
-import org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumLineBreakpoint;
-import org.eclipse.wst.jsdt.chromium.debug.core.model.ConnectedTargetData;
-import org.eclipse.wst.jsdt.chromium.debug.core.model.DebugTargetImpl;
-import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResource;
-import org.eclipse.wst.jsdt.chromium.debug.core.util.ScriptTargetMapping;
-import org.eclipse.wst.jsdt.chromium.JavascriptVmFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdapterManager;
@@ -28,6 +21,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.jsdt.chromium.JavascriptVmFactory;
+import org.eclipse.wst.jsdt.chromium.debug.core.internal.sourcemap.SourceMapManager;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumBreakpointWBAFactory;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumLineBreakpoint;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.ConnectedTargetData;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.DebugTargetImpl;
+import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResource;
+import org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.extension.ISourceMapManager;
+import org.eclipse.wst.jsdt.chromium.debug.core.util.ScriptTargetMapping;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -60,12 +62,14 @@ public class ChromiumDebugPlugin extends Plugin {
     manager.registerAdapters(breakpointWorkbenchAdapterFactory, ChromiumLineBreakpoint.class);
     plugin = this;
 
+    SourceMapManager.getInstance().initialize();
     JavascriptVmFactory.getRootLogger().addHandler(SDK_LOG_HANDLER);
   }
 
   @Override
   public void stop(BundleContext context) throws Exception {
     JavascriptVmFactory.getRootLogger().removeHandler(SDK_LOG_HANDLER);
+    SourceMapManager.getInstance().destroy();
     plugin = null;
     IAdapterManager manager = Platform.getAdapterManager();
     manager.unregisterAdapters(breakpointWorkbenchAdapterFactory);
@@ -174,4 +178,8 @@ public class ChromiumDebugPlugin extends Plugin {
     public void close() throws SecurityException {
     }
   };
+
+	public static ISourceMapManager getSourceMapManager() {
+		return SourceMapManager.getInstance();
+	}
 }
