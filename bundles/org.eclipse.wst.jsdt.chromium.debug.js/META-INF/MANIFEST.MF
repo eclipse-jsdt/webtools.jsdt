@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.debug.ui,
  org.eclipse.wst.server.core;resolution:=optional,
  org.eclipse.wst.server.ui;resolution:=optional,
- org.eclipse.wst.jsdt.chromium.debug.core;bundle-version="[0.4.0,0.5.0)",
+ org.eclipse.wst.jsdt.chromium.debug.core;bundle-version="[0.5.0,0.6.0)",
  org.eclipse.core.variables
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

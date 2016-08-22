@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.wst.jsdt.chromium.debug.core.util.PlatformUtil;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -50,10 +50,8 @@ public final class ChromiumDetector {
 	 */
 	public static File findChromiumSystemPath() {
 		// TODO in future browsers from General -> Web Browser preferences should be used
-		// TODO need to test for all OS - tested only on Ubuntu 16.04 / only chromium-browser is processed correctly
+		// Bug 498453 - Chrome / Chromium detection does not work on Mac OS
 		File chromiumFile = null;
-		boolean isWindows = true;
-
 		String output = locateSystemCommandPath(CHROMIUM_BROWSER);
 
 		if (output.equals(EMPTY)) {
@@ -61,10 +59,7 @@ public final class ChromiumDetector {
 		}
 
 		if (output.equals(EMPTY)) {
-			String chromeFileName = CHROMIUM_BROWSER;
-			if (isWindows) {
-				chromeFileName = CHROME_WINDOWS;
-			}
+			String chromeFileName = PlatformUtil.isWindows() ? CHROME_WINDOWS : CHROMIUM_BROWSER;
 
 			String path = System.getenv(SYSTEM_PATH_ENV_VAR);
 			String[] paths = path.split(File.pathSeparator, 0);
@@ -73,9 +68,10 @@ public final class ChromiumDetector {
 				directories.add(p);
 			}
 
-			if (!isWindows) {
+			if (!PlatformUtil.isWindows()) {
 				directories.add(CHROMIUM_EXTRA_LOCATION);
 			}
+			
 			boolean notFound = true;
 			Iterator<String> it = directories.iterator();
 			while (notFound && it.hasNext()) {
@@ -87,7 +83,7 @@ public final class ChromiumDetector {
 				}
 			}
 
-			if (chromiumFile == null && isWindows) {
+			if (chromiumFile == null && PlatformUtil.isWindows()) {
 				// We will try to determine the location of Chrome from the Windows registry, checking both
 				// HKEY_CURRENT_USER (for user-only Chrome installation) and HKEY_LOCAL_MACHINE (for all-users
 				// Chrome installation).
@@ -113,10 +109,9 @@ public final class ChromiumDetector {
 	private static String locateSystemCommandPath(String commandName) {
 
 		List<String> cmdLine = new ArrayList<String>();
-		boolean isWindows = Platform.getOS().startsWith("win"); //$NON-NLS-1$
 
 		// Is windows?
-		if (isWindows) { // $NON-NLS-1$
+		if (PlatformUtil.isWindows()) { // $NON-NLS-1$
 			// Handle command in a different way
 			cmdLine.add("cmd"); //$NON-NLS-1$
 			cmdLine.add("/c"); //$NON-NLS-1$
@@ -130,7 +125,7 @@ public final class ChromiumDetector {
 
 		String output = executeCmd(cmdLine);
 
-		if (!isWindows) {
+		if (!PlatformUtil.isWindows()) {
 			if (output.equals(EMPTY)) {
 				cmdLine.remove(0);
 				cmdLine.add(0, WHICH_LOCATION_2);

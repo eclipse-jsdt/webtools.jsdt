@@ -11,6 +11,7 @@
 package org.eclipse.wst.jsdt.chromium.debug.js.launch.shortcuts;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -75,11 +76,15 @@ public class ChromiumShortcut implements ILaunchShortcut {
 				resource.getProjectRelativePath().toOSString());
 		workingCopy.setAttribute(LaunchConstants.ATTR_CHROMIUM_URL, resource.getLocation().toOSString());
 		
-		workingCopy.setAttribute(LaunchConstants.ATTR_BASE_URL, "file://" + resource.getParent().getLocation().toOSString()); //$NON-NLS-1$
+		workingCopy.setAttribute(LaunchConstants.ATTR_BASE_URL, getBaseURL(resource));
 		
 		workingCopy.setAttribute(LaunchParams.CHROMIUM_DEBUG_PORT, String.valueOf(ChromiumUtil.getRandomOpenPort()));
 		
 		DebugUITools.launch(workingCopy, mode);
+	}
+	
+	private String getBaseURL(IResource r) throws MalformedURLException {
+		return r.getParent().getLocation().toFile().toURI().toURL().toString();
 	}
 
 }

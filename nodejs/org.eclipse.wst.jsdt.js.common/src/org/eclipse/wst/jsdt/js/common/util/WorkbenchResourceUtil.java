@@ -282,7 +282,7 @@ public final class WorkbenchResourceUtil {
 				}
 
 				if (container == null) {
-					IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
+					ISelection selection = window.getSelectionService().getSelection();
 					if (selection instanceof TreeSelection) {
 						TreeSelection treeSelection = (TreeSelection) selection;
 						Object element = treeSelection.getFirstElement();
@@ -297,15 +297,18 @@ public final class WorkbenchResourceUtil {
 								return selection;
 							}
 						}
+						
+						TreePath[] paths = treeSelection.getPaths();
+						TreePath path = (paths.length > 0) ? paths[0] : null;
 
-						TreePath path = treeSelection.getPaths()[0];
-
-						Object first = path.getFirstSegment();
-						if (first instanceof IAdaptable) {
-							container = ((IAdaptable) first).getAdapter(IContainer.class);
+						if (path != null) {
+							Object first = path.getFirstSegment();
+							if (first instanceof IAdaptable) {
+								container = ((IAdaptable) first).getAdapter(IContainer.class);
+							}
 						}
-					} else if (selection != null) {
-						Object firstElement = selection.getFirstElement();
+					} else if (selection instanceof IStructuredSelection) {
+						Object firstElement = ((IStructuredSelection) selection).getFirstElement();
 						if (firstElement instanceof IAdaptable) {
 							container = ((IAdaptable) firstElement).getAdapter(IContainer.class);
 						}

@@ -7,6 +7,7 @@
 package org.eclipse.wst.jsdt.chromium.debug.core;
 
 import org.eclipse.wst.jsdt.chromium.debug.core.model.VmResourceId;
+import org.eclipse.wst.jsdt.chromium.debug.core.util.PlatformUtil;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -122,7 +123,11 @@ public class ReverseSourceLookup {
           String subResult = targetContainerWrapper == null ? null : targetContainerWrapper.lookup(resource);
           if (subResult == null) {
             return null;
+          // Bug 497685 - [windows] cannot set a breakpoint in a node modules
+          } else if (PlatformUtil.isWindows() && prefix.contains("\\")) { //$NON-NLS-1$
+        	 subResult = subResult.replace("/", "\\");   //$NON-NLS-1$ //$NON-NLS-2$
           }
+      
           return prefix + subResult;
         }
       };
@@ -130,7 +135,7 @@ public class ReverseSourceLookup {
 
     return null;
   }
-
+  
   /**
    * Wraps a container. This interface guarantees that original container with all inner containers
    * are supported by our reversed lookup.

@@ -82,6 +82,7 @@ public class ChromiumLaunchConfigurationDelegate implements ILaunchConfiguration
 				
 				chromiumArgs += "--remote-debugging-port=" + port + " "; //$NON-NLS-1$ //$NON-NLS-2$
 				chromiumArgs += "--user-data-dir=" + ChromiumUtil.getChromiumUserDataDir() + " "; //$NON-NLS-1$ //$NON-NLS-2$
+				chromiumArgs += "--disable-component-extensions-with-background-pages "; //$NON-NLS-1$
 				chromiumArgs += url;
 				
 			}
