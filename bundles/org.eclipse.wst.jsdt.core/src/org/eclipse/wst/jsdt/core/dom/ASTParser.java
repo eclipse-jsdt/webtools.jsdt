@@ -851,7 +851,11 @@ public class ASTParser {
 							 * (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=75632)
 							 */
 //							sourceUnit = new BasicCompilationUnit(sourceUnit.getContents(), sourceUnit.getPackageName(), new String(sourceUnit.getFileName()), this.project);
-						JavaScriptUnit result = EsprimaParser.newParser().includeComments().setSource((IJavaScriptUnit) this.typeRoot).parse();
+						JavaScriptUnit result = EsprimaParser.newParser()
+									.includeComments()
+									.setSourceType(project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))
+									.setSource((IJavaScriptUnit) this.typeRoot)
+									.parse();
 						result.setTypeRoot(this.typeRoot);
 							result.ast.setOriginalModificationCount(result.ast.modificationCount());
 							try {
@@ -895,7 +899,11 @@ public class ASTParser {
 					} else {
 						throw new IllegalStateException();
 					}
-					JavaScriptUnit $ = EsprimaParser.newParser().setSource(String.valueOf(sourceUnit.getContents())).parse();
+					String sourceType = project != null ? project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true): null;		
+					JavaScriptUnit $ = EsprimaParser.newParser()
+								.setSourceType(sourceType)
+								.setSource(String.valueOf(sourceUnit.getContents()))
+								.parse();
 					$.setTypeRoot(this.typeRoot);
 					$.ast.setOriginalModificationCount($.ast.modificationCount());
 					scanner.setSource(sourceUnit.getContents());
@@ -989,7 +997,11 @@ public class ASTParser {
 		this.sourceLength = this.rawSource.length;
 		char[] contentArray = new char[this.sourceLength];
 		System.arraycopy(this.rawSource,this.sourceOffset,contentArray,0,this.sourceLength );
-		JavaScriptUnit unit = EsprimaParser.newParser().includeComments().setSource(String.valueOf(contentArray)).parse();
+		JavaScriptUnit unit = EsprimaParser.newParser()
+					.includeComments()
+					.setSourceType(project.getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))	
+					.setSource(String.valueOf(contentArray))
+					.parse();
 		unit.ast.setOriginalModificationCount(unit.ast.modificationCount());
 		final Scanner scanner = new Scanner(
 				true /*comment*/,

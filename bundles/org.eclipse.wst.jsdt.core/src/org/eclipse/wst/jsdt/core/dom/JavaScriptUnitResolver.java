@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
+import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
@@ -373,7 +374,9 @@ class JavaScriptUnitResolver extends Compiler {
 
 				// convert AST
 //				JavaScriptUnit node = convert(compilationUnitDeclaration, parser.scanner.getSource(), apiLevel, options, false/*don't resolve binding*/, null/*no owner needed*/, null/*no binding table needed*/, flags /* flags */, monitor);
-				JavaScriptUnit node = EsprimaParser.newParser().setSource(compilationUnits[i]).parse();
+				JavaScriptUnit node = EsprimaParser.newParser()
+							.setSourceType(compilationUnits[i].getJavaScriptProject().getOption(JavaScriptCore.COMPILER_SOURCE_TYPE, true))
+							.setSource(compilationUnits[i]).parse();
 				node.setTypeRoot(compilationUnits[i]);
 
 				// accept AST

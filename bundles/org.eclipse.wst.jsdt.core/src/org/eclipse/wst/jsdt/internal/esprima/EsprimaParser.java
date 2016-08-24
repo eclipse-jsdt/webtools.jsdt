@@ -216,7 +216,8 @@ public class EsprimaParser {
 		$.put(ESPRIMA_OPT_RANGE, range);
 		$.put(ESPRIMA_OPT_TOLERANT, tolerant);
 		$.put(ESPRIMA_OPT_ATTACH_COMMENT, includeJsdocs);
-		$.put(ESPRIMA_OPT_SOURCE_TYPE, sourceType);
+		if(sourceType != null)
+			$.put(ESPRIMA_OPT_SOURCE_TYPE, sourceType);
 		return $;
 	}
 

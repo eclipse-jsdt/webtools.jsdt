@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
+import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.compiler.CategorizedProblem;
 import org.eclipse.wst.jsdt.core.dom.AST;
 import org.eclipse.wst.jsdt.core.dom.ASTParser;
@@ -212,6 +213,7 @@ public class JSDTSourceValidator extends AbstractValidator implements IValidator
 		}
 		
 		parser.setSource(source);
+		parser.setProject(JavaScriptCore.create(file.getProject()));
 		JavaScriptUnit unit = (JavaScriptUnit) parser.createAST(new NullProgressMonitor());
 		if(unit.getProblems().length > 0){
 			CategorizedProblem[] resourceProblems = (CategorizedProblem[]) unit.getProblems();
