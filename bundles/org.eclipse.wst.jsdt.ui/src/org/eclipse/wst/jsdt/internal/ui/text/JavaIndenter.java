@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Patrik Suzzi <psuzzi@gmail.com> - Bug 356606 
  *******************************************************************************/
 package org.eclipse.wst.jsdt.internal.ui.text;
 
@@ -171,7 +172,7 @@ public final class JavaIndenter {
 		}
 
 		private boolean prefArrayDimensionsDeepIndent() {
-			return true; // sensible default, no formatter setting
+			return false; // sensible default, no formatter setting
 		}
 
 		private int prefArrayIndent() {

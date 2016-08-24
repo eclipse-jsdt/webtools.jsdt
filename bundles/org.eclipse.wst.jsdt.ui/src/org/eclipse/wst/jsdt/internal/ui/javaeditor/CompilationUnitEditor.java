@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Patrik Suzzi <psuzzi@gmail.com> - Bug 356606 
  *******************************************************************************/
 
 package org.eclipse.wst.jsdt.internal.ui.javaeditor;
@@ -254,12 +255,13 @@ public class CompilationUnitEditor extends JavaEditor implements IJavaReconcilin
 						// don't enter the character if if its the closing peer
 						return new ExitFlags(ILinkedModeListener.UPDATE_CARET, false);
 				}
-				// when entering an anonymous class between the parenthesis', we don't want
-				// to jump after the closing parenthesis when return is pressed
+				// skip jumping after the closing parenthesis both when
+				// entering an anonymous class between curly braces and when
+				// closing an array literal
 				if (event.character == SWT.CR && offset > 0) {
 					IDocument document= getSourceViewer().getDocument();
 					try {
-						if (document.getChar(offset - 1) == '{')
+						if (document.getChar(offset - 1) == '{'||document.getChar(offset - 1) == '[')
 							return new ExitFlags(ILinkedModeListener.EXIT_ALL, true);
 					} catch (BadLocationException e) {
 					}

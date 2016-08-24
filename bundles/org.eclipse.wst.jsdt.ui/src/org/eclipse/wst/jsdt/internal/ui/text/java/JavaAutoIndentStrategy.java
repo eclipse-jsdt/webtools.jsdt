@@ -9,6 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *     Nikolay Metchev - Fixed https://bugs.eclipse.org/bugs/show_bug.cgi?id=29909
  *     Tom Eicher (Avaloq Evolution AG) - block selection mode
+ *     Patrik Suzzi <psuzzi@gmail.com> - Bug 356606 
  *******************************************************************************/
 package org.eclipse.wst.jsdt.internal.ui.text.java;
 
@@ -335,6 +336,26 @@ public class JavaAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
 					StringBuffer reference= null;
 					int nonWS= findEndOfWhiteSpace(d, start, lineEnd);
 					if (nonWS < c.offset && d.getChar(nonWS) == '{')
+						reference= new StringBuffer(d.get(start, nonWS - start));
+					else
+						reference= indenter.getReferenceIndentation(c.offset);
+
+					buf.append(TextUtilities.getDefaultLineDelimiter(d));
+
+					if (reference != null)
+						buf.append(reference);
+				}
+			}
+			// insert extra line upon new line between two braces
+			else if (c.offset > start && contentStart < lineEnd && d.getChar(contentStart) == ']') {
+				int firstCharPos= scanner.findNonWhitespaceBackward(c.offset - 1, start);
+				if (firstCharPos != JavaHeuristicScanner.NOT_FOUND && d.getChar(firstCharPos) == '[') {
+					c.caretOffset= c.offset + buf.length();
+					c.shiftsCaret= false;
+
+					StringBuffer reference= null;
+					int nonWS= findEndOfWhiteSpace(d, start, lineEnd);
+					if (nonWS < c.offset && d.getChar(nonWS) == '[')
 						reference= new StringBuffer(d.get(start, nonWS - start));
 					else
 						reference= indenter.getReferenceIndentation(c.offset);
