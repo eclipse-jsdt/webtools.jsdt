@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.internal.corext.template.java.CompilationUnitContextType;
 import org.eclipse.wst.jsdt.internal.corext.template.java.JavaContextType;
@@ -40,13 +41,12 @@ public class IdentifierCompletionProposalComputer implements IJavaCompletionProp
 	 * @see org.eclipse.wst.jsdt.ui.text.java.IJavaCompletionProposalComputer#sessionStarted()
 	 */
 	public void sessionStarted() {
-		// TODO Auto-generated method stub
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.ui.text.java.IJavaCompletionProposalComputer#computeCompletionProposals(org.eclipse.wst.jsdt.ui.text.java.ContentAssistInvocationContext, org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	public List computeCompletionProposals(ContentAssistInvocationContext context, IProgressMonitor monitor) {
+	public List<ICompletionProposal> computeCompletionProposals(ContentAssistInvocationContext context, IProgressMonitor monitor) {
 		List<ICompletionProposal> result = Collections.emptyList();
 		if (context instanceof JavaContentAssistInvocationContext) {
 			JavaContentAssistInvocationContext javaContext = (JavaContentAssistInvocationContext) context;
@@ -64,16 +64,14 @@ public class IdentifierCompletionProposalComputer implements IJavaCompletionProp
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.ui.text.java.IJavaCompletionProposalComputer#computeContextInformation(org.eclipse.wst.jsdt.ui.text.java.ContentAssistInvocationContext, org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	public List computeContextInformation(ContentAssistInvocationContext context, IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<IContextInformation> computeContextInformation(ContentAssistInvocationContext context, IProgressMonitor monitor) {
+		return Collections.emptyList();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.jsdt.ui.text.java.IJavaCompletionProposalComputer#getErrorMessage()
 	 */
 	public String getErrorMessage() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -81,8 +79,6 @@ public class IdentifierCompletionProposalComputer implements IJavaCompletionProp
 	 * @see org.eclipse.wst.jsdt.ui.text.java.IJavaCompletionProposalComputer#sessionEnded()
 	 */
 	public void sessionEnded() {
-		// TODO Auto-generated method stub
-
 	}
 
 }
