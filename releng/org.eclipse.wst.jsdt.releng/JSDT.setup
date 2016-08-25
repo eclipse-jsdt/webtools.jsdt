@@ -51,6 +51,14 @@
     <description>Initialize AERI preferences to enable error report</description>
   </setupTask>
   <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      excludedTriggers="STARTUP MANUAL"
+      content="MAX_RECENT_WORKSPACES=5&#xD;&#xA;RECENT_WORKSPACES=${workspace.location|property}&#xD;&#xA;RECENT_WORKSPACES_PROTOCOL=3&#xD;&#xA;SHOW_WORKSPACE_SELECTION_DIALOG=false&#xD;&#xA;eclipse.preferences.version=1"
+      targetURL="configuration:/.settings/org.eclipse.ui.ide.prefs"
+      encoding="UTF-8">
+    <description>Suppress prompt for default workspace already upon very first start</description>
+  </setupTask>
+  <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
         name="org.eclipse.platform.feature.group"/>
@@ -290,7 +298,7 @@
             project="org.eclipse.wst.jsdt.core"/>
         <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSet="//@setupTasks.15/@workingSets.0 //@setupTasks.15/@workingSets.1"/>
+            excludedWorkingSet="//@setupTasks.16/@workingSets.0 //@setupTasks.16/@workingSets.1"/>
       </predicate>
     </workingSet>
     <workingSet
@@ -348,7 +356,7 @@
             project="org.eclipse.json"/>
         <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSet="//@setupTasks.15/@workingSets.3 //@setupTasks.15/@workingSets.4"/>
+            excludedWorkingSet="//@setupTasks.16/@workingSets.3 //@setupTasks.16/@workingSets.4"/>
       </predicate>
     </workingSet>
     <description>The dynamic working sets for ${scope.project.label}</description>
