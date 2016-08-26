@@ -37,7 +37,13 @@ public final class ChromiumDetector {
 	private static final String CHROME_WINDOWS_REG_HKCU_LOCATION = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe"; //$NON-NLS-1$
 	private static final String CHROME_WINDOWS_REG_HKLM_LOCATION = "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe"; //$NON-NLS-1$
 	private static final String CHROME_WINDOWS_REG_KEY_NAME = "Path"; //$NON-NLS-1$
+	private static final String MAC_CHROME_PATH = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"; //$NON-NLS-1$
+	private static final String MAC_CHROMIUM_PATH = "/Applications/Chromium.app/Contents/MacOS/Chromium"; //$NON-NLS-1$
+	private static final String MAC_CANARY_PATH = "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"; //$NON-NLS-1$
 
+
+
+	
 	private ChromiumDetector() {
 	}
 
@@ -50,9 +56,14 @@ public final class ChromiumDetector {
 	 */
 	public static File findChromiumSystemPath() {
 		// TODO in future browsers from General -> Web Browser preferences should be used
-		// Bug 498453 - Chrome / Chromium detection does not work on Mac OS
 		File chromiumFile = null;
-		String output = locateSystemCommandPath(CHROMIUM_BROWSER);
+		String output = null;
+
+		if (PlatformUtil.isMacOS()) {
+			output = detectChromiumOnMacOs();
+		} else {
+			output = locateSystemCommandPath(CHROMIUM_BROWSER);			
+		}
 
 		if (output.equals(EMPTY)) {
 			output = locateSystemCommandPath(CHROME_LINUX);
@@ -104,6 +115,18 @@ public final class ChromiumDetector {
 		}
 		chromiumFile = new File(output);
 		return chromiumFile;
+	}
+	
+	private static String detectChromiumOnMacOs() {
+		String detectedPath = EMPTY;
+		if (new File(MAC_CHROMIUM_PATH).exists()) {
+			detectedPath = MAC_CHROMIUM_PATH;
+		} else if (new File(MAC_CHROME_PATH).exists()) {
+			detectedPath = MAC_CHROME_PATH;
+		} else if (new File(MAC_CANARY_PATH).exists()) {
+			detectedPath = MAC_CANARY_PATH;
+		}
+		return detectedPath;
 	}
 
 	private static String locateSystemCommandPath(String commandName) {
