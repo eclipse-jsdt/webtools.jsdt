@@ -87,6 +87,16 @@
         value="false"/>
   </setupTask>
   <setupTask
+      xsi:type="setup:CompoundTask"
+      name="org.eclipse.ui.ide.prefs">
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        key="/instance/org.eclipse.ui.ide/EXIT_PROMPT_ON_CLOSE_LAST_WINDOW"
+        value="false">
+      <description>Avoid prompt on exit</description>
+    </setupTask>
+  </setupTask>
+  <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
       defaultValue="Neon"
