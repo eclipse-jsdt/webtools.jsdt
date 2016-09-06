@@ -81,6 +81,10 @@ class WipContextBuilder {
     this.tabImpl = tabImpl;
     this.evaluateHack = new EvaluateHack(tabImpl);
   }
+  
+  public WipDebugContextImpl getCurrentContext() {
+	  return currentContext;
+  }
 
   // Called from Dispatch Thread.
   RelayOk updateStackTrace(List<CallFrameValue> callFrames,

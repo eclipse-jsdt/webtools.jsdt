@@ -6,17 +6,13 @@
 
 package org.eclipse.wst.jsdt.chromium.internal.wip;
 
-import java.util.List;
-
+import org.eclipse.wst.jsdt.chromium.DebugContext;
 import org.eclipse.wst.jsdt.chromium.RelayOk;
 import org.eclipse.wst.jsdt.chromium.Script;
 import org.eclipse.wst.jsdt.chromium.SyncCallback;
 import org.eclipse.wst.jsdt.chromium.UpdatableScript;
 import org.eclipse.wst.jsdt.chromium.internal.ScriptBase;
-import org.eclipse.wst.jsdt.chromium.internal.liveeditprotocol.LiveEditProtocolParserAccess;
-import org.eclipse.wst.jsdt.chromium.internal.liveeditprotocol.LiveEditResult;
-import org.eclipse.wst.jsdt.chromium.internal.protocolparser.JsonProtocolParseException;
-import org.eclipse.wst.jsdt.chromium.internal.wip.protocol.input.debugger.CallFrameValue;
+import org.eclipse.wst.jsdt.chromium.internal.wip.WipContextBuilder.WipDebugContextImpl;
 import org.eclipse.wst.jsdt.chromium.internal.wip.protocol.input.debugger.SetScriptSourceData;
 import org.eclipse.wst.jsdt.chromium.internal.wip.protocol.output.debugger.SetScriptSourceParams;
 import org.eclipse.wst.jsdt.chromium.util.GenericCallback;
@@ -58,10 +54,11 @@ class WipScriptImpl extends ScriptBase<String> {
         new GenericCallback<SetScriptSourceData>() {
       @Override
       public void success(SetScriptSourceData value) {
-        // TODO: support 'step in recommended' here.
         RelayOk relayOk = guard.getRelay().finish();
-            // possiblyUpdateCallFrames(preview, value, updateCallback, guard.getRelay());
+        // possiblyUpdateCallFrames(preview, value, updateCallback, guard.getRelay());
         guard.discharge(relayOk);
+        WipContextBuilder contextBuilder = scriptManager.getTabImpl().getContextBuilder();
+        doStepIn(contextBuilder);
       }
 
       @Override
@@ -69,6 +66,15 @@ class WipScriptImpl extends ScriptBase<String> {
         // TODO: provide failure details when supported by protocol.
         UpdatableScript.Failure failure = UpdatableScript.Failure.UNSPECIFIED;
         updateCallback.failure(exception.getMessage(), failure);
+      }
+      
+      private void doStepIn(WipContextBuilder contextBuilder) {
+        if (contextBuilder != null) {
+            WipDebugContextImpl currentContext = contextBuilder.getCurrentContext();
+            if (currentContext != null) {
+                currentContext.continueVm(DebugContext.StepAction.IN, 0, null);
+            }
+        }
       }
     };
 
