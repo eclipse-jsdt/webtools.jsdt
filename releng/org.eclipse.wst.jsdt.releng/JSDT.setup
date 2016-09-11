@@ -175,7 +175,7 @@
         <repository
             url="http://download.eclipse.org/webtools/repository/neon"/>
         <repository
-            url="http://download.eclipse.org/webtools/downloads/drops/R3.8.0/I-latest/repositoryunittests"/>
+            url="http://download.eclipse.org/webtools/downloads/drops/R3.8.0/R-3.8.0-20160608130753/repositoryunittests/"/>
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
@@ -222,7 +222,7 @@
         <repository
             url="http://download.eclipse.org/webtools/repository/neon"/>
         <repository
-            url="http://download.eclipse.org/webtools/downloads/drops/R3.8.0/I-latest/repositoryunittests"/>
+            url="http://download.eclipse.org/webtools/downloads/drops/R3.8.0/R-3.8.0-20160608130753/repositoryunittests/"/>
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
@@ -345,11 +345,7 @@
       userID="${bugzilla.id}"
       password="${eclipse.user.password}">
     <query summary="JSDT Bugs"
-        url="https://bugs.eclipse.org/bugs/buglist.cgi?product=JSDT&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=blocker&amp;bug_severity=critical&amp;bug_severity=major&amp;bug_severity=normal&amp;bug_severity=minor&amp;bug_severity=trivial"/>
-    <query summary="JSDT Features"
-        url="https://bugs.eclipse.org/bugs/buglist.cgi?product=JSDT&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=enhancement"/>
-    <query summary="JSDT Unspecified Version"
-        url="https://bugs.eclipse.org/bugs/buglist.cgi?product=JSDT&amp;version=unspecified"/>
+        url="https://bugs.eclipse.org/bugs/buglist.cgi?product=JSDT&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED"/>
   </setupTask>
   <setupTask
       xsi:type="mylyn:MylynQueriesTask"
