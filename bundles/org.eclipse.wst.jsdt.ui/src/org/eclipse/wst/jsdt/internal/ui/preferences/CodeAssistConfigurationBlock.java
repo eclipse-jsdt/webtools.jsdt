@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -251,19 +251,19 @@ class CodeAssistConfigurationBlock extends OptionsConfigurationBlock {
 		});		
 		
 		label= PreferencesMessages.JavaEditorPreferencePage_autoActivationDelay; 
-		addLabelledTextField(composite, label, PREF_CODEASSIST_AUTOACTIVATION_DELAY, 4, 0, true);
+		addLabelledTextField(composite, label, PREF_CODEASSIST_AUTOACTIVATION_DELAY, 4, 20, 0, true);
 		
 		label= PreferencesMessages.JavaEditorPreferencePage_autoActivationTriggersForJava; 
-		addLabelledTextField(composite, label, PREF_CODEASSIST_AUTOACTIVATION_TRIGGERS_JAVA, 4, 0, false);
+		addLabelledTextField(composite, label, PREF_CODEASSIST_AUTOACTIVATION_TRIGGERS_JAVA, 100, 4, 0, false);
 		
 		label= PreferencesMessages.JavaEditorPreferencePage_autoActivationTriggersForJavaDoc; 
-		addLabelledTextField(composite, label, PREF_CODEASSIST_AUTOACTIVATION_TRIGGERS_JAVADOC, 4, 0, false);
+		addLabelledTextField(composite, label, PREF_CODEASSIST_AUTOACTIVATION_TRIGGERS_JAVADOC, 100, 4, 0, false);
 	}
 	
-	protected Text addLabelledTextField(Composite parent, String label, Key key, int textlimit, int indent, boolean dummy) {	
+	protected Text addLabelledTextField(Composite parent, String label, Key key, int modelTextLimit, int fieldTextlimit, int indent, boolean dummy) {	
 		PixelConverter pixelConverter= new PixelConverter(parent);
 		
-		Label labelControl= new Label(parent, SWT.WRAP);
+		Label labelControl= new Label(parent, SWT.NONE);
 		labelControl.setText(label);
 		labelControl.setLayoutData(new GridData());
 				
@@ -280,10 +280,14 @@ class CodeAssistConfigurationBlock extends OptionsConfigurationBlock {
 		textBox.addModifyListener(getTextModifyListener());
 
 		GridData data= new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		if (textlimit != 0) {
-			textBox.setTextLimit(textlimit);
-			data.widthHint= pixelConverter.convertWidthInCharsToPixels(textlimit + 1);
+		if (modelTextLimit != 0) {
+			textBox.setTextLimit(modelTextLimit);
 		}
+		
+		if (fieldTextlimit != 0) {
+			data.widthHint= pixelConverter.convertWidthInCharsToPixels(fieldTextlimit + 1);
+		}
+		
 		data.horizontalIndent= indent;
 		data.horizontalSpan= 2;
 		textBox.setLayoutData(data);
