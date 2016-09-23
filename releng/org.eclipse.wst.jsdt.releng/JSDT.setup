@@ -98,6 +98,10 @@
       defaultValue=""
       storageURI="scope://Workspace"/>
   <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.gerrit.uri.pattern"
+      value="(https|ssh)://([^@/]+@)?(git.eclipse.org:29418/.*|git.eclipse.org/.*)"/>
+  <setupTask
       xsi:type="git:GitCloneTask"
       id="git.clone.jsdt"
       remoteURI="jsdt/webtools.jsdt"
