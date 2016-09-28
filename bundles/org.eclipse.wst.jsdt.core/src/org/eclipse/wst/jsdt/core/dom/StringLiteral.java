@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     Patrik Suzzi <psuzzi@gmail.com> - Bug 501790
  *******************************************************************************/
 
 package org.eclipse.wst.jsdt.core.dom;
@@ -174,7 +175,7 @@ public class StringLiteral extends Expression {
 			new JsStringScanner(token).scan();
 		}
 		catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("Invalid string literal : >" + token + "<");//$NON-NLS-1$//$NON-NLS-2$
+			// Bug 501790, Tolerant parsing should not crash the editor.
 		}
 		preValueChange(ESCAPED_VALUE_PROPERTY);
 		this.escapedValue = token;
