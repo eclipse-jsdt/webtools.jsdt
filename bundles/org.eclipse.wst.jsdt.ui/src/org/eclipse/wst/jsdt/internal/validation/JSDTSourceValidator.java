@@ -35,6 +35,9 @@ import org.eclipse.wst.jsdt.core.dom.AST;
 import org.eclipse.wst.jsdt.core.dom.ASTParser;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.internal.compiler.problem.DefaultProblem;
+import org.eclipse.wst.jsdt.internal.core.JavaModel;
+import org.eclipse.wst.jsdt.internal.core.JavaModelManager;
+import org.eclipse.wst.jsdt.internal.core.JavaProject;
 import org.eclipse.wst.jsdt.ui.JavaScriptUI;
 import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.sse.ui.internal.reconcile.validator.ISourceValidator;
@@ -59,6 +62,12 @@ public class JSDTSourceValidator extends AbstractValidator implements IValidator
 	private IDocument fDocument;
 	
 	static boolean shouldValidate(IFile file) {
+		IProject project = file.getProject();
+		JavaModel model = JavaModelManager.getJavaModelManager().getJavaModel();
+		JavaProject javaProject = (JavaProject) model.getJavaProject(project);
+		if (!javaProject.exists() || !javaProject.isOnIncludepath(file))
+			return false;
+
 		IResource resource = file;
 		do {
 			if (resource.isDerived() || resource.isTeamPrivateMember() || !resource.isAccessible()
