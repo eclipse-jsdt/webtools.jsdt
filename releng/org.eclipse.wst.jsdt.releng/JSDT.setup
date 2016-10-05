@@ -197,7 +197,7 @@
         <repository
             url="http://download.eclipse.org/webtools/repository/neon"/>
         <repository
-            url="http://download.eclipse.org/webtools/downloads/drops/R3.8.0/R-3.8.0-20160608130753/repositoryunittests/"/>
+            url="http://download.eclipse.org/webtools/downloads/drops/R3.8.1/I-latest/repositoryunittests"/>
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
@@ -244,7 +244,7 @@
         <repository
             url="http://download.eclipse.org/webtools/repository/neon"/>
         <repository
-            url="http://download.eclipse.org/webtools/downloads/drops/R3.8.0/R-3.8.0-20160608130753/repositoryunittests/"/>
+            url="http://download.eclipse.org/webtools/downloads/drops/R3.8.1/I-latest/repositoryunittests"/>
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
