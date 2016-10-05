@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,8 +10,6 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.core.tests.compiler.regression;
 
-import junit.framework.Test;
-
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.ToolFactory;
 import org.eclipse.wst.jsdt.core.compiler.IScanner;
@@ -20,7 +18,6 @@ import org.eclipse.wst.jsdt.core.compiler.InvalidInputException;
 import org.eclipse.wst.jsdt.internal.compiler.classfmt.ClassFileConstants;
 import org.eclipse.wst.jsdt.internal.compiler.parser.Scanner;
 import org.eclipse.wst.jsdt.internal.compiler.parser.TerminalTokens;
-import org.eclipse.wst.jsdt.internal.core.util.PublicScanner;
 
 public class ScannerTest extends AbstractRegressionTest {
 
@@ -598,7 +595,42 @@ public class ScannerTest extends AbstractRegressionTest {
 			assertTrue(false);
 		}		
 	}
-	
+	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=399501
+	public void test030() {
+		char[] source = ("const FOO = \"bar\"").toCharArray();
+		int[] CORRECT_TOKENS = {
+					TerminalTokens.TokenNamevar, 
+					TerminalTokens.TokenNameIdentifier, 
+					TerminalTokens.TokenNameEQUAL, 
+					TerminalTokens.TokenNameStringLiteral,
+					TerminalTokens.TokenNameEOF};
+		Scanner scanner = new Scanner(false, false, false, ClassFileConstants.JDK1_4, null, null, false);
+		scanner.setSource(source);
+		scanner.resetTo(0, source.length - 1);
+		try {
+			int token;
+			int index = 0;
+			StringBuffer buffer = new StringBuffer();
+			while ((token = scanner.getNextToken()) != TerminalTokens.TokenNameEOF) {
+				try {
+					assertEquals("Wrong token parsed from content", CORRECT_TOKENS[index], token);
+					switch(token) {
+						case TerminalTokens.TokenNameEOF :
+							break;
+						default :
+							buffer.append(scanner.getCurrentTokenSource());
+							index++;
+							break;
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					e.printStackTrace();
+				}
+			}
+			assertEquals("Wrong contents", "constFOO=\"bar\"", String.valueOf(buffer));
+		} catch (InvalidInputException e) {
+			assertTrue(false);
+		}		
+	}
 	// https://bugs.eclipse.org/bugs/show_bug.cgi?id=106403
 	public void test036() {
 		try {
