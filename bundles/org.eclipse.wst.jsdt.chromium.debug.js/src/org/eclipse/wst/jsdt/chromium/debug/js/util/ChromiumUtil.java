@@ -185,7 +185,9 @@ public final class ChromiumUtil {
 			Object serverAdapter = server.loadAdapter(IURLProvider.class, null);
 			if (serverAdapter != null && selectedModule != null) {
 				URL moduleRootUrl = ((IURLProvider) serverAdapter).getModuleRootURL(selectedModule);
-				url = moduleRootUrl.toString();
+				if (moduleRootUrl != null) {
+					url = moduleRootUrl.toString();
+				}
 			}
 		}
 		return url;
