@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2015 Eclipse Foundation and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Distribution License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/org/documents/edl-v10.php
+ 
+  Contributors:
+    Pavol Srna (Red Hat Inc.) - initial implementation
+-->
+
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.eclipse.webtools.jsdt</groupId>
+		<artifactId>tests</artifactId>
+		<version>3.6.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.eclipse.webtools.jsdt.tests</groupId>
+	<artifactId>org.eclipse.wst.jsdt.integration.tests</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<properties>
+		<suiteClass>org.eclipse.wst.jsdt.integration.tests.JSDTIntegrationTests</suiteClass>
+		<skipIntegrationTests>true</skipIntegrationTests>
+		<skipTests>${skipIntegrationTests}</skipTests>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+					<useUIThread>false</useUIThread>
+					<testSuite>org.eclipse.wst.jsdt.integration.tests</testSuite>
+					<testClass>${suiteClass}</testClass>
+					<argLine>${platformSystemProperties}</argLine>
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.wst.jsdt.feature.feature.group</artifactId>
+						</dependency>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.equinox.event</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+					</dependencies>
+					<systemProperties>
+						<org.osgi.framework.bundle.parent>ext</org.osgi.framework.bundle.parent>
+					</systemProperties>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<!-- Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=388084 -->
+			<id>osx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<platformSystemProperties> -XstartOnFirstThread </platformSystemProperties>
+			</properties>
+		</profile>
+	</profiles>
+
+	<repositories>
+		<repository>
+			<id>reddeer-site</id>
+			<url>http://download.jboss.org/jbosstools/neon/stable/updates/reddeer/1.2.1/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+</project>

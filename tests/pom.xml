@@ -32,6 +32,7 @@
     <module>org.eclipse.wst.jsdt.chromium.debug.core.tests</module>
     <module>org.eclipse.wst.jsdt.js.common.tests</module>
     <module>org.eclipse.wst.jsdt.js.node.common.tests</module>
+    <module>org.eclipse.wst.jsdt.integration.tests</module>
   </modules>
  <build>
   <plugins>
