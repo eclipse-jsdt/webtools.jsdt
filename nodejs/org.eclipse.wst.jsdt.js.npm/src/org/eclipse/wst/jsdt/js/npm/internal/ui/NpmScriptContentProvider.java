@@ -79,24 +79,21 @@ public class NpmScriptContentProvider implements ITreeContentProvider, IResource
 	 */
 	@Override
 	public Object[] getChildren(Object parentNode) {
-		Set<ITask> tasks = null;
 		if (parentNode instanceof IFile) {
-
 			try {
 				PackageJson packageJson = NpmUtil.parsePackageJsonFile((IFile) parentNode);
 
-				tasks = new HashSet<ITask>();
+				Set<ITask> tasks = new HashSet<ITask>();
 
 				for (String scriptName : packageJson.getScripts().keySet()) {
 					tasks.add(
 							new NpmScriptTask(((IFile) parentNode), scriptName, null, false, new Location(0, 1)));
 				}
 
-
+				return tasks.toArray();
 			} catch (Exception ex) {
 				NpmPlugin.logError(ex, ex.getMessage());
 			}
-			return tasks.toArray();
 		}
 
 		return null;
