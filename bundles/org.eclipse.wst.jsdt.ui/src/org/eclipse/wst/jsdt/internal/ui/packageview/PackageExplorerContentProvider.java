@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2013 IBM Corporation and others.
+ * Copyright (c) 2000, 2016 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -338,7 +338,7 @@ public class PackageExplorerContentProvider extends StandardJavaScriptElementCon
 					}
 				}
 				catch (JavaScriptModelException e) {
-					e.printStackTrace();
+					JavaScriptPlugin.log(e);
 				}
 				Object[] combined = new Object[children1.length + sourceRoots.size()];
 				System.arraycopy(children1, 0, combined, 0, children1.length);
@@ -388,7 +388,7 @@ public class PackageExplorerContentProvider extends StandardJavaScriptElementCon
 				return getSourceChildren(((NamespaceGroup) parentElement).getPackageFragmentRoot(), true, ((NamespaceGroup) parentElement));
 			}
 			// if script unit
-			else if (parentElement instanceof IJavaScriptUnit) {
+			else if (parentElement instanceof IJavaScriptUnit && ((IJavaScriptUnit)parentElement).exists()) {
 				return getSourceChildren(parentElement, fIsFlatLayout, null);
 			}
 			// if group with script unit as parent
@@ -397,7 +397,7 @@ public class PackageExplorerContentProvider extends StandardJavaScriptElementCon
 			}
 			return super.getChildren(parentElement);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			JavaScriptPlugin.log(e);
 			return NO_CHILDREN;
 		}
 	}
@@ -533,7 +533,7 @@ public class PackageExplorerContentProvider extends StandardJavaScriptElementCon
 		try {
 			children = container.getChildren();
 		} catch (JavaScriptModelException ex1) {
-			ex1.printStackTrace();
+			JavaScriptPlugin.log(ex1);
 		}
 		if(children==null) return null;
 		ArrayList allChildren = new ArrayList();
@@ -632,7 +632,7 @@ public class PackageExplorerContentProvider extends StandardJavaScriptElementCon
 				if(!unique) children = more.toArray();
 			}
 		} catch (JavaScriptModelException ex) {
-			ex.printStackTrace();
+			JavaScriptPlugin.log(ex);
 		}
 		
 		return allChildren.toArray();
@@ -826,7 +826,7 @@ public class PackageExplorerContentProvider extends StandardJavaScriptElementCon
 						allChildren.add(next);
 					}
 				} catch (JavaScriptModelException ex) {
-					ex.printStackTrace();
+					JavaScriptPlugin.log(ex);
 				}
 				
 				if(expanded.size()>0) 
@@ -885,8 +885,7 @@ public class PackageExplorerContentProvider extends StandardJavaScriptElementCon
 								break;
 							}
 						} catch (JavaScriptModelException ex) {
-							// TODO Auto-generated catch block
-							ex.printStackTrace();
+							JavaScriptPlugin.log(ex);
 						}
 						
 					}
