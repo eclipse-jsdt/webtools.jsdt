@@ -260,8 +260,8 @@ public class JSDTSourceValidator extends AbstractValidator implements IValidator
 	}
 
 	private Position calcPosition(char[] source, int offset) {
-		int start = offset;
-		int end = offset;
+		int start = offset > source.length ? source.length : offset;
+		int end = start;
 
 		// Search forward
 		while (source.length > end && 
