@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Chromium Developer Tools SDK WIP backend (current development)
 Bundle-Vendor: Eclipse Web Tools Platform
 Bundle-SymbolicName: org.eclipse.wst.jsdt.chromium.wipbackend.dev;singleton:=true
-Bundle-Version: 0.4.0.qualifier
+Bundle-Version: 0.5.200.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.wst.jsdt.chromium;bundle-version="[0.4.0,0.5.0)"
 Export-Package: org.eclipse.wst.jsdt.chromium.internal.wip.protocol
