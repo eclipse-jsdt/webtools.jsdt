@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2015, 2016 Red Hat, Inc. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Packages are defined by a manifest file bower.json. This is similar to Node’s package.json or Ruby’s Gemfile.
+ * Packages are defined by a manifest file bower.json. This is similar to Node's package.json or Ruby's Gemfile.
  *
  * @see <a href="http://bower.io/docs/creating-packages/#bowerjson">http://bower.io/docs/creating-packages/#bowerjson</a>
  * @author "Ilya Buziuk (ibuziuk)"

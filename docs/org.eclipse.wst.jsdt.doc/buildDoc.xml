@@ -31,6 +31,14 @@
 		<property name="dest" value="reference/extension-points" />
         <record name="${basedir}/workspace/jsdtconvert.txt" action="start"/>
 
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.debug.core/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.debug.js/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.debug.jsdtbridge/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.debug.ui/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.wip.eclipse/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.dev/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0/plugin.xml" destination="${dest}" />
+
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.core/plugin.xml" destination="${dest}" />
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.debug.core/plugin.xml" destination="${dest}" />
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.debug.rhino/plugin.xml" destination="${dest}" />
@@ -39,6 +47,14 @@
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.support.firefox/plugin.xml" destination="${dest}" />
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.support.ie/plugin.xml" destination="${dest}" />
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.ui/plugin.xml" destination="${dest}" />
+
+       <pde.convertSchemaToHTML manifest="../../nodejs/org.eclipse.wst.jsdt.js.bower/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../nodejs/org.eclipse.wst.jsdt.js.common/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../nodejs/org.eclipse.wst.jsdt.js.grunt/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../nodejs/org.eclipse.wst.jsdt.js.gulp/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../nodejs/org.eclipse.wst.jsdt.js.node/plugin.xml" destination="${dest}" />
+       <pde.convertSchemaToHTML manifest="../../nodejs/org.eclipse.wst.jsdt.js.npm/plugin.xml" destination="${dest}" />
+
        <record name="${basedir}/workspace/jsdtconvert.txt" action="stop"/>
 	</target>
 

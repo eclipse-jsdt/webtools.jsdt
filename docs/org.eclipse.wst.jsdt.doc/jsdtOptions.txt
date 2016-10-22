@@ -1,6 +1,25 @@
 #-quiet
 -charset "utf-8"
--sourcepath "../../bundles/org.eclipse.wst.jsdt.core/src
+-sourcepath "../../bundles/org.eclipse.wst.jsdt.chromium/src
+;../../bundles/org.eclipse.wst.jsdt.chromium/src-dynamic-impl/bridge
+;../../bundles/org.eclipse.wst.jsdt.chromium/src-dynamic-impl/parser
+;../../bundles/org.eclipse.wst.jsdt.chromium/src-static-impl/generated
+;../../bundles/org.eclipse.wst.jsdt.chromium/src-wip
+;../../bundles/org.eclipse.wst.jsdt.chromium.debug.core/src
+;../../bundles/org.eclipse.wst.jsdt.chromium.debug.js/src
+;../../bundles/org.eclipse.wst.jsdt.chromium.debug.jsdtbridge/src
+;../../bundles/org.eclipse.wst.jsdt.chromium.debug.ui/src
+;../../bundles/org.eclipse.wst.jsdt.chromium.wip.eclipse/src
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.dev/src
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.dev/src-static-impl/bridge
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.dev/src-static-impl/generated
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.dev/src-wip-generated
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0/src
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0/src-dynamic-impl/parser
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0/src-dynamic-impl/bridge
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0/src-static-impl/generated
+;../../bundles/org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0/src-wip-generated
+;../../bundles/org.eclipse.wst.jsdt.core/src
 ;../../bundles/org.eclipse.wst.jsdt.debug.core/src
 ;../../bundles/org.eclipse.wst.jsdt.debug.rhino/src
 ;../../bundles/org.eclipse.wst.jsdt.debug.rhino.debugger/src
@@ -8,13 +27,24 @@
 ;../../bundles/org.eclipse.wst.jsdt.manipulation/src
 ;../../bundles/org.eclipse.wst.jsdt.support.firefox/src
 ;../../bundles/org.eclipse.wst.jsdt.support.ie/src
-;../../bundles/org.eclipse.wst.jsdt.ui/src"
+;../../bundles/org.eclipse.wst.jsdt.ui/src
+;../../nodejs/org.eclipse.wst.jsdt.js.cli/src
+;../../nodejs/org.eclipse.wst.jsdt.js.common/src
+;../../nodejs/org.eclipse.wst.jsdt.js.bower/src
+;../../nodejs/org.eclipse.wst.jsdt.js.grunt/src
+;../../nodejs/org.eclipse.wst.jsdt.js.gulp/src
+;../../nodejs/org.eclipse.wst.jsdt.js.node/src
+;../../nodejs/org.eclipse.wst.jsdt.js.node.common/src
+;../../nodejs/org.eclipse.wst.jsdt.js.npm/src"
 -d reference/api
 -classpath @rt@
 ;../org.eclipse.compare/@dot
 ;../org.eclipse.compare.core/@dot
 ;../org.eclipse.core.boot/@dot
 ;../org.eclipse.core.contenttype/@dot
+;../org.eclipse.core.expressions/@dot
+;../org.eclipse.core.externaltools/@dot
+;../org.eclipse.core.filesystem/@dot
 ;../org.eclipse.core.jobs/@dot
 ;../org.eclipse.core.resources/@dot
 ;../org.eclipse.core.runtime/@dot
@@ -48,15 +78,18 @@
 ;../org.eclipse.pde.build/@dot
 ;../org.eclipse.pde.launching/@dot
 ;../org.eclipse.search/@dot
+;../org.eclipse.swt/@dot
 ;../org.eclipse.swt.win32.win32.x86/@dot
 ;../org.eclipse.text/@dot
 ;../org.eclipse.ui/@dot
+;../org.eclipse.ui.console/@dot
 ;../org.eclipse.ui.editors/@dot
 ;../org.eclipse.ui.ide/@dot
 ;../org.eclipse.ui.views/@dot
 ;../org.eclipse.ui.workbench/@dot
 ;../org.eclipse.ui.workbench.texteditor/@dot
 ;../org.eclipse.update.configurator/@dot
+;../com.google.gson/@dot
 -breakiterator
 -use
 -splitIndex
@@ -64,7 +97,7 @@
 -windowtitle "JavaScript Development Tools API Specification"
 -doctitle "JavaScript Development Tools API Specification"
 -header "<b>JavaScript Development Tools</b><br>Release 3.2"
--bottom "Copyright (c) IBM Corp. and others 2000, 2010.  All Rights Reserved."
+-bottom "Copyright (c) IBM Corp. and others 2000, 2016.  All Rights Reserved."
 -link http://java.sun.com/j2se/1.4/docs/api
 -linkoffline ./../../../org.eclipse.platform.doc.isv/reference/api ../org.eclipse.platform.doc.isv/reference/api
 -linkoffline ./../../../org.eclipse.jdt.doc.isv/reference/api ../org.eclipse.jdt.doc.isv/reference/api
@@ -132,3 +165,99 @@ org.eclipse.wst.jsdt.ui.text.folding
 org.eclipse.wst.jsdt.ui.text.java
 org.eclipse.wst.jsdt.ui.text.java.hover
 org.eclipse.wst.jsdt.ui.wizards
+
+#JSDT chromium API packages
+org.eclipse.wst.jsdt.chromium
+org.eclipse.wst.jsdt.chromium.util
+org.eclipse.wst.jsdt.chromium.wip
+
+#JSDT chromium debug core API packages
+
+org.eclipse.wst.jsdt.chromium.debug.core
+org.eclipse.wst.jsdt.chromium.debug.core.efs
+org.eclipse.wst.jsdt.chromium.debug.core.model
+org.eclipse.wst.jsdt.chromium.debug.core.sourcemap
+org.eclipse.wst.jsdt.chromium.debug.core.util
+
+#JSDT chromium debug js API packages
+
+org.eclipse.wst.jsdt.chromium.debug.js
+org.eclipse.wst.jsdt.chromium.debug.js.handlers
+org.eclipse.wst.jsdt.chromium.debug.js.launch
+org.eclipse.wst.jsdt.chromium.debug.js.launch.shortcuts
+org.eclipse.wst.jsdt.chromium.debug.js.launchers
+org.eclipse.wst.jsdt.chromium.debug.js.runtime
+org.eclipse.wst.jsdt.chromium.debug.js.testers
+org.eclipse.wst.jsdt.chromium.debug.js.util
+
+#JSDT chromium debug jsdtbridge API packages
+
+org.eclipse.wst.jsdt.chromium.debug.jsdtbridge
+
+#JSDT chromium debug ui API packages
+
+org.eclipse.wst.jsdt.chromium.debug.ui
+org.eclipse.wst.jsdt.chromium.debug.ui.actions
+org.eclipse.wst.jsdt.chromium.debug.ui.actions.pinpoint
+org.eclipse.wst.jsdt.chromium.debug.ui.editors
+org.eclipse.wst.jsdt.chromium.debug.ui.launcher
+org.eclipse.wst.jsdt.chromium.debug.ui.listeners
+org.eclipse.wst.jsdt.chromium.debug.ui.liveedit
+org.eclipse.wst.jsdt.chromium.debug.ui.propertypages
+org.eclipse.wst.jsdt.chromium.debug.ui.source
+
+#JSDT chromium wip eclipse API packages
+
+org.eclipse.wst.jsdt.chromium.wip.eclipse
+
+#JSDT chromium wipbackend protocol_1_0/dev API packages
+
+org.eclipse.wst.jsdt.chromium.wip
+
+#JSDT js bower API packages
+
+org.eclipse.wst.jsdt.js.bower
+org.eclipse.wst.jsdt.js.bower.util
+
+#JSDT js cli API packages
+
+org.eclipse.wst.jsdt.js.cli
+org.eclipse.wst.jsdt.js.cli.core
+
+#JSDT js common API packages
+
+org.eclipse.wst.jsdt.js.common
+org.eclipse.wst.jsdt.js.common.build.system
+org.eclipse.wst.jsdt.js.common.build.system.launch
+org.eclipse.wst.jsdt.js.common.build.system.launch.ui
+org.eclipse.wst.jsdt.js.common.build.system.ui
+org.eclipse.wst.jsdt.js.common.build.system.ui.navigator
+org.eclipse.wst.jsdt.js.common.build.system.util
+org.eclipse.wst.jsdt.js.common.ui
+org.eclipse.wst.jsdt.js.common.util
+
+#JSDT js grunt API packages
+
+org.eclipse.wst.jsdt.js.grunt
+org.eclipse.wst.jsdt.js.grunt.util
+
+#JSDT js gulp API packages
+
+org.eclipse.wst.jsdt.js.gulp
+org.eclipse.wst.jsdt.js.gulp.util
+
+#JSDT js node API packages
+
+org.eclipse.wst.jsdt.js.node
+org.eclipse.wst.jsdt.js.node.runtime
+
+#JSDT js node common API packages
+
+org.eclipse.wst.jsdt.js.node.common
+org.eclipse.wst.jsdt.js.node.common.json.objects
+org.eclipse.wst.jsdt.js.node.common.util
+
+#JSDT js npm API packages
+
+org.eclipse.wst.jsdt.js.npm
+org.eclipse.wst.jsdt.js.npm.util
