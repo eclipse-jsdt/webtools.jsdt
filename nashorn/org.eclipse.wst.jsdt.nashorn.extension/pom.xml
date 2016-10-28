@@ -21,6 +21,6 @@
 
  	<groupId>org.eclipse.webtools.jsdt.nashorn</groupId>
 	<artifactId>org.eclipse.wst.jsdt.nashorn.extension</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
