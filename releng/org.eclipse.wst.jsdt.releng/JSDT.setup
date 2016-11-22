@@ -200,6 +200,8 @@
             url="http://download.eclipse.org/webtools/downloads/drops/R3.8.1/I-latest/repositoryunittests"/>
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
+        <repository
+            url="http://download.jboss.org/jbosstools/neon/stable/updates/reddeer/1.2.1/"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -298,7 +300,10 @@
             project="org.eclipse.wst.jsdt.core"/>
         <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSet="//@setupTasks.16/@workingSets.0 //@setupTasks.16/@workingSets.1"/>
+            excludedWorkingSet="//@setupTasks.18/@workingSets.0"/>
+        <operand
+            xsi:type="workingsets:ExclusionPredicate"
+            excludedWorkingSet="//@setupTasks.18/@workingSets.1"/>
       </predicate>
     </workingSet>
     <workingSet
@@ -356,7 +361,10 @@
             project="org.eclipse.json"/>
         <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSet="//@setupTasks.16/@workingSets.3 //@setupTasks.16/@workingSets.4"/>
+            excludedWorkingSet="//@setupTasks.18/@workingSets.3"/>
+        <operand
+            xsi:type="workingsets:ExclusionPredicate"
+            excludedWorkingSet="//@setupTasks.18/@workingSets.4"/>
       </predicate>
     </workingSet>
     <description>The dynamic working sets for ${scope.project.label}</description>
