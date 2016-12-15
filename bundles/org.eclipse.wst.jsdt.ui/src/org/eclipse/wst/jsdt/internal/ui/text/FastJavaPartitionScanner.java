@@ -439,14 +439,14 @@ public class FastJavaPartitionScanner implements IPartitionTokenScanner, IJavaSc
 	 			case '{':
 	 				if (fLast == DOLLAR) {
 	 					fTemplateLiteralExpressionDepth++;
-	 					fTokenLength++;
 	 				}
+ 					fTokenLength++;
 	 				break;
 	 			case '}':
 	 				if (fLast != BACKSLASH && fTemplateLiteralExpressionDepth > 0) {
 	 					fTemplateLiteralExpressionDepth--;
-	 					fTokenLength++;
 	 				}
+ 					fTokenLength++;
 	 				break;
 	 			case '`':
 	 				if (fLast != BACKSLASH && fTemplateLiteralExpressionDepth == 0) {

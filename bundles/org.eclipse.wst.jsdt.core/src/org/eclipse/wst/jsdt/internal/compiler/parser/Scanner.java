@@ -1474,6 +1474,7 @@ public int getNextToken() throws InvalidInputException {
 					}
 					throw new InvalidInputException(INVALID_CHARACTER_CONSTANT); */
 				case '\'':
+				case '`': // a template surroundings (TODO: this will result into TokenNameStringLiteral. Shall we make a separate token for the templates?)
 				case '"' :
 					char character = this.currentCharacter;
 					try {
@@ -3942,9 +3943,9 @@ public String toString() {
 		this.eofPosition - (this.currentPosition - 1) - 1);
 
 	return new String(front)
-		+ "\n===============================\nStarts here -->" //$NON-NLS-1$
+		+ "\n===============================\nStarts here (" + this.startPosition + ") -->" //$NON-NLS-1$ //$NON-NLS-2$
 		+ new String(middle)
-		+ "<-- Ends here\n===============================\n" //$NON-NLS-1$
+		+ "<-- (" + (this.startPosition + middleLength - 1) + ", l:" + middleLength + ") Ends here\n===============================\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		+ new String(end);
 }
 
