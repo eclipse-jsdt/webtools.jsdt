@@ -115,9 +115,8 @@ public class ScopeDeclarationScanner {
 					break;
 				case ASTNode.TYPE_DECLARATION_EXPRESSION : {
 					AbstractTypeDeclaration cd = ((TypeDeclarationExpression) n).getDeclaration();
-					SimpleName cNameNode = (cd.getName());
-					if (cNameNode != null) {
-						declareClass(cNameNode);
+					if (cd != null) {
+						declareClass(cd.getName());
 					}
 				}
 					break;
@@ -187,27 +186,22 @@ public class ScopeDeclarationScanner {
 					// Intentional
 					return;
 				case ASTNode.FUNCTION_DECLARATION_STATEMENT : {
-					FunctionDeclaration fd = ((FunctionDeclarationStatement) n).getDeclaration();
-					SimpleName fNameNode = ((SimpleName) fd.getMethodName());
-					if (fNameNode != null) {
-						declareFunction(fNameNode);
+						FunctionDeclaration fd = ((FunctionDeclarationStatement) n).getDeclaration();
+						if (fd != null) {
+							declareFunction(((SimpleName) fd.getMethodName()));
+						}
 					}
-				}
 					return;
 				case ASTNode.FUNCTION_DECLARATION : {
-					SimpleName fNameNode = ((SimpleName) ((FunctionDeclaration) n).getMethodName());
-					if (fNameNode != null) {
-						declareFunction(fNameNode);
+						declareFunction(((SimpleName) ((FunctionDeclaration) n).getMethodName()));
 					}
-				}
 					break;
 				case ASTNode.TYPE_DECLARATION_EXPRESSION :
 					return;
 				case ASTNode.TYPE_DECLARATION_STATEMENT : {
 					TypeDeclaration td = (TypeDeclaration) ((TypeDeclarationStatement) n).getDeclaration();
-					SimpleName cNameNode = (td.getName());
-					if (cNameNode != null) {
-						declareClass(cNameNode);
+					if (td != null) {
+						declareClass(td.getName());
 					}
 				}
 					return;
@@ -334,18 +328,20 @@ public class ScopeDeclarationScanner {
 		 *            expression
 		 */
 		private void declareExpression(Scope scope, ASTNode lhs) {
-			switch (lhs.getNodeType()) {
-				case ASTNode.SIMPLE_NAME :
-					declareVariable(scope, (SimpleName) lhs);
-					break;
-				case ASTNode.SINGLE_VARIABLE_DECLARATION :
-					declareVariable(scope, ((SingleVariableDeclaration) lhs).getName());
-					break;
-				case ASTNode.VARIABLE_DECLARATION_FRAGMENT :
-					declareVariable(scope, ((VariableDeclarationFragment) lhs).getName());
-					break;
-				case ASTNode.OBJECT_LITERAL :
-					break;
+			if (lhs != null) {
+				switch (lhs.getNodeType()) {
+					case ASTNode.SIMPLE_NAME :
+						declareVariable(scope, (SimpleName) lhs);
+						break;
+					case ASTNode.SINGLE_VARIABLE_DECLARATION :
+						declareVariable(scope, ((SingleVariableDeclaration) lhs).getName());
+						break;
+					case ASTNode.VARIABLE_DECLARATION_FRAGMENT :
+						declareVariable(scope, ((VariableDeclarationFragment) lhs).getName());
+						break;
+					case ASTNode.OBJECT_LITERAL :
+						break;
+				}
 			}
 		}
 
@@ -387,9 +383,11 @@ public class ScopeDeclarationScanner {
 		 *            variable name node
 		 */
 		private void declareVariable(Scope s, SimpleName n) {
-			String name = n.getIdentifier();
-			if (checkRedeclaration(s, n, name)) {
-				s.declareVariable(name, n, org.eclipse.wst.jsdt.internal.core.dom.binding.VariableDeclaration.VariableKind.VAR);
+			if  (n != null) {
+				String name = n.getIdentifier();
+				if (checkRedeclaration(s, n, name)) {
+					s.declareVariable(name, n, org.eclipse.wst.jsdt.internal.core.dom.binding.VariableDeclaration.VariableKind.VAR);
+				}
 			}
 		}
 
@@ -403,9 +401,11 @@ public class ScopeDeclarationScanner {
 		 *            function name node
 		 */
 		private void declareFunction(Scope s, SimpleName n) {
-			String name = n.getIdentifier();
-			if (checkRedeclaration(s, n, name)) {
-				s.declareFunction(name, n);
+			if (n != null) {
+				String name = n.getIdentifier();
+				if (checkRedeclaration(s, n, name)) {
+					s.declareFunction(name, n);
+				}
 			}
 		}
 
@@ -428,9 +428,11 @@ public class ScopeDeclarationScanner {
 		 *            class name node
 		 */
 		private void declareClass(Scope s, SimpleName n) {
-			String name = n.getIdentifier();
-			if (checkRedeclaration(s, n, name)) {
-				s.declareClass(name, n);
+			if (n != null) {
+				String name = n.getIdentifier();
+				if (checkRedeclaration(s, n, name)) {
+					s.declareClass(name, n);
+				}
 			}
 		}
 
