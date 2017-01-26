@@ -11,14 +11,6 @@
 <plugin>
 
   <!-- Breakpoint-related extensions -->
-  <extension point="org.eclipse.core.runtime.adapters">
-    <factory
-        class="org.eclipse.wst.jsdt.chromium.debug.core.model.BreakpointAdapterFactory"
-        adaptableType="org.eclipse.ui.texteditor.ITextEditor">
-      <adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget" /> 
-    </factory>
-  </extension>
-  
   <extension point="org.eclipse.debug.core.breakpoints">
       <breakpoint
         class="org.eclipse.wst.jsdt.chromium.debug.core.model.ChromiumLineBreakpoint"

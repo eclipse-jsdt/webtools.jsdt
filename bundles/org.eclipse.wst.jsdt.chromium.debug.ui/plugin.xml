@@ -542,4 +542,11 @@
 	    </viewerContentBinding>
   </extension>
   
+  <extension point="org.eclipse.core.runtime.adapters">
+    <factory
+        class="org.eclipse.wst.jsdt.chromium.debug.core.model.BreakpointAdapterFactory"
+        adaptableType="org.eclipse.wst.jsdt.chromium.debug.ui.editors.JsEditor">
+      <adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget" /> 
+    </factory>
+  </extension>
 </plugin>
