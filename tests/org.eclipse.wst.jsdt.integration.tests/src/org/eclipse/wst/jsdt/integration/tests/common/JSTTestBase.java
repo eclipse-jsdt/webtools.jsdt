@@ -14,9 +14,11 @@ package org.eclipse.wst.jsdt.integration.tests.common;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,6 +59,10 @@ import org.eclipse.wst.jsdt.integration.tests.internal.wizard.js.NewJSFileWizard
 import org.eclipse.wst.jsdt.integration.tests.internal.condition.TreeContainsItem;
 import org.eclipse.wst.jsdt.integration.tests.internal.wizard.npm.NpmInitDialog;
 import org.junit.runner.RunWith;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchesListener;
+import org.eclipse.debug.core.model.IProcess;
 
 /**
  * TestBase Class for JST tests
@@ -234,7 +240,7 @@ public class JSTTestBase {
 		}
 	}
 
-	protected void resume(Tree tree, Matcher matcher){
+	protected void resume(Tree tree, Matcher matcher) {
 		List<TreeItem> items = tree.getAllItems();
 		for (TreeItem i : items) {
 			if (matcher.matches(i.getText())) {
@@ -243,18 +249,18 @@ public class JSTTestBase {
 			}
 		}
 	}
-	
+
 	protected TreeItem getVariable(String name) {
 
 		WorkbenchView variables = new WorkbenchView("Variables");
 		variables.activate();
 		DefaultTree variablesTree = new DefaultTree();
-		
+
 		TreeItem var = null;
-		try{
+		try {
 			new WaitUntil(new TreeContainsItem(variablesTree, new WithTextMatcher(name), false));
-		}catch (WaitTimeoutExpiredException e) {
-			//not found
+		} catch (WaitTimeoutExpiredException e) {
+			// not found
 			return null;
 		}
 		List<TreeItem> vars = variablesTree.getItems();
@@ -264,5 +270,50 @@ public class JSTTestBase {
 			}
 		}
 		return var;
+	}
+
+	public void terminatePrcs(IProcess[] prcs) {
+
+		for (IProcess p : prcs) {
+			try {
+				p.terminate();
+			} catch (DebugException e) {
+				fail(e.getMessage());
+			}
+			assertTrue("Proces:" + p.getLabel() + " not terminated!", p.isTerminated());
+		}
+	}
+
+	public static boolean portAvailable(int port) {
+		try (Socket ignored = new Socket("localhost", port)) {
+			return false;
+		} catch (IOException ignored) {
+			return true;
+		}
+	}
+
+	public class NodeJSLaunchListener implements ILaunchesListener {
+
+		private ILaunch launch;
+
+		public ILaunch getNodeJSLaunch() {
+			return launch;
+		}
+
+		@Override
+		public void launchesAdded(ILaunch[] arg0) {
+			this.launch = arg0[0];
+		}
+
+		@Override
+		public void launchesChanged(ILaunch[] arg0) {
+
+		}
+
+		@Override
+		public void launchesRemoved(ILaunch[] arg0) {
+
+		}
+
 	}
 }

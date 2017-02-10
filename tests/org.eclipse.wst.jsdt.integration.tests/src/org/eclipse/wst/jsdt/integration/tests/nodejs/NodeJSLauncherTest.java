@@ -20,6 +20,7 @@ import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
 import org.jboss.reddeer.eclipse.ui.console.ConsoleView;
 import org.jboss.reddeer.eclipse.ui.perspectives.DebugPerspective;
 import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,6 +29,9 @@ import org.junit.Assert;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.wst.jsdt.integration.tests.common.JSTTestBase;
 
 /**
@@ -41,6 +45,11 @@ public class NodeJSLauncherTest extends JSTTestBase {
 
 	private static String TEST_APP_NAME = "jsdt-node-test-project";
 	private static String IMPORT_PATH = "resources/" + TEST_APP_NAME;
+
+	private static int APP_PORT = 3000;
+	private static int DEBUG_PORT = 5858;
+
+	private NodeJSLaunchListener launchListener = null;
 
 	@BeforeClass
 	public static void prepare() {
@@ -66,6 +75,12 @@ public class NodeJSLauncherTest extends JSTTestBase {
 
 	@Test
 	public void testNodeJSAppIsRunning() {
+		assertTrue(portAvailable(APP_PORT));
+
+		launchListener = new NodeJSLaunchListener();
+		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+		manager.addLaunchListener(launchListener);
+
 		ExplorerItem indexJS = new ProjectExplorer().getProject(TEST_APP_NAME).getProjectItem("index.js");
 		indexJS.select();
 		runAsNodeJSAppMenu().select();
@@ -77,7 +92,6 @@ public class NodeJSLauncherTest extends JSTTestBase {
 		} catch (WaitTimeoutExpiredException e) {
 			Assert.fail("Node.js App is not running!");
 		}
-		console.terminateConsole();
 	}
 
 	@Test
@@ -89,6 +103,13 @@ public class NodeJSLauncherTest extends JSTTestBase {
 
 	@Test
 	public void testNodeJSAppIsDebugging() {
+		assertTrue(portAvailable(APP_PORT));
+		assertTrue(portAvailable(DEBUG_PORT));
+
+		launchListener = new NodeJSLaunchListener();
+		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+		manager.addLaunchListener(launchListener);
+
 		debugAsNodeJSAppMenu(new ProjectExplorer().getProject(TEST_APP_NAME).getProjectItem("index.js")).select();
 
 		ConsoleView console = new ConsoleView();
@@ -96,8 +117,17 @@ public class NodeJSLauncherTest extends JSTTestBase {
 		new WaitUntil(new ConsoleHasText("Debugger listening"), TimePeriod.LONG);
 
 		assertTrue("Node.js App is not debugging!", console.getConsoleText().contains("Debugger listening"));
-
-		console.terminateConsole();
 	}
 
+	@After
+	public void terminate() {
+		if (launchListener != null) {
+			ILaunch launch = launchListener.getNodeJSLaunch();
+			if (launch != null) {
+				terminatePrcs(launch.getProcesses());
+			}
+			ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+			manager.removeLaunchListener(launchListener);
+		}
+	}
 }

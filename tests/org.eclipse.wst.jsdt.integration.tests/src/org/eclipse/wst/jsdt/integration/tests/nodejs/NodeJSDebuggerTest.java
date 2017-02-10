@@ -31,6 +31,8 @@ import org.jboss.reddeer.workbench.impl.editor.TextEditor;
 import org.jboss.reddeer.workbench.impl.view.WorkbenchView;
 import org.eclipse.wst.jsdt.integration.tests.internal.condition.CursorPositionIsOnLine;
 import org.eclipse.wst.jsdt.integration.tests.internal.condition.TreeContainsItem;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -40,7 +42,6 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-
 
 /**
  * Tests for NodeJS Debugger
@@ -63,6 +64,11 @@ public class NodeJSDebuggerTest extends JSTTestBase {
 	private static String DEBUG_VARIABLE_AUTHOR = "author";
 	private static String DEBUG_VARIABLE_AUTHOR_VALUE = "\"George Orwell\"";
 
+	private static int APP_PORT = 3000;
+	private static int DEBUG_PORT = 5858;
+
+	private static NodeJSLaunchListener launchListener = null;
+
 	@BeforeClass
 	public static void prepare() {
 		/* PE is closed in Debug perspective, open it */
@@ -81,14 +87,18 @@ public class NodeJSDebuggerTest extends JSTTestBase {
 
 	@Before
 	public void debugAs() {
+		assertTrue(portAvailable(APP_PORT));
+		assertTrue(portAvailable(DEBUG_PORT));
 
-		debugAsNodeJSAppMenu(new ProjectExplorer().getProject(TEST_APP_NAME).getProjectItem("index.js"))
-				.select();
+		launchListener = new NodeJSLaunchListener();
+		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+		manager.addLaunchListener(launchListener);
+
+		debugAsNodeJSAppMenu(new ProjectExplorer().getProject(TEST_APP_NAME).getProjectItem("index.js")).select();
 
 		new WorkbenchView("Debug").open();
 		DefaultTree debugTree = new DefaultTree();
-		new WaitUntil(
-				new TreeContainsItem(debugTree, new RegexMatcher("\\(anonymous function\\)(.*)(index\\.js)(.*)")),
+		new WaitUntil(new TreeContainsItem(debugTree, new RegexMatcher("\\(anonymous function\\)(.*)(index\\.js)(.*)")),
 				TimePeriod.LONG);
 
 		RegexMatcher matcher = new RegexMatcher("\\(anonymous function\\)(.*)(index\\.js)(.*)");
@@ -97,13 +107,14 @@ public class NodeJSDebuggerTest extends JSTTestBase {
 		ConsoleView console = new ConsoleView();
 		console.open();
 		new WaitUntil(new ConsoleHasText("Debugger listening"), TimePeriod.LONG);
+
 	}
 
 	@After
 	public void terminate() {
-		ConsoleView console = new ConsoleView();
-		console.open();
-		console.terminateConsole();
+		terminatePrcs(launchListener.getNodeJSLaunch().getProcesses());
+		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+		manager.removeLaunchListener(launchListener);
 	}
 
 	@Test
@@ -125,7 +136,6 @@ public class NodeJSDebuggerTest extends JSTTestBase {
 	@Test
 	public void testJSVariablesInitialized() throws CoreException {
 
-		
 		new ProjectExplorer().getProject(TEST_APP_NAME).getProjectItem("book.js").open();
 		new WaitUntil(new EditorWithTitleIsActive("book.js"));
 		TextEditor editor = new TextEditor("book.js");
@@ -135,18 +145,17 @@ public class NodeJSDebuggerTest extends JSTTestBase {
 		new WorkbenchView("Debug").open();
 		DefaultTree debugTree = new DefaultTree();
 		resume(debugTree, new RegexMatcher("\\(anonymous function\\)(.*)(index\\.js)(.*)"));
-		
+
 		new WaitUntil(new EditorWithTitleIsActive("book.js"), TimePeriod.LONG);
 		new WaitUntil(new CursorPositionIsOnLine(editor, BOOK_JS_BREAKPOINT_LINE));
 
 		TreeItem varTitle = getVariable(DEBUG_VARIABLE_TITLE);
 		TreeItem varAuthor = getVariable(DEBUG_VARIABLE_AUTHOR);
 
-		assertTrue("Variable '"+ DEBUG_VARIABLE_TITLE  + "' not found in view!", varTitle != null);
+		assertTrue("Variable '" + DEBUG_VARIABLE_TITLE + "' not found in view!", varTitle != null);
 		assertThat(varTitle.getCell(0), is(DEBUG_VARIABLE_TITLE));
 		assertThat(varTitle.getCell(1), is(DEBUG_VARIABLE_TITLE_VALUE));
-		
-		
+
 		assertTrue("Variable '" + DEBUG_VARIABLE_AUTHOR + "' not found in view!", varAuthor != null);
 		assertThat(varAuthor.getCell(0), is(DEBUG_VARIABLE_AUTHOR));
 		assertThat(varAuthor.getCell(1), is(DEBUG_VARIABLE_AUTHOR_VALUE));
