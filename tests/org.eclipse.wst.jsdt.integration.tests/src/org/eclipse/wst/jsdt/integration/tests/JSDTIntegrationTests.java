@@ -13,6 +13,8 @@ package org.eclipse.wst.jsdt.integration.tests;
 
 import org.eclipse.wst.jsdt.integration.tests.nodejs.NodeJSDebuggerTest;
 import org.eclipse.wst.jsdt.integration.tests.nodejs.NodeJSLauncherTest;
+import org.eclipse.wst.jsdt.integration.tests.npm.NpmInitTest;
+import org.eclipse.wst.jsdt.integration.tests.npm.NpmShortcutsTest;
 import org.jboss.reddeer.junit.runner.RedDeerSuite;
 
 import org.junit.runner.RunWith;
@@ -22,7 +24,10 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({	
 	//NodeJS Debugger Tests
 	NodeJSLauncherTest.class,
-	NodeJSDebuggerTest.class
+	NodeJSDebuggerTest.class,
+	//npm
+	NpmInitTest.class,
+	NpmShortcutsTest.class
 	
 	// ...
 	
