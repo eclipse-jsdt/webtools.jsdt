@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2016 Red Hat, Inc.
+ * Copyright (c) 2016-2017 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -58,6 +58,7 @@ import org.eclipse.wst.jsdt.integration.tests.internal.wizard.js.NewJSFileWizard
 import org.eclipse.wst.jsdt.integration.tests.internal.wizard.js.NewJSFileWizardPage;
 import org.eclipse.wst.jsdt.integration.tests.internal.condition.TreeContainsItem;
 import org.eclipse.wst.jsdt.integration.tests.internal.wizard.npm.NpmInitDialog;
+import org.eclipse.wst.jsdt.integration.tests.internal.wizard.bower.BowerInitDialog;
 import org.junit.runner.RunWith;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
@@ -202,6 +203,18 @@ public class JSTTestBase {
 	protected static void assertBowerJsonExists() {
 		File bowerJson = new File(BASE_DIRECTORY + "/bower.json");
 		assertTrue("bower.json file does not exist", bowerJson.exists());
+	}
+	
+	protected static void bowerInit() {
+		bowerInit(PROJECT_NAME);
+	}
+
+	protected static void bowerInit(String projectName) {
+		BowerInitDialog dialog = new BowerInitDialog();
+		dialog.open();
+		new LabeledText("Base directory:").setText(BASE_DIRECTORY);
+		dialog.finish();
+		assertBowerJsonExists();
 	}
 
 	@SuppressWarnings("unchecked")
