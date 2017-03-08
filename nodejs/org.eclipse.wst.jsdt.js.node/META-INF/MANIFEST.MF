@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Node
 Bundle-SymbolicName: org.eclipse.wst.jsdt.js.node;singleton:=true
-Bundle-Version: 1.0.200.qualifier
+Bundle-Version: 1.0.202.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.js.node.NodePlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -16,9 +16,9 @@ Require-Bundle: org.eclipse.ui,
  com.google.gson;bundle-version="[2.2.4,3.0.0)",
  org.eclipse.wst.jsdt.js.node.common,
  org.eclipse.debug.core,
- org.eclipse.wst.jsdt.chromium.debug.core;bundle-version="0.4.0",
- org.eclipse.wst.jsdt.chromium;bundle-version="0.4.0",
- org.eclipse.wst.jsdt.chromium.debug;bundle-version="0.4.0",
+ org.eclipse.wst.jsdt.chromium.debug.core;bundle-version="[0.4.0,0.6.0)",
+ org.eclipse.wst.jsdt.chromium;bundle-version="[0.4.0,0.6.0)",
+ org.eclipse.wst.jsdt.chromium.debug;bundle-version="[0.4.0,0.5.0)",
  org.eclipse.wst.jsdt.chromium.debug.ui;bundle-version="[0.6.0,0.7.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
