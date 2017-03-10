@@ -36,7 +36,6 @@
     <module>nodejs</module>
     <module>docs</module>
     <module>tests</module>
-    <module>nashorn</module>
     <module>features</module>
   </modules>
 
