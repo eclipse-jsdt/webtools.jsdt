@@ -263,7 +263,7 @@
             project="org.eclipse.wst.jsdt.core"/>
         <operand
             xsi:type="predicates:LocationPredicate"
-            pattern=".*/(nashorn|development|bundles)/.*"/>
+            pattern=".*/(development|bundles)/.*"/>
         <operand
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.wst\.jsdt\..*"/>
