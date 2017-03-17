@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corporation and others.
+ * Copyright (c) 2016, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,6 +23,7 @@ import org.eclipse.wst.jsdt.core.dom.ASTParser;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.eclipse.wst.jsdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.wst.jsdt.internal.core.JavaProject;
+import org.eclipse.wst.jsdt.internal.core.Logger;
 import org.eclipse.wst.jsdt.internal.core.builder.ClasspathMultiDirectory;
 import org.eclipse.wst.jsdt.internal.core.builder.NameEnvironment;
 import org.eclipse.wst.jsdt.internal.core.builder.SourceFile;
@@ -60,8 +61,9 @@ public class JavaScriptValidator extends AbstractValidator {
 			// Does not worth keep analyzing
 			parser.setSource(sf.getContents());
 			JavaScriptUnit unit = (JavaScriptUnit) parser.createAST(monitor);
-			
-			if(unit.getProblems().length > 0){
+			if(unit == null) {
+				Logger.log(Logger.ERROR, "AST couldn't be created during the validation of " + resource.getName());
+			} else if(unit.getProblems().length > 0){
 				CategorizedProblem[] resourceProblems = (CategorizedProblem[]) unit.getProblems();
 				for (CategorizedProblem problem : resourceProblems) {
 					ValidatorMessage vm = ValidatorMessage.create(problem.getMessage(), resource);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2016, 2017 Red Hat, Inc. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -319,7 +319,9 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 			this.newElements.put(importContainer, this.importContainerInfo);
 		}
 
-		final SimpleName localName = module.getLocal();
+		final SimpleName localName = (module.getLocal() != null ? 
+					module.getLocal() : 
+						module.getDiscoverableName());
 		StringBuilder nameString = new StringBuilder(parent.getSource().getLiteralValue());
 		nameString.append(" as ");
 		nameString.append(localName.getIdentifier());
@@ -454,68 +456,72 @@ public class CompilationUnitStructureVisitor extends DefaultASTVisitor{
 		}
 		return false;
 	}
-	
+
 	public boolean visit(VariableDeclarationFragment node){
 		JavaElementInfo parentInfo = this.infoStack.peek();
 		JavaElement parentHandle= this.handleStack.peek();
-		String fieldName = JavaModelManager.getJavaModelManager().intern(
-					new String(node.getName().getIdentifier()));
-		SourceField handle = new SourceField(parentHandle, fieldName);
-		resolveDuplicates(handle);
-		
-		
-		SourceFieldElementInfo info = new SourceFieldElementInfo();
-		info.setNameSourceStart(node.getName().getStartPosition());
-		info.setNameSourceEnd(node.getName().getStartPosition() + node.getName().getLength()-1);
-		info.setSourceRangeStart(node.getStartPosition());
-		
-		if(node.getParent().getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT &&
-					node.getParent().getStructuralProperty(VariableDeclarationStatement.KIND_PROPERTY)
-					== VariableKind.CONST){
-			info.flags |= ClassFileConstants.AccStatic | ClassFileConstants.AccFinal;
-		}
-		
-		if (node.getInitializer() != null) {
-			int initializerType = node.getInitializer().getNodeType();
-			String typeString = null;
-			switch (initializerType) {
-				case ASTNode.BOOLEAN_LITERAL :
-					typeString = Signature.createTypeSignature("boolean", false);
-					break;
-				case ASTNode.NUMBER_LITERAL :
-					typeString = "Number";
-					break;
-				case ASTNode.STRING_LITERAL :
-					typeString = "String";
-					break;
-				case ASTNode.OBJECT_LITERAL :
-					typeString = "{}";
-					break;
-				default :
-					break;
+		if (node.getPattern().getNodeType() == ASTNode.SIMPLE_NAME) {
+			String fieldName = JavaModelManager.getJavaModelManager().intern(
+						String.valueOf(node.getName().getIdentifier()));
+			SourceField handle = new SourceField(parentHandle, fieldName);
+			resolveDuplicates(handle);
+			
+			
+			SourceFieldElementInfo info = new SourceFieldElementInfo();
+			info.setNameSourceStart(node.getName().getStartPosition());
+			info.setNameSourceEnd(node.getName().getStartPosition() + node.getName().getLength()-1);
+			info.setSourceRangeStart(node.getStartPosition());
+			
+			if(node.getParent().getNodeType() == ASTNode.VARIABLE_DECLARATION_STATEMENT &&
+						node.getParent().getStructuralProperty(VariableDeclarationStatement.KIND_PROPERTY)
+						== VariableKind.CONST){
+				info.flags |= ClassFileConstants.AccStatic | ClassFileConstants.AccFinal;
 			}
-			if (typeString != null) {
-				char[] typeName = JavaModelManager.getJavaModelManager().intern(typeString.toCharArray());
-				info.setTypeName(typeName);
+			
+			if (node.getInitializer() != null) {
+				int initializerType = node.getInitializer().getNodeType();
+				String typeString = null;
+				switch (initializerType) {
+					case ASTNode.BOOLEAN_LITERAL :
+						typeString = Signature.createTypeSignature("boolean", false);
+						break;
+					case ASTNode.NUMBER_LITERAL :
+						typeString = "Number";
+						break;
+					case ASTNode.STRING_LITERAL :
+						typeString = "String";
+						break;
+					case ASTNode.OBJECT_LITERAL :
+						typeString = "{}";
+						break;
+					default :
+						break;
+				}
+				if (typeString != null) {
+					char[] typeName = JavaModelManager.getJavaModelManager().intern(typeString.toCharArray());
+					info.setTypeName(typeName);
+				}
 			}
-		}
-		
-		addToChildren(parentInfo, handle);
-		this.newElements.put(handle, info);
-		this.infoStack.push(info);
-		this.handleStack.push(handle);
-		if(node.getInitializer() != null ){
-			node.getInitializer().accept(this);
+			
+			addToChildren(parentInfo, handle);
+			this.newElements.put(handle, info);
+			this.infoStack.push(info);
+			this.handleStack.push(handle);
+			if(node.getInitializer() != null ){
+				node.getInitializer().accept(this);
+			}
 		}
 		return false;
 	}
 	
 	public void endVisit(VariableDeclarationFragment node){
-		SourceFieldElementInfo info = (SourceFieldElementInfo) this.infoStack.pop();
-		info.setSourceRangeEnd(node.getStartPosition() + node.getLength()-1);
-		setChildren(info);
-		
-		this.handleStack.pop();
+		if (node.getPattern().getNodeType() == ASTNode.SIMPLE_NAME) {
+			SourceFieldElementInfo info = (SourceFieldElementInfo) this.infoStack.pop();
+			info.setSourceRangeEnd(node.getStartPosition() + node.getLength()-1);
+			setChildren(info);
+			
+			this.handleStack.pop();
+		}
 	}
 	
 	public void endVisit(JavaScriptUnit node){

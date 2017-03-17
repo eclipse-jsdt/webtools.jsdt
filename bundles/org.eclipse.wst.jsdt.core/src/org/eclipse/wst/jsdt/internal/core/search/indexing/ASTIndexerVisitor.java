@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2016 Red Hat, Inc.
+* Copyright (c) 2016, 2017 Red Hat, Inc.
 * All rights reserved. This program and the accompanying materials
 * are made available under the terms of the Eclipse Public License v1.0
 * which accompanies this distribution, and is available at
@@ -198,7 +198,7 @@ public class ASTIndexerVisitor extends ASTVisitor {
 		String name;
 		if (node.getName() != null) {
 			name = node.getName().getIdentifier();
-		} else if (node.getExpression().getNodeType() == ASTNode.FIELD_ACCESS) {
+		} else if (node.getExpression() != null && node.getExpression().getNodeType() == ASTNode.FIELD_ACCESS) {
 			name = ((FieldAccess) node.getExpression()).getName().getIdentifier();
 		} else {
 			// Can't index an anonymous function.

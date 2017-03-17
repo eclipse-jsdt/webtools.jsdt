@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2016 IBM Corporation and others.
+ * Copyright (c) 2004, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -29,6 +29,7 @@ import org.eclipse.wst.jsdt.internal.compiler.parser.RecoveryScannerData;
 import org.eclipse.wst.jsdt.internal.compiler.parser.Scanner;
 import org.eclipse.wst.jsdt.internal.core.BasicCompilationUnit;
 import org.eclipse.wst.jsdt.internal.core.DefaultWorkingCopyOwner;
+import org.eclipse.wst.jsdt.internal.core.Logger;
 import org.eclipse.wst.jsdt.internal.core.PackageFragment;
 import org.eclipse.wst.jsdt.internal.core.util.RecordedParsingInformation;
 import org.eclipse.wst.jsdt.internal.core.util.Util;
@@ -675,6 +676,7 @@ public class ASTParser {
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
+			Logger.logException(e);
 		} finally {
 	   	   // re-init defaults to allow reuse (and avoid leaking)
 	   	   initializeDefaults();

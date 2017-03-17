@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -91,11 +91,17 @@ public class SourceIndexer extends AbstractIndexer implements SuffixConstants {
 		// file save. For large projects this can be a significant performance impediment.
 		try {
 			ASTNode root = parser.createAST(null);
-			root.accept(visitor);
+			if (root != null) {
+				root.accept(visitor);
+			} else {
+				Util.verbose("AST couldn't be created during indexing file:  " + this.document.getPath()); //$NON-NLS-1$
+			}
 		} catch (ClassCastException e) {
+			e.printStackTrace();
 			Util.verbose("ClassCastException during indexing -- " + e.getMessage() //$NON-NLS-1$
 						+ "\n\t in file:  " + this.document.getPath()); //$NON-NLS-1$
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			Util.verbose("IllegalArgumentException during indexing -- " + e.getMessage() //$NON-NLS-1$
 						+ "\n\t in file:  " + this.document.getPath()); //$NON-NLS-1$
 		}

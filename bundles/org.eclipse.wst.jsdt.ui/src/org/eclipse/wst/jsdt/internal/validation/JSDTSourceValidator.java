@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 RedHat, Inc.
+ * Copyright (c) 2016, 2017 RedHat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -224,7 +224,22 @@ public class JSDTSourceValidator extends AbstractValidator implements IValidator
 		parser.setSource(source);
 		parser.setProject(JavaScriptCore.create(file.getProject()));
 		JavaScriptUnit unit = (JavaScriptUnit) parser.createAST(new NullProgressMonitor());
-		if(unit.getProblems().length > 0){
+		if (unit == null) {
+			Message valMessage = new Message(JavaScriptUI.ID_PLUGIN, IMessage.HIGH_SEVERITY, JavaScriptUI.ID_PLUGIN + ".problem" ) { //$NON-NLS-1$
+				/**
+				 * @see IMessage#getText(Locale, ClassLoader)
+				 */
+				public java.lang.String getText(Locale locale, ClassLoader classLoader) {
+					return "AST couldn't be created due to the fatal error"; //$NON-NLS-1$
+				}
+
+			};
+			valMessage.setOffset(0);
+			valMessage.setLength(0);
+			valMessage.setLineNo(0);
+			reporter.addMessage(this, valMessage);
+			
+		} else if(unit.getProblems().length > 0){
 			for (IProblem problem : unit.getProblems()) {
 
 				final String msg = problem.getMessage();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Eugene Melekhov and others.
+ * Copyright (c) 2016, 2017 Eugene Melekhov and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -92,7 +92,9 @@ public class ScopeDeclarationScanner {
 			switch (n.getNodeType()) {
 				case ASTNode.FUNCTION_EXPRESSION : {
 					FunctionDeclaration fd = ((FunctionExpression) n).getMethod();
-					SimpleName fNameNode = ((SimpleName) fd.getMethodName());
+					SimpleName fNameNode = (fd.getMethodName() instanceof SimpleName ? 
+								(SimpleName) fd.getMethodName() :
+									null);
 					if (fNameNode != null) {
 						declareFunction(fNameNode);
 					}
