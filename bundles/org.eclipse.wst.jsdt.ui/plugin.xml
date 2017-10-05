@@ -15,6 +15,7 @@
    <extension-point id="classpathAttributeConfiguration" name="%classpathAttributeConfiguration" schema="schema/classpathAttributeConfiguration.exsd"/>
    <extension-point id="documentationProvider" name="%documentationProvider" schema="schema/DocumentationProvider.exsd"/>
    <extension-point id="JsGlobalScopeUIInitializer" name="%extension-point.name.1" schema="schema/JsGlobalScopeUIInitializer.exsd"/>
+   <extension-point id="javascriptValidationHelper" name="%extension-point.name.validationHelper" schema="schema/javascriptValidationHelper.exsd"/>
 
 	<extension
 		point="org.eclipse.ui.decorators">
@@ -6032,23 +6033,5 @@
          </activeWhen>
       </projectConfigurator>
    </extension>
-   
-   
-    <!--======================================================================================-->
-    <!-- As you type validation                                                               -->
-    <!--======================================================================================-->
 
-    <extension point="org.eclipse.wst.sse.ui.sourcevalidation">
-        <validator
-            scope="total"
-            class="org.eclipse.wst.jsdt.internal.validation.JSDTSourceValidator"
-            id="org.eclipse.wst.jsdt.ui.internal.validation.jsdtsyntaxvalidator">
-            <contentTypeIdentifier
-                id="org.eclipse.wst.jsdt.core.jsSource">
-                <partitionType id="__dftl_partition_content_type" />
-                <partitionType id="__java_string" />
-            </contentTypeIdentifier>
-        </validator>
-    </extension>
-    
 </plugin>

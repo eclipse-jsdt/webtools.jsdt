@@ -101,7 +101,6 @@
                 <fileext caseSensitive="false" ext="js"></fileext>
             </rules>
         </include>
-        <group id="org.eclipse.wst.sse.core.structuredModelGroup"/>
      </validator>
 </extension>
 
