@@ -46,8 +46,9 @@
                 <phase>compile</phase>
                 <configuration>
                   <skip>false</skip>
+                  <executionEnvironment>JavaSE-1.8</executionEnvironment>
                   <!-- call buildDoc.xml -->
-                  <appArgLine>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</appArgLine>
+                  <applicationsArgs>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</applicationsArgs>
                   <dependencies>
                     <!-- list of bundles that we need -->
                     <dependency>
