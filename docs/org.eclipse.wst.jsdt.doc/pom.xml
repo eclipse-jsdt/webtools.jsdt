@@ -48,7 +48,10 @@
                   <skip>false</skip>
                   <executionEnvironment>JavaSE-1.8</executionEnvironment>
                   <!-- call buildDoc.xml -->
-                  <applicationsArgs>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</applicationsArgs>
+                  <!-- TODO switch to new parameter when we've moved up to Tycho 1.0, as appArgLine is deprecated 
+                  <applicationsArgs>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</applicationsArgs> 
+                  -->
+                  <appArgLine>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</appArgLine>
                   <dependencies>
                     <!-- list of bundles that we need -->
                     <dependency>
