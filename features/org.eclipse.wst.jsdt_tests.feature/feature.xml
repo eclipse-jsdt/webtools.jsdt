@@ -38,18 +38,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.wtp.releng.versionchecker"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.wtp.releng.tests"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="org.eclipse.wst.jsdt.debug.rhino.tests"
          download-size="0"
          install-size="0"
