@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc.
+ * Copyright (c) 2016, 1027 Red Hat, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -81,15 +81,17 @@ public class NpmScriptContentProvider implements ITreeContentProvider, IResource
 	public Object[] getChildren(Object parentNode) {
 		if (parentNode instanceof IFile) {
 			try {
+				Set<ITask> tasks = new HashSet<ITask>();
+				
 				PackageJson packageJson = NpmUtil.parsePackageJsonFile((IFile) parentNode);
 
-				Set<ITask> tasks = new HashSet<ITask>();
-
-				for (String scriptName : packageJson.getScripts().keySet()) {
-					tasks.add(
-							new NpmScriptTask(((IFile) parentNode), scriptName, null, false, new Location(0, 1)));
+				if (packageJson != null && packageJson.getScripts() != null) {
+					for (String scriptName : packageJson.getScripts().keySet()) {
+						tasks.add(
+								new NpmScriptTask(((IFile) parentNode), scriptName, null, false, new Location(0, 1)));
+					}
 				}
-
+				
 				return tasks.toArray();
 			} catch (Exception ex) {
 				NpmPlugin.logError(ex, ex.getMessage());
