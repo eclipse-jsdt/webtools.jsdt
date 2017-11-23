@@ -20,6 +20,6 @@
   </parent>
 
   <groupId>org.eclipse.webtools.jsdt</groupId>
-  <artifactId>site</artifactId>
+  <artifactId>org.eclipse.webtools.jsdt.site</artifactId>
   <packaging>eclipse-repository</packaging>
 </project>
