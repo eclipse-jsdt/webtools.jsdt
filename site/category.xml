@@ -13,6 +13,8 @@
       <category name="JSDT"/>
    </feature>
 
+   <bundle id="org.eclipse.wst.jsdt.debug.rhino.ui"/>
+
    <!-- required by downstream webservices repo : org.eclipse.jst.web_ui.feature.feature.group -->
    <bundle id="org.eclipse.wst.jsdt.debug.rhino.ui"/>
 
