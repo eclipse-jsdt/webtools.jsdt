@@ -60,8 +60,11 @@
   <modules>
     <module>bundles</module>
     <module>nodejs</module>
+    <!-- old code, do not build <module>development</module> -->
+    <!-- to be removed, do not build <module>nashorn</module> -->
     <module>docs</module>
     <module>tests</module>
+    <!-- internal use only, do not build <module>itests</module> -->
     <module>features</module>
     <module>site</module>
   </modules>

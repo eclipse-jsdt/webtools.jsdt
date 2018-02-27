@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.wst.jsdt_sdk.feature"
       label="%featureName"
-      version="2.1.0.qualifier"
+      version="2.1.1.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="1.0.1.qualifier">
@@ -19,27 +19,9 @@
       %license
    </license>
 
-   <includes
-         id="org.eclipse.wst.jsdt.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.wst.jsdt.feature.source"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.wst.jsdt.nodejs.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.wst.jsdt.nodejs.feature.source"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.mozilla.javascript.source"
-         download-size="0"
-         install-size="0"
-         version="1.7.5.qualifier"
-         unpack="false"/>
+    <requires>
+      <import feature="org.eclipse.wst.jsdt.feature"/>
+      <import feature="org.eclipse.wst.jsdt.nodejs.feature"/>
+    </requires>
 
 </feature>

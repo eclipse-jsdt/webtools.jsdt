@@ -21,7 +21,7 @@
 
   <groupId>org.eclipse.webtools.jsdt.tests</groupId>
   <artifactId>org.eclipse.wst.jsdt.js.common.tests</artifactId>
-  <version>1.0.200-SNAPSHOT</version>
+  <version>1.0.201-SNAPSHOT</version>
   <packaging>eclipse-test-plugin</packaging>
   
   <properties>

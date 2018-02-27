@@ -22,16 +22,9 @@
   <artifactId>tests</artifactId>
   <packaging>pom</packaging>
 
+  <!-- for internal use only - tests may violate IP policy? -->
   <modules>
-    <module>org.eclipse.wst.jsdt.core.tests.compiler</module>
-    <module>org.eclipse.wst.jsdt.core.tests.model</module>
-    <module>org.eclipse.wst.jsdt.debug.core.tests</module>
-    <module>org.eclipse.wst.jsdt.debug.rhino.tests</module>
-    <module>org.eclipse.wst.jsdt.ui.tests</module>
-    <module>org.eclipse.wst.jsdt.chromium.tests</module>
-    <module>org.eclipse.wst.jsdt.chromium.debug.core.tests</module>
-    <module>org.eclipse.wst.jsdt.js.common.tests</module>
-    <module>org.eclipse.wst.jsdt.js.node.common.tests</module>
+    <module>org.eclipse.wst.jsdt.integration.tests</module>
   </modules>
  <build>
   <plugins>

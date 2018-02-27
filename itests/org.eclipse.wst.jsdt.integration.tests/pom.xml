@@ -22,9 +22,11 @@
 
 	<groupId>org.eclipse.webtools.jsdt.tests</groupId>
 	<artifactId>org.eclipse.wst.jsdt.integration.tests</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 
+	<!-- TODO: update to use Red Deer 2.0 from Eclipse instead of 1.2 from JBoss -->
+	
 	<properties>
 		<suiteClass>org.eclipse.wst.jsdt.integration.tests.JSDTIntegrationTests</suiteClass>
 		<skipIntegrationTests>true</skipIntegrationTests>

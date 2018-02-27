@@ -1,32 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature id="org.eclipse.wst.jsdt.feature">
-      <category name="JSDT"/>
-   </feature>
-   <feature id="org.eclipse.wst.jsdt.nodejs.feature">
-      <category name="JSDT"/>
-   </feature>
-   <feature id="org.eclipse.wst.jsdt_sdk.feature">
-      <category name="JSDT"/>
-   </feature>
-   <feature id="org.eclipse.wst.jsdt_tests.feature">
-      <category name="JSDT"/>
-   </feature>
+   <feature id="org.eclipse.wst.jsdt.feature"><category name="wtp"/></feature>
+   <feature id="org.eclipse.wst.jsdt.nodejs.feature"><category name="wtp"/></feature>
+   <feature id="org.eclipse.wst.jsdt_sdk.feature"><category name="wtp"/></feature>
+   <feature id="org.eclipse.wst.jsdt_tests.feature"><category name="wtp"/></feature>
 
-   <bundle id="org.eclipse.wst.jsdt.debug.rhino.ui"/>
+   <!-- do not include thse plugins 
+   org.eclipse.wst.jsdt.astview
+   org.eclipse.wst.jsdt.debug.chrome
+   org.eclipse.wst.jsdt.debug.ie
+   org.eclipse.wst.jsdt.debug.jsd2
+   org.eclipse.wst.jsdt.debug.node
+   org.eclipse.wst.jsdt.debug.opera
+   org.eclipse.wst.jsdt.jseview
+   org.eclipse.wst.jsdt.unittests
 
-   <!-- required by downstream webservices repo : org.eclipse.jst.web_ui.feature.feature.group -->
-   <bundle id="org.eclipse.wst.jsdt.debug.rhino.ui"/>
+   org.eclipse.wst.jsdt.nashorn.api
+   org.eclipse.wst.jsdt.nashorn.extension
 
-   <feature id="org.eclipse.wst.jsdt.chromium.debug.feature">
-      <category name="JSDT - Incubation"/>
-   </feature>
-   <feature id="org.eclipse.wst.jsdt.chromium_sdk.feature">
-      <category name="JSDT - Incubation"/>
-   </feature>
-   <feature id="org.eclipse.wst.jsdt.chromium_tests.feature">
-      <category name="JSDT - Incubation"/>
-   </feature>
-   <category-def name="JSDT" label="JavaScript Development Tools"/>
-   <category-def name="JSDT - Incubation" label="JSDT - Incubating and experimental plugins"/>
+   org.eclipse.wst.jsdt.integration.tests
+   -->
+
+   <bundle id="org.eclipse.wst.jsdt.debug.rhino.ui"><category name="wtp.bundles"/></bundle>
+   <bundle id="org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0"><category name="wtp.bundles"/></bundle>
+   <bundle id="org.eclipse.wst.jsdt.js.common.tests"><category name="wtp.tests"/></bundle>
+
+   <feature id="org.eclipse.wst.jsdt.chromium.debug.feature"><category name="wtp.incubation"/></feature>
+   <feature id="org.eclipse.wst.jsdt.chromium_sdk.feature"><category name="wtp.incubation"/></feature>
+   <feature id="org.eclipse.wst.jsdt.chromium_tests.feature"><category name="wtp.incubation"/></feature>
+
+   <!-- sources -->
+
+   <feature id="org.eclipse.wst.jsdt.feature.source"><category name="wtp.sources"/></feature>
+   <feature id="org.eclipse.wst.jsdt.nodejs.feature.source"><category name="wtp.sources"/></feature>
+
+   <bundle id="org.eclipse.wst.jsdt.debug.rhino.ui.source"><category name="wtp.bundles.sources"/></bundle>
+   <bundle id="org.eclipse.wst.jsdt.chromium.wipbackend.protocol_1_0.source"><category name="wtp.bundles.sources"/></bundle>
+   <bundle id="org.eclipse.wst.jsdt.js.common.tests.source"><category name="wtp.tests.sources"/></bundle>
+
+   <feature id="org.eclipse.wst.jsdt.chromium.debug.feature.source"><category name="wtp.incubation.sources"/></feature>
+
+  <category-def name="wtp" label="Web Tools Platform (WTP)"><description>These features provide functionality with the executable code only and are recommended for most users.</description></category-def>
+  <category-def name="wtp.sdk" label="Web Tools Platform SDK (WTP SDK)"><description>These features provide functionality with the executable code and the source code and are recommended for those extending or debugging WTP.</description></category-def>
+
+  <category-def name="wtp.sources" label="Web Tools Platform (WTP) Sources"><description>These features provide sources.</description></category-def>
+  <category-def name="wtp.sdk.sources" label="Web Tools Platform SDK (WTP SDK) Sources"><description>These features provide sources.</description></category-def>
+
+  <category-def name="wtp.bundles" label="Web Tools Platform (WTP) Bundles"><description>These bundles are most likely include in features, but are provided here for completeness.</description></category-def>
+  <category-def name="wtp.bundles.sdk" label="Web Tools Platform SDK (WTP SDK) Bundles"><description>These bundles are most likely include in features, but are provided here for completeness.</description></category-def>
+
+  <category-def name="wtp.incubation" label="Web Tools Platform (WTP) Incubation"><description>These features provide incubating functionality with the executable code only and are recommended for most users.</description></category-def>
+  <category-def name="wtp.incubation.sources" label="Web Tools Platform (WTP) Incubation Sources"><description>These features provide incubating sources.</description></category-def>
+
+  <category-def name="wtp.bundles.sources" label="Web Tools Platform (WTP) Bundle Sources"><description>These bundles provide sources.</description></category-def>
+  <category-def name="wtp.bundles.sdk.sources" label="Web Tools Platform SDK (WTP SDK) Bundle Sources"><description>These bundles provide sources.</description></category-def>
+
+  <category-def name="wtp.tests" label="Web Tools Platform Tests (WTP Tests)"><description>These features provide unit tests for WTP. WTP Committers, or others testing WTP, will need these in at least their PDE Targets.</description></category-def>
+  <category-def name="wtp.tests.sources" label="Web Tools Platform Tests (WTP Tests) Sources"><description>These sources provide unit tests for WTP. WTP Committers, or others testing WTP, will need these in at least their PDE Targets.</description></category-def>
+
 </site>

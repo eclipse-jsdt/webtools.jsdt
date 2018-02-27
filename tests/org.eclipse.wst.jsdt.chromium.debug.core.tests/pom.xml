@@ -10,6 +10,6 @@
 	</parent>
 	<groupId>org.eclipse.webtools.jsdt.tests</groupId>
 	<artifactId>org.eclipse.wst.jsdt.chromium.debug.core.tests</artifactId>
-	<version>0.5.200-SNAPSHOT</version>
+	<version>0.5.201-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 </project>
