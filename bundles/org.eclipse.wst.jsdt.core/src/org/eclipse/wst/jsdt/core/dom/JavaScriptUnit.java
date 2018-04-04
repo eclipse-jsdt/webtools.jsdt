@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2018 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -941,10 +941,18 @@ public class JavaScriptUnit extends ASTNode {
 	public void setCommentTable(Comment[] commentTable) {
 		// double check table to ensure that all comments have
 		// source positions and are in strictly increasing order
+		
+		// TODO: Workaround for bug #529278: No more double check.
+		// While using the provided example code, two identical comments
+		// appear in the commentTable array.
+		// This workaround just skips the comments that are not added in 
+		// strictly increasing order.
+		
 		if (commentTable == null) {
 			this.optionalCommentList = null;
 			this.optionalCommentTable = null;
 		} else {
+			List<Comment> acceptedComments = new ArrayList<Comment>();
 			int nextAvailablePosition = 0;
 			for (int i = 0; i < commentTable.length; i++) {
 				Comment comment = commentTable[i];
@@ -954,12 +962,18 @@ public class JavaScriptUnit extends ASTNode {
 				int start = comment.getStartPosition();
 				int length = comment.getLength();
 				if (start < 0 || length < 0 || start < nextAvailablePosition) {
-					throw new IllegalArgumentException();
+//					throw new IllegalArgumentException();
+				} else {
+					acceptedComments.add(comment);
+					nextAvailablePosition = comment.getStartPosition() + comment.getLength();
 				}
-				nextAvailablePosition = comment.getStartPosition() + comment.getLength();
 			}
-			this.optionalCommentTable = commentTable;
-			List commentList = Arrays.asList(commentTable);
+//			this.optionalCommentTable = commentTable;
+//			List commentList = Arrays.asList(commentTable);
+			
+			this.optionalCommentTable = acceptedComments.toArray(new Comment[0]);
+			List commentList = Arrays.asList(this.optionalCommentTable);
+			
 			// protect the list from further modification
 			this.optionalCommentList = Collections.unmodifiableList(commentList);
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2018 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -169,7 +169,12 @@ public class CompilationUnit extends Openable implements IJavaScriptUnit, org.ec
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setSource(this);
 		org.eclipse.wst.jsdt.core.dom.JavaScriptUnit cu = (JavaScriptUnit) parser.createAST(pm);
-		cu.accept(visitor);
+		
+		// TODO: Workaround for bug #529278: CU might not be created in some 
+		// cases, so NPE here blocks a user from ability to save a file. 
+		if (cu != null) {
+			cu.accept(visitor);
+		}
 		
 		if (info instanceof ASTHolderCUInfo) {
 			((ASTHolderCUInfo) info).ast = cu;
