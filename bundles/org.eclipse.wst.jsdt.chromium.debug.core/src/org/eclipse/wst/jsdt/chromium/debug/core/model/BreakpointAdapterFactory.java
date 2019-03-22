@@ -1,8 +1,8 @@
 // Copyright (c) 2009, 2016 The Chromium Authors. All rights reserved.
 // This program and the accompanying materials are made available
-// under the terms of the Eclipse Public License v1.0 which accompanies
+// under the terms of the Eclipse Public License v2.0 which accompanies
 // this distribution, and is available at
-// http://www.eclipse.org/legal/epl-v10.html
+// https://www.eclipse.org/legal/epl-2.0/
 //
 // Contributors:
 //     eb6dd07e13178c83c12323e16a84554108d40333 - Bug 496914 Nullpointer in JavaScript Development Tools Chromium/V8 Remote Debugger: BreakpointAdapterFactory
