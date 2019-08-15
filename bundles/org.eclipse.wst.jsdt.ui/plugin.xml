@@ -170,6 +170,13 @@
 	</extension>
 	<extension
 		point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
+		id="genericProposalCategory"
+		name="%GenericProposalCategory">
+		<proposalCategory
+			icon="$nl$/icons/full/elcl16/generic_editor.png"/>
+	</extension>
+	<extension
+		point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
 		id="defaultProposalCategory"
 		name="%DefaultProposalCategory">
 		<proposalCategory/>
@@ -205,9 +212,19 @@
 	<extension
 		point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
 		id="JavaNoTypeCompletionProposalComputer">
-		<javaCompletionProposalComputer 
+		<javaCompletionProposalComputer
 			class="org.eclipse.wst.jsdt.internal.ui.text.java.JavaNoTypeCompletionProposalComputer"
 			categoryId="org.eclipse.wst.jsdt.ui.javaNoTypeProposalCategory">
+			<partition type="__dftl_partition_content_type"/>
+			<partition type="__java_string"/>
+		</javaCompletionProposalComputer>
+	</extension>
+	<extension
+		point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
+		id="JavaScriptGenericCompletionProposalComputer">
+		<javaCompletionProposalComputer
+			class="org.eclipse.wst.jsdt.internal.ui.text.java.GenericCompletionProposalComputer"
+			categoryId="org.eclipse.wst.jsdt.ui.genericProposalCategory">
 			<partition type="__dftl_partition_content_type"/>
 			<partition type="__java_string"/>
 		</javaCompletionProposalComputer>
@@ -391,6 +408,12 @@
             description="%sourceHoverDescription"
             class="org.eclipse.wst.jsdt.internal.ui.text.java.hover.JavaSourceHover"
             id="org.eclipse.wst.jsdt.ui.JavaSourceHover">
+      </hover>
+      <hover
+            label="%genericHover"
+            description="%genericHoverDescription"
+            class="org.eclipse.wst.jsdt.internal.ui.text.java.hover.GenericTextHover"
+            id="org.eclipse.wst.jsdt.ui.GenericHover">
       </hover>
 <!--
       <hover

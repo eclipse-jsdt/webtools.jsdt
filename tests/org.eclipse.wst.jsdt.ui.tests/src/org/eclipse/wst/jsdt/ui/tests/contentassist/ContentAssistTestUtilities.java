@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 IBM Corporation and others.
+ * Copyright (c) 2011, 2019 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -245,7 +245,7 @@ public class ContentAssistTestUtilities {
 
 		StringBuffer error = new StringBuffer();
 		int lastFoundIndex = -1;
-		String lastFoundProposal = "";
+		String lastFoundProposal = ""; //$NON-NLS-1$
 		for(int page = 0; page < expectedProposals.length; ++page) {
 			for(int expected = 0; expected < expectedProposals[page].length; ++expected) {
 				String expectedProposal = expectedProposals[page][expected];
@@ -253,8 +253,8 @@ public class ContentAssistTestUtilities {
 				int suggestion = 0;
 				for( ; (suggestion < pages[page].length) && !found; ++suggestion) {
 					String displayString = pages[page][suggestion].getDisplayString();
-					found = exactMatch ?
-							displayString.equals(expectedProposal) : displayString.indexOf(expectedProposal) != -1;
+					found = found || (exactMatch ?
+							displayString.equals(expectedProposal) : displayString.indexOf(expectedProposal) != -1);
 				}
 
 				/* error if checking for in order and this expected proposal was

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2019 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -937,9 +938,10 @@ public class JavaScriptSourceViewerConfiguration extends TextSourceViewerConfigu
 	 *
 	 */
 	@Override
-	protected Map getHyperlinkDetectorTargets(final ISourceViewer sourceViewer) {
-		Map targets = super.getHyperlinkDetectorTargets(sourceViewer);
+	protected Map<String, IAdaptable> getHyperlinkDetectorTargets(final ISourceViewer sourceViewer) {
+		Map<String, IAdaptable> targets = super.getHyperlinkDetectorTargets(sourceViewer);
 		targets.put("org.eclipse.wst.jsdt.ui.javaCode", fTextEditor); //$NON-NLS-1$
+		targets.put("org.eclipse.ui.genericeditor.GenericEditor", fTextEditor); //$NON-NLS-1$
 		return targets;
 	}
 

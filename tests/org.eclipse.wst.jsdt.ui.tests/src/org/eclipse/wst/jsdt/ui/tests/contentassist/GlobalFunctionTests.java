@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 IBM Corporation and others.
+ * Copyright (c) 2011, 2019 IBM Corporation and others.
 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
@@ -241,6 +241,7 @@ public class GlobalFunctionTests {
 			"foo1Ignored",
 			"foo2Ignored"
 		} };
+		// negative test, may fail in the absence of lsp4e contributions
 		ContentAssistTestUtilities.runProposalTest(fTestProjectSetup, "TestNamedFunctionsAssignedToVariables_0.js", 10, 1,
 				expectedProposals, true, false);
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2019 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -3595,7 +3595,7 @@ public class PreferenceConstants {
 		store.setDefault(PreferenceConstants.CODEASSIST_GUESS_METHOD_ARGUMENTS, false);
 		store.setDefault(PreferenceConstants.CODEASSIST_PREFIX_COMPLETION, false);
 		store.setDefault(PreferenceConstants.CODEASSIST_EXCLUDED_CATEGORIES, "org.eclipse.wst.jsdt.ui.spellingProposalCategory\0org.eclipse.wst.jsdt.ui.textProposalCategory\0"); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.CODEASSIST_CATEGORY_ORDER, "org.eclipse.wst.jsdt.ui.spellingProposalCategory:65545\0org.eclipse.wst.jsdt.ui.javaTypeProposalCategory:65540\0org.eclipse.wst.jsdt.ui.javaNoTypeProposalCategory:65539\0org.eclipse.wst.jsdt.ui.textProposalCategory:65541\0org.eclipse.wst.jsdt.ui.templateProposalCategory:2\0"); //$NON-NLS-1$
+		store.setDefault(PreferenceConstants.CODEASSIST_CATEGORY_ORDER, "org.eclipse.wst.jsdt.ui.spellingProposalCategory:65545\0org.eclipse.wst.jsdt.ui.genericProposalCategory:65542\0org.eclipse.wst.jsdt.ui.javaTypeProposalCategory:65540\0org.eclipse.wst.jsdt.ui.javaNoTypeProposalCategory:65539\0org.eclipse.wst.jsdt.ui.textProposalCategory:65541\0org.eclipse.wst.jsdt.ui.templateProposalCategory:2\0"); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.CODEASSIST_LRU_HISTORY, ""); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.CODEASSIST_SORTER, "org.eclipse.wst.jsdt.ui.RelevanceSorter"); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.CODEASSIST_FAVORITE_STATIC_MEMBERS, ""); //$NON-NLS-1$
