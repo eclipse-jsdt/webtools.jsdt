@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2008 IBM Corporation and others.
+ * Copyright (c) 2003, 2019 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -61,9 +61,9 @@ public class JavaNavigatorActionProvider extends CommonActionProvider {
 
 	public void fillContextMenu(IMenuManager menu) {
 		if (fInViewPart) {
-			 ISelection selection = (this.getContext()!=null) ? this.getContext().getSelection() : null;
-			 boolean isEmpty = (selection!=null)? selection.isEmpty() : false;
-			 fOpenViewGroup.containsShowInMenu(!isEmpty);
+			ISelection selection = (this.getContext()!=null) ? this.getContext().getSelection() : null;
+			boolean isEmpty = (selection!=null)? selection.isEmpty() : false;
+//			fOpenViewGroup.containsShowInMenu(!isEmpty);
 			fOpenViewGroup.fillContextMenu(menu);
 			fCCPGroup.setShowLimited(isEmpty);
 			fCCPGroup.fillContextMenu(menu);
