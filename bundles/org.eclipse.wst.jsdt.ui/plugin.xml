@@ -808,7 +808,7 @@
          point="org.eclipse.ui.editors">
       <editor
             name="%CompilationUnitEditorName"
-            default="true"
+            default="false"
             icon="$nl$/icons/full/obj16/jcu_obj.gif"
             contributorClass="org.eclipse.wst.jsdt.internal.ui.javaeditor.CompilationUnitEditorActionContributor"
             class="org.eclipse.wst.jsdt.internal.ui.javaeditor.CompilationUnitEditor"
@@ -819,7 +819,7 @@
       </editor>
       <editor
             name="%ClassFileViewerName"
-            default="true"
+            default="false"
             icon="$nl$/icons/full/obj16/classf_obj.gif"
             contributorClass="org.eclipse.wst.jsdt.internal.ui.javaeditor.ClassFileEditorActionContributor"
             class="org.eclipse.wst.jsdt.internal.ui.javaeditor.ClassFileEditor"
@@ -829,28 +829,6 @@
                contentTypeId="org.eclipse.wst.jsdt.core.javaClass"
             /> 
       </editor>
-<!--      
-      <editor
-            name="%PropertiesFileEditorName"
-            icon="$nl$/icons/full/obj16/file_obj.gif"
-            contributorClass="org.eclipse.wst.jsdt.internal.ui.propertiesfileeditor.PropertiesFileEditorActionContributor"
-            class="org.eclipse.wst.jsdt.internal.ui.propertiesfileeditor.PropertiesFileEditor"
-            symbolicFontName="org.eclipse.wst.jsdt.ui.PropertiesFileEditor.textfont"
-            id="org.eclipse.wst.jsdt.ui.PropertiesFileEditor">
-            <contentTypeBinding
-               contentTypeId="org.eclipse.wst.jsdt.core.javaProperties"
-            /> 
-      </editor>
-      <editor
-            name="%jarDescEditorName"
-            default="true"
-            icon="$nl$/icons/full/obj16/jar_desc_obj.gif"
-            extensions="jardesc"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            class="org.eclipse.ui.editors.text.TextEditor"
-            id="org.eclipse.wst.jsdt.ui.JARDescEditor">
-      </editor>
--->      
    </extension>
    
    <extension
