@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -71,10 +71,6 @@ class JavaParseTreeBuilder extends ASTVisitor {
         pop();
     }
 
- 
-    
-
-
     public boolean visit(FunctionDeclaration node) {
         String signature= getSignature(node);
         push(node.isConstructor() ? JavaNode.CONSTRUCTOR : JavaNode.METHOD, signature, node.getStartPosition(), node.getLength());
@@ -127,22 +123,23 @@ class JavaParseTreeBuilder extends ASTVisitor {
      * container.
      */
     private void push(int type, String name, int declarationStart, int length) {
-
-        while (declarationStart > 0) {
-            char c= fBuffer[declarationStart - 1];
-            if (c != ' ' && c != '\t')
-                break;
-            declarationStart--;
-            length++;
-        }
-
-        JavaNode node= new JavaNode(getCurrentContainer(), type, name, declarationStart, length);
-        if (type == JavaNode.CU)
-            node.setAppendPosition(declarationStart + length + 1);
-        else
-            node.setAppendPosition(declarationStart + length);
-
-        fStack.push(node);
+    	if (declarationStart >= 0) {
+	        while (declarationStart > 0) {
+	            char c= fBuffer[declarationStart - 1];
+	            if (c != ' ' && c != '\t')
+	                break;
+	            declarationStart--;
+	            length++;
+	        }
+	
+	        JavaNode node= new JavaNode(getCurrentContainer(), type, name, declarationStart, length);
+	        if (type == JavaNode.CU)
+	            node.setAppendPosition(declarationStart + length + 1);
+	        else
+	            node.setAppendPosition(declarationStart + length);
+	
+	        fStack.push(node);
+    	}
     }
 
     /**
@@ -159,7 +156,8 @@ class JavaParseTreeBuilder extends ASTVisitor {
 
     private String getFieldName(VariableDeclarationFragment node) {
         StringBuffer buffer= new StringBuffer();
-        buffer.append(node.getName().toString());
+        SimpleName name = node.getName();
+        buffer.append(name != null ? node.getName().toString() : ""); //$NON-NLS-1$
         ASTNode parent= node.getParent();
         if (parent instanceof FieldDeclaration) {
             FieldDeclaration fd= (FieldDeclaration) parent;
@@ -193,7 +191,6 @@ class JavaParseTreeBuilder extends ASTVisitor {
         buffer.append(')');
         return buffer.toString();
     }
-
 
     private String getType(Type type) {
         String name= type.toString();
