@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -34,14 +34,10 @@ import org.eclipse.wst.jsdt.internal.ui.text.html.HTMLTextPresenter;
 import org.eclipse.wst.jsdt.ui.PreferenceConstants;
 import org.eclipse.wst.jsdt.ui.text.java.hover.IJavaEditorTextHover;
 
-
 public class JavaInformationProvider implements IInformationProvider, IInformationProviderExtension2 {
 
-	
 	/**
 	 * Control creator.
-	 *  
-	 * 
 	 */
 	private static final class ControlCreator extends AbstractReusableInformationControlCreator {
 		/*
@@ -59,7 +55,6 @@ public class JavaInformationProvider implements IInformationProvider, IInformati
 				return new DefaultInformationControl(parent, shellStyle, style, new HTMLTextPresenter(false));
 		}
 	}
-	
 
 	class EditorWatcher implements IPartListener {
 
@@ -105,13 +100,9 @@ public class JavaInformationProvider implements IInformationProvider, IInformati
 
 	/**
 	 * The presentation control creator.
-	 * 
-	 * 
 	 */
 	private IInformationControlCreator fPresenterControlCreator;
 	
-
-
 	public JavaInformationProvider(IEditorPart editor) {
 
 		fEditor= editor;
@@ -127,21 +118,18 @@ public class JavaInformationProvider implements IInformationProvider, IInformati
 	}
 
 	protected void update() {
+		IWorkbenchWindow window = fEditor.getSite().getWorkbenchWindow();
+		IWorkbenchPage page = window != null ? window.getActivePage() : null;
+		IPerspectiveDescriptor perspective = page != null ? page.getPerspective() : null;
 
-		IWorkbenchWindow window= fEditor.getSite().getWorkbenchWindow();
-		IWorkbenchPage page= window.getActivePage();
-		if (page != null) {
+		if (perspective != null)  {
+			String perspectiveId= perspective.getId();
 
-			IPerspectiveDescriptor perspective= page.getPerspective();
-			if (perspective != null)  {
-				String perspectiveId= perspective.getId();
+			if (fCurrentPerspective == null || fCurrentPerspective != perspectiveId) {
+				fCurrentPerspective= perspectiveId;
 
-				if (fCurrentPerspective == null || fCurrentPerspective != perspectiveId) {
-					fCurrentPerspective= perspectiveId;
-
-					fImplementation= new JavaTypeHover();
-					fImplementation.setEditor(fEditor);
-				}
+				fImplementation= new JavaTypeHover();
+				fImplementation.setEditor(fEditor);
 			}
 		}
 	}
