@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -75,7 +75,12 @@ public class JavaProjectWizard extends NewElementWizard implements IExecutableEx
 			IWorkingSet[] workingSets= fFirstPage.getWorkingSets();
 			WorkingSetConfigurationBlock.addToWorkingSets(newElement, workingSets);
 			
-			BasicNewProjectResourceWizard.updatePerspective(fConfigElement);
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					BasicNewProjectResourceWizard.updatePerspective(fConfigElement);
+				}
+			});
+			
 			selectAndReveal(fSecondPage.getJavaProject().getProject());				
 			
 			Display.getDefault().asyncExec(new Runnable() {
