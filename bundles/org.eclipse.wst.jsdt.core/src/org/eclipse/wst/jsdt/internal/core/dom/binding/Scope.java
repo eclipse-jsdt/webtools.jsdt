@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Eugene Melekhov and others.
+ * Copyright (c) 2016, 2020 Eugene Melekhov and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -395,12 +395,22 @@ public class Scope {
 					break;
 				case ASTNode.FUNCTION_DECLARATION_STATEMENT : {
 					org.eclipse.wst.jsdt.core.dom.FunctionDeclaration fd = ((FunctionDeclarationStatement) current.getRootNode()).getDeclaration();
-					scopes.push(((SimpleName) fd.getMethodName()).getIdentifier());
+					SimpleName fname = (SimpleName) fd.getMethodName();
+					if (fname != null) {
+						scopes.push(fname.getIdentifier());
+					} else {
+						scopes.push("@"); //$NON-NLS-1$
+					}			
 				}
 					break;
 				case ASTNode.FUNCTION_DECLARATION : {
 					org.eclipse.wst.jsdt.core.dom.FunctionDeclaration fd = ((org.eclipse.wst.jsdt.core.dom.FunctionDeclaration) current.getRootNode());
-					scopes.push(((SimpleName) fd.getMethodName()).getIdentifier());
+					SimpleName fname = (SimpleName) fd.getMethodName();
+					if (fname != null) {
+						scopes.push(fname.getIdentifier());
+					} else {
+						scopes.push("@"); //$NON-NLS-1$
+					}
 				}
 					break;
 				case ASTNode.FUNCTION_EXPRESSION : {
@@ -408,8 +418,7 @@ public class Scope {
 					SimpleName fname = (SimpleName) fd.getMethodName();
 					if (fname != null) {
 						scopes.push(fname.getIdentifier());
-					}
-					else {
+					} else {
 						scopes.push("@"); //$NON-NLS-1$
 					}
 				}
