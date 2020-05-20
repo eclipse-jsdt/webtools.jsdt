@@ -436,56 +436,7 @@
          </description>
       </perspective>    
    </extension>
-   
-   <extension point="org.eclipse.ui.perspectiveExtensions">
-      <!-- shortcuts to JS perspective -->
-      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <perspectiveShortcut id="org.eclipse.wst.jsdt.ui.JavaPerspective"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <perspectiveShortcut id="org.eclipse.wst.jsdt.ui.JavaPerspective"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.wst.web.ui.webDevPerspective">
-         <perspectiveShortcut id="org.eclipse.wst.jsdt.ui.JavaPerspective"/>
-      </perspectiveExtension> 
-      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
-         <perspectiveShortcut id="org.eclipse.wst.jsdt.ui.JavaPerspective"/>
-      </perspectiveExtension>
-      
-      <!-- shortcuts from JS perspective -->
-      <perspectiveExtension targetID="org.eclipse.wst.jsdt.ui.JavaPerspective">
-         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.wst.jsdt.ui.JavaPerspective">
-         <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.wst.jsdt.ui.JavaPerspective">
-         <perspectiveShortcut id="org.eclipse.wst.web.ui.webDevPerspective"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.wst.jsdt.ui.JavaPerspective">
-         <perspectiveShortcut id="org.eclipse.ui.resourcePerspective"/>
-      </perspectiveExtension>
-       
-      <!-- view shortcuts in JS perspective -->
-      <perspectiveExtension targetID="org.eclipse.wst.jsdt.ui.JavaPerspective">
-      	<viewShortcut id="org.eclipse.ui.navigator.ProjectExplorer"/>
-      </perspectiveExtension>      
-      <perspectiveExtension targetID="org.eclipse.wst.jsdt.ui.JavaPerspective">
-         <showInPart id="org.eclipse.ui.navigator.ProjectExplorer"/>
-         <showInPart id="org.eclipse.wst.jsdt.ui.PackageExplorer"/>
-         <showInPart id="org.eclipse.team.ui.GenericHistoryView"/>
-         <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.wst.jsdt.ui.JavaBrowsingPerspective">
-         <showInPart id="org.eclipse.wst.jsdt.ui.PackageExplorer"/>
-         <showInPart id="org.eclipse.team.ui.GenericHistoryView"/>
-         <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <showInPart id="org.eclipse.wst.jsdt.ui.PackageExplorer"/>
-      </perspectiveExtension>
-      
-   </extension>
+
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">
       <image
@@ -803,34 +754,7 @@
             id="org.eclipse.wst.jsdt.ui.PersistableJavaElementFactory">
       </factory>
    </extension>
-   <extension
-         id="javaeditor"
-         point="org.eclipse.ui.editors">
-      <editor
-            name="%CompilationUnitEditorName"
-            default="false"
-            icon="$nl$/icons/full/obj16/jcu_obj.gif"
-            contributorClass="org.eclipse.wst.jsdt.internal.ui.javaeditor.CompilationUnitEditorActionContributor"
-            class="org.eclipse.wst.jsdt.internal.ui.javaeditor.CompilationUnitEditor"
-            symbolicFontName="org.eclipse.wst.jsdt.ui.editors.textfont"
-            id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor"
-            extensions="js">
-            <contentTypeBinding contentTypeId="org.eclipse.wst.jsdt.core.jsSource" /> 
-      </editor>
-      <editor
-            name="%ClassFileViewerName"
-            default="false"
-            icon="$nl$/icons/full/obj16/classf_obj.gif"
-            contributorClass="org.eclipse.wst.jsdt.internal.ui.javaeditor.ClassFileEditorActionContributor"
-            class="org.eclipse.wst.jsdt.internal.ui.javaeditor.ClassFileEditor"
-            symbolicFontName="org.eclipse.wst.jsdt.ui.editors.textfont"
-            id="org.eclipse.wst.jsdt.ui.ClassFileEditor">
-            <contentTypeBinding
-               contentTypeId="org.eclipse.wst.jsdt.core.javaClass"
-            /> 
-      </editor>
-   </extension>
-   
+
    <extension
          point="org.eclipse.ui.themes">
         <themeElementCategory label="%javaPresentation.label" id="org.eclipse.wst.jsdt.ui.presentation"/>

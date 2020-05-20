@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.eclipse.wst.jsdt.standalone.ui; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.wst.jsdt.internal.standalone.ui.JavaScriptStandalonePlugin
+Import-Package: org.eclipse.wst.jsdt.ui,
+ com.ibm.icu.text,
+ com.ibm.icu.util,
+ org.eclipse.wst.validation,
+ org.eclipse.wst.validation.internal.core
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-Vendor: %providerName
+Require-Bundle: org.eclipse.ui;bundle-version="[3.5.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
+ org.eclipse.wst.jsdt.core;bundle-version="[2.0.0,3.0.0)",
+ org.eclipse.wst.jsdt.ui;bundle-version="[2.0.0,3.0.0)"
+Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+
