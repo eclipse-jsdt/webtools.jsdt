@@ -29,5 +29,6 @@
     <module>org.eclipse.wst.jsdt.debug.jsd2</module>
     <module>org.eclipse.wst.jsdt.debug.node</module>
     <module>org.eclipse.wst.jsdt.debug.opera</module>
+    <module>org.eclipse.wst.jsdt.standalone.ui</module>
   </modules>
 </project>
