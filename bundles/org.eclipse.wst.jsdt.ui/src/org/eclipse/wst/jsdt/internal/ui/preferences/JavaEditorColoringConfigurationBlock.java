@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -521,15 +521,15 @@ class JavaEditorColoringConfigurationBlock extends AbstractConfigurationBlock {
 		fStrikethroughCheckBox.setSelection(getPreferenceStore().getBoolean(item.getStrikethroughKey()));
 		fUnderlineCheckBox.setSelection(getPreferenceStore().getBoolean(item.getUnderlineKey()));
 		if (item instanceof SemanticHighlightingColorListItem) {
-			fEnableCheckbox.setEnabled(true);
+			fEnableCheckbox.setEnabled(false);
 			boolean enable= getPreferenceStore().getBoolean(((SemanticHighlightingColorListItem) item).getEnableKey());
-			fEnableCheckbox.setSelection(enable);
-			fSyntaxForegroundColorEditor.getButton().setEnabled(enable);
+			fEnableCheckbox.setSelection(false);
+			fSyntaxForegroundColorEditor.getButton().setEnabled(false);
 			fColorEditorLabel.setEnabled(enable);
-			fBoldCheckBox.setEnabled(enable);
-			fItalicCheckBox.setEnabled(enable);
-			fStrikethroughCheckBox.setEnabled(enable);
-			fUnderlineCheckBox.setEnabled(enable);
+			fBoldCheckBox.setEnabled(false);
+			fItalicCheckBox.setEnabled(false);
+			fStrikethroughCheckBox.setEnabled(false);
+			fUnderlineCheckBox.setEnabled(false);
 		} else {
 			fSyntaxForegroundColorEditor.getButton().setEnabled(true);
 			fColorEditorLabel.setEnabled(true);

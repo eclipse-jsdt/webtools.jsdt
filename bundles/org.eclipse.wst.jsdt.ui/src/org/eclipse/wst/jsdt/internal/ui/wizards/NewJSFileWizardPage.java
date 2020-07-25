@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2015 IBM Corporation and others.
+ * Copyright (c) 2006, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.internal.ui.wizards;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -41,8 +42,8 @@ import org.eclipse.wst.jsdt.ui.CodeGeneration;
 
 class NewJSFileWizardPage extends WizardNewFileCreationPage {
 	
-	private IContentType	fContentType;
-	private List			fValidExtensions = null;
+	private IContentType[]	fContentTypes;
+	private Set<String>			fValidExtensions = null;
 	
 	public NewJSFileWizardPage(String pageName, IStructuredSelection selection) {
         super(pageName, selection);
@@ -137,11 +138,11 @@ class NewJSFileWizardPage extends WizardNewFileCreationPage {
 	 * 
 	 * @return IContentType
 	 */
-	private IContentType getContentType() {
-		if (fContentType == null)
-//			fContentType = Platform.getContentTypeManager().getContentType(ContentTypeIdForJavaScript.ContentTypeID_JAVASCRIPT);
-			fContentType = Platform.getContentTypeManager().getContentType("org.eclipse.wst.jsdt.core.jsSource"); //$NON-NLS-1$
-		return fContentType;
+	private IContentType[] getContentTypes() {
+		if (fContentTypes == null) {
+			fContentTypes = Platform.getContentTypeManager().findContentTypesFor("filename.js"); //$NON-NLS-1$
+		}
+		return fContentTypes;
 	}
 
 	/**
@@ -149,10 +150,13 @@ class NewJSFileWizardPage extends WizardNewFileCreationPage {
 	 * 
 	 * @return
 	 */
-	private List getValidExtensions() {
+	private Collection<String> getValidExtensions() {
 		if (fValidExtensions == null) {
-			IContentType type = getContentType();
-			fValidExtensions = new ArrayList(Arrays.asList(type.getFileSpecs(IContentType.FILE_EXTENSION_SPEC)));
+			IContentType[] types = getContentTypes();
+			fValidExtensions = new HashSet<String>();
+			for (int i = 0; i < types.length; i++) {
+				fValidExtensions.addAll(Arrays.asList(types[i].getFileSpecs(IContentType.FILE_EXTENSION_SPEC)));
+			}
 		}
 		return fValidExtensions;
 	}
@@ -167,19 +171,22 @@ class NewJSFileWizardPage extends WizardNewFileCreationPage {
 	private boolean extensionValidForContentType(String fileName) {
 		boolean valid = false;
 
-		IContentType type = getContentType();
+		IContentType[] expectedTypes = getContentTypes();
 		// there is currently an extension
 		if (fileName.lastIndexOf('.') != -1) {
 			// check what content types are associated with current extension
 			IContentType[] types = Platform.getContentTypeManager().findContentTypesFor(fileName);
 			int i = 0;
 			while (i < types.length && !valid) {
-				valid = types[i].isKindOf(type);
-				++i;
+				for (int j = 0; j < expectedTypes.length && !valid; j++) {
+					valid |= types[i].isKindOf(expectedTypes[j]);
+				}
+				i++;
 			}
 		}
-		else
+		else {
 			valid = true; // no extension so valid
+		}
 		return valid;
 	}
 
@@ -194,10 +201,10 @@ class NewJSFileWizardPage extends WizardNewFileCreationPage {
 
 //		Preferences preference = JavaScriptCorePlugin.getDefault().getPluginPreferences();
 //		String ext = preference.getString(JavaScriptCorePreferenceNames.DEFAULT_EXTENSION);
+//		newFileName.append(ext);
 
 		newFileName.append("."); //$NON-NLS-1$
-//		newFileName.append(ext);
-newFileName.append("js"); //$NON-NLS-1$
+		newFileName.append("js"); //$NON-NLS-1$
 		return newFileName.toString();
 	}
 	

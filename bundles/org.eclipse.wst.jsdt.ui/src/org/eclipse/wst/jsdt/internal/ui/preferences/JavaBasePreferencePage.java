@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -31,15 +31,13 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.jsdt.internal.ui.IJavaHelpContextIds;
-import org.eclipse.wst.jsdt.internal.ui.IUIConstants;
 import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
 import org.eclipse.wst.jsdt.internal.ui.dialogs.OptionalMessageDialog;
-import org.eclipse.wst.jsdt.internal.ui.refactoring.RefactoringSavePreferences;
 import org.eclipse.wst.jsdt.internal.ui.util.SWTUtil;
 import org.eclipse.wst.jsdt.ui.PreferenceConstants;
 	
 /*
- * The page for setting general java plugin preferences.
+ * The page for setting general javascript plug-in preferences.
  * See PreferenceConstants to access or change these values through public API.
  */
 public class JavaBasePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
@@ -114,34 +112,6 @@ public class JavaBasePreferencePage extends PreferencePage implements IWorkbench
 		layout.verticalSpacing= convertVerticalDLUsToPixels(10);
 		layout.horizontalSpacing= convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
 		result.setLayout(layout);
-
-		Group doubleClickGroup= new Group(result, SWT.NONE);
-		doubleClickGroup.setLayout(new GridLayout());		
-		doubleClickGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		doubleClickGroup.setText(PreferencesMessages.JavaBasePreferencePage_doubleclick_action);  
-		addRadioButton(doubleClickGroup, PreferencesMessages.JavaBasePreferencePage_doubleclick_gointo, DOUBLE_CLICK, DOUBLE_CLICK_GOES_INTO); 
-		addRadioButton(doubleClickGroup, PreferencesMessages.JavaBasePreferencePage_doubleclick_expand, DOUBLE_CLICK, DOUBLE_CLICK_EXPANDS);  
-
-		if ( IUIConstants.SUPPORT_REFACTORING ) {
-			Group refactoringGroup= new Group(result, SWT.NONE);
-			refactoringGroup.setLayout(new GridLayout());		
-			refactoringGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			refactoringGroup.setText(PreferencesMessages.JavaBasePreferencePage_refactoring_title); 
-			addCheckBox(refactoringGroup, 
-					PreferencesMessages.JavaBasePreferencePage_refactoring_auto_save, 
-					RefactoringSavePreferences.PREF_SAVE_ALL_EDITORS);
-			addCheckBox(refactoringGroup, 
-					PreferencesMessages.JavaBasePreferencePage_refactoring_lightweight, 
-					PreferenceConstants.REFACTOR_LIGHTWEIGHT);
-		}
-
-		Group group= new Group(result, SWT.NONE);
-		group.setLayout(new GridLayout());
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		group.setText(PreferencesMessages.JavaBasePreferencePage_search); 
-		
-		addCheckBox(group, PreferencesMessages.JavaBasePreferencePage_search_small_menu, PreferenceConstants.SEARCH_USE_REDUCED_MENU); 
-
 		
 		layout= new GridLayout();
 		layout.numColumns= 2;

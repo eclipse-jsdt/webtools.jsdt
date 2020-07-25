@@ -193,7 +193,7 @@ public class TestProjectSetup {
 				if(editorPart instanceof JavaEditor) {
 					editor = (JavaEditor) editorPart;
 				} else {
-					Assert.fail("Unable to open JS editor");
+					Assert.fail("Unable to open JS editor: " + editorPart.getClass());
 				}
 
 				if(editor != null) {

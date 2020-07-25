@@ -107,8 +107,6 @@
 	 </topic>
  </topic>
  <topic href="reference/extension-points/index.html" label="Extension Points Reference">
-    <topic href="reference/extension-points/org_eclipse_wst_jsdt_core_codeFormatter.html" label="org.eclipse.wst.jsdt.core.codeFormatter">
-    </topic>
     <topic href="reference/extension-points/org_eclipse_wst_jsdt_core_inferrenceSupport.html" label="org.eclipse.wst.jsdt.core.inferrenceSupport">
     </topic>
     <topic href="reference/extension-points/org_eclipse_wst_jsdt_core_JsGlobalScopeContainerInitializer.html" label="org.eclipse.wst.jsdt.core.JsGlobalScopeContainerInitializer">

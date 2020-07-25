@@ -276,7 +276,7 @@ public class ContentAssistTestUtilities {
 			}
 		}
 		if (negativeTest) {
-			System.out.println(error.length());
+//			System.out.println(error.length());
 		}
 		// if errors report them
 		if(error.length() > 0) {
