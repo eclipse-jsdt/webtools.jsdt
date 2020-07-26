@@ -46,7 +46,7 @@
                 <phase>compile</phase>
                 <configuration>
                   <skip>false</skip>
-                  <executionEnvironment>JavaSE-1.8</executionEnvironment>
+                  <executionEnvironment>JavaSE-11</executionEnvironment>
                   <!-- call buildDoc.xml -->
                   <!-- TODO switch to new parameter when we've moved up to Tycho 1.0, as appArgLine is deprecated 
                   <applicationsArgs>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</applicationsArgs> 
