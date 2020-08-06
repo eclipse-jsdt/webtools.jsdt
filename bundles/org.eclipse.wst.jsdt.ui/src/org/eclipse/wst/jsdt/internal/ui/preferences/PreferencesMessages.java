@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -825,4 +825,7 @@ public final class PreferencesMessages extends NLS {
 	public static String StandardRuntimeInstallPage_RuntimeDefinition_Title;
 	public static String StandardRuntimeInstallPage_RuntimeAttributes_Message;
 	public static String JSRuntimes_MissingPath;
+	public static String TaskTagLinkText;
+	public static String TaskTagLinkAlternateText;
+	public static String StandaloneJavaScriptPreferencePage_description;
 }
