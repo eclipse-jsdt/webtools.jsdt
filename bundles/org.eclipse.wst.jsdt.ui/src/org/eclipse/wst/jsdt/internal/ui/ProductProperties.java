@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2011 IBM Corporation and others.
+ * Copyright (c) 2005, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -19,6 +19,10 @@ public class ProductProperties {
 	 * Default values for WTP level product
 	 */
 	public static final String ID_PERSPECTIVE_EXPLORER_VIEW = IPageLayout.ID_PROJECT_EXPLORER;
+	/**
+	 * Default values for WTP level product
+	 */
+	public static final String ID_DEFAULT_JS_EDITOR = "org.eclipse.ui.genericeditor.GenericEditor"; //$NON-NLS-1$
 
 	/**
 	 * Return the value for the associated key from the Platform Product registry or return the
@@ -36,6 +40,8 @@ public class ProductProperties {
 		if (value == null) {
 			if (key.equals(IProductConstants.PERSPECTIVE_EXPLORER_VIEW))
 				return ID_PERSPECTIVE_EXPLORER_VIEW;
+			if (key.equals(IProductConstants.NEW_FILE_EDITOR))
+				return ID_DEFAULT_JS_EDITOR;
 		}
 		return value;
 	}

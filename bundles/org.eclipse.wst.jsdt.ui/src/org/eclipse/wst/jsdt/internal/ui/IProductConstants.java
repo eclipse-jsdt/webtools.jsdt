@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2010 IBM Corporation and others.
+ * Copyright (c) 2005, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -26,5 +26,9 @@ public interface IProductConstants {
 	 * The "explorer" view to use when creating the JavaScript perspective
 	 */
 	public static final String PERSPECTIVE_EXPLORER_VIEW = "idPerspectiveHierarchyView"; //$NON-NLS-1$
+	/**
+	 * The ID of the editor to open when the new JavaScript File wizard finishes
+	 */
+	public static final String NEW_FILE_EDITOR = "idNewJSFileEditor"; //$NON-NLS-1$
 
 }
