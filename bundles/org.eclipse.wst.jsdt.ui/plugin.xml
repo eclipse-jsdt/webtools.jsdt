@@ -618,13 +618,6 @@
             <keywordReference id="org.eclipse.wst.jsdt.ui.general"/>
       </page>
       <page
-            name="%javaPrefName"
-            category="org.eclipse.wst.html.ui.preferences.web"
-            class="org.eclipse.wst.jsdt.internal.ui.preferences.StandaloneJSPreferencePage"
-            id="org.eclipse.wst.jsdt.internal.ui.preferences.TaskTagPreferencePage">
-            <keywordReference id="org.eclipse.wst.jsdt.ui.todo"/>
-      </page>
-      <page
             name="%codeFormatterPrefName"
             category="org.eclipse.wst.jsdt.ui.preferences.JavaBasePreferencePage"
             class="org.eclipse.wst.jsdt.internal.ui.preferences.CodeFormatterPreferencePage"
