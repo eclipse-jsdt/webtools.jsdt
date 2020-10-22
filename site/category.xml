@@ -41,6 +41,7 @@
     <feature id="org.eclipse.wst.jsdt.chromium.debug.feature.source"><category name="wtp.incubation.sources"/></feature>
 
     <bundle id="com.google.gson"/>
+    <bundle id="com.google.protobuf"/>
 
      <category-def name="wtp" label="Web Tools Platform (WTP)"><description>These features provide functionality with the executable code only and are recommended for most users.</description></category-def>
      <category-def name="wtp.sdk" label="Web Tools Platform SDK (WTP SDK)"><description>These features provide functionality with the executable code and the source code and are recommended for those extending or debugging WTP.</description></category-def>
