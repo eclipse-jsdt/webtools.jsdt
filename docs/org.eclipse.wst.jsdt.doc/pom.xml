@@ -45,11 +45,18 @@
                 <id>build_java_doc</id>
                 <phase>compile</phase>
                 <configuration>
+                  <useJDK>BREE</useJDK>
                   <skip>false</skip>
-                  <executionEnvironment>JavaSE-11</executionEnvironment>
                   <!-- call buildDoc.xml -->
                   <!-- TODO switch to new parameter when we've moved up to Tycho 1.0, as appArgLine is deprecated 
-                  <applicationsArgs>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</applicationsArgs> 
+                  <applicationsArgs>
+                    <args>-consolelog</args>
+                    <args>-debug</args>
+                    <args>-application</args>
+                    <args>org.eclipse.ant.core.antRunner</args>
+                    <args>-quiet</args>
+                    <args>-buildfile</args>
+                    <args>buildDoc.xml</applicationsArgs>
                   -->
                   <appArgLine>-consolelog -debug -application org.eclipse.ant.core.antRunner -quiet -buildfile buildDoc.xml</appArgLine>
                   <dependencies>
@@ -83,6 +90,7 @@
                       <type>eclipse-plugin</type>
                     </dependency>
                   </dependencies>
+                  <project>${project}</project>
                   <repositories>
                     <repository>
                       <id>eclipse</id>

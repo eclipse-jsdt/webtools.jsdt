@@ -28,9 +28,8 @@
 	</target>
 
 	<target name="convertSchemaToHtml" if="eclipse.running">
-		<property name="dest" value="reference/extension-points" />
-        <record name="${basedir}/workspace/jsdtconvert.txt" action="start"/>
-
+	   <property name="dest" value="reference/extension-points" />
+       <!--<record name="${basedir}/target/eclipserun-work/data/jsdtconvert.txt" action="start"/>-->
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.debug.core/plugin.xml" destination="${dest}" />
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.debug.js/plugin.xml" destination="${dest}" />
        <pde.convertSchemaToHTML manifest="../../bundles/org.eclipse.wst.jsdt.chromium.debug.jsdtbridge/plugin.xml" destination="${dest}" />
@@ -55,18 +54,18 @@
        <pde.convertSchemaToHTML manifest="../../nodejs/org.eclipse.wst.jsdt.js.node/plugin.xml" destination="${dest}" />
        <pde.convertSchemaToHTML manifest="../../nodejs/org.eclipse.wst.jsdt.js.npm/plugin.xml" destination="${dest}" />
 
-       <record name="${basedir}/workspace/jsdtconvert.txt" action="stop"/>
+       <!--<record name="${basedir}/target/eclipserun-work/data/jsdtconvert.txt" action="stop"/>-->
 	</target>
 
 	<target name="getJavadocPath">
-		<available file="${java.home}/../bin/javadoc.exe" property="javadoc" value="${java.home}/../bin/javadoc.exe"/>
-		<available file="${java.home}/../bin/javadoc" property="javadoc" value="${java.home}/../bin/javadoc" />
+		<available file="${java.home}/bin/javadoc.exe" property="javadoc" value="${java.home}/bin/javadoc.exe"/>
+		<available file="${java.home}/bin/javadoc" property="javadoc" value="${java.home}/bin/javadoc" />
 	</target>
 
 
 	<target name="generateJavadoc" depends="getJavadocPath" if="javadoc">
 
-        <property name="optionsFile" value="workspace/jsdtOptions.tmp.txt" />
+        <property name="optionsFile" value="target/eclipserun-work/data/jsdtOptions.tmp.txt" />
 		<copy file="jsdtOptions.txt" tofile="${optionsFile}" overwrite="true" />
 		
 		<condition property="argsListDelimiter" value=":">
