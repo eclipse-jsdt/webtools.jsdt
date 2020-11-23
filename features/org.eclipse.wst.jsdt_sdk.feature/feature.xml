@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.wst.jsdt_sdk.feature"
       label="%featureName"
-      version="2.3.100.qualifier"
+      version="2.3.300.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
@@ -19,9 +19,9 @@
       %license
    </license>
 
-    <requires>
+   <requires>
       <import feature="org.eclipse.wst.jsdt.feature"/>
       <import feature="org.eclipse.wst.jsdt.nodejs.feature"/>
-    </requires>
+   </requires>
 
 </feature>
