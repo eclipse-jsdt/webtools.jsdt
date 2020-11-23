@@ -446,6 +446,446 @@
          </part>
       </actionSetPartAssociation>
    </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <!--  win32:  M1=CTRL,    M2=SHIFT, M3=ALT, M4=-
+            carbon: M1=COMMAND, M2=SHIFT, M3=ALT, M4=CTRL -->
+      
+   <!-- views -->
+      <key
+            sequence="M2+M3+Q T"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.TypeHierarchy"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+Q T"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+Q T"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.TypeHierarchy"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            sequence="M2+M3+Q P"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.PackageExplorer"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+Q P"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+Q P"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.PackageExplorer"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            sequence="M2+M3+Q D"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.SourceView"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+Q D"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+Q D"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.SourceView"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            sequence="M2+M3+Q J"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.JavadocView"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+Q J"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+Q J"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.JavadocView"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
 
+    <!-- Changing context to JavaScript Editor -->     
+    <!-- navigate -->
+      <key
+            sequence="M1+T"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.open.hierarchy"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+<!-- refactoring -->
+      <key
+            sequence="M2+M3+T"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.refactor.quickMenu"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+T"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+T"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.refactor.quickMenu"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            sequence="M2+M3+R"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.rename.element"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+R"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+R"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.rename.element"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+V"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.move.element"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+V"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+V"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.move.element"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+C"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.modify.method.parameters"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+C"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+C"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.modify.method.parameters"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+I"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.inline"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+I"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+I"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.inline"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+M"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.extract.method"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+M"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+M"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.extract.method"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+L"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.extract.local.variable"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+L"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+L"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.extract.local.variable"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+<!-- edit -->
+      <key
+            sequence="M2+M3+ARROW_UP"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.select.enclosing"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+ARROW_UP"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="CTRL+SHIFT+ARROW_UP"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.select.enclosing"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+ARROW_RIGHT"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.select.next"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+ARROW_RIGHT"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="CTRL+SHIFT+ARROW_RIGHT"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.select.next"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            sequence="M2+M3+ARROW_LEFT"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.select.previous"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+ARROW_LEFT"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="CTRL+SHIFT+ARROW_LEFT"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.select.previous"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            sequence="M2+M3+ARROW_DOWN"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.select.last"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+ARROW_DOWN"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="CTRL+SHIFT+ARROW_DOWN"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.select.last"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+<!-- source -->
+      <key
+            sequence="M2+M3+S"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.source.quickMenu"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+S"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId=""
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+S"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.source.quickMenu"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M1+M2+M"
+            contextId="org.eclipse.wst.jsdt.ui.javaEditorScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.add.import"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            sequence="M1+M2+O"
+            contextId="org.eclipse.wst.jsdt.ui.javascriptViewScope"
+            commandId="org.eclipse.wst.jsdt.ui.edit.text.java.organize.imports"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.commands">
+<!-- categories -->
+      <category
+            name="%category.source.name"
+            description="%category.source.description"
+            id="org.eclipse.wst.jsdt.ui.category.source">
+      </category>
+      <category
+            name="%category.refactoring.name"
+            description="%category.refactoring.description"
+            id="org.eclipse.wst.jsdt.ui.category.refactoring">
+      </category>
+<!-- edit -->
+      <command
+            name="%ActionDefinition.selectEnclosing.name"
+            description="%ActionDefinition.selectEnclosing.description"
+            categoryId="org.eclipse.ui.category.edit"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.select.enclosing">
+      </command>
+
+      <command
+            name="%ActionDefinition.selectNext.name"
+            description="%ActionDefinition.selectNext.description"
+            categoryId="org.eclipse.ui.category.edit"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.select.next">
+      </command>
+      <command
+            name="%ActionDefinition.selectPrevious.name"
+            description="%ActionDefinition.selectPrevious.description"
+            categoryId="org.eclipse.ui.category.edit"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.select.previous">
+      </command>
+      <command
+            name="%ActionDefinition.selectLast.name"
+            description="%ActionDefinition.selectLast.description"
+            categoryId="org.eclipse.ui.category.edit"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.select.last">
+      </command>
+<!-- source -->
+      <command
+            name="%ActionDefinition.sourceQuickMenu.name"
+            description="%ActionDefinition.sourceQuickMenu.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.source"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.source.quickMenu">
+      </command>
+      <command
+            name="%ActionDefinition.addImport.name"
+            description="%ActionDefinition.addImport.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.source"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.add.import">
+      </command>
+      <command
+            name="%ActionDefinition.organizeImports.name"
+            description="%ActionDefinition.organizeImports.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.source"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.organize.imports">
+      </command>
+<!-- views -->
+      <command
+            name="%ViewCommand.typeHierarchy.name"
+            description="%ViewCommand.typeHierarchy.description"
+            categoryId="org.eclipse.ui.category.views"
+            id="org.eclipse.wst.jsdt.ui.TypeHierarchy">
+      </command>
+      
+      <command
+            name="%ViewCommand.packageExplorer.name"
+            description="%ViewCommand.packageExplorer.description"
+            categoryId="org.eclipse.ui.category.views"
+            id="org.eclipse.wst.jsdt.ui.PackageExplorer">
+      </command>
+      <command
+            name="%ViewCommand.sourceView.name"
+            description="%ViewCommand.sourceView.description"
+            categoryId="org.eclipse.ui.category.views"
+            id="org.eclipse.wst.jsdt.ui.SourceView">
+      </command>
+      
+      <command
+            name="%ViewCommand.javadocView.name"
+            description="%ViewCommand.javadocView.description"
+            categoryId="org.eclipse.ui.category.views"
+            id="org.eclipse.wst.jsdt.ui.JavadocView">
+      </command>
+<!-- refactoring -->
+      <command
+            name="%ActionDefinition.refactorQuickMenu.name"
+            description="%ActionDefinition.refactorQuickMenu.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.refactoring"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.refactor.quickMenu">
+      </command>
+      <command
+            name="%ActionDefinition.renameElement.name"
+            description="%ActionDefinition.renameElement.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.refactoring"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.rename.element">
+      </command>
+      <command
+            name="%ActionDefinition.moveElement.name"
+            description="%ActionDefinition.moveElement.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.refactoring"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.move.element">
+      </command>
+      <command
+            name="%ActionDefinition.modifyMethodParameters.name"
+            description="%ActionDefinition.modifyMethodParameters.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.refactoring"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.modify.method.parameters">
+      </command>
+      <command
+            name="%ActionDefinition.inline.name"
+            description="%ActionDefinition.inline.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.refactoring"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.inline">
+      </command>
+      <command
+            name="%ActionDefinition.extractMethod.name"
+            description="%ActionDefinition.extractMethod.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.refactoring"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.extract.method">
+      </command>
+      <command
+            name="%ActionDefinition.extractLocalVariable.name"
+            description="%ActionDefinition.extractLocalVariable.description"
+            categoryId="org.eclipse.wst.jsdt.ui.category.refactoring"
+            id="org.eclipse.wst.jsdt.ui.edit.text.java.extract.local.variable">
+      </command>
+
+   </extension>
 </plugin>
 
