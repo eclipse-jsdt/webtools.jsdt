@@ -27,9 +27,11 @@
       <toc
             file="tocconcepts.xml">
       </toc>
+      <!--
       <toc
             file="toctasks.xml">
       </toc>
+      -->
       <toc
             file="tocgettingstarted.xml">
       </toc>

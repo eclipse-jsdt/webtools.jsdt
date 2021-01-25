@@ -19,9 +19,6 @@
 	<topic label="Concepts">
 		<link toc="tocconcepts.xml"/>
 	</topic>
-	<topic label="Tasks">
-		<link toc="toctasks.xml"/>
-	</topic>
 	<topic label="Reference">
 		<link toc="tocreference.xml" />
 	</topic>

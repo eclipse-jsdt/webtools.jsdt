@@ -121,6 +121,7 @@
     </topic>
     <topic href="reference/extension-points/org_eclipse_wst_jsdt_debug_core_launchingConnectors.html" label="org.eclipse.wst.jsdt.debug.core.launchingConnectors">
     </topic>
+    <!--
     <topic href="reference/extension-points/org_eclipse_wst_jsdt_ui_classpathAttributeConfiguration.html" label="org.eclipse.wst.jsdt.ui.classpathAttributeConfiguration">
     </topic>
     <topic href="reference/extension-points/org_eclipse_wst_jsdt_ui_documentationProvider.html" label="org.eclipse.wst.jsdt.ui.documentationProvider">
@@ -147,6 +148,7 @@
     </topic>
     <topic href="reference/extension-points/org_eclipse_wst_jsdt_ui_quickFixProcessors.html" label="org.eclipse.wst.jsdt.ui.quickFixProcessors">
     </topic>
+    -->
  </topic>
  <topic label="Preferences">
     <topic href="reference/debug/preferences/ref-debug-pref-page.htm" label="Debug">
