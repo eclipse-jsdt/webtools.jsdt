@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2021 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -93,14 +93,14 @@ class SmartTypingConfigurationBlock extends AbstractConfigurationBlock {
 		composite= createSubsection(control, null, PreferencesMessages.SmartTypingConfigurationBlock_automove_title); 
 		addAutopositionSection(composite);
 		
-		composite= createSubsection(control, null, PreferencesMessages.SmartTypingConfigurationBlock_tabs_title); 
-		addTabSection(composite);
-
-		composite= createSubsection(control, null, PreferencesMessages.SmartTypingConfigurationBlock_pasting_title); 
-		addPasteSection(composite);
-		
-		composite= createSubsection(control, null, PreferencesMessages.SmartTypingConfigurationBlock_strings_title); 
-		addStringsSection(composite);
+//		composite= createSubsection(control, null, PreferencesMessages.SmartTypingConfigurationBlock_tabs_title); 
+//		addTabSection(composite);
+//
+//		composite= createSubsection(control, null, PreferencesMessages.SmartTypingConfigurationBlock_pasting_title); 
+//		addPasteSection(composite);
+//		
+//		composite= createSubsection(control, null, PreferencesMessages.SmartTypingConfigurationBlock_strings_title); 
+//		addStringsSection(composite);
 
 		scrolled.setContent(control);
 		final Point size= control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -108,7 +108,7 @@ class SmartTypingConfigurationBlock extends AbstractConfigurationBlock {
 		return scrolled;
 	}
 
-	private void addStringsSection(Composite composite) {
+	void addStringsSection(Composite composite) {
 		GridLayout layout= new GridLayout();
 		composite.setLayout(layout);
 
@@ -122,7 +122,7 @@ class SmartTypingConfigurationBlock extends AbstractConfigurationBlock {
 		createDependency(master, slave);
 	}
 
-	private void addPasteSection(Composite composite) {
+	void addPasteSection(Composite composite) {
 		GridLayout layout= new GridLayout();
 		composite.setLayout(layout);
 
@@ -134,7 +134,7 @@ class SmartTypingConfigurationBlock extends AbstractConfigurationBlock {
 		addCheckBox(composite, label, PreferenceConstants.EDITOR_IMPORTS_ON_PASTE, 0);
 	}
 
-	private void addTabSection(Composite composite) {
+	void addTabSection(Composite composite) {
 		GridLayout layout= new GridLayout();
 		composite.setLayout(layout);
 

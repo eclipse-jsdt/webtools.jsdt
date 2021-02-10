@@ -639,6 +639,13 @@
          <keywordReference id="org.eclipse.wst.jsdt.ui.syntaxcoloring"/>
       </page>
       <page
+            name="%editorTypingPage"
+            category="org.eclipse.wst.jsdt.ui.preferences.JavaBasePreferencePage"
+            class="org.eclipse.wst.jsdt.internal.ui.preferences.SmartTypingPreferencePage"
+            id="org.eclipse.wst.jsdt.ui.preferences.SmartTypingPreferencePage">
+         <keywordReference id="org.eclipse.wst.jsdt.ui.smarttyping"/>
+      </page>
+      <page
             name="%codeTemplatePreferencePageName"
             category="org.eclipse.wst.jsdt.ui.preferences.JavaBasePreferencePage"
             class="org.eclipse.wst.jsdt.internal.ui.preferences.CodeTemplatePreferencePage"
