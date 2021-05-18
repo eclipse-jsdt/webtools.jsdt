@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: org.eclipse.wst.jsdt.ui; singleton:=true
-Bundle-Version: 2.1.200.qualifier
+Bundle-Version: 2.1.300.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin
 Import-Package: com.ibm.icu.text,
  com.ibm.icu.util,
@@ -56,7 +56,7 @@ Export-Package: org.eclipse.wst.jsdt.internal.corext;x-friends:="org.eclipse.wst
  org.eclipse.wst.jsdt.internal.ui.fix;x-internal:=true,
  org.eclipse.wst.jsdt.internal.ui.infoviews;x-internal:=true,
  org.eclipse.wst.jsdt.internal.ui.javadocexport;x-internal:=true,
- org.eclipse.wst.jsdt.internal.ui.javaeditor;x-friends:="org.eclipse.wst.jsdt.junit,org.eclipse.wst.jsdt.debug.ui",
+ org.eclipse.wst.jsdt.internal.ui.javaeditor;x-friends:="org.eclipse.wst.jsdt.junit,org.eclipse.wst.jsdt.debug.ui,org.eclipse.wst.jsdt.ui.tests",
  org.eclipse.wst.jsdt.internal.ui.javaeditor.saveparticipant;x-internal:=true,
  org.eclipse.wst.jsdt.internal.ui.javaeditor.selectionactions;x-internal:=true,
  org.eclipse.wst.jsdt.internal.ui.model;x-internal:=true,
