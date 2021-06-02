@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2016 IBM Corporation and others.
+ * Copyright (c) 2012, 2021 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -185,15 +185,15 @@ public class TestProjectSetup {
 	public JavaEditor getEditor(IFile file) {
 		JavaEditor editor = (JavaEditor) fFileToEditorMap.get(file);
 
-		if(editor == null) {
+		if (editor == null) {
 			try {
 				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 				IWorkbenchPage page = workbenchWindow.getActivePage();
-				IEditorPart editorPart = IDE.openEditor(page, file, true, true);
-				if(editorPart instanceof JavaEditor) {
+//				IEditorPart editorPart = IDE.openEditor(page, file, true, true);
+				IEditorPart editorPart = IDE.openEditor(page, file, "org.eclipse.wst.jsdt.ui.CompilationUnitEditor", true);
+				if (editorPart instanceof JavaEditor) {
 					editor = (JavaEditor) editorPart;
 				} else {
-					Assert.fail("Unable to open JS editor: " + editorPart.getClass());
 				}
 
 				if(editor != null) {
@@ -207,6 +207,9 @@ public class TestProjectSetup {
 			}
 		}
 
+		if (!(editor instanceof JavaEditor)) {
+			Assert.fail("Unable to open JS editor for: " + file.getFullPath() + " (got " + editor.getClass() + ")");
+		}
 		return editor;
 	}
 
