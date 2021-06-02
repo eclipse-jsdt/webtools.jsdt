@@ -584,6 +584,13 @@
       </participant>
    </extension>
 
+   <!-- For .js files use the Generic Text Editor to enable JavaScript support via Eclipse Wild Web Developer (see bug 573902) -->
+   <extension point="org.eclipse.ui.editors">
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.wst.jsdt.core.jsSource"
+            editorId="org.eclipse.ui.genericeditor.GenericEditor"/>
+   </extension>
+
    <extension
          point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectorTargets">
       <target
