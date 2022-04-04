@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 IBM Corporation and others.
+ * Copyright (c) 2010, 2022 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -48,7 +48,7 @@ public class RhinoProcess extends JavaScriptProcess {
 		String capture = launch.getAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT);
 		boolean needsstreams = capture == null ? true : Boolean.valueOf(capture).booleanValue();
 		if(needsstreams) {
-			streamproxy = new StreamsProxy(p, Charset.forName(launch.getAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING)));
+			streamproxy = new StreamsProxy(p, Charset.forName(launch.getAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING)), "js"); //$NON-NLS-1$
 		}
 		setAttribute(IProcess.ATTR_PROCESS_TYPE, TYPE);
 	}
@@ -69,7 +69,7 @@ public class RhinoProcess extends JavaScriptProcess {
 				charset = Charset.defaultCharset();
 			}
 		}
-		return new StreamsProxy(process, charset);
+		return new StreamsProxy(process, charset, "js"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
