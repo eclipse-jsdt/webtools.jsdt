@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2020 IBM Corporation and others.
+ * Copyright (c) 2005, 2022 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -26,7 +26,7 @@ public class ProductProperties {
 
 	/**
 	 * Return the value for the associated key from the Platform Product registry or return the
-	 * WTP default for the JavaScript cases.
+	 * WTP default for the JavaScript cases, or <code>null</code> if none.
 	 * 
 	 * @param key
 	 * @return String value of product's property
@@ -40,8 +40,6 @@ public class ProductProperties {
 		if (value == null) {
 			if (key.equals(IProductConstants.PERSPECTIVE_EXPLORER_VIEW))
 				return ID_PERSPECTIVE_EXPLORER_VIEW;
-			if (key.equals(IProductConstants.NEW_FILE_EDITOR))
-				return ID_DEFAULT_JS_EDITOR;
 		}
 		return value;
 	}
