@@ -96,7 +96,7 @@
   
   <extension point="org.eclipse.ui.editors">
     <editor
-        name="JS Editor"
+        name="Chromium Debugging Editor"
         extensions="chromium"
         default="true"
         icon="res/chromium_16.png"

@@ -10,6 +10,6 @@
 	</parent>
 	<groupId>org.eclipse.webtools.jsdt.features</groupId>
 	<artifactId>org.eclipse.wst.jsdt.chromium_sdk.feature</artifactId>
-	<version>0.6.100-SNAPSHOT</version>
+	<version>0.6.300-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 </project>
