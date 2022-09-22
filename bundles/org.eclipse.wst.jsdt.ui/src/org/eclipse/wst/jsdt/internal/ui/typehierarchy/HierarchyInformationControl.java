@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2022 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -12,6 +12,7 @@ package org.eclipse.wst.jsdt.internal.ui.typehierarchy;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.jface.bindings.TriggerSequence;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -81,7 +82,7 @@ public class HierarchyInformationControl extends AbstractInformationControl {
 				public void keyPressed(KeyEvent e) {
 					int accelerator = SWTKeySupport.convertEventToUnmodifiedAccelerator(e);
 					KeySequence keySequence = KeySequence.getInstance(SWTKeySupport.convertAcceleratorToKeyStroke(accelerator));
-					KeySequence[] sequences= getInvokingCommandKeySequences();
+					TriggerSequence[] sequences= getInvokingCommandKeySequences();
 					if (sequences == null)
 						return;
 					
@@ -332,7 +333,7 @@ public class HierarchyInformationControl extends AbstractInformationControl {
 	}
 	
 	protected String getStatusFieldText() {
-		KeySequence[] sequences= getInvokingCommandKeySequences();
+		TriggerSequence[] sequences= getInvokingCommandKeySequences();
 		String keyName= ""; //$NON-NLS-1$
 		if (sequences != null && sequences.length > 0)
 			keyName= sequences[0].format();

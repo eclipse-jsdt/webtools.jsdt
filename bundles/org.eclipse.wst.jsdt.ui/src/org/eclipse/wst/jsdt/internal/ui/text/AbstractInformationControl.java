@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2022 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -10,12 +10,13 @@
  *******************************************************************************/
 package org.eclipse.wst.jsdt.internal.ui.text;
 
-import java.util.List;
-
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.CommandManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.bindings.TriggerSequence;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.PopupDialog;
@@ -57,11 +58,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ActionHandler;
 import org.eclipse.ui.commands.HandlerSubmission;
-import org.eclipse.ui.commands.ICommand;
-import org.eclipse.ui.commands.ICommandManager;
-import org.eclipse.ui.commands.IKeySequenceBinding;
 import org.eclipse.ui.commands.Priority;
-import org.eclipse.ui.keys.KeySequence;
+import org.eclipse.ui.keys.IBindingService;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IParent;
 import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
@@ -120,8 +118,8 @@ public abstract class AbstractInformationControl extends PopupDialog implements 
 	private TreeViewer fTreeViewer;
 	/** The current string matcher */
 	protected StringMatcher fStringMatcher;
-	private ICommand fInvokingCommand;
-	private KeySequence[] fInvokingCommandKeySequences;
+	private Command fInvokingCommand;
+	private TriggerSequence[] fInvokingCommandKeySequences;
 
 	/**
 	 * Fields that support the dialog menu
@@ -153,9 +151,9 @@ public abstract class AbstractInformationControl extends PopupDialog implements 
 	 * @param showStatusField <code>true</code> iff the control has a status field at the bottom
 	 */
 	public AbstractInformationControl(Shell parent, int shellStyle, int treeStyle, String invokingCommandId, boolean showStatusField) {
-		super(parent, shellStyle, true, true, true, true, null, null);
+		super(parent, shellStyle, true, true, true, true, true, null, null);
 		if (invokingCommandId != null) {
-			ICommandManager commandManager= PlatformUI.getWorkbench().getCommandSupport().getCommandManager();
+			CommandManager commandManager= PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(CommandManager.class);
 			fInvokingCommand= commandManager.getCommand(invokingCommandId);
 			if (fInvokingCommand != null && !fInvokingCommand.isDefined())
 				fInvokingCommand= null;
@@ -617,7 +615,7 @@ public abstract class AbstractInformationControl extends PopupDialog implements 
 		 * the call to constrainShellSize in PopupDialog.open will still ensure that the shell is
 		 * entirely visible.
 		 */
-		if (!getPersistBounds() || getDialogSettings() == null)
+		if (!getPersistLocation() || getDialogSettings() == null)
 			getShell().setLocation(location);
 	}
 
@@ -685,21 +683,16 @@ public abstract class AbstractInformationControl extends PopupDialog implements 
 		getShell().removeFocusListener(listener);
 	}
 
-	final protected ICommand getInvokingCommand() {
+	final protected Command getInvokingCommand() {
 		return fInvokingCommand;
 	}
 
-	final protected KeySequence[] getInvokingCommandKeySequences() {
+	final protected TriggerSequence[] getInvokingCommandKeySequences() {
 		if (fInvokingCommandKeySequences == null) {
 			if (getInvokingCommand() != null) {
-				List list= getInvokingCommand().getKeySequenceBindings();
-				if (!list.isEmpty()) {
-					fInvokingCommandKeySequences= new KeySequence[list.size()];
-					for (int i= 0; i < fInvokingCommandKeySequences.length; i++) {
-						fInvokingCommandKeySequences[i]= ((IKeySequenceBinding) list.get(i)).getKeySequence();
-					}
-					return fInvokingCommandKeySequences;
-				}
+				IBindingService bindingService = PlatformUI.getWorkbench().getAdapter(IBindingService.class);
+				fInvokingCommandKeySequences = bindingService.getActiveBindingsFor(getInvokingCommand().getId());
+				return fInvokingCommandKeySequences;
 			}
 		}
 		return fInvokingCommandKeySequences;
