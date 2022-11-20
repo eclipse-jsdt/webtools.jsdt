@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: org.eclipse.wst.jsdt.core; singleton:=true
-Bundle-Version: 2.0.400.qualifier
+Bundle-Version: 2.0.500.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
@@ -54,7 +54,6 @@ Export-Package: org.eclipse.wst.jsdt.core,
  org.eclipse.wst.jsdt.internal.oaametadata,
  org.eclipse.wst.jsdt.launching,
  org.eclipse.wst.jsdt.libraries
-Import-Package: com.ibm.icu.text
 Bundle-Activator: org.eclipse.wst.jsdt.core.JavaScriptCore
 Require-Bundle: com.google.javascript,
  com.google.guava,
@@ -64,7 +63,8 @@ Require-Bundle: com.google.javascript,
  org.eclipse.text;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.team.core;bundle-version="[3.5.0,4.0.0)";resolution:=optional,
  org.eclipse.debug.core;bundle-version="[3.5.0,4.0.0)",
- org.eclipse.wst.validation;bundle-version="[1.2.600,2.0.0)"
+ org.eclipse.wst.validation;bundle-version="[1.2.600,2.0.0)",
+ com.ibm.icu;bundle-version="72.1.0"
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Main-Class: org.eclipse.wst.jsdt.internal.compiler.batch.Main

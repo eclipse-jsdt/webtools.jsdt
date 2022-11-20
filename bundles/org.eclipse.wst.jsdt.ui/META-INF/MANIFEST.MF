@@ -1,10 +1,8 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: org.eclipse.wst.jsdt.ui; singleton:=true
-Bundle-Version: 2.1.500.qualifier
+Bundle-Version: 2.1.600.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin
-Import-Package: com.ibm.icu.text,
- com.ibm.icu.util,
- org.eclipse.wst.validation,
+Import-Package: org.eclipse.wst.validation,
  org.eclipse.wst.validation.internal.core,
  org.eclipse.wst.validation.internal.operations,
  org.eclipse.wst.validation.internal.provisional.core
@@ -135,7 +133,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.ui.navigator;bundle-version="[3.4.0,4.0.0)",
  org.eclipse.ui.navigator.resources;bundle-version="[3.4.0,4.0.0)",
  org.eclipse.wst.jsdt.manipulation;bundle-version="[1.0.200,2.0.0)",
- org.eclipse.core.filebuffers
+ org.eclipse.core.filebuffers,
+ com.ibm.icu;bundle-version="72.1.0"
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Localization: plugin
