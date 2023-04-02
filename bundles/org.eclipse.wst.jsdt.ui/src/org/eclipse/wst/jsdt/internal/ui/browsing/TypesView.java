@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -32,6 +32,8 @@ import org.eclipse.wst.jsdt.core.IMember;
 import org.eclipse.wst.jsdt.core.IPackageFragment;
 import org.eclipse.wst.jsdt.core.IType;
 import org.eclipse.wst.jsdt.internal.ui.IJavaHelpContextIds;
+import org.eclipse.wst.jsdt.internal.ui.IProductConstants;
+import org.eclipse.wst.jsdt.internal.ui.ProductProperties;
 import org.eclipse.wst.jsdt.internal.ui.actions.SelectAllAction;
 import org.eclipse.wst.jsdt.internal.ui.filters.NonJavaElementFilter;
 import org.eclipse.wst.jsdt.internal.ui.viewsupport.AppearanceAwareLabelProvider;
@@ -72,7 +74,13 @@ public class TypesView extends JavaBrowsingPart {
 		if (key == IShowInTargetList.class) {
 			return new IShowInTargetList() {
 				public String[] getShowInTargetIds() {
-					return new String[] { JavaScriptUI.ID_PACKAGES, IPageLayout.ID_RES_NAV  };
+					String explorerViewID = ProductProperties.getProperty(IProductConstants.PERSPECTIVE_EXPLORER_VIEW);
+					if (explorerViewID != null) {
+						return new String[] { explorerViewID, JavaScriptUI.ID_PACKAGES, IPageLayout.ID_PROJECT_EXPLORER };
+					}
+					else {
+						return new String[] { JavaScriptUI.ID_PACKAGES, IPageLayout.ID_PROJECT_EXPLORER };
+					}
 				}
 
 			};

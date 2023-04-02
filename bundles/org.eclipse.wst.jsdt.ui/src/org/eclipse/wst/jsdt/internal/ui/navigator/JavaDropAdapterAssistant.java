@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2008 IBM Corporation and others.
+ * Copyright (c) 2006, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.DND;
@@ -26,7 +27,6 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.actions.CopyFilesAndFoldersOperation;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
-import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.internal.corext.refactoring.reorg.JavaCopyProcessor;
@@ -50,7 +50,7 @@ public class JavaDropAdapterAssistant extends CommonDropAdapterAssistant {
 	private int fCanCopyElements; 
 
 	public IStatus handleDrop(CommonDropAdapter dropAdapter, DropTargetEvent dropTargetEvent, Object target) { 
-		if (LocalSelectionTransfer.getInstance().isSupportedType(dropAdapter.getCurrentTransfer())) {
+		if (org.eclipse.jface.util.LocalSelectionTransfer.getTransfer().isSupportedType(dropAdapter.getCurrentTransfer())) {
 			try {
 
 				switch (dropAdapter.getCurrentOperation()) {
@@ -101,7 +101,7 @@ public class JavaDropAdapterAssistant extends CommonDropAdapterAssistant {
 
 	public IStatus validateDrop(Object target, int operation, TransferData transferType) { 
 		IStatus result = Status.OK_STATUS;
-		if (LocalSelectionTransfer.getInstance().isSupportedType(transferType)) {
+		if (LocalSelectionTransfer.getTransfer().isSupportedType(transferType)) {
 			initializeSelection();
 			try {
 				switch (operation) {
@@ -151,7 +151,7 @@ public class JavaDropAdapterAssistant extends CommonDropAdapterAssistant {
 	protected void initializeSelection() {
 		if (fElements != null)
 			return;
-		ISelection s = LocalSelectionTransfer.getInstance().getSelection();
+		ISelection s = LocalSelectionTransfer.getTransfer().getSelection();
 		if (!(s instanceof IStructuredSelection))
 			return;
 		fElements = ((IStructuredSelection) s).toList();

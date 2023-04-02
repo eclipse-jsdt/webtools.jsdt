@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -22,7 +23,6 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.internal.corext.refactoring.reorg.JavaCopyProcessor;
@@ -55,7 +55,7 @@ public class SelectionTransferDropAdapter extends JdtViewerDropAdapter implement
 	//---- TransferDropTargetListener interface ---------------------------------------
 	
 	public Transfer getTransfer() {
-		return LocalSelectionTransfer.getInstance();
+		return LocalSelectionTransfer.getTransfer();
 	}
 	
 	public boolean isEnabled(DropTargetEvent event) {
@@ -109,7 +109,7 @@ public class SelectionTransferDropAdapter extends JdtViewerDropAdapter implement
 	protected void initializeSelection(){
 		if (fElements != null)
 			return;
-		ISelection s= LocalSelectionTransfer.getInstance().getSelection();
+		ISelection s= LocalSelectionTransfer.getTransfer().getSelection();
 		if (!(s instanceof IStructuredSelection))
 			return;
 		fSelection= s;	
@@ -121,7 +121,7 @@ public class SelectionTransferDropAdapter extends JdtViewerDropAdapter implement
 	}
 	
 	private boolean tooFast(DropTargetEvent event) {
-		return Math.abs(LocalSelectionTransfer.getInstance().getSelectionSetTime() - (event.time & 0xFFFFFFFFL)) < DROP_TIME_DIFF_TRESHOLD;
+		return Math.abs(LocalSelectionTransfer.getTransfer().getSelectionSetTime() - (event.time & 0xFFFFFFFFL)) < DROP_TIME_DIFF_TRESHOLD;
 	}	
 
 	public void drop(Object target, DropTargetEvent event) {

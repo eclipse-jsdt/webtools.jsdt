@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -40,6 +40,7 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.util.TransferDragSourceListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
@@ -105,7 +106,6 @@ import org.eclipse.ui.views.framelist.FrameAction;
 import org.eclipse.ui.views.framelist.FrameList;
 import org.eclipse.ui.views.framelist.IFrameSource;
 import org.eclipse.ui.views.framelist.TreeFrame;
-import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import org.eclipse.wst.jsdt.core.IClassFile;
 import org.eclipse.wst.jsdt.core.IJarEntryResource;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
@@ -119,7 +119,9 @@ import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 import org.eclipse.wst.jsdt.internal.corext.util.Messages;
 import org.eclipse.wst.jsdt.internal.ui.IJavaHelpContextIds;
+import org.eclipse.wst.jsdt.internal.ui.IProductConstants;
 import org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin;
+import org.eclipse.wst.jsdt.internal.ui.ProductProperties;
 import org.eclipse.wst.jsdt.internal.ui.dnd.DelegatingDropAdapter;
 import org.eclipse.wst.jsdt.internal.ui.dnd.JdtViewerDragAdapter;
 import org.eclipse.wst.jsdt.internal.ui.dnd.ResourceTransferDragAdapter;
@@ -755,7 +757,13 @@ public class PackageExplorerPart extends ViewPart
 		if (key == IShowInTargetList.class) {
 			return new IShowInTargetList() {
 				public String[] getShowInTargetIds() {
-					return new String[] { IPageLayout.ID_RES_NAV };
+					String explorerViewID = ProductProperties.getProperty(IProductConstants.PERSPECTIVE_EXPLORER_VIEW);
+					if (explorerViewID != null) {
+						return new String[] { explorerViewID, JavaScriptUI.ID_PACKAGES, IPageLayout.ID_PROJECT_EXPLORER };
+					}
+					else {
+						return new String[] { JavaScriptUI.ID_PACKAGES, IPageLayout.ID_PROJECT_EXPLORER };
+					}
 				}
 
 			};
@@ -879,7 +887,7 @@ public class PackageExplorerPart extends ViewPart
 	private void initDrag() {
 		int ops= DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 		Transfer[] transfers= new Transfer[] {
-			LocalSelectionTransfer.getInstance(), 
+			LocalSelectionTransfer.getTransfer(), 
 			ResourceTransfer.getInstance(),
 			FileTransfer.getInstance()};
 		TransferDragSourceListener[] dragListeners= new TransferDragSourceListener[] {
@@ -893,7 +901,7 @@ public class PackageExplorerPart extends ViewPart
 	private void initDrop() {
 		int ops= DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK | DND.DROP_DEFAULT;
 		Transfer[] transfers= new Transfer[] {
-			LocalSelectionTransfer.getInstance(), 
+			LocalSelectionTransfer.getTransfer(), 
 			FileTransfer.getInstance()};
 		TransferDropTargetListener[] dropListeners= new TransferDropTargetListener[] {
 			new SelectionTransferDropAdapter(fViewer),

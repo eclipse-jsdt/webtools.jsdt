@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2015 IBM Corporation and others.
+ * Copyright (c) 2000, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -1809,11 +1809,13 @@ public abstract class JavaEditor extends AbstractDecoratedTextEditor implements 
 				public String[] getShowInTargetIds() {
 					String explorerViewID = ProductProperties.getProperty(IProductConstants.PERSPECTIVE_EXPLORER_VIEW);
 					// make sure the specified view ID is known
-					if (PlatformUI.getWorkbench().getViewRegistry().find(explorerViewID) == null)
-						explorerViewID = ProductProperties.ID_PERSPECTIVE_EXPLORER_VIEW;
-					return new String[] {explorerViewID, JavaScriptUI.ID_PACKAGES, IPageLayout.ID_OUTLINE, IPageLayout.ID_RES_NAV };
+					if (explorerViewID != null && PlatformUI.getWorkbench().getViewRegistry().find(explorerViewID) != null) {
+						return new String[]{explorerViewID, JavaScriptUI.ID_PACKAGES, IPageLayout.ID_OUTLINE, IPageLayout.ID_PROJECT_EXPLORER};
+					}
+					else {
+						return new String[]{JavaScriptUI.ID_PACKAGES, IPageLayout.ID_OUTLINE, IPageLayout.ID_PROJECT_EXPLORER};
+					}
 				}
-
 			};
 		}
 

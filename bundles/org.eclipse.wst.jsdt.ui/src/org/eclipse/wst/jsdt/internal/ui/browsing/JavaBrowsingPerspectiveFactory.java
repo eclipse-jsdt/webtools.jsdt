@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -19,6 +19,8 @@ import org.eclipse.ui.IPlaceholderFolderLayout;
 import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.progress.IProgressConstants;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
+import org.eclipse.wst.jsdt.internal.ui.IProductConstants;
+import org.eclipse.wst.jsdt.internal.ui.ProductProperties;
 import org.eclipse.wst.jsdt.ui.JavaScriptUI;
 import org.eclipse.wst.jsdt.ui.PreferenceConstants;
 
@@ -49,6 +51,8 @@ public class JavaBrowsingPerspectiveFactory implements IPerspectiveFactory {
 		layout.addActionSet(JavaScriptUI.ID_ELEMENT_CREATION_ACTION_SET);
 		layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
 
+		String explorerViewID = ProductProperties.getProperty(IProductConstants.PERSPECTIVE_EXPLORER_VIEW);
+
 		// views - java
 		layout.addShowViewShortcut(JavaScriptUI.ID_TYPE_HIERARCHY);
 		layout.addShowViewShortcut(JavaScriptUI.ID_PACKAGES);
@@ -68,7 +72,9 @@ public class JavaBrowsingPerspectiveFactory implements IPerspectiveFactory {
 		// views - standard workbench
 		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 		layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
-		layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
+		if (explorerViewID != null) {
+			layout.addShowViewShortcut(explorerViewID);
+		}
 		layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
 		layout.addShowViewShortcut(IProgressConstants.PROGRESS_VIEW_ID);
 
@@ -90,14 +96,21 @@ public class JavaBrowsingPerspectiveFactory implements IPerspectiveFactory {
 		String relativePartId= IPageLayout.ID_EDITOR_AREA;
 		int relativePos= IPageLayout.LEFT;
 
+		String explorerViewID = ProductProperties.getProperty(IProductConstants.PERSPECTIVE_EXPLORER_VIEW);
+
 		IPlaceholderFolderLayout placeHolderLeft= layout.createPlaceholderFolder("left", IPageLayout.LEFT, (float)0.25, IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
 		placeHolderLeft.addPlaceholder(JavaScriptUI.ID_TYPE_HIERARCHY);
 		placeHolderLeft.addPlaceholder(IPageLayout.ID_OUTLINE);
 		placeHolderLeft.addPlaceholder(JavaScriptUI.ID_PACKAGES);
-		placeHolderLeft.addPlaceholder(IPageLayout.ID_RES_NAV);
+		if (explorerViewID != null) {
+			placeHolderLeft.addPlaceholder(explorerViewID);
+		}
 
 		if (shouldShowProjectsView()) {
 			layout.addView(JavaScriptUI.ID_PROJECTS_VIEW, IPageLayout.LEFT, (float)0.25, IPageLayout.ID_EDITOR_AREA);
+			if (explorerViewID != null) {
+				layout.addView(explorerViewID, IPageLayout.LEFT, (float)0.25, IPageLayout.ID_EDITOR_AREA);
+			}
 			relativePartId= JavaScriptUI.ID_PROJECTS_VIEW;
 			relativePos= IPageLayout.BOTTOM;
 		}
@@ -123,9 +136,14 @@ public class JavaBrowsingPerspectiveFactory implements IPerspectiveFactory {
 		String relativePartId= IPageLayout.ID_EDITOR_AREA;
 		int relativePos= IPageLayout.TOP;
 
+		String explorerViewID = ProductProperties.getProperty(IProductConstants.PERSPECTIVE_EXPLORER_VIEW);
+
 		if (shouldShowProjectsView()) {
 			layout.addView(JavaScriptUI.ID_PROJECTS_VIEW, IPageLayout.TOP, (float)0.25, IPageLayout.ID_EDITOR_AREA);
 			relativePartId= JavaScriptUI.ID_PROJECTS_VIEW;
+			if (explorerViewID != null) {
+				layout.addView(explorerViewID, IPageLayout.LEFT, (float)0.25, IPageLayout.ID_EDITOR_AREA);
+			}
 			relativePos= IPageLayout.RIGHT;
 		}
 		if (shouldShowPackagesView()) {
@@ -140,7 +158,9 @@ public class JavaBrowsingPerspectiveFactory implements IPerspectiveFactory {
 		placeHolderLeft.addPlaceholder(JavaScriptUI.ID_TYPE_HIERARCHY);
 		placeHolderLeft.addPlaceholder(IPageLayout.ID_OUTLINE);
 		placeHolderLeft.addPlaceholder(JavaScriptUI.ID_PACKAGES);
-		placeHolderLeft.addPlaceholder(IPageLayout.ID_RES_NAV);
+		if (explorerViewID != null) {
+			placeHolderLeft.addPlaceholder(explorerViewID);
+		}
 
 
 		IPlaceholderFolderLayout placeHolderBottom= layout.createPlaceholderFolder("bottom", IPageLayout.BOTTOM, (float)0.75, IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$

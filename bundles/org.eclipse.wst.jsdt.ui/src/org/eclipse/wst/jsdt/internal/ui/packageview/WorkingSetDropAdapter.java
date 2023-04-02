@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * Copyright (c) 2000, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -30,7 +31,6 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.IWorkingSet;
-import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.internal.corext.refactoring.reorg.ReorgUtils;
 import org.eclipse.wst.jsdt.internal.ui.dnd.JdtViewerDropAdapter;
@@ -54,14 +54,14 @@ public class WorkingSetDropAdapter extends JdtViewerDropAdapter implements Trans
 	//---- TransferDropTargetListener interface ---------------------------------------
 	
 	public Transfer getTransfer() {
-		return LocalSelectionTransfer.getInstance();
+		return LocalSelectionTransfer.getTransfer();
 	}
 	
 	public boolean isEnabled(DropTargetEvent event) {
 		Object target= event.item != null ? event.item.getData() : null;
 		if (target == null)
 			return false;
-		ISelection selection= LocalSelectionTransfer.getInstance().getSelection();
+		ISelection selection= LocalSelectionTransfer.getTransfer().getSelection();
 		if (!isValidSelection(selection)) {
 			return false;
 		}
@@ -93,7 +93,7 @@ public class WorkingSetDropAdapter extends JdtViewerDropAdapter implements Trans
 		setDefaultFeedback(DND.FEEDBACK_SCROLL | DND.FEEDBACK_EXPAND);
 		if (!isValidTarget(target))
 			return DND.DROP_NONE;
-		ISelection s= LocalSelectionTransfer.getInstance().getSelection();
+		ISelection s= LocalSelectionTransfer.getTransfer().getSelection();
 		if (!isValidSelection(s)) {
 			return DND.DROP_NONE;
 		}

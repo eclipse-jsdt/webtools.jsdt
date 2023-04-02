@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2011 IBM Corporation and others.
+ * Copyright (c) 2000, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -36,13 +36,15 @@ public class JavaPerspectiveFactory implements IPerspectiveFactory {
 		
 		String explorerViewID = ProductProperties.getProperty(IProductConstants.PERSPECTIVE_EXPLORER_VIEW);
 		// make sure the specified view ID is known
-		if (PlatformUI.getWorkbench().getViewRegistry().find(explorerViewID) != null)
+		if (PlatformUI.getWorkbench().getViewRegistry().find(explorerViewID) != null) {
 			folder.addView(explorerViewID);
-		else
+		}
+		else {
 			folder.addView(ProductProperties.ID_PERSPECTIVE_EXPLORER_VIEW);
+		}
 		
 		folder.addPlaceholder(JavaScriptUI.ID_TYPE_HIERARCHY);
-		folder.addPlaceholder(IPageLayout.ID_RES_NAV);
+		folder.addPlaceholder(IPageLayout.ID_PROJECT_EXPLORER);
 		folder.addPlaceholder(JavaScriptUI.ID_PACKAGES);
 		
 		IFolderLayout outputfolder= layout.createFolder("bottom", IPageLayout.BOTTOM, (float)0.75, editorArea); //$NON-NLS-1$
@@ -80,7 +82,6 @@ public class JavaPerspectiveFactory implements IPerspectiveFactory {
 		// views - standard workbench
 		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 		layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
-		layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
 		layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
 		layout.addShowViewShortcut(IProgressConstants.PROGRESS_VIEW_ID);
 				

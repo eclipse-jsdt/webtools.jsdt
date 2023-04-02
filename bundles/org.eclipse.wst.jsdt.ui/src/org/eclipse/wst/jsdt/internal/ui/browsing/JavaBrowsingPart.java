@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
+ * Copyright (c) 2000, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -32,6 +32,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.util.TransferDragSourceListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
@@ -79,7 +80,6 @@ import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import org.eclipse.wst.jsdt.core.IClassFile;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.IJavaScriptElement;
@@ -423,7 +423,7 @@ abstract class JavaBrowsingPart extends ViewPart implements IMenuListener, ISele
 		int ops= DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 		// drop
 		Transfer[] dropTransfers= new Transfer[] {
-			LocalSelectionTransfer.getInstance()
+			LocalSelectionTransfer.getTransfer()
 		};
 		TransferDropTargetListener[] dropListeners= new TransferDropTargetListener[] {
 			new SelectionTransferDropAdapter(fViewer)
@@ -432,7 +432,7 @@ abstract class JavaBrowsingPart extends ViewPart implements IMenuListener, ISele
 
 		// Drag
 		Transfer[] dragTransfers= new Transfer[] {
-			LocalSelectionTransfer.getInstance(),
+			LocalSelectionTransfer.getTransfer(),
 			ResourceTransfer.getInstance()};
 		TransferDragSourceListener[] dragListeners= new TransferDragSourceListener[] {
 			new SelectionTransferDragAdapter(fViewer),
