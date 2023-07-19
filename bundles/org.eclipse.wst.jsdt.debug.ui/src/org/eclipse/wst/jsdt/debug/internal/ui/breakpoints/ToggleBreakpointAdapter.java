@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 IBM Corporation and others.
+ * Copyright (c) 2010, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -206,7 +206,7 @@ public class ToggleBreakpointAdapter implements IToggleBreakpointsTargetExtensio
 			return;
 		}
 
-		ITextEditor textEditor = (ITextEditor) part.getAdapter(ITextEditor.class);
+		ITextEditor textEditor = part.getAdapter(ITextEditor.class);
 		if (textEditor != null) {
 			IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
 			if (document != null) {
@@ -303,7 +303,7 @@ public class ToggleBreakpointAdapter implements IToggleBreakpointsTargetExtensio
 	 * @return the {@link ITypeRoot} for the editor input or <code>null</code>
 	 */
 	ITypeRoot getTypeRoot(IEditorInput input) {
-		ITypeRoot root = (ITypeRoot) input.getAdapter(IClassFile.class);
+		ITypeRoot root = input.getAdapter(IClassFile.class);
 		if(root == null) {
 			root = DebugWCManager.getCompilationUnit(input, false);
 		}
@@ -387,7 +387,7 @@ public class ToggleBreakpointAdapter implements IToggleBreakpointsTargetExtensio
 	void reportToStatusLine(final IWorkbenchPart part, final String message) {
 		getStandardDisplay().asyncExec(new Runnable() {
             public void run() {
-				IEditorStatusLine statusLine = (IEditorStatusLine) part.getAdapter(IEditorStatusLine.class);
+				IEditorStatusLine statusLine = part.getAdapter(IEditorStatusLine.class);
 		        if (statusLine != null) {
 		            if (message != null) {
 		                statusLine.setMessage(true, message, null);
@@ -521,7 +521,7 @@ public class ToggleBreakpointAdapter implements IToggleBreakpointsTargetExtensio
      */
     IResource getResource(IEditorPart editor) {
         IEditorInput editorInput = editor.getEditorInput();
-        IResource resource = (IResource) editorInput.getAdapter(IFile.class);
+        IResource resource = editorInput.getAdapter(IFile.class);
         if (resource == null) {
             resource = ResourcesPlugin.getWorkspace().getRoot();
         }
@@ -540,7 +540,7 @@ public class ToggleBreakpointAdapter implements IToggleBreakpointsTargetExtensio
     	if (part instanceof ITextEditor) {
     		return (ITextEditor) part;
     	}
-    	return (ITextEditor) part.getAdapter(ITextEditor.class);
+    	return part.getAdapter(ITextEditor.class);
     }
 
 	/* (non-Javadoc)

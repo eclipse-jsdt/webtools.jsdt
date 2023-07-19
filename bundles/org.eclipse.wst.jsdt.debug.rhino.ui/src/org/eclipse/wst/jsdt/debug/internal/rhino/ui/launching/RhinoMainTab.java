@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2013 IBM Corporation and others.
+ * Copyright (c) 2010, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -256,7 +256,7 @@ public class RhinoMainTab extends AbstractLaunchConfigurationTab {
 			IEditorPart part = page.getActiveEditor();
 			if (part != null) {
 				IEditorInput input = part.getEditorInput();
-				return (IJavaScriptElement) input.getAdapter(IJavaScriptElement.class);
+				return input.getAdapter(IJavaScriptElement.class);
 			}
 		}
 		return null;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2010, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -76,7 +76,7 @@ class WorkbenchAdapter implements IWorkbenchAdapter {
 	 * if none
 	 */
 	protected ImageDescriptor getImageDescriptor(IJavaScriptElement element) {
-		IWorkbenchAdapter adapter = (IWorkbenchAdapter)element.getAdapter(IWorkbenchAdapter.class);
+		IWorkbenchAdapter adapter = element.getAdapter(IWorkbenchAdapter.class);
 		if (adapter != null) {
 			return adapter.getImageDescriptor(element);
 		}

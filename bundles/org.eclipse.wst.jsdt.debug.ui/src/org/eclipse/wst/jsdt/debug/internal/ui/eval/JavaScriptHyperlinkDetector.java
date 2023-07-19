@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2010, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -89,7 +89,7 @@ public class JavaScriptHyperlinkDetector extends AbstractHyperlinkDetector {
 	 * @see org.eclipse.jface.text.hyperlink.IHyperlinkDetector#detectHyperlinks(org.eclipse.jface.text.ITextViewer, org.eclipse.jface.text.IRegion, boolean)
 	 */
 	public IHyperlink[] detectHyperlinks(ITextViewer textViewer, IRegion region, boolean canShowMultipleHyperlinks) {
-		ITextEditor editor = (ITextEditor) getAdapter(ITextEditor.class);
+		ITextEditor editor = getAdapter(ITextEditor.class);
 		if(editor != null) {
 			IJavaScriptStackFrame frame = EvaluationManager.getManager().getEvaluationContext(PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 			if (frame == null) {

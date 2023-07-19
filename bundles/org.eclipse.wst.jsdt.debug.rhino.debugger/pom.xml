@@ -22,7 +22,7 @@
 
   <groupId>org.eclipse.webtools.jsdt.bundles</groupId>
   <artifactId>org.eclipse.wst.jsdt.debug.rhino.debugger</artifactId>
-  <version>1.0.600-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 
   <!-- We don't need this constrain anymore as we stepped to use Rhino 1.7.4 -->

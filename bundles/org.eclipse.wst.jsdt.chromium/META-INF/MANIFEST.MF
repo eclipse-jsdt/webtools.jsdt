@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: org.eclipse.wst.jsdt.chromium
 Bundle-Name: Chromium Developer Tools SDK
-Bundle-SymbolicName: org.eclipse.wst.jsdt.chromium
-Bundle-Version: 0.5.200.qualifier
+Bundle-SymbolicName: org.eclipse.wst.jsdt.chromium;singleton:=true
+Bundle-Version: 0.6.0.qualifier
 Bundle-Vendor: Eclipse Web Tools Platform
 Bundle-ClassPath: lib/json_simple/json_simple-1.1.jar,
  .
@@ -21,4 +22,4 @@ Export-Package: org.eclipse.wst.jsdt.chromium,
  org.eclipse.wst.jsdt.chromium.wip,
  org.json.simple,
  org.json.simple.parser
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

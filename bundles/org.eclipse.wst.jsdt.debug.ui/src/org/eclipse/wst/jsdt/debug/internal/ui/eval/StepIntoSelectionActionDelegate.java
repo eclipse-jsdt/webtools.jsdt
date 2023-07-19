@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2010, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -144,7 +144,7 @@ public class StepIntoSelectionActionDelegate implements IEditorActionDelegate, I
 		IRunToLineTarget runToLineAction = null;
 		IEditorPart ed = getActiveEditor();
 		if (ed != null) {
-			runToLineAction  = (IRunToLineTarget) ed.getAdapter(IRunToLineTarget.class);
+			runToLineAction  = ed.getAdapter(IRunToLineTarget.class);
 			if (runToLineAction == null) {
 				IAdapterManager adapterManager = Platform.getAdapterManager();
 				if (adapterManager.hasAdapter(ed, IRunToLineTarget.class.getName())) { 
@@ -266,7 +266,7 @@ public class StepIntoSelectionActionDelegate implements IEditorActionDelegate, I
 	 */
 	protected void showErrorMessage(String message) {	
 		if (getActiveEditor() != null) {
-			IEditorStatusLine statusLine= (IEditorStatusLine) getActiveEditor().getAdapter(IEditorStatusLine.class);
+			IEditorStatusLine statusLine= getActiveEditor().getAdapter(IEditorStatusLine.class);
 			if (statusLine != null) {
 				statusLine.setMessage(true, message, null);
 			}

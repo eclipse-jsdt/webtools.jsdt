@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.wst.jsdt.chromium.debug.core;singleton:=true
-Bundle-Version: 0.5.300.qualifier
+Bundle-Version: 0.6.0.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.chromium.debug.core.ChromiumDebugPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui;bundle-version="3.4.1",
  org.eclipse.jface.text;bundle-version="3.4.1",
  org.eclipse.ui.workbench.texteditor;bundle-version="3.4.1",
- org.eclipse.wst.jsdt.chromium;bundle-version="[0.4.0,0.6.0)",
+ org.eclipse.wst.jsdt.chromium;bundle-version="[0.6.0,0.7.0)",
  org.eclipse.core.expressions;bundle-version="3.4.0",
  org.eclipse.wst.jsdt.debug.core;bundle-version="[3.1.200,4.0.0)",
  com.google.gson;bundle-version="2.2.4",
@@ -26,4 +26,4 @@ Export-Package: org.eclipse.wst.jsdt.chromium.debug.core,
  org.eclipse.wst.jsdt.chromium.debug.core.sourcemap.extension,
  org.eclipse.wst.jsdt.chromium.debug.core.util
 Eclipse-LazyStart: true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -9,7 +9,7 @@
 <feature
       id="org.eclipse.wst.jsdt.chromium_tests.feature"
       label="%featureName"
-      version="0.6.0.qualifier"
+      version="0.7.0.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
@@ -29,15 +29,15 @@
    <url>
       <update label="ChromeDevTools Update Site" url="http://chromedevtools.googlecode.com/svn/update/dev/"/>
    </url>
-   
-      <plugin
+
+   <plugin
          id="org.eclipse.wst.jsdt.chromium.debug.core.tests"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
-      <plugin
+
+   <plugin
          id="org.eclipse.wst.jsdt.chromium.tests"
          download-size="0"
          install-size="0"

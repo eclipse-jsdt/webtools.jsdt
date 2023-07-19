@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2010, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -38,7 +38,7 @@ public class ShowLoadedScriptsAction implements IViewActionDelegate {
 	 */
 	public void run(IAction action) {
 		PreferencesManager.getManager().showLoadedScripts(action.isChecked());
-		IDebugView dview = (IDebugView) fView.getAdapter(IDebugView.class);
+		IDebugView dview = fView.getAdapter(IDebugView.class);
 		dview.getViewer().refresh();
 	}
 

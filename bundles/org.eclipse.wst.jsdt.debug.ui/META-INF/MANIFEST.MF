@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundleName.name
 Bundle-SymbolicName: org.eclipse.wst.jsdt.debug.ui;singleton:=true
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.debug.internal.ui.JavaScriptDebugUIPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,
@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions,
  org.eclipse.debug.core,
  org.eclipse.core.resources
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy;exclude:="org.eclipse.wst.jsdt.debug.internal.ui.filters"
 Export-Package: org.eclipse.wst.jsdt.debug.internal.ui;x-friends:="org.eclipse.wst.jsdt.debug.rhino.ui",
  org.eclipse.wst.jsdt.debug.internal.ui.actions;x-internal:=true,

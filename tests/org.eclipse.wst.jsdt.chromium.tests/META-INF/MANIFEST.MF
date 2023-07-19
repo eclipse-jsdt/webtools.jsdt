@@ -4,8 +4,8 @@ Bundle-Name: ChromeDevTools SDK Tests
 Bundle-Vendor: Eclipse Web Tools Platform
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.wst.jsdt.chromium.tests
-Bundle-Version: 0.5.201.qualifier
+Bundle-Version: 0.6.0.qualifier
 Fragment-Host: org.eclipse.wst.jsdt.chromium;bundle-version="0.1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.eclipse.wst.jsdt.chromium.wipbackend.dev;bundle-version="[0.4.0,0.6.0)",
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.wst.jsdt.chromium.wipbackend.dev;bundle-version="[0.6.0,0.7.0)",
  org.junit;bundle-version="4.12.0"

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 IBM Corporation and others.
+ * Copyright (c) 2010, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -328,10 +328,10 @@ public abstract class EvaluateAction implements IEditorActionDelegate, IObjectAc
 	 * @return associated style text widget or <code>null</code>
 	 */
 	protected StyledText getStyledText(IWorkbenchPart part) {
-		ITextViewer viewer = (ITextViewer)part.getAdapter(ITextViewer.class);
+		ITextViewer viewer = part.getAdapter(ITextViewer.class);
 		StyledText textWidget = null;
 		if (viewer == null) {
-			Control control = (Control) part.getAdapter(Control.class);
+			Control control = part.getAdapter(Control.class);
 			if (control instanceof StyledText) {
 				textWidget = (StyledText) control;
 			}

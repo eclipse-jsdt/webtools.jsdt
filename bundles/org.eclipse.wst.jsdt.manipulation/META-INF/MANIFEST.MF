@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Version: 1.0.601.qualifier
+Bundle-Version: 1.1.0.qualifier
 Export-Package: org.eclipse.wst.jsdt.core.manipulation,
  org.eclipse.wst.jsdt.core.refactoring,
  org.eclipse.wst.jsdt.core.refactoring.descriptors,
@@ -15,7 +15,7 @@ Bundle-Activator: org.eclipse.wst.jsdt.internal.core.manipulation.JavaManipulati
 Eclipse-LazyStart: true
 Bundle-SymbolicName: org.eclipse.wst.jsdt.manipulation;singleton:=true
 Bundle-Name: %pluginName
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Localization: plugin
 Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy

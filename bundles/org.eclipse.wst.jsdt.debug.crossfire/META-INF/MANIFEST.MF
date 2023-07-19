@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.eclipse.wst.jsdt.debug.crossfire;singleton:=true
-Bundle-Version: 1.0.500.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.debug.internal.crossfire.CrossFirePlugin
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.core.runtime,
@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.jsdt.core;bundle-version="1.0.0",
  org.eclipse.debug.core,
  org.eclipse.core.resources
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.wst.jsdt.debug.internal.crossfire;x-internal:=true,
  org.eclipse.wst.jsdt.debug.internal.crossfire.connect;x-internal:=true,

@@ -9,7 +9,7 @@
 <feature
       id="org.eclipse.wst.jsdt.chromium.debug.feature"
       label="%featureName"
-      version="0.6.300.qualifier"
+      version="0.7.0.qualifier"
       provider-name="%providerName"
       plugin="org.eclipse.wst.jsdt.chromium.debug"
       license-feature="org.eclipse.license"

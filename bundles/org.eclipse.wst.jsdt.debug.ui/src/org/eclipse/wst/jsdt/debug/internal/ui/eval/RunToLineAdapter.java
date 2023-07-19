@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright (c) 2010 IBM Corporation and others.
+ *  Copyright (c) 2010, 2023 IBM Corporation and others.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v2.0
  *  which accompanies this distribution, and is available at
@@ -92,7 +92,7 @@ public class RunToLineAdapter implements IRunToLineTarget {
 			attributes.put(RUN_TO_LINE, Boolean.TRUE);
 			breakpoint = JavaScriptDebugModel.createLineBreakpoint(ResourcesPlugin.getWorkspace().getRoot(), lineNumber[0], -1, -1, attributes, false);
 			if (target instanceof IAdaptable) {
-				IDebugTarget debugTarget = (IDebugTarget) ((IAdaptable)target).getAdapter(IDebugTarget.class);
+				IDebugTarget debugTarget = ((IAdaptable)target).getAdapter(IDebugTarget.class);
 				if (debugTarget == null) {
 					throw new CoreException(new Status(IStatus.ERROR, JavaScriptDebugUIPlugin.PLUGIN_ID, Messages.cannot_find_debug_target, null));
 				}
@@ -115,7 +115,7 @@ public class RunToLineAdapter implements IRunToLineTarget {
 	public boolean canRunToLine(IWorkbenchPart part, ISelection selection, ISuspendResume target) {
 	    if (target instanceof IDebugElement) {
             IDebugElement element = (IDebugElement) target;
-            IJavaScriptDebugTarget adapter = (IJavaScriptDebugTarget) element.getDebugTarget().getAdapter(IJavaScriptDebugTarget.class);
+            IJavaScriptDebugTarget adapter = element.getDebugTarget().getAdapter(IJavaScriptDebugTarget.class);
             return adapter != null;
         }
 		return false;

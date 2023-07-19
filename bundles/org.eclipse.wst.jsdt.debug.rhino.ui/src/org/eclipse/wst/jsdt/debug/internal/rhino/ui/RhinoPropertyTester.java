@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2011 IBM Corporation and others.
+ * Copyright (c) 2010, 2023 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -54,12 +54,12 @@ public class RhinoPropertyTester extends PropertyTester {
 	 * @return <code>true</code> if the element is a script <code>false</code> otherwise
 	 */
 	boolean isScript(IAdaptable element) {
-		IJavaScriptElement jselement = (IJavaScriptElement) element.getAdapter(IJavaScriptElement.class);
+		IJavaScriptElement jselement = element.getAdapter(IJavaScriptElement.class);
 		if(jselement != null) {
 			int type = jselement.getElementType();
 			return type == IJavaScriptElement.JAVASCRIPT_UNIT;
 		}
-		IFile file = (IFile) element.getAdapter(IFile.class);
+		IFile file = element.getAdapter(IFile.class);
 		if(file != null) {
 			return "js".equals(file.getFileExtension()); //$NON-NLS-1$
 		}
