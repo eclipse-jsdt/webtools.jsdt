@@ -109,7 +109,7 @@ public class ClosureCompiler {
 	}
 
 	public JavaScriptUnit parse() {
-		Config config = new Config(com.google.javascript.jscomp.parsing.parser.Parser.Config.Mode.ES6);
+		Config config = new Config(com.google.javascript.jscomp.parsing.parser.Parser.Config.Mode.ES6_OR_ES7);
 		SourceFile source = getSourceFile(); 
 		ErrorCollector errorCollector = new  ErrorCollector(source.name);
 		Parser parser = new Parser(config, errorCollector, source);
