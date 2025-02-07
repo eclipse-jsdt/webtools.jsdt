@@ -342,6 +342,7 @@ public class SourceContainerWorkbookPage extends BuildPathBasePage {
 				CPListElement newElement= new CPListElement(fCurrJProject, IIncludePathEntry.CPE_SOURCE);
 				AddSourceFolderWizard wizard= newLinkedSourceFolderWizard(newElement, fFoldersList.getElements(), "", true); //$NON-NLS-1$
 				OpenBuildPathWizardAction action= new OpenBuildPathWizardAction(wizard);
+				action.setShell(getShell());
 				action.run();
 			} else if (index==IDX_ADDJAR) {
 				libentries= openJarFileDialog(null);
