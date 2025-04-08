@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: org.eclipse.wst.jsdt.ui; singleton:=true
-Bundle-Version: 2.1.700.qualifier
+Bundle-Version: 2.1.800.qualifier
 Bundle-Activator: org.eclipse.wst.jsdt.internal.ui.JavaScriptPlugin
 Import-Package: org.eclipse.wst.validation,
  org.eclipse.wst.validation.internal.core,
