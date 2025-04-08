@@ -55,7 +55,7 @@ Export-Package: org.eclipse.wst.jsdt.core,
  org.eclipse.wst.jsdt.launching,
  org.eclipse.wst.jsdt.libraries
 Bundle-Activator: org.eclipse.wst.jsdt.core.JavaScriptCore
-Require-Bundle: com.google.javascript;bundle-version="[0.0.20160315,0.0.2017)",
+Require-Bundle: com.google.javascript;bundle-version="[0.0.20160315,0.0.20220000)",
  com.google.guava,
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
