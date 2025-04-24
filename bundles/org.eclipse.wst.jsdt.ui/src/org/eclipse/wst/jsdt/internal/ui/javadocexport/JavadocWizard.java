@@ -396,7 +396,7 @@ public class JavadocWizard extends Wizard implements IExportWizard {
 		if (fOpenInBrowser) {
 			try {
 				IPath indexFile= fDestination.append("index.html"); //$NON-NLS-1$
-				URL url= indexFile.toFile().toURL();
+				URL url= indexFile.toFile().toURI().toURL();
 				OpenBrowserUtil.open(url, display, getWindowTitle());
 			} catch (MalformedURLException e) {
 				JavaScriptPlugin.log(e);
