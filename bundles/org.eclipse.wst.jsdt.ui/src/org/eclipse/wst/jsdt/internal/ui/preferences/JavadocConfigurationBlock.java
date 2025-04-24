@@ -346,7 +346,7 @@ public class JavadocConfigurationBlock {
 				File indexFile= new File(folder, "index.html"); //$NON-NLS-1$
 				if (indexFile.isFile()) {
 					if (MessageDialog.openConfirm(fShell, fTitle, fValidMessage)) { 
-						spawnInBrowser(indexFile.toURL());
+						spawnInBrowser(indexFile.toURI().toURL());
 					}
 					return;
 				}
@@ -629,7 +629,7 @@ public class JavadocConfigurationBlock {
 		String result= dialog.open();
 		if (result != null) {
 			try {
-				URL url= new File(result).toURL();
+				URL url= new File(result).toURI().toURL();
 				return url.toExternalForm();
 			} catch (MalformedURLException e) {
 				JavaScriptPlugin.log(e);
@@ -740,7 +740,7 @@ public class JavadocConfigurationBlock {
 				buf.append("platform:/resource").append(encodeExclamationMarks(res.getFullPath().toString())); //$NON-NLS-1$
 			}
 		} else {
-			buf.append(encodeExclamationMarks(new File(jarLoc).toURL().toExternalForm()));
+			buf.append(encodeExclamationMarks(new File(jarLoc).toURI().toURL().toExternalForm()));
 		}
 		buf.append('!');
 		if (innerPath.length() > 0) {
