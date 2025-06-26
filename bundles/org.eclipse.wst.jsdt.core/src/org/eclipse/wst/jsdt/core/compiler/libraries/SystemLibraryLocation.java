@@ -70,7 +70,7 @@ public class SystemLibraryLocation implements LibraryLocation {
 		while (entries.hasMoreElements()) {
 			Path value = new Path((String) entries.nextElement());
 			char[] filename = value.lastSegment().toCharArray();
-			if (Util.isJavaLikeFileName(filename)) { //$NON-NLS-1$
+			if (Util.isJavaLikeFileName(filename)) {
 				allEntries.add(filename);
 			}
 		}

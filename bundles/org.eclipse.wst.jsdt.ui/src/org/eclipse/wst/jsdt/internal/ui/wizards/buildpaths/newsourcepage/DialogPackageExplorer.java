@@ -209,7 +209,7 @@ public class DialogPackageExplorer implements IMenuListener, ISelectionProvider,
             try {
                 if (element instanceof IFile) {
                     IFile file= (IFile) element;
-                    if (file.getName().equals(JavaProject.CLASSPATH_FILENAME) || file.getName().equals(".project")) //$NON-NLS-1$//$NON-NLS-2$
+                    if (file.getName().equals(JavaProject.CLASSPATH_FILENAME) || file.getName().equals(".project")) //$NON-NLS-1$
                         return false;
                 } else if (element instanceof IPackageFragmentRoot) {
                     IIncludePathEntry cpe= ((IPackageFragmentRoot)element).getRawIncludepathEntry();

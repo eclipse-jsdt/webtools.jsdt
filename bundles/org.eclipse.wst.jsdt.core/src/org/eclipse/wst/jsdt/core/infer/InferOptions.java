@@ -81,7 +81,7 @@ public class InferOptions {
 		optionsMap.put(OPTION_UseAssignments, this.useAssignments ? "true":"false"); //$NON-NLS-1$ //$NON-NLS-2$
 		optionsMap.put(OPTION_UseInitMethod, this.useInitMethod ? "true":"false"); //$NON-NLS-1$ //$NON-NLS-2$
 		optionsMap.put(OPTION_SaveArgumentComments, this.saveArgumentComments ? "true":"false"); //$NON-NLS-1$ //$NON-NLS-2$
-		optionsMap.put(OPTION_DocLocation, String.valueOf(this.docLocation)); //$NON-NLS-1$ //$NON-NLS-2$
+		optionsMap.put(OPTION_DocLocation, String.valueOf(this.docLocation));
 		return optionsMap;
 	}
 
@@ -99,7 +99,7 @@ public class InferOptions {
 			this.saveArgumentComments="true".equals(optionValue) ; //$NON-NLS-1$
 		}
 		if ((optionValue = optionsMap.get(OPTION_DocLocation)) != null) {
-			this.docLocation=   Integer.parseInt((String)optionValue) ; //$NON-NLS-1$
+			this.docLocation=   Integer.parseInt((String)optionValue) ;
 		}
 	}
 

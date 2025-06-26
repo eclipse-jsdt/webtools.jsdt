@@ -352,10 +352,10 @@ public class InterpreterEngine extends ASTVisitor implements Contants{
 		
     	switch (postfixExpression.operator) {
 		case OperatorIds.PLUS :
-			number++; //$NON-NLS-1$
+			number++;
 			break;
 		case OperatorIds.MINUS :
-			number++; //$NON-NLS-1$
+			number++;
 			break;
 	} 
     	Value newValue = new NumberValue(number);
@@ -373,10 +373,10 @@ public class InterpreterEngine extends ASTVisitor implements Contants{
 		
     	switch (prefixExpression.operator) {
 		case OperatorIds.PLUS :
-			number++; //$NON-NLS-1$
+			number++;
 			break;
 		case OperatorIds.MINUS :
-			number++; //$NON-NLS-1$
+			number++;
 			break;
 	} 
     	Value newValue = new NumberValue(number);

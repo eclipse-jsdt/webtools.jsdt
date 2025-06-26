@@ -86,7 +86,7 @@ public abstract class RefactoringModifications {
 		if (project == null)
 			return null;
 		IFolder rscPath = project.getFolder(JavaProject.SHARED_PROPERTIES_DIRECTORY);
-		IResource result= rscPath.findMember(JavaProject.CLASSPATH_FILENAME); //$NON-NLS-1$
+		IResource result= rscPath.findMember(JavaProject.CLASSPATH_FILENAME);
 		if (result instanceof IFile)
 			return (IFile)result;
 		return null;

@@ -140,7 +140,7 @@ public final class JavaRuntime {
 	 */
 	public static final String DEFAULT_SUPER_TYPE = "Global"; //$NON-NLS-1$
 	
-	public static final String DEFAULT_SUPER_TYPE_LIBRARY = JRE_CONTAINER; //$NON-NLS-1$
+	public static final String DEFAULT_SUPER_TYPE_LIBRARY = JRE_CONTAINER;
 	/**
 	 * A status code indicating that a JRE could not be resolved for a project.
 	 * When a JRE cannot be resolved for a project by this plug-in's container

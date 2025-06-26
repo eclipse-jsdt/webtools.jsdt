@@ -44,10 +44,10 @@ import org.eclipse.wst.jsdt.internal.core.search.indexing.IIndexConstants;
 public class ConvertUtility {
 	private static final String NATURE_IDS[] = {JavaScriptCore.NATURE_ID};
 
-	private static final String SYSTEM_LIBRARY = org.eclipse.wst.jsdt.launching.JavaRuntime.JRE_CONTAINER; //$NON-NLS-1$
+	private static final String SYSTEM_LIBRARY = org.eclipse.wst.jsdt.launching.JavaRuntime.JRE_CONTAINER;
 	private static final String SYSTEM_SUPER_TYPE_NAME = new String(IIndexConstants.GLOBAL);
 
-	private static final String BROWSER_LIBRARY = org.eclipse.wst.jsdt.launching.JavaRuntime.BASE_BROWSER_LIB; //$NON-NLS-1$
+	private static final String BROWSER_LIBRARY = org.eclipse.wst.jsdt.launching.JavaRuntime.BASE_BROWSER_LIB;
 	public static final IPath BROWSER_LIBRARY_PATH = new Path(BROWSER_LIBRARY);
 	private static final String BROWSER_SUPER_TYPE_NAME = new String(IIndexConstants.WINDOW);
 

@@ -92,7 +92,7 @@ public class DeleteModifications extends RefactoringModifications {
 					getResourceModifications().addDelete(resource);
 				IJavaScriptProject[] referencingProjects= JavaElementUtil.getReferencingProjects((IPackageFragmentRoot) element);
 				for (int i= 0; i < referencingProjects.length; i++) {
-					IFile classpath= referencingProjects[i].getJSDTScopeFile(); //$NON-NLS-1$
+					IFile classpath= referencingProjects[i].getJSDTScopeFile();
 					getResourceModifications().addChanged(classpath);
 				}
 				return;

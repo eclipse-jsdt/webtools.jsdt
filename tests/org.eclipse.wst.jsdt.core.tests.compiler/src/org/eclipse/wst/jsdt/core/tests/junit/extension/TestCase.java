@@ -513,7 +513,7 @@ public static List buildTestsList(Class evaluationTestClass, int inheritedDepth,
  * @return a {@link Test test suite} 
  */
 public static Test buildTestSuite(Class evaluationTestClass) {
-	return buildTestSuite(evaluationTestClass, null); //$NON-NLS-1$
+	return buildTestSuite(evaluationTestClass, null);
 }
 
 /**
