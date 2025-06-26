@@ -1035,7 +1035,7 @@ public class JavaProject
 	 */
 	protected IPath defaultOutputLocation() {
 		// https://bugs.eclipse.org/bugs/show_bug.cgi?id=272495
-		return this.project.getFullPath(); //$NON-NLS-1$
+		return this.project.getFullPath();
 	}
 
 	/**

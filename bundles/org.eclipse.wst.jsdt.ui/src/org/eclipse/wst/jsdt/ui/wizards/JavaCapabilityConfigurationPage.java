@@ -134,7 +134,7 @@ public class JavaCapabilityConfigurationPage extends NewElementWizardPage {
 	 * the given default classpath and output location is only used if no '.classpath' exists.
 	 */
 	public void init(IJavaScriptProject jproject,  IIncludePathEntry[] defaultEntries, boolean defaultsOverrideExistingClasspath) {
-		if (!defaultsOverrideExistingClasspath && jproject.exists() && jproject.getJSDTScopeFile().exists()) { //$NON-NLS-1$
+		if (!defaultsOverrideExistingClasspath && jproject.exists() && jproject.getJSDTScopeFile().exists()) {
 			
 			defaultEntries= null;
 		}

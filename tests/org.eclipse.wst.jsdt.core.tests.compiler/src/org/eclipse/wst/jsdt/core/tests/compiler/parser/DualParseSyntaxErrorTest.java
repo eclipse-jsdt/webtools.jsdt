@@ -31,7 +31,7 @@ import org.eclipse.wst.jsdt.internal.compiler.problem.ProblemReporter;
 
 public class DualParseSyntaxErrorTest extends AbstractCompilerTest {
 	public static boolean optimizeStringLiterals = false;
-	public static long sourceLevel = ClassFileConstants.JDK1_3; //$NON-NLS-1$
+	public static long sourceLevel = ClassFileConstants.JDK1_3;
 	
 public DualParseSyntaxErrorTest(String testName){
 	super(testName);

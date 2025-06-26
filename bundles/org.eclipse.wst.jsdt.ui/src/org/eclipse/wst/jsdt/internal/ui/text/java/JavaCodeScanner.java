@@ -156,12 +156,12 @@ public final class JavaCodeScanner extends AbstractJavaScanner {
 		"case", "catch", "class", "const", "continue", //$NON-NLS-5$ //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 		"default", "delete", "debugger", "do", //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-1$
 		"else", "export", "extends", //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-1$
-		"finally", "for",  "function",//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-2$ //$NON-NLS-1$
+		"finally", "for",  "function",//$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 		"if", "implements", "in", "instanceof", "interface", //$NON-NLS-5$ //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
-		  "new", //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$
+		  "new", //$NON-NLS-1$
 		"package", "private", "protected", "public", //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
-		"static", "super", "switch", //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$
-		"this", "throw", "try","typeof",  //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-2$ //$NON-NLS-1$
+		"static", "super", "switch", //$NON-NLS-3$ //$NON-NLS-2$
+		"this", "throw", "try","typeof", //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-1$
 		"var", //$NON-NLS-1$
 		"while", "with", //$NON-NLS-1$ //$NON-NLS-2$
 	

@@ -174,7 +174,7 @@ public class RenameVirtualMethodProcessor extends RenameMethodProcessor {
 											"getClass", "getClass", "notify", //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 											"notifyAll", "wait"}; //$NON-NLS-2$ //$NON-NLS-1$
 		String[][] specialParamTypes= new String[][]{noParams, noParams, noParams, noParams,
-													 noParams, noParams, //$NON-NLS-2$ //$NON-NLS-1$
+													 noParams, noParams,
 													 noParams, noParams, noParams};
 		String[] specialReturnTypes= new String[]{"QString;", "QString;", "Qjava.lang.String;", "Qjava.lang.String;", //$NON-NLS-4$ //$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 												   "QClass;", "Qjava.lang.Class;", //$NON-NLS-2$ //$NON-NLS-1$

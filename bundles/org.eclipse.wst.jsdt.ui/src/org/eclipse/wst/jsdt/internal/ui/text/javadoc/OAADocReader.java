@@ -81,7 +81,7 @@ public class OAADocReader extends Reader {
 				for (int i = 0; i < method.exceptions.length; i++) {
 					Exception exception = method.exceptions[i];
 					buffer.append("<dd>"); //$NON-NLS-1$
-					buffer.append(exception.description); //$NON-NLS-1$
+					buffer.append(exception.description);
 					buffer.append("</dd>"); //$NON-NLS-1$
 				}
 			}

@@ -105,7 +105,7 @@ public class DeletePackageFragmentRootChange extends AbstractDeleteChange {
 		HashMap/*<IFile, String>*/ classpathFilesContents= new HashMap();
 		for (int i= 0; i < referencingProjects.length; i++) {
 			IJavaScriptProject javaProject= referencingProjects[i];
-			IFile classpathFile= javaProject.getJSDTScopeFile(); //$NON-NLS-1$
+			IFile classpathFile= javaProject.getJSDTScopeFile();
 			if (classpathFile.exists()) {
 				classpathFilesContents.put(classpathFile, getFileContents(classpathFile));
 			}
